@@ -1,0 +1,16 @@
+{
+  "generic": {
+    "close": "Sulje"
+  },
+  "errorHandling": {
+    "title": "Tapahtui virhe",
+    "dialog": {
+      "tryAgain": "Tarkista internet-yhteytesi ja yritä uudelleen.",
+      "reportIssue": "Mikäli ongelma jatkuu, voi vika olla myös käyttämissämme taustajärjestelmissä. Voit halutessasi ottaa sähköpostilla yhteyttä osoitteeseen support@metatavu.fi. Liitä tekniset lisätiedot osaksi sähköpostia nopeuttaaksesi ongelman selvittelyä.",
+      "technicalDetails": "Teknisiä lisätietoja:",
+      "time": "Aika: {0}",
+      "url": "Osoite: {0}",
+      "errorMessage": "Virheilmoitus: "
+    }
+  }
+}

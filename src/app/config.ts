@@ -3,7 +3,7 @@ import { cleanEnv, url } from "envalid";
 type Config = {
   api: {
     baseUrl: string;
-  }
+  };
 };
 
 const env = cleanEnv(import.meta.env, {

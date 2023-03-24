@@ -6,13 +6,12 @@ import fi from "./fi.json";
  * Localized strings
  */
 export interface Localized extends LocalizedStringsMethods {
-
   /**
    * Translations related to generic words
    */
   generic: {
     close: string;
-  }
+  };
 
   /**
    * Translations related to error handling
@@ -26,8 +25,8 @@ export interface Localized extends LocalizedStringsMethods {
       time: string;
       url: string;
       errorMessage: string;
-    },
-  }
+    };
+  };
 }
 /**
  * Initialized localized strings

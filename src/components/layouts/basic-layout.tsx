@@ -4,7 +4,7 @@ import React from "react";
  * Component props
  */
 export interface Props {
-  children: React.ReactNode
+  children: React.ReactNode;
 }
 
 /**
@@ -12,17 +12,11 @@ export interface Props {
  *
  * @param props component properties
  */
-const BasicLayout: React.FC<Props> = ({
-  children
-}) => {
+const BasicLayout: React.FC<Props> = ({ children }) => {
   /**
    * Component render
    */
-  return (
-    <>
-      { children }
-    </>
-  );
+  return <>{children}</>;
 };
 
 export default BasicLayout;

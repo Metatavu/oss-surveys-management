@@ -1,5 +1,13 @@
 import * as React from "react";
-import { Dialog, DialogTitle, DialogContent, DialogActions, Button, IconButton, Divider } from "@mui/material";
+import {
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Button,
+  IconButton,
+  Divider
+} from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 
 /**
@@ -67,46 +75,31 @@ const GenericDialog: React.FC<Props> = ({
    */
   return (
     <Dialog
-      open={ open }
-      onClose={ onCloseClick }
-      fullScreen={ fullScreen }
-      fullWidth={ fullWidth }
-      disableEnforceFocus={ disableEnforceFocus }
+      open={open}
+      onClose={onCloseClick}
+      fullScreen={fullScreen}
+      fullWidth={fullWidth}
+      disableEnforceFocus={disableEnforceFocus}
     >
       <DialogTitle variant="h2">
-        { title }
-        <IconButton
-          style={{ float: "right" }}
-          size="small"
-          onClick={ onCancel }
-        >
-          <CloseIcon/>
+        {title}
+        <IconButton style={{ float: "right" }} size="small" onClick={onCancel}>
+          <CloseIcon />
         </IconButton>
-        <Divider/>
+        <Divider />
       </DialogTitle>
-      <DialogContent>
-        { children }
-      </DialogContent>
+      <DialogContent>{children}</DialogContent>
       <DialogActions>
-        { reloadButtonText &&
-          <Button
-            onClick={ onReloadClick }
-            color="error"
-            style={{ float: "left" }}
-          >
-            { reloadButtonText }
+        {reloadButtonText && (
+          <Button onClick={onReloadClick} color="error" style={{ float: "left" }}>
+            {reloadButtonText}
           </Button>
-        }
-        { closeButtonText &&
-          <Button
-            disabled={ error || disabled }
-            onClick={ onConfirm }
-            color="primary"
-            autoFocus
-          >
-            { closeButtonText }
+        )}
+        {closeButtonText && (
+          <Button disabled={error || disabled} onClick={onConfirm} color="primary" autoFocus>
+            {closeButtonText}
           </Button>
-        }
+        )}
       </DialogActions>
     </Dialog>
   );

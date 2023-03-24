@@ -19,6 +19,8 @@
     "@mui/material": "5.11.14",
     "@sentry/react": "7.45.0",
     "envalid": "7.3.1",
+    "jotai": "2.0.3",
+    "keycloak-js": "21.0.1",
     "localized-strings": "0.2.4",
     "luxon": "3.3.0",
     "moment": "2.29.4",

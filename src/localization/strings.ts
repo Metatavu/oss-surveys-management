@@ -1,6 +1,6 @@
-import LocalizedStrings, { LocalizedStringsMethods } from "localized-strings";
 import en from "./en.json";
 import fi from "./fi.json";
+import LocalizedStrings, { LocalizedStringsMethods } from "localized-strings";
 
 /**
  * Localized strings
@@ -11,6 +11,7 @@ export interface Localized extends LocalizedStringsMethods {
    */
   generic: {
     close: string;
+    logout: string;
   };
 
   /**

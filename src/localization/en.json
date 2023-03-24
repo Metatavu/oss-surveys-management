@@ -1,6 +1,7 @@
 {
   "generic": {
-    "close": "Close"
+    "close": "Close",
+    "logout": "Logout"
   },
   "errorHandling": {
     "title": "Error occurred",

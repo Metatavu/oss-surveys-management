@@ -1,3 +1,4 @@
+import Header from "../layout-components/header";
 import React from "react";
 
 /**
@@ -16,7 +17,15 @@ const BasicLayout: React.FC<Props> = ({ children }) => {
   /**
    * Component render
    */
-  return <>{children}</>;
+  return (
+    <>
+      <Header />
+      <div>
+        {children}
+      </div>
+    </>
+  )
+
 };
 
 export default BasicLayout;

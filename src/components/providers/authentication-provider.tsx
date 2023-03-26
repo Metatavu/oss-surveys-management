@@ -18,7 +18,7 @@ const AuthenticationProvider = ({ children }: Props) => {
     setAuth({
       token: keycloak.tokenParsed!,
       tokenRaw: keycloak.token!,
-      logout: () => keycloak.logout({ redirectUri: `${window.location.origin}` })
+      logout: () => keycloak.logout({ redirectUri: window.location.origin })
     });
 
     setUserProfile(keycloak.profile);

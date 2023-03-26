@@ -4,7 +4,7 @@ import React from "react";
 /**
  * Component props
  */
-export interface Props {
+interface Props {
   children: React.ReactNode;
 }
 

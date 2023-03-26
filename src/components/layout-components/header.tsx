@@ -32,7 +32,7 @@ const Header: React.FC = () => {
     <Stack direction="row-reverse">
       <Stack direction="row">
         <Stack sx={{ marginRight: 2 }}>
-          <Avatar>img</Avatar>
+          <Avatar />
         </Stack>
         <Stack>
           <Typography fontWeight="bold">

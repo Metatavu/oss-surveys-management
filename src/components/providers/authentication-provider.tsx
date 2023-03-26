@@ -1,10 +1,10 @@
-import { useCallback, useEffect } from "react";
-import Keycloak from "keycloak-js";
-import { useAtom, useSetAtom } from "jotai";
-import { authAtom, userProfileAtom } from "../../atoms/auth";
 import config from "../../app/config";
+import { authAtom, userProfileAtom } from "../../atoms/auth";
+import { useAtom, useSetAtom } from "jotai";
+import Keycloak from "keycloak-js";
+import { useCallback, useEffect } from "react";
 
-type Props = {
+interface Props {
   children: JSX.Element;
 };
 

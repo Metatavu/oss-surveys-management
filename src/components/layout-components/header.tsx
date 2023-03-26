@@ -18,7 +18,7 @@ const Header: React.FC = () => {
       <Button
         onClick={() => auth?.logout()}
         endIcon={<ExitToAppOutlinedIcon sx={{ color: "grey" }} />}
-        style={{
+        sx={{
           textTransform: "none",
           flex: 1,
           display: "flex",

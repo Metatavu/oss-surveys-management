@@ -26,8 +26,8 @@ export const ErrorContext = React.createContext<ErrorContextType>({
  * @param props component properties
  */
 const ErrorHandler: React.FC<Props> = ({ children }) => {
-  const [ error, setError ] = React.useState<string>();
-  const [ errorMessage, setErrorMessage ] = React.useState<string>();
+  const [error, setError] = React.useState<string>();
+  const [errorMessage, setErrorMessage] = React.useState<string>();
 
   /**
    * Handles error message and tries to print any given error to logs
@@ -60,9 +60,12 @@ const ErrorHandler: React.FC<Props> = ({ children }) => {
   /**
    * Memoized context value
    */
-  const contextValue = React.useMemo(() => ({
-    setError: handleError
-  }), [ error ]);
+  const contextValue = React.useMemo(
+    () => ({
+      setError: handleError
+    }),
+    [error]
+  );
 
   /**
    * Returns current time
@@ -86,44 +89,36 @@ const ErrorHandler: React.FC<Props> = ({ children }) => {
    * Component render
    */
   return (
-    <ErrorContext.Provider value={ contextValue }>
-      { children }
+    <ErrorContext.Provider value={contextValue}>
+      {children}
       <GenericDialog
-        open={ error !== undefined }
-        error={ false }
-        onClose={ () => setError(undefined) }
-        onCancel={ () => setError(undefined) }
-        onConfirm={ () => setError(undefined) }
-        title={ strings.errorHandling.title }
-        closeButtonText={ strings.generic.close }
+        open={error !== undefined}
+        error={false}
+        onClose={() => setError(undefined)}
+        onCancel={() => setError(undefined)}
+        onConfirm={() => setError(undefined)}
+        title={strings.errorHandling.title}
+        closeButtonText={strings.generic.close}
       >
         <DialogContent id="error-dialog-description">
-          { error &&
-            <Typography marginBottom={ 3 } sx={{ fontSize: 16, fontWeight: "bold" }}>
-              { error }
+          {error && (
+            <Typography marginBottom={3} sx={{ fontSize: 16, fontWeight: "bold" }}>
+              {error}
             </Typography>
-          }
-          <Typography marginBottom={ 2 }>
-            { strings.errorHandling.dialog.tryAgain }
-          </Typography>
-          <Typography marginBottom={ 2 }>
-            { strings.errorHandling.dialog.reportIssue }
-          </Typography>
-          <Typography fontWeight="bold">
-            { strings.errorHandling.dialog.technicalDetails }
+          )}
+          <Typography marginBottom={2}>{strings.errorHandling.dialog.tryAgain}</Typography>
+          <Typography marginBottom={2}>{strings.errorHandling.dialog.reportIssue}</Typography>
+          <Typography fontWeight="bold">{strings.errorHandling.dialog.technicalDetails}</Typography>
+          <Typography>
+            {strings.formatString(strings.errorHandling.dialog.time, getTime())}
           </Typography>
           <Typography>
-            { strings.formatString(strings.errorHandling.dialog.time, getTime()) }
+            {strings.formatString(strings.errorHandling.dialog.url, getURL())}
           </Typography>
-          <Typography >
-            { strings.formatString(strings.errorHandling.dialog.url, getURL()) }
-          </Typography>
-          <Typography>
-            { strings.errorHandling.dialog.errorMessage }
-          </Typography>
-          <code style={{ fontSize: "12px" }}>{ errorMessage || "" }</code>
+          <Typography>{strings.errorHandling.dialog.errorMessage}</Typography>
+          <code style={{ fontSize: "12px" }}>{errorMessage || ""}</code>
         </DialogContent>
-        <Divider/>
+        <Divider />
       </GenericDialog>
     </ErrorContext.Provider>
   );

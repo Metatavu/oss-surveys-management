@@ -1,10 +1,11 @@
+import Header from "../layout-components/header";
 import React from "react";
 
 /**
  * Component props
  */
-export interface Props {
-  children: React.ReactNode
+interface Props {
+  children: React.ReactNode;
 }
 
 /**
@@ -12,17 +13,19 @@ export interface Props {
  *
  * @param props component properties
  */
-const BasicLayout: React.FC<Props> = ({
-  children
-}) => {
+const BasicLayout: React.FC<Props> = ({ children }) => {
   /**
    * Component render
    */
   return (
     <>
-      { children }
+      <Header />
+      <div>
+        {children}
+      </div>
     </>
-  );
+  )
+
 };
 
 export default BasicLayout;

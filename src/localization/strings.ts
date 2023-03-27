@@ -1,18 +1,18 @@
-import LocalizedStrings, { LocalizedStringsMethods } from "localized-strings";
 import en from "./en.json";
 import fi from "./fi.json";
+import LocalizedStrings, { LocalizedStringsMethods } from "localized-strings";
 
 /**
  * Localized strings
  */
 export interface Localized extends LocalizedStringsMethods {
-
   /**
    * Translations related to generic words
    */
   generic: {
     close: string;
-  }
+    logout: string;
+  };
 
   /**
    * Translations related to error handling
@@ -26,8 +26,8 @@ export interface Localized extends LocalizedStringsMethods {
       time: string;
       url: string;
       errorMessage: string;
-    },
-  }
+    };
+  };
 }
 /**
  * Initialized localized strings

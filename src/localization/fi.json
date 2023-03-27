@@ -1,6 +1,7 @@
 {
   "generic": {
-    "close": "Sulje"
+    "close": "Sulje",
+    "logout": "Kirjaudu ulos"
   },
   "errorHandling": {
     "title": "Tapahtui virhe",

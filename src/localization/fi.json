@@ -13,5 +13,13 @@
       "url": "Osoite: {0}",
       "errorMessage": "Virheilmoitus: "
     }
+  },
+  "surveysScreen": {
+    "surveyTitle": "Kysely",
+    "screens": "Näytöt",
+    "publicationDate": "Julkaisuaika",
+    "endTime": "Päättymisaika",
+    "mostPopular": "SuosituinNäyttö",
+    "answers": "Vastauksia"
   }
 }

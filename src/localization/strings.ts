@@ -28,7 +28,19 @@ export interface Localized extends LocalizedStringsMethods {
       errorMessage: string;
     };
   };
-}
+
+  /**
+   * Translations related to surveys screen
+   */
+  surveysScreen: {
+    surveyTitle: string;
+    screens: string;
+    publicationDate: string;
+    endTime: string;
+    mostPopular: string;
+    answers: string;
+  };
+};
 /**
  * Initialized localized strings
  */

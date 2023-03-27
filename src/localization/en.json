@@ -13,5 +13,13 @@
       "url": "URL: {0}",
       "errorMessage": "Error message: "
     }
+  },
+  "surveysScreen": {
+    "surveyTitle": "Surveys",
+    "screens": "Screens",
+    "publicationDate": "Publication date",
+    "endTime": "End date",
+    "mostPopular": "Most popular screen",
+    "answers": "Answers"
   }
 }

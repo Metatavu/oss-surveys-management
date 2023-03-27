@@ -27,8 +27,8 @@ const App = () => (
     <ErrorHandler>
       <AuthenticationProvider>
         <BasicLayout>
-        <RouterProvider router={router} />
-      </BasicLayout>
+          <RouterProvider router={router} />
+        </BasicLayout>
       </AuthenticationProvider>
     </ErrorHandler>
   </div>

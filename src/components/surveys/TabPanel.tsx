@@ -4,7 +4,7 @@ import { SurveyScreens } from "../../types";
 /**
  * Interface for tab panel props
  */
-interface TabPanelProps {
+interface Props {
   children: React.ReactNode;
   value: SurveyScreens;
   index: SurveyScreens;

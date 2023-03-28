@@ -2,7 +2,7 @@
   "generic": {
     "close": "Sulje",
     "logout": "Kirjaudu ulos",
-    "notImplemented": "Ei toteutettu"
+    "notImplemented": "Ei vielä toteutettu"
   },
   "errorHandling": {
     "title": "Tapahtui virhe",

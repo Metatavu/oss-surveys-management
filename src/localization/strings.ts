@@ -40,6 +40,7 @@ export interface Localized extends LocalizedStringsMethods {
     endTime: string;
     mostPopular: string;
     answers: string;
+    activeSurveys: string;
   };
 };
 /**

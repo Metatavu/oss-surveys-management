@@ -1,39 +1,10 @@
 import { List, ListItem, Tab, Tabs, ListItemText } from "@mui/material";
 import { Box } from "@mui/system";
 import { useState } from "react";
-import { DateTime } from "luxon";
 import strings from "../../localization/strings";
 import { SurveyScreens } from "../../types";
-
-const mockData = [
-  {
-    id: "12313",
-    kysely: "name of survey",
-    näytöt: 3,
-    julkaisuaika: DateTime.now(),
-    päättymisaika: DateTime.now(),
-    suosituinNäyttö: "location",
-    vastauksia: 234324
-  },
-  {
-    id: "12314",
-    kysely: "name of survey2",
-    näytöt: 4,
-    julkaisuaika: DateTime.now(),
-    päättymisaika: DateTime.now(),
-    suosituinNäyttö: "location 2",
-    vastauksia: 17
-  },
-];
-
-/**
- * Interface for tab panel props
- */
-interface TabPanelProps {
-  children: React.ReactNode;
-  value: SurveyScreens;
-  index: SurveyScreens;
-};
+import { mockData } from "./surveys-mock-data";
+import TabPanel from "../surveys/TabPanel";
 
 const SurveysScreen = () => {
   const [ activeTab, setActiveTab ] = useState(SurveyScreens.ACTIVE);
@@ -101,38 +72,13 @@ const SurveysScreen = () => {
     )
   };
 
-  /**
-   * Tab Panel
-   *
-   * @param props TabPanelProps
-   * @returns Tab panel
-   */
-  const TabPanel = (props: TabPanelProps) => {
-    const {children, value, index} = props;
-
-    return (
-      <div
-        role="tabpanel"
-        hidden={value !== index}
-        id={`Survey-screen-tabpanel-${index}`}
-        aria-labelledby={`Survey-screen-tab-${index}`}
-      >
-        {value === index && (
-          <Box sx={{ p: 3 }}>
-            { children }
-          </Box>
-        )}
-      </div>
-    );
-  };
-
   return (
     <Box>
       <Box>
         <Tabs value={activeTab} onChange={(_, value) => setActiveTab(value)} >
           <Tab
             value={SurveyScreens.ACTIVE}
-            label={`Aktiiviset kyselyt (${mockData.length})`}
+            label={ strings.formatString(strings.surveysScreen.activeSurveys, `(${mockData.length})`)}
           />
           <Tab
             value={ SurveyScreens.NOT_IMPLEMENTED }

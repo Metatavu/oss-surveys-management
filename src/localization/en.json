@@ -21,6 +21,7 @@
     "publicationDate": "Publication date",
     "endTime": "End date",
     "mostPopular": "Most popular screen",
-    "answers": "Answers"
+    "answers": "Answers",
+    "activeSurveys": "Active surveys {0}"
   }
 }

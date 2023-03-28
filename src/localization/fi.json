@@ -21,6 +21,7 @@
     "publicationDate": "Julkaisuaika",
     "endTime": "Päättymisaika",
     "mostPopular": "Suosituin näyttö",
-    "answers": "Vastauksia"
+    "answers": "Vastauksia",
+    "activeSurveys": "Aktiiviset kyselyt {0}"
   }
 }

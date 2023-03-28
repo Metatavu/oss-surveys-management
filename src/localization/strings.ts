@@ -12,6 +12,7 @@ export interface Localized extends LocalizedStringsMethods {
   generic: {
     close: string;
     logout: string;
+    notImplemented: string;
   };
 
   /**

@@ -3,6 +3,7 @@ import { Box } from "@mui/system";
 import { useState } from "react";
 import { DateTime } from "luxon";
 import strings from "../../localization/strings";
+import { SurveyScreens } from "../../types";
 
 const mockData = [
   {
@@ -25,18 +26,23 @@ const mockData = [
   },
 ];
 
+/**
+ * Interface for tab panel props
+ */
 interface TabPanelProps {
-  value: number;
-  index: number;
-}
+  children: React.ReactNode;
+  value: SurveyScreens;
+  index: SurveyScreens;
+};
 
 const SurveysScreen = () => {
-  const [ activeTab, setActiveTab ] = useState(0);
+  const [ activeTab, setActiveTab ] = useState(SurveyScreens.ACTIVE);
 
-  const handleTabChange = (_event: React.SyntheticEvent, newValue: number) => {
-    setActiveTab(newValue);
-  };
+  // TODO: Fetch surveys data from backend when available
 
+  /**
+   * Render survey list headings
+   */
   const renderSurveyListHeadings = () => (
     <ListItem>
       <ListItemText>
@@ -60,6 +66,9 @@ const SurveysScreen = () => {
     </ListItem>
   );
 
+  /**
+   * Renders list of surveys
+   */
   const renderSurveysList = () => {
     return (
       <Box>
@@ -92,8 +101,14 @@ const SurveysScreen = () => {
     )
   };
 
+  /**
+   * Tab Panel
+   *
+   * @param props TabPanelProps
+   * @returns Tab panel
+   */
   const TabPanel = (props: TabPanelProps) => {
-    const {value, index } = props;
+    const {children, value, index} = props;
 
     return (
       <div
@@ -104,7 +119,7 @@ const SurveysScreen = () => {
       >
         {value === index && (
           <Box sx={{ p: 3 }}>
-            { renderSurveysList() }
+            { children }
           </Box>
         )}
       </div>
@@ -114,11 +129,23 @@ const SurveysScreen = () => {
   return (
     <Box>
       <Box>
-        <Tabs value={activeTab} onChange={handleTabChange} >
-          <Tab label={`Aktiiviset kyselyt (${mockData.length})`} />
+        <Tabs value={activeTab} onChange={(_, value) => setActiveTab(value)} >
+          <Tab
+            value={SurveyScreens.ACTIVE}
+            label={`Aktiiviset kyselyt (${mockData.length})`}
+          />
+          <Tab
+            value={ SurveyScreens.NOT_IMPLEMENTED }
+            label={ strings.generic.notImplemented }
+          />
         </Tabs>
       </Box>
-      <TabPanel value={activeTab} index={0} />
+      <TabPanel value={activeTab} index={SurveyScreens.ACTIVE} >
+        { renderSurveysList() }
+      </TabPanel>
+      <TabPanel value={activeTab} index={SurveyScreens.NOT_IMPLEMENTED} >
+        { strings.generic.notImplemented }
+      </TabPanel>
     </Box>
   );
 };

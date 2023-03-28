@@ -1,7 +1,8 @@
 {
   "generic": {
     "close": "Close",
-    "logout": "Logout"
+    "logout": "Logout",
+    "notImplemented": "Not yet implemented"
   },
   "errorHandling": {
     "title": "Error occurred",

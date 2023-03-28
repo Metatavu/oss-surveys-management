@@ -1,5 +1,4 @@
-import { List, ListItem, Tab, Tabs, ListItemText } from "@mui/material";
-import { Box } from "@mui/system";
+import { List, ListItem, Tab, Tabs, ListItemText, Box } from "@mui/material";
 import { useState } from "react";
 import strings from "../../localization/strings";
 import { SurveyScreens } from "../../types";

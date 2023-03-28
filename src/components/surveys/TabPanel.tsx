@@ -16,8 +16,7 @@ interface Props {
  * @param props TabPanelProps
  * @returns Tab panel
  */
-const TabPanel = (props: TabPanelProps) => {
-  const {children, value, index} = props;
+const TabPanel: React.FC<Props> = ({children, value, index}) => {
 
   return (
     <div

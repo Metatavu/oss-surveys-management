@@ -12,6 +12,7 @@ export interface Localized extends LocalizedStringsMethods {
   generic: {
     close: string;
     logout: string;
+    notImplemented: string;
   };
 
   /**
@@ -28,7 +29,20 @@ export interface Localized extends LocalizedStringsMethods {
       errorMessage: string;
     };
   };
-}
+
+  /**
+   * Translations related to surveys screen
+   */
+  surveysScreen: {
+    surveyTitle: string;
+    screens: string;
+    publicationDate: string;
+    endTime: string;
+    mostPopular: string;
+    answers: string;
+    activeSurveys: string;
+  };
+};
 /**
  * Initialized localized strings
  */

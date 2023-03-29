@@ -1,7 +1,8 @@
 {
   "generic": {
     "close": "Sulje",
-    "logout": "Kirjaudu ulos"
+    "logout": "Kirjaudu ulos",
+    "notImplemented": "Ei vielä toteutettu"
   },
   "errorHandling": {
     "title": "Tapahtui virhe",
@@ -13,5 +14,14 @@
       "url": "Osoite: {0}",
       "errorMessage": "Virheilmoitus: "
     }
+  },
+  "surveysScreen": {
+    "surveyTitle": "Kysely",
+    "screens": "Näytöt",
+    "publicationDate": "Julkaisuaika",
+    "endTime": "Päättymisaika",
+    "mostPopular": "Suosituin näyttö",
+    "answers": "Vastauksia",
+    "activeSurveys": "Aktiiviset kyselyt {0}"
   }
 }

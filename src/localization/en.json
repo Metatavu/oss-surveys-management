@@ -1,7 +1,8 @@
 {
   "generic": {
     "close": "Close",
-    "logout": "Logout"
+    "logout": "Logout",
+    "notImplemented": "Not yet implemented"
   },
   "errorHandling": {
     "title": "Error occurred",
@@ -13,5 +14,14 @@
       "url": "URL: {0}",
       "errorMessage": "Error message: "
     }
+  },
+  "surveysScreen": {
+    "surveyTitle": "Surveys",
+    "screens": "Screens",
+    "publicationDate": "Publication date",
+    "endTime": "End date",
+    "mostPopular": "Most popular screen",
+    "answers": "Answers",
+    "activeSurveys": "Active surveys {0}"
   }
 }

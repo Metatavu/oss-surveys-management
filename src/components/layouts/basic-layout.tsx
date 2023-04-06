@@ -1,5 +1,6 @@
 import Header from "../layout-components/header";
 import React from "react";
+import { Box } from "@mui/material";
 
 /**
  * Component props
@@ -20,9 +21,9 @@ const BasicLayout: React.FC<Props> = ({ children }) => {
   return (
     <>
       <Header />
-      <div>
+      <Box>
         {children}
-      </div>
+      </Box>
     </>
   )
 

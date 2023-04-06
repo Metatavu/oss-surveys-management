@@ -1,8 +1,11 @@
 import { authAtom, userProfileAtom } from "../../atoms/auth";
 import ExitToAppOutlinedIcon from '@mui/icons-material/ExitToAppOutlined';
-import { Avatar, Button, Stack, Typography } from "@mui/material";
+import { AppBar, Avatar, IconButton, Stack, Toolbar, Typography } from "@mui/material";
 import { useAtom, useAtomValue } from "jotai";
 import React from "react";
+import logo from "../../assets/oss.svg";
+import NavButton from "./nav-button";
+import strings from "../../localization/strings";
 
 /**
  * Header component
@@ -15,36 +18,54 @@ const Header: React.FC = () => {
 
   const renderLogOutButton = () => {
     return (
-      <Button
-        onClick={() => auth?.logout()}
-        endIcon={<ExitToAppOutlinedIcon sx={{ color: "grey" }} />}
-        sx={{
-          textTransform: "none",
-          flex: 1,
-          display: "flex",
-          justifyContent: "space-between"
-        }}
-      />
+      <IconButton onClick={() => auth?.logout()}>
+        <ExitToAppOutlinedIcon />
+      </IconButton>
     )
   }
 
-  return (
-    <Stack direction="row-reverse">
-      <Stack direction="row">
-        <Stack sx={{ marginRight: 2 }}>
-          <Avatar />
-        </Stack>
+  const renderUser = () => {
+    return (
+      <Stack direction="row" gap={2} alignItems="center">
+        <Avatar />
         <Stack>
-          <Typography fontWeight="bold">
+          <Typography variant="subtitle1">
             {`${profileAtom?.firstName} ${profileAtom?.lastName}`}
           </Typography>
-          <Typography>
+          <Typography variant="subtitle2">
             {profileAtom?.email}
           </Typography>
         </Stack>
         {renderLogOutButton()}
       </Stack>
-    </Stack>
+    )
+  }
+
+  /**
+   * Renders navigation buttons
+   * TODO: add links and selection check
+   * @returns 
+   */
+  const renderNavigation = () => {
+    return (
+      <Stack direction="row" gap={2} alignItems="center">
+        <NavButton selected={true} title={strings.navigation.overview}/>
+        <NavButton selected={false} title={strings.navigation.surveys}/>
+        <NavButton selected={false} title={strings.navigation.screens}/>
+      </Stack>
+    )
+  }
+
+  return (
+    <AppBar position="sticky">
+      <Stack gap={4} direction="row">
+        <img height={30} src={logo}></img>
+        {renderNavigation()}
+      </Stack>
+      <Toolbar>
+        {renderUser()}
+      </Toolbar>
+    </AppBar>
   );
 };
 

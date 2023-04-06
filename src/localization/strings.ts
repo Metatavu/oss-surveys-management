@@ -16,6 +16,15 @@ export interface Localized extends LocalizedStringsMethods {
   };
 
   /**
+   * Translations related to navigation
+   */
+  navigation: {
+    overview: string;
+    surveys: string;
+    screens: string;
+  };
+
+  /**
    * Translations related to error handling
    */
   errorHandling: {

@@ -4,6 +4,11 @@
     "logout": "Logout",
     "notImplemented": "Not yet implemented"
   },
+  "navigation": {
+    "overview": "Overview",
+    "surveys": "Surveys",
+    "screens": "Screens"
+  },
   "errorHandling": {
     "title": "Error occurred",
     "dialog": {

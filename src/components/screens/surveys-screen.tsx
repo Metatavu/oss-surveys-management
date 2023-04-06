@@ -1,4 +1,4 @@
-import { List, ListItem, Tab, Tabs, ListItemText, Box } from "@mui/material";
+import { List, ListItem, Tab, Tabs, ListItemText, Box, Paper } from "@mui/material";
 import { useState } from "react";
 import strings from "../../localization/strings";
 import { SurveyScreens } from "../../types";
@@ -15,24 +15,12 @@ const SurveysScreen = () => {
    */
   const renderSurveyListHeadings = () => (
     <ListItem>
-      <ListItemText>
-        { strings.surveysScreen.surveyTitle }
-      </ListItemText>
-      <ListItemText>
-      { strings.surveysScreen.screens }
-      </ListItemText>
-      <ListItemText>
-      { strings.surveysScreen.publicationDate }
-      </ListItemText>
-      <ListItemText>
-      { strings.surveysScreen.endTime }
-      </ListItemText>
-      <ListItemText>
-      { strings.surveysScreen.mostPopular }
-      </ListItemText>
-      <ListItemText>
-      { strings.surveysScreen.answers }
-      </ListItemText>
+      <ListItemText primary={ strings.surveysScreen.surveyTitle }/>
+      <ListItemText primary={ strings.surveysScreen.screens } />
+      <ListItemText primary={ strings.surveysScreen.publicationDate } />
+      <ListItemText primary={ strings.surveysScreen.endTime }/>
+      <ListItemText primary={ strings.surveysScreen.mostPopular } />
+      <ListItemText primary={ strings.surveysScreen.answers } />
     </ListItem>
   );
 
@@ -41,39 +29,25 @@ const SurveysScreen = () => {
    */
   const renderSurveysList = () => {
     return (
-      <Box>
-        <List>
-          { renderSurveyListHeadings() }
-          {mockData.map(survey => (
-            <ListItem key={survey.id}>
-              <ListItemText>
-                {survey.kysely}
-              </ListItemText>
-              <ListItemText>
-                {survey.näytöt}
-              </ListItemText>
-              <ListItemText>
-                {survey.julkaisuaika.toFormat("dd.MM.yyyy")}
-              </ListItemText>
-              <ListItemText>
-                {survey.päättymisaika.toFormat("dd.MM.yyyy")}
-              </ListItemText>
-              <ListItemText>
-                {survey.suosituinNäyttö}
-              </ListItemText>
-              <ListItemText>
-                {survey.vastauksia}
-              </ListItemText>
-            </ListItem>
-          ))}
-        </List>
-      </Box>
+      <List>
+        { renderSurveyListHeadings() }
+        {mockData.map(survey => (
+          <ListItem key={survey.id}>
+            <ListItemText secondary={survey.kysely} />
+            <ListItemText secondary={survey.näytöt} />
+            <ListItemText secondary={survey.julkaisuaika.toFormat("dd.MM.yyyy")} />
+            <ListItemText secondary={survey.päättymisaika.toFormat("dd.MM.yyyy")} />
+            <ListItemText secondary={survey.suosituinNäyttö} />
+            <ListItemText secondary={survey.vastauksia} />
+          </ListItem>
+        ))}
+      </List>
     )
   };
 
   return (
-    <Box>
-      <Box>
+    <Box p={4}>
+      <Paper>
         <Tabs value={activeTab} onChange={(_, value) => setActiveTab(value)} >
           <Tab
             value={SurveyScreens.ACTIVE}
@@ -84,13 +58,13 @@ const SurveysScreen = () => {
             label={ strings.generic.notImplemented }
           />
         </Tabs>
-      </Box>
-      <TabPanel value={activeTab} index={SurveyScreens.ACTIVE} >
-        { renderSurveysList() }
-      </TabPanel>
-      <TabPanel value={activeTab} index={SurveyScreens.NOT_IMPLEMENTED} >
-        { strings.generic.notImplemented }
-      </TabPanel>
+        <TabPanel value={activeTab} index={SurveyScreens.ACTIVE} >
+          { renderSurveysList() }
+        </TabPanel>
+        <TabPanel value={activeTab} index={SurveyScreens.NOT_IMPLEMENTED} >
+          { strings.generic.notImplemented }
+        </TabPanel>
+      </Paper>
     </Box>
   );
 };

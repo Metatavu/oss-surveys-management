@@ -10,37 +10,37 @@ const { breakpoints, spacing } = createTheme();
  */
 export default createTheme({
   palette: {
-    mode: 'light',
+    mode: "light",
     primary: {
-      main: '#00aa46',
-      light: '#46dc78',
-      dark: '#007841',
+      main: "#00aa46",
+      light: "#46dc78",
+      dark: "#007841",
     },
     secondary: {
-      main: '#006e87',
+      main: "#006e87",
     },
     error: {
-      main: '#b70000',
+      main: "#b70000",
     },
     warning: {
-      main: '#ffa200',
+      main: "#ffa200",
     },
     success: {
-      main: '#00aa46',
-      dark: '#007841',
-      light: '#46dc78',
+      main: "#00aa46",
+      dark: "#007841",
+      light: "#46dc78",
     },
-    divider: '#dadcde',
+    divider: "#dadcde",
     background: {
-      default: '#eff0f1',
+      default: "#eff0f1",
     },
     text: {
-      primary: '#4b5055',
-      secondary: '#4B5055',
-      disabled: '#7d8287',
+      primary: "#4b5055",
+      secondary: "#4B5055",
+      disabled: "#7d8287",
     },
     info: {
-      main: '#006e87',
+      main: "#006e87",
     },
   },
   shape: {
@@ -52,7 +52,7 @@ export default createTheme({
       fontFamily: "SBonusDisplay-Black"
     },
     button: {
-      fontWeight: "bold",
+      fontFamily: "SBonusText-Bold",
       textTransform: "inherit"
     }
   },
@@ -60,13 +60,13 @@ export default createTheme({
     MuiCssBaseline: {
       styleOverrides: {
         a: {
-          textDecoration: "none",
+          textDecoration: "none"
         }
       }
     },
     MuiAppBar: {
       defaultProps: {
-        color: 'inherit',
+        color: "inherit"
       },
       styleOverrides: {
         root: {
@@ -76,42 +76,42 @@ export default createTheme({
           paddingLeft: spacing(4)
         },
         colorInherit: {
-          backgroundColor: '#fff'
+          backgroundColor: "#fff"
         },
       },
     },
     MuiSwitch: {
       defaultProps: {
-        size: 'small',
+        size: "small",
       },
       styleOverrides: {
         root: {
           width: 42,
           height: 26,
           padding: 0,
-          margin: 8,
+          margin: 8
         },
         switchBase: {
           padding: 1,
-          '&$checked, &$colorPrimary$checked, &$colorSecondary$checked': {
-            transform: 'translateX(16px)',
-            color: '#fff',
-            '& + $track': {
+          "&$checked, &$colorPrimary$checked, &$colorSecondary$checked": {
+            transform: "translateX(16px)",
+            color: "#fff",
+            "& + $track": {
               opacity: 1,
-              border: 'none',
+              border: "none"
             },
           },
         },
         thumb: {
           width: 24,
-          height: 24,
+          height: 24
         },
         track: {
           borderRadius: 13,
-          border: '1px solid #bdbdbd',
-          backgroundColor: '#fafafa',
+          border: "1px solid #bdbdbd",
+          backgroundColor: "#fafafa",
           opacity: 1,
-          transition: 'background-color 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,border 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms',
+          transition: "background-color 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,border 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms"
         },
       },
     },
@@ -151,64 +151,64 @@ export default createTheme({
     },
     MuiTable: {
       defaultProps: {
-        size: 'small'
+        size: "small"
       }
     },
     MuiButton: {
       defaultProps: {
-        size: 'small'
+        size: "small"
       }
     },
     MuiButtonGroup: {
       defaultProps: {
-        size: 'small'
+        size: "small"
       }
     },
     MuiCheckbox: {
       defaultProps: {
-        size: 'small'
+        size: "small"
       }
     },
     MuiFab: {
       defaultProps: {
-        size: 'small'
+        size: "small"
       }
     },
     MuiFormControl: {
       defaultProps: {
-        margin: 'dense',
-        size: 'small'
+        margin: "dense",
+        size: "small"
       }
     },
     MuiFormHelperText: {
       defaultProps: {
-        margin: 'dense'
+        margin: "dense"
       }
     },
     MuiIconButton: {
       defaultProps: {
-        size: 'small'
+        size: "small"
       }
     },
     MuiInputBase: {
       defaultProps: {
-        margin: 'dense'
+        margin: "dense"
       }
     },
     MuiInputLabel: {
       defaultProps: {
-        margin: 'dense'
+        margin: "dense"
       }
     },
     MuiRadio: {
       defaultProps: {
-        size: 'small'
+        size: "small"
       }
     },
     MuiTextField: {
       defaultProps: {
-        margin: 'dense',
-        size: 'small',
+        margin: "dense",
+        size: "small",
       }
     },
     MuiTooltip: {

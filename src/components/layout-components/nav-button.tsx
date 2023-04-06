@@ -33,7 +33,7 @@ const NavigationButton = styled(Button, {
  *
  * @param props component properties
  */
-const NavButton: React.FC<Props> = ({ title, selected }) => {
+const NavButton: FC<Props> = ({ title, selected }) => {
   return (
     <NavigationButton className={selected ? "selected" : ""}>
       {title}

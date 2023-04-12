@@ -13,7 +13,7 @@ import strings from "../../localization/strings";
  */
 const Header = () => {
   const [auth] = useAtom(authAtom);
-  const profileAtom = useAtomValue(userProfileAtom);
+  const profile = useAtomValue(userProfileAtom);
 
   const renderLogOutButton = () => {
     return (
@@ -29,10 +29,10 @@ const Header = () => {
         <Avatar />
         <Stack>
           <Typography variant="subtitle1">
-            {`${profileAtom?.firstName} ${profileAtom?.lastName}`}
+            {`${profile?.firstName} ${profile?.lastName}`}
           </Typography>
           <Typography variant="subtitle2">
-            {profileAtom?.email}
+            {profile?.email}
           </Typography>
         </Stack>
         {renderLogOutButton()}

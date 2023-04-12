@@ -9,16 +9,12 @@ import theme from "./styles/theme";
 
 const router = createBrowserRouter([
   {
-    children: [
-      {
-        path: "/surveys",
-        element: <SurveysScreen />
-      },
-      {
-        path: "/",
-        element: <Navigate to="/surveys" />
-      }
-    ]
+    path: "/surveys",
+    element: <SurveysScreen />
+  },
+  {
+    path: "/",
+    element: <Navigate to="/surveys" />
   }
 ]);
 

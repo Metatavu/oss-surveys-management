@@ -2,7 +2,6 @@ import { authAtom, userProfileAtom } from "../../atoms/auth";
 import ExitToAppOutlinedIcon from '@mui/icons-material/ExitToAppOutlined';
 import { AppBar, Avatar, IconButton, Stack, Toolbar, Typography } from "@mui/material";
 import { useAtom, useAtomValue } from "jotai";
-import React from "react";
 import logo from "../../assets/oss.svg";
 import NavButton from "./nav-button";
 import strings from "../../localization/strings";
@@ -12,13 +11,13 @@ import strings from "../../localization/strings";
  *
  * @param props component properties
  */
-const Header: React.FC = () => {
+const Header = () => {
   const [auth] = useAtom(authAtom);
   const profileAtom = useAtomValue(userProfileAtom);
 
   const renderLogOutButton = () => {
     return (
-      <IconButton onClick={() => auth?.logout()}>
+      <IconButton onClick={auth?.logout}>
         <ExitToAppOutlinedIcon />
       </IconButton>
     )
@@ -44,7 +43,7 @@ const Header: React.FC = () => {
   /**
    * Renders navigation buttons
    * TODO: add links and selection check
-   * @returns 
+   * @returns
    */
   const renderNavigation = () => {
     return (
@@ -59,7 +58,7 @@ const Header: React.FC = () => {
   return (
     <AppBar position="sticky">
       <Stack gap={4} direction="row">
-        <img height={30} src={logo}></img>
+        <img height={30} src={logo} alt={strings.navigation.logo}/>
         {renderNavigation()}
       </Stack>
       <Toolbar>

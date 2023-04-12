@@ -1,4 +1,4 @@
-import * as React from "react";
+import { createContext, ReactNode, useMemo, useState } from "react";
 import { DialogContent, Divider, Typography } from "@mui/material";
 import strings from "../../localization/strings";
 import type { ErrorContextType } from "../../types";
@@ -10,13 +10,13 @@ import moment from "moment";
  * Componenet properties
  */
 interface Props {
-  children: React.ReactNode;
+  children: ReactNode;
 }
 
 /**
  * Error context initialization
  */
-export const ErrorContext = React.createContext<ErrorContextType>({
+export const ErrorContext = createContext<ErrorContextType>({
   setError: () => {}
 });
 
@@ -25,9 +25,9 @@ export const ErrorContext = React.createContext<ErrorContextType>({
  *
  * @param props component properties
  */
-const ErrorHandler: React.FC<Props> = ({ children }) => {
-  const [error, setError] = React.useState<string>();
-  const [errorMessage, setErrorMessage] = React.useState<string>();
+const ErrorHandler = ({ children }: Props) => {
+  const [error, setError] = useState<string>();
+  const [errorMessage, setErrorMessage] = useState<string>();
 
   /**
    * Handles error message and tries to print any given error to logs
@@ -60,7 +60,7 @@ const ErrorHandler: React.FC<Props> = ({ children }) => {
   /**
    * Memoized context value
    */
-  const contextValue = React.useMemo(
+  const contextValue = useMemo(
     () => ({
       setError: handleError
     }),

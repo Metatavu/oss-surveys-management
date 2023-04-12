@@ -1,5 +1,4 @@
 import Header from "../layout-components/header";
-import React from "react";
 import { Box } from "@mui/material";
 
 /**
@@ -14,7 +13,7 @@ interface Props {
  *
  * @param props component properties
  */
-const BasicLayout: React.FC<Props> = ({ children }) => {
+const BasicLayout = ({ children }: Props) => {
   /**
    * Component render
    */

@@ -1,9 +1,12 @@
-import React from 'react'
+import strings from "../../localization/strings";
 
+/**
+ * Renders surveys screen
+ */
 const SurveysScreen = () => {
   return (
-    <div>surveys-screen</div>
+    <div>{strings.generic.notImplemented}</div>
   )
-}
+};
 
 export default SurveysScreen;

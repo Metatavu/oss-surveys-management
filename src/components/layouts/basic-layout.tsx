@@ -1,20 +1,14 @@
 import Header from "../layout-components/header";
 import React from "react";
 import { Box } from "@mui/material";
-
-/**
- * Component props
- */
-interface Props {
-  children: React.ReactNode;
-}
+import { Outlet } from "react-router-dom";
 
 /**
  * Basic layout component
  *
  * @param props component properties
  */
-const BasicLayout: React.FC<Props> = ({ children }) => {
+const BasicLayout: React.FC<Props> = () => {
   /**
    * Component render
    */
@@ -22,7 +16,7 @@ const BasicLayout: React.FC<Props> = ({ children }) => {
     <>
       <Header />
       <Box>
-        {children}
+        <Outlet/>
       </Box>
     </>
   )

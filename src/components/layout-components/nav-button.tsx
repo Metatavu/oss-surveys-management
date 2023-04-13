@@ -1,5 +1,6 @@
 import { Button, styled } from "@mui/material";
-import React, { FC } from "react";
+import { FC } from "react";
+import { Link } from "react-router-dom";
 
 /**
  * Component props
@@ -7,6 +8,7 @@ import React, { FC } from "react";
 interface Props {
   title: string;
   selected: boolean;
+  to: string;
 }
 
 /**
@@ -24,7 +26,7 @@ const NavigationButton = styled(Button, {
   borderRadius: 0,
   "&.selected": {
     color: theme.palette.primary.main,
-    borderBottomColor: theme.palette.primary.main 
+    borderBottomColor: theme.palette.primary.main
   }
 }));
 
@@ -33,11 +35,13 @@ const NavigationButton = styled(Button, {
  *
  * @param props component properties
  */
-const NavButton: FC<Props> = ({ title, selected }) => {
+const NavButton: FC<Props> = ({ title, selected, to }) => {
   return (
-    <NavigationButton className={selected ? "selected" : ""}>
-      {title}
-    </NavigationButton>
+    <Link to={to}>
+      <NavigationButton className={selected ? "selected" : ""}>
+        {title}
+      </NavigationButton>
+    </Link>
   )
 }
 

@@ -5,11 +5,13 @@ import ErrorHandler from "./components/contexts/error-handler";
 import BasicLayout from "./components/layouts/basic-layout";
 import AuthenticationProvider from "./components/providers/authentication-provider";
 import OverviewScreen from "./components/screens/overview-screen";
+import ScreensScreen from "./components/screens/screens-screen";
 import SurveysScreen from "./components/screens/surveys-screen";
 import theme from "./styles/theme";
 
 const router = createBrowserRouter([
   {
+    element: <BasicLayout />,
     children: [
       {
         path: "/overview",
@@ -18,6 +20,10 @@ const router = createBrowserRouter([
       {
         path: "/surveys",
         element: <SurveysScreen />
+      },
+      {
+        path: "/screens",
+        element: <ScreensScreen />
       },
       {
         path: "/",
@@ -36,9 +42,7 @@ const App = () => (
       <AuthenticationProvider>
         <ThemeProvider theme={ responsiveFontSizes(theme) }>
           <CssBaseline/>
-          <BasicLayout>
-            <RouterProvider router={router} />
-          </BasicLayout>
+            <RouterProvider router={router}/>
         </ThemeProvider>
       </AuthenticationProvider>
     </ErrorHandler>

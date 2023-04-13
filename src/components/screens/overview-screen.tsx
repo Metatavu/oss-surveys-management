@@ -5,6 +5,9 @@ import { SurveyScreens } from "../../types";
 import { mockData } from "./surveys-mock-data";
 import TabPanel from "../surveys/TabPanel";
 
+/**
+ *  Renders overview screen
+ */
 const OverviewScreen = () => {
   const [ activeTab, setActiveTab ] = useState(SurveyScreens.ACTIVE);
 

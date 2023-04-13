@@ -6,6 +6,9 @@ import React from "react";
 import logo from "../../assets/oss.svg";
 import NavButton from "./nav-button";
 import strings from "../../localization/strings";
+import { useLocation } from "react-router-dom";
+import { matchNavigation } from "../../utils/NavigationUtils";
+import { NavigationLinks } from "../../types";
 
 /**
  * Header component
@@ -15,6 +18,8 @@ import strings from "../../localization/strings";
 const Header: React.FC = () => {
   const [auth] = useAtom(authAtom);
   const profileAtom = useAtomValue(userProfileAtom);
+  const { pathname } = useLocation();
+  const currentNavigation = matchNavigation(pathname);
 
   const renderLogOutButton = () => {
     return (
@@ -24,6 +29,9 @@ const Header: React.FC = () => {
     )
   }
 
+  /**
+   * Renders user profile
+   */
   const renderUser = () => {
     return (
       <Stack direction="row" gap={2} alignItems="center">
@@ -43,15 +51,25 @@ const Header: React.FC = () => {
 
   /**
    * Renders navigation buttons
-   * TODO: add links and selection check
-   * @returns 
    */
   const renderNavigation = () => {
     return (
       <Stack direction="row" gap={2} alignItems="center">
-        <NavButton selected={true} title={strings.navigation.overview}/>
-        <NavButton selected={false} title={strings.navigation.surveys}/>
-        <NavButton selected={false} title={strings.navigation.screens}/>
+        <NavButton
+          selected={currentNavigation === NavigationLinks.OVERVIEW}
+          title={strings.navigation.overview}
+          to={NavigationLinks.OVERVIEW}
+        />
+        <NavButton
+          selected={currentNavigation === NavigationLinks.SURVEYS}
+          title={strings.navigation.surveys}
+          to={NavigationLinks.SURVEYS}
+        />
+        <NavButton
+          selected={currentNavigation === NavigationLinks.SCREENS}
+          title={strings.navigation.screens}
+          to={NavigationLinks.SCREENS}
+        />
       </Stack>
     )
   }

@@ -1,4 +1,4 @@
-import * as React from "react";
+import { FC, ReactNode } from "react";
 import {
   Dialog,
   DialogTitle,
@@ -21,13 +21,13 @@ interface Props {
   onCancel: () => void;
   onConfirm: () => void | Promise<void>;
   open: boolean;
-  error: boolean;
+  error?: boolean;
   fullScreen?: boolean;
   fullWidth?: boolean;
   disableEnforceFocus?: boolean;
   disabled?: boolean;
   ignoreOutsideClicks?: boolean;
-  children: React.ReactNode;
+  children: ReactNode;
 }
 
 /**
@@ -35,7 +35,7 @@ interface Props {
  *
  * @param props component properties
  */
-const GenericDialog: React.FC<Props> = ({
+const GenericDialog: FC<Props> = ({
   open,
   closeButtonText,
   reloadButtonText,

@@ -22,8 +22,6 @@ const TabPanel: React.FC<Props> = ({children, value, index}) => {
     <div
       role="tabpanel"
       hidden={value !== index}
-      id={`Survey-screen-tabpanel-${index}`}
-      aria-labelledby={`Survey-screen-tab-${index}`}
     >
       {value === index && (
         <Box sx={{ p: 3 }}>

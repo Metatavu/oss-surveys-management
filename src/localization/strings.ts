@@ -22,6 +22,7 @@ export interface Localized extends LocalizedStringsMethods {
     overview: string;
     surveys: string;
     screens: string;
+    logo: string;
   };
 
   /**

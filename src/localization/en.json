@@ -7,7 +7,8 @@
   "navigation": {
     "overview": "Overview",
     "surveys": "Surveys",
-    "screens": "Screens"
+    "screens": "Screens",
+    "logo": "Logo image"
   },
   "errorHandling": {
     "title": "Error occurred",

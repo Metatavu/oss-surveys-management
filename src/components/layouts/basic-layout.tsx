@@ -1,5 +1,4 @@
 import Header from "../layout-components/header";
-import React from "react";
 import { Box } from "@mui/material";
 import { Outlet } from "react-router-dom";
 
@@ -8,7 +7,7 @@ import { Outlet } from "react-router-dom";
  *
  * @param props component properties
  */
-const BasicLayout: React.FC<Props> = () => {
+const BasicLayout = ({ children }: Props) => {
   /**
    * Component render
    */

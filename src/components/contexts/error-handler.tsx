@@ -1,34 +1,26 @@
-import * as React from "react";
+import { ReactNode, useMemo } from "react";
 import { DialogContent, Divider, Typography } from "@mui/material";
 import strings from "../../localization/strings";
-import type { ErrorContextType } from "../../types";
 import GenericDialog from "../generic/generic-dialog";
 import * as Sentry from "@sentry/react";
 import moment from "moment";
+import { errorAtom } from "../../atoms/error";
+import { useAtom } from "jotai";
 
 /**
  * Componenet properties
  */
 interface Props {
-  children: React.ReactNode;
+  children: ReactNode;
 }
-
-/**
- * Error context initialization
- */
-export const ErrorContext = React.createContext<ErrorContextType>({
-  setError: () => {}
-});
 
 /**
  * Error handler component
  *
  * @param props component properties
  */
-const ErrorHandler: React.FC<Props> = ({ children }) => {
-  const [error, setError] = React.useState<string>();
-  const [errorMessage, setErrorMessage] = React.useState<string>();
-
+const ErrorHandler = ({ children }: Props) => {
+  const [error, setError] = useAtom(errorAtom);
   /**
    * Handles error message and tries to print any given error to logs
    * Sends error message to sentry
@@ -46,21 +38,21 @@ const ErrorHandler: React.FC<Props> = ({ children }) => {
       try {
         const errorJson = await err.json();
         console.error(errorJson);
-        setErrorMessage(errorJson.message);
+        setError(errorJson.message);
       } catch {
-        setErrorMessage(JSON.stringify(err));
+        setError(JSON.stringify(err));
       }
     } else if (err instanceof Error) {
-      setErrorMessage(err.message);
+      setError(err.message);
     } else {
-      setErrorMessage(JSON.stringify(err));
+      setError(JSON.stringify(err));
     }
   };
 
   /**
    * Memoized context value
    */
-  const contextValue = React.useMemo(
+  useMemo(
     () => ({
       setError: handleError
     }),
@@ -89,7 +81,7 @@ const ErrorHandler: React.FC<Props> = ({ children }) => {
    * Component render
    */
   return (
-    <ErrorContext.Provider value={contextValue}>
+    <>
       {children}
       <GenericDialog
         open={error !== undefined}
@@ -116,11 +108,11 @@ const ErrorHandler: React.FC<Props> = ({ children }) => {
             {strings.formatString(strings.errorHandling.dialog.url, getURL())}
           </Typography>
           <Typography>{strings.errorHandling.dialog.errorMessage}</Typography>
-          <code style={{ fontSize: "12px" }}>{errorMessage || ""}</code>
+          <code style={{ fontSize: "12px" }}>{error || ""}</code>
         </DialogContent>
         <Divider />
       </GenericDialog>
-    </ErrorContext.Provider>
+    </>
   );
 };
 

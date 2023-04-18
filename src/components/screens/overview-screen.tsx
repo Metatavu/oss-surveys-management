@@ -36,12 +36,12 @@ const OverviewScreen = () => {
         { renderSurveyListHeadings() }
         {mockData.map(survey => (
           <ListItem key={survey.id}>
-            <ListItemText secondary={survey.kysely} />
-            <ListItemText secondary={survey.näytöt} />
-            <ListItemText secondary={survey.julkaisuaika.toFormat("dd.MM.yyyy")} />
-            <ListItemText secondary={survey.päättymisaika.toFormat("dd.MM.yyyy")} />
-            <ListItemText secondary={survey.suosituinNäyttö} />
-            <ListItemText secondary={survey.vastauksia} />
+            <ListItemText secondary={survey.title} />
+            <ListItemText secondary={survey.screens} />
+            <ListItemText secondary={survey.startTime.toFormat("dd.MM.yyyy")} />
+            <ListItemText secondary={survey.endTime.toFormat("dd.MM.yyyy")} />
+            <ListItemText secondary={survey.topScreen} />
+            <ListItemText secondary={survey.answers} />
           </ListItem>
         ))}
       </List>

@@ -36,12 +36,12 @@ const OverviewScreen = () => {
         { renderSurveyListHeadings() }
         {mockData.map(survey => (
           <ListItem key={survey.id}>
-            <ListItemText secondary={survey.kysely} />
-            <ListItemText secondary={survey.näytöt} />
-            <ListItemText secondary={survey.julkaisuaika.toFormat("dd.MM.yyyy")} />
-            <ListItemText secondary={survey.päättymisaika.toFormat("dd.MM.yyyy")} />
-            <ListItemText secondary={survey.suosituinNäyttö} />
-            <ListItemText secondary={survey.vastauksia} />
+            <ListItemText secondary={survey.title} />
+            <ListItemText secondary={survey.screens} />
+            <ListItemText secondary={survey.startTime.toFormat("dd.MM.yyyy")} />
+            <ListItemText secondary={survey.endTime.toFormat("dd.MM.yyyy")} />
+            <ListItemText secondary={survey.topScreen} />
+            <ListItemText secondary={survey.answers} />
           </ListItem>
         ))}
       </List>
@@ -51,9 +51,9 @@ const OverviewScreen = () => {
   return (
     <Box p={4}>
       <Paper>
-        <Tabs value={activeTab} onChange={(_, value) => setActiveTab(value)} >
+        <Tabs value={ activeTab } onChange={ (_, value) => setActiveTab(value) } >
           <Tab
-            value={SurveyScreens.ACTIVE}
+            value={ SurveyScreens.ACTIVE }
             label={ strings.formatString(strings.surveysScreen.activeSurveys, `(${mockData.length})`)}
           />
           <Tab
@@ -61,10 +61,10 @@ const OverviewScreen = () => {
             label={ strings.generic.notImplemented }
           />
         </Tabs>
-        <TabPanel value={activeTab} index={SurveyScreens.ACTIVE} >
+        <TabPanel value={ activeTab } index={ SurveyScreens.ACTIVE } >
           { renderSurveysList() }
         </TabPanel>
-        <TabPanel value={activeTab} index={SurveyScreens.NOT_IMPLEMENTED} >
+        <TabPanel value={ activeTab } index={ SurveyScreens.NOT_IMPLEMENTED } >
           { strings.generic.notImplemented }
         </TabPanel>
       </Paper>

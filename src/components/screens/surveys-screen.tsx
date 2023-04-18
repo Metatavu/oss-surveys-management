@@ -1,20 +1,36 @@
 import { FormControl, Button, InputLabel, Select, Stack, TextField } from "@mui/material";
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import strings from "../../localization/strings";
+import { useApi } from "../../hooks/use-api";
+import { useSetAtom } from "jotai";
+import { errorAtom } from "../../atoms/error";
+import { useNavigate } from "react-router-dom";
 
 /**
  * Renders surveys screen
  */
 const SurveysScreen = () => {
+  const { surveysApi } = useApi();
+
+  const setError = useSetAtom(errorAtom);
+  const navigate = useNavigate();
 
   /**
    * Creates a new survey
    */
-  const createSurvey = () => {
-    console.log("TODO");
-    // API Call return id
+  const createSurvey = async () => {
+    try {
+      const newSurvey = await surveysApi.createSurvey({
+        survey: {
+          title: strings.surveysScreen.newSurvey
+        }
+      });
 
-    // Redirect to blank edit screen with id as part of route
+      navigate(`edit/${newSurvey.id}`)
+    } catch (error: any) {
+      setError(`${strings.errorHandling.surveysScreen.createSurveyError}, ${error}`)
+    }
+
   }
 
   return (

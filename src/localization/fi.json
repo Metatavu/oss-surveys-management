@@ -19,6 +19,9 @@
       "time": "Aika: {0}",
       "url": "Osoite: {0}",
       "errorMessage": "Virheilmoitus: "
+    },
+    "surveysScreen": {
+      "createSurveyError": "Virhe luotaessa kyselyä"
     }
   },
   "overviewScreen": {
@@ -35,6 +38,7 @@
     "sortBy": "Järjestä",
     "category": "Kategoria",
     "filter": "Suodata",
-    "createButton": "Luo uusi kysely"
+    "createButton": "Luo uusi kysely",
+    "newSurvey": "Uusi kysely"
   }
 }

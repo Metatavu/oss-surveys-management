@@ -19,6 +19,9 @@
       "time": "Time: {0}",
       "url": "URL: {0}",
       "errorMessage": "Error message: "
+    },
+    "surveysScreen": {
+      "createSurveyError": "Error while creating a survey"
     }
   },
   "overviewScreen": {
@@ -35,6 +38,7 @@
     "sortBy": "Sort by",
     "category": "Category",
     "filter": "Filter by",
-    "createButton": "Create new survey"
+    "createButton": "Create new survey",
+    "newSurvey": "New Survey"
   }
 }

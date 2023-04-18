@@ -38,6 +38,9 @@ export interface Localized extends LocalizedStringsMethods {
       url: string;
       errorMessage: string;
     };
+    surveysScreen: {
+      createSurveyError: string;
+    }
   };
 
   /**
@@ -62,6 +65,7 @@ export interface Localized extends LocalizedStringsMethods {
     category: string;
     filter: string;
     createButton: string;
+    newSurvey: string;
   }
 };
 /**

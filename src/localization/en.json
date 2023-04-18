@@ -2,7 +2,8 @@
   "generic": {
     "close": "Close",
     "logout": "Logout",
-    "notImplemented": "Not yet implemented"
+    "notImplemented": "Not yet implemented",
+    "back": "Back"
   },
   "navigation": {
     "overview": "Overview",
@@ -22,6 +23,9 @@
     },
     "surveysScreen": {
       "createSurveyError": "Error while creating a survey"
+    },
+    "editSurveysScreen": {
+      "surveyNotFound": "Survey not found"
     }
   },
   "overviewScreen": {
@@ -40,5 +44,8 @@
     "filter": "Filter by",
     "createButton": "Create new survey",
     "newSurvey": "New Survey"
+  },
+  "editSurveysScreen": {
+    "editing": "Editing / "
   }
 }

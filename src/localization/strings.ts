@@ -13,6 +13,7 @@ export interface Localized extends LocalizedStringsMethods {
     close: string;
     logout: string;
     notImplemented: string;
+    back: string;
   };
 
   /**
@@ -41,6 +42,9 @@ export interface Localized extends LocalizedStringsMethods {
     surveysScreen: {
       createSurveyError: string;
     }
+    editSurveysScreen: {
+      surveyNotFound: string;
+    }
   };
 
   /**
@@ -66,6 +70,13 @@ export interface Localized extends LocalizedStringsMethods {
     filter: string;
     createButton: string;
     newSurvey: string;
+  }
+
+  /**
+   * Translations related to surveys screen
+   */
+  editSurveysScreen: {
+    editing: string;
   }
 };
 /**

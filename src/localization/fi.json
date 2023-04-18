@@ -2,7 +2,8 @@
   "generic": {
     "close": "Sulje",
     "logout": "Kirjaudu ulos",
-    "notImplemented": "Ei vielä toteutettu"
+    "notImplemented": "Ei vielä toteutettu",
+    "back": "Takaisin"
   },
   "navigation": {
     "overview": "Yhteenveto",
@@ -22,6 +23,9 @@
     },
     "surveysScreen": {
       "createSurveyError": "Virhe luotaessa kyselyä"
+    },
+    "editSurveysScreen": {
+      "surveyNotFound": "Kyselyä ei löytynyt"
     }
   },
   "overviewScreen": {
@@ -40,5 +44,8 @@
     "filter": "Suodata",
     "createButton": "Luo uusi kysely",
     "newSurvey": "Uusi kysely"
+  },
+  "editSurveysScreen": {
+    "editing": "Luonnokset / "
   }
 }

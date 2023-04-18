@@ -1,4 +1,6 @@
-import { Box, Button, InputLabel, Select, Stack, TextField } from "@mui/material";
+import { FormControl, Button, InputLabel, Select, Stack, TextField } from "@mui/material";
+import AddCircleIcon from '@mui/icons-material/AddCircle';
+import strings from "../../localization/strings";
 
 /**
  * Renders surveys screen
@@ -10,31 +12,41 @@ const SurveysScreen = () => {
    */
   const createSurvey = () => {
     console.log("TODO");
+    // API Call return id
+
+    // Redirect to blank edit screen with id as part of route
   }
 
   return (
-    <Stack direction="row" sx={{ backgroundColor: "white" }}>
-      <Box>
-        <InputLabel>Näyta</InputLabel>
-        <Select />
-      </Box>
-      <Box>
-        <InputLabel>Järjestä</InputLabel>
-        <Select />
-      </Box>
-      <Box>
-        <InputLabel>Kategoria</InputLabel>
-        <Select />
-      </Box>
-      <Box>
-        <InputLabel>Suodata</InputLabel>
-        <Select />
-      </Box>
-      <Box>
-        <InputLabel>Suodata</InputLabel>
-        <TextField />
-      </Box>
-      <Button onClick={ createSurvey }>Luo uusi kysely</Button>
+    <Stack
+      direction="row"
+      gap={5}
+      sx={{ backgroundColor: "white", padding: 1 }}
+    >
+      <FormControl size="small" sx={{ flex: 1 }}>
+        <InputLabel>{ strings.surveysScreen.show }</InputLabel>
+        <Select sx={{ marginTop: 4 }} />
+      </FormControl>
+      <FormControl size="small" sx={{ flex: 1 }}>
+        <InputLabel>{ strings.surveysScreen.sortBy }</InputLabel>
+        <Select sx={{ marginTop: 4 }} />
+      </FormControl>
+      <FormControl size="small" sx={{ flex: 1 }}>
+        <InputLabel>{ strings.surveysScreen.category }</InputLabel>
+        <Select sx={{ marginTop: 4 }} />
+      </FormControl>
+      <FormControl size="small" sx={{ flex: 2 }}>
+        <InputLabel>{ strings.surveysScreen.filter }</InputLabel>
+        <TextField sx={{ marginTop: 4 }} />
+      </FormControl>
+      <Button
+        variant="outlined"
+        size="small"
+        startIcon={ <AddCircleIcon /> }
+        onClick={ createSurvey }
+      >
+        { strings.surveysScreen.createButton }
+      </Button>
     </Stack>
   );
 };

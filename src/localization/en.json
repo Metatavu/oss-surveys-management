@@ -21,7 +21,7 @@
       "errorMessage": "Error message: "
     }
   },
-  "surveysScreen": {
+  "overviewScreen": {
     "surveyTitle": "Surveys",
     "screens": "Screens",
     "publicationDate": "Publication date",
@@ -29,5 +29,12 @@
     "mostPopular": "Most popular screen",
     "answers": "Answers",
     "activeSurveys": "Active surveys {0}"
+  },
+  "surveysScreen": {
+    "show": "Show",
+    "sortBy": "Sort by",
+    "category": "Category",
+    "filter": "Filter by",
+    "createButton": "Create new survey"
   }
 }

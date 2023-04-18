@@ -41,9 +41,9 @@ export interface Localized extends LocalizedStringsMethods {
   };
 
   /**
-   * Translations related to surveys screen
+   * Translations related to overview screen
    */
-  surveysScreen: {
+  overviewScreen: {
     surveyTitle: string;
     screens: string;
     publicationDate: string;
@@ -52,6 +52,17 @@ export interface Localized extends LocalizedStringsMethods {
     answers: string;
     activeSurveys: string;
   };
+
+  /**
+   * Translations related to surveys screen
+   */
+  surveysScreen: {
+    show: string;
+    sortBy: string;
+    category: string;
+    filter: string;
+    createButton: string;
+  }
 };
 /**
  * Initialized localized strings

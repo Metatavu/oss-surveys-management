@@ -21,7 +21,7 @@
       "errorMessage": "Virheilmoitus: "
     }
   },
-  "surveysScreen": {
+  "overviewScreen": {
     "surveyTitle": "Kysely",
     "screens": "Näytöt",
     "publicationDate": "Julkaisuaika",
@@ -29,5 +29,12 @@
     "mostPopular": "Suosituin näyttö",
     "answers": "Vastauksia",
     "activeSurveys": "Aktiiviset kyselyt {0}"
+  },
+  "surveysScreen": {
+    "show": "Näyta",
+    "sortBy": "Järjestä",
+    "category": "Kategoria",
+    "filter": "Suodata",
+    "createButton": "Luo uusi kysely"
   }
 }

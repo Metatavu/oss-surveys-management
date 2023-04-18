@@ -7,7 +7,7 @@ import { Outlet } from "react-router-dom";
  *
  * @param props component properties
  */
-const BasicLayout = ({ children }: Props) => {
+const BasicLayout = () => {
   /**
    * Component render
    */

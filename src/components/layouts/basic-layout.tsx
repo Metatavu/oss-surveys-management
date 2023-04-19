@@ -1,19 +1,13 @@
 import Header from "../layout-components/header";
 import { Box } from "@mui/material";
-
-/**
- * Component props
- */
-interface Props {
-  children: React.ReactNode;
-}
+import { Outlet } from "react-router-dom";
 
 /**
  * Basic layout component
  *
  * @param props component properties
  */
-const BasicLayout = ({ children }: Props) => {
+const BasicLayout = () => {
   /**
    * Component render
    */
@@ -21,7 +15,7 @@ const BasicLayout = ({ children }: Props) => {
     <>
       <Header />
       <Box>
-        {children}
+        <Outlet/>
       </Box>
     </>
   )

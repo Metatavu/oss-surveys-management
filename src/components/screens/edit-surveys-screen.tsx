@@ -6,6 +6,9 @@ import { Survey } from "../../generated/client";
 import { useSetAtom } from "jotai";
 import { errorAtom } from "../../atoms/error";
 import strings from "../../localization/strings";
+import Editor from "../layout-components/editor";
+import { Box, Stack, Typography } from "@mui/material";
+import PropertiesPanel from "../layout-components/properties-panel";
 
 const EditSurveysScreen = () => {
   const { id } = useParams();
@@ -37,7 +40,14 @@ const EditSurveysScreen = () => {
   return (
     <>
       <Toolbar surveyName={ survey?.title || "" } />
-      <div>EditSurveysScreen</div>
+      <Stack direction="row" flex={1}>
+        <Editor/>
+        <PropertiesPanel>
+          <Box p={2} sx={{ borderBottom: "1px solid #DADCDE" }}>
+            <Typography>{strings.generic.notImplemented}</Typography>
+          </Box>
+        </PropertiesPanel>
+      </Stack>
     </>
   )
 }

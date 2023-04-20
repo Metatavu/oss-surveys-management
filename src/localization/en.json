@@ -46,6 +46,11 @@
     "newSurvey": "New Survey"
   },
   "editSurveysScreen": {
-    "editing": "Editing / "
+    "addNewPage": "Add new page",
+    "editing": "Editing",
+    "publish": "Publish",
+    "published": "Published",
+    "statistics": "Statistics",
+    "preview": "Preview"
   }
 }

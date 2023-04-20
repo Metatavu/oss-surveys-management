@@ -76,7 +76,12 @@ export interface Localized extends LocalizedStringsMethods {
    * Translations related to surveys screen
    */
   editSurveysScreen: {
+    addNewPage: string;
     editing: string;
+    publish: string;
+    published: string;
+    statistics: string;
+    preview: string;
   }
 };
 /**

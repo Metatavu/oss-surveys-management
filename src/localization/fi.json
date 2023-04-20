@@ -46,6 +46,11 @@
     "newSurvey": "Uusi kysely"
   },
   "editSurveysScreen": {
-    "editing": "Luonnokset / "
+    "addNewPage": "Lisää uusi sivu",
+    "editing": "Luonnokset",
+    "publish": "Julkaise",
+    "published": "Julkaistu",
+    "statistics": "Tilastot",
+    "preview": "Esikatselu"
   }
 }

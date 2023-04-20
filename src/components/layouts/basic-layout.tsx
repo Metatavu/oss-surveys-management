@@ -1,5 +1,5 @@
 import Header from "../layout-components/header";
-import { Box } from "@mui/material";
+import { Stack } from "@mui/material";
 import { Outlet } from "react-router-dom";
 
 /**
@@ -14,9 +14,9 @@ const BasicLayout = () => {
   return (
     <>
       <Header />
-      <Box>
+      <Stack flex={1}>
         <Outlet/>
-      </Box>
+      </Stack>
     </>
   )
 

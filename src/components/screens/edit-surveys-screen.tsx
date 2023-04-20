@@ -10,6 +10,9 @@ import Editor from "../layout-components/editor";
 import { Box, Stack, Typography } from "@mui/material";
 import PropertiesPanel from "../layout-components/properties-panel";
 
+/**
+ * Renders edit surveys screen
+ */
 const EditSurveysScreen = () => {
   const { id } = useParams();
   const { surveysApi } = useApi();

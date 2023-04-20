@@ -62,13 +62,28 @@ const Toolbar = ({ surveyName }: Props) => {
 
   const renderControls = () => (
     <>
-      <Button disabled color="primary" title={strings.generic.notImplemented} startIcon={<PublishOutlined/>}>
+      <Button
+        disabled
+        color="primary"
+        title={strings.generic.notImplemented}
+        startIcon={<PublishOutlined/>}
+      >
         {strings.editSurveysScreen.publish}
       </Button>
-      <Button disabled color="primary" title={strings.generic.notImplemented} startIcon={<BarChartOutlined/>}>
+      <Button
+        disabled
+        color="primary"
+        title={strings.generic.notImplemented}
+        startIcon={<BarChartOutlined/>}
+      >
         {strings.editSurveysScreen.statistics}
       </Button>
-      <Button disabled color="primary" title={strings.generic.notImplemented} startIcon={<PlayArrowOutlined/>}>
+      <Button
+        disabled
+        color="primary"
+        title={strings.generic.notImplemented}
+        startIcon={<PlayArrowOutlined/>}
+      >
         {strings.editSurveysScreen.preview}
       </Button>
     </>
@@ -97,7 +112,7 @@ const Toolbar = ({ surveyName }: Props) => {
         {renderControls()}
         {renderMenu()}
       </ControlsContainer>
-  </ToolbarContainer>
+    </ToolbarContainer>
   )
 };
 

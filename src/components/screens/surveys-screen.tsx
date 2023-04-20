@@ -56,16 +56,24 @@ const SurveysScreen = () => {
         gap={2}
         alignItems="center"
       >
-        <TextField disabled sx={{ flex: 2 }} label={ strings.surveysScreen.filter } size="small" placeholder="Hae nimellä" InputProps={{ endAdornment: <InputAdornment position="end"><Search/></InputAdornment> }}/>
+        <TextField
+          disabled
+          sx={{ flex: 2 }}
+          label={ strings.surveysScreen.filter }
+          size="small"
+          placeholder="Hae nimellä"
+          InputProps={{
+            endAdornment: <InputAdornment position="end"><Search/></InputAdornment>
+          }}
+        />
         <TextField
           sx={{ flex: 1 }}
           label={ strings.surveysScreen.show }
           size="small"
           select
-          defaultValue="Kaikki"
           disabled
         >
-          {/* //TODO: select options
+          {/* //TODO: select options not yet implemented
           {currencies.map((option) => (
             <MenuItem key={option.value} value={option.value}>
               {option.label}
@@ -78,10 +86,9 @@ const SurveysScreen = () => {
           label={ strings.surveysScreen.sortBy }
           size="small"
           select
-          defaultValue="Kaikki"
           disabled
         >
-          {/* //TODO: select options
+          {/* //TODO: select options not yet implemented
           {currencies.map((option) => (
             <MenuItem key={option.value} value={option.value}>
               {option.label}
@@ -94,7 +101,6 @@ const SurveysScreen = () => {
           label={ strings.surveysScreen.category }
           size="small"
           select
-          defaultValue="Ei kategorioita"
           disabled
         />
         <Box>

@@ -2,7 +2,7 @@ import styled from "@emotion/styled";
 import { Box, Button, IconButton, Paper, Stack, Typography } from "@mui/material";
 import theme from "../../styles/theme";
 import strings from "../../localization/strings";
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { useNavigate } from "react-router-dom";
 import { BarChartOutlined, MoreHoriz, PlayArrowOutlined, PublishOutlined } from "@mui/icons-material";
 

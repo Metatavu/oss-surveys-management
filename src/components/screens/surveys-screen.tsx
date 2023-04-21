@@ -1,5 +1,5 @@
 import { Search } from "@mui/icons-material";
-import AddCircleIcon from '@mui/icons-material/AddCircle';
+import AddCircleIcon from "@mui/icons-material/AddCircle";
 import { Box, Button, InputAdornment, Paper, Stack, TextField, styled } from "@mui/material";
 import strings from "../../localization/strings";
 import { useApi } from "../../hooks/use-api";

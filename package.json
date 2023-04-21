@@ -10,7 +10,8 @@
     "preview": "vite preview",
     "build-client": "openapi-generator-cli generate -i oss-surveys-api-spec/swagger.yaml -o src/generated/client -c generator-config.json -g typescript-fetch",
     "lint:check": "rome ci src/",
-    "lint:fix": "rome check src/ --apply-suggested && rome format src/ --write"
+    "lint:fix": "rome check src/ --apply-suggested && rome format src/ --write",
+    "postinstall": "npm run build-client"
   },
   "dependencies": {
     "@emotion/react": "11.10.6",

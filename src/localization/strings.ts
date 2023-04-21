@@ -13,6 +13,7 @@ export interface Localized extends LocalizedStringsMethods {
     close: string;
     logout: string;
     notImplemented: string;
+    back: string;
   };
 
   /**
@@ -38,12 +39,18 @@ export interface Localized extends LocalizedStringsMethods {
       url: string;
       errorMessage: string;
     };
+    surveysScreen: {
+      createSurveyError: string;
+    };
+    editSurveysScreen: {
+      surveyNotFound: string;
+    };
   };
 
   /**
-   * Translations related to surveys screen
+   * Translations related to overview screen
    */
-  surveysScreen: {
+  overviewScreen: {
     surveyTitle: string;
     screens: string;
     publicationDate: string;
@@ -52,7 +59,32 @@ export interface Localized extends LocalizedStringsMethods {
     answers: string;
     activeSurveys: string;
   };
-};
+
+  /**
+   * Translations related to surveys screen
+   */
+  surveysScreen: {
+    show: string;
+    sortBy: string;
+    category: string;
+    filter: string;
+    createButton: string;
+    newSurvey: string;
+    findByName: string;
+  };
+
+  /**
+   * Translations related to surveys screen
+   */
+  editSurveysScreen: {
+    addNewPage: string;
+    editing: string;
+    publish: string;
+    published: string;
+    statistics: string;
+    preview: string;
+  };
+}
 /**
  * Initialized localized strings
  */

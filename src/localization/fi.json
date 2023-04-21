@@ -2,7 +2,8 @@
   "generic": {
     "close": "Sulje",
     "logout": "Kirjaudu ulos",
-    "notImplemented": "Ei vielä toteutettu"
+    "notImplemented": "Ei vielä toteutettu",
+    "back": "Takaisin"
   },
   "navigation": {
     "overview": "Yhteenveto",
@@ -19,9 +20,15 @@
       "time": "Aika: {0}",
       "url": "Osoite: {0}",
       "errorMessage": "Virheilmoitus: "
+    },
+    "surveysScreen": {
+      "createSurveyError": "Virhe luotaessa kyselyä"
+    },
+    "editSurveysScreen": {
+      "surveyNotFound": "Kyselyä ei löytynyt"
     }
   },
-  "surveysScreen": {
+  "overviewScreen": {
     "surveyTitle": "Kysely",
     "screens": "Näytöt",
     "publicationDate": "Julkaisuaika",
@@ -29,5 +36,22 @@
     "mostPopular": "Suosituin näyttö",
     "answers": "Vastauksia",
     "activeSurveys": "Aktiiviset kyselyt {0}"
+  },
+  "surveysScreen": {
+    "show": "Näytä",
+    "sortBy": "Järjestä",
+    "category": "Kategoria",
+    "filter": "Suodata",
+    "createButton": "Luo uusi kysely",
+    "newSurvey": "Uusi kysely",
+    "findByName": "Hae nimellä"
+  },
+  "editSurveysScreen": {
+    "addNewPage": "Lisää uusi sivu",
+    "editing": "Luonnokset",
+    "publish": "Julkaise",
+    "published": "Julkaistu",
+    "statistics": "Tilastot",
+    "preview": "Esikatselu"
   }
 }

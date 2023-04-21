@@ -18,12 +18,12 @@ const OverviewScreen = () => {
    */
   const renderSurveyListHeadings = () => (
     <ListItem>
-      <ListItemText primary={ strings.surveysScreen.surveyTitle }/>
-      <ListItemText primary={ strings.surveysScreen.screens } />
-      <ListItemText primary={ strings.surveysScreen.publicationDate } />
-      <ListItemText primary={ strings.surveysScreen.endTime }/>
-      <ListItemText primary={ strings.surveysScreen.mostPopular } />
-      <ListItemText primary={ strings.surveysScreen.answers } />
+      <ListItemText primary={ strings.overviewScreen.surveyTitle }/>
+      <ListItemText primary={ strings.overviewScreen.screens } />
+      <ListItemText primary={ strings.overviewScreen.publicationDate } />
+      <ListItemText primary={ strings.overviewScreen.endTime }/>
+      <ListItemText primary={ strings.overviewScreen.mostPopular } />
+      <ListItemText primary={ strings.overviewScreen.answers } />
     </ListItem>
   );
 
@@ -35,13 +35,13 @@ const OverviewScreen = () => {
       <List>
         { renderSurveyListHeadings() }
         {mockData.map(survey => (
-          <ListItem key={survey.id}>
-            <ListItemText secondary={survey.title} />
-            <ListItemText secondary={survey.screens} />
-            <ListItemText secondary={survey.startTime.toFormat("dd.MM.yyyy")} />
-            <ListItemText secondary={survey.endTime.toFormat("dd.MM.yyyy")} />
-            <ListItemText secondary={survey.topScreen} />
-            <ListItemText secondary={survey.answers} />
+          <ListItem key={ survey.id }>
+            <ListItemText secondary={ survey.title } />
+            <ListItemText secondary={ survey.screens } />
+            <ListItemText secondary={ survey.startTime.toFormat("dd.MM.yyyy") } />
+            <ListItemText secondary={ survey.endTime.toFormat("dd.MM.yyyy") } />
+            <ListItemText secondary={ survey.topScreen } />
+            <ListItemText secondary={ survey.answers } />
           </ListItem>
         ))}
       </List>
@@ -54,7 +54,7 @@ const OverviewScreen = () => {
         <Tabs value={ activeTab } onChange={ (_, value) => setActiveTab(value) } >
           <Tab
             value={ SurveyScreens.ACTIVE }
-            label={ strings.formatString(strings.surveysScreen.activeSurveys, `(${mockData.length})`)}
+            label={ strings.formatString(strings.overviewScreen.activeSurveys, `(${mockData.length})`) }
           />
           <Tab
             value={ SurveyScreens.NOT_IMPLEMENTED }

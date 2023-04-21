@@ -8,6 +8,7 @@ import OverviewScreen from "./components/screens/overview-screen";
 import ScreensScreen from "./components/screens/screens-screen";
 import SurveysScreen from "./components/screens/surveys-screen";
 import theme from "./styles/theme";
+import EditSurveysScreen from "./components/screens/edit-surveys-screen";
 
 const router = createBrowserRouter([
   {
@@ -20,6 +21,10 @@ const router = createBrowserRouter([
       {
         path: "/surveys",
         element: <SurveysScreen />
+      },
+      {
+        path:"/surveys/edit/:id",
+        element: <EditSurveysScreen />
       },
       {
         path: "/screens",

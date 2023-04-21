@@ -51,6 +51,15 @@ export default createTheme({
     h1: {
       fontFamily: "SBonusDisplay-Black"
     },
+    h2: {
+      fontFamily: "SBonusDisplay-Black"
+    },
+    h3: {},
+    h4: {},
+    h5: {},
+    h6: {
+      fontFamily: "SBonusText-Bold"
+    },
     button: {
       fontFamily: "SBonusText-Bold",
       textTransform: "inherit"
@@ -59,6 +68,12 @@ export default createTheme({
   components: {
     MuiCssBaseline: {
       styleOverrides: {
+        ".App": {
+          display: "flex",
+          flexDirection: "column",
+          height: "100vh",
+          width: "100vw"
+        },
         a: {
           textDecoration: "none"
         }

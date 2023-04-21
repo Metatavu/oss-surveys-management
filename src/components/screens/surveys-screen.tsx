@@ -1,12 +1,12 @@
+import { errorAtom } from "../../atoms/error";
+import { useApi } from "../../hooks/use-api";
+import strings from "../../localization/strings";
+import theme from "../../styles/theme";
 import { Search } from "@mui/icons-material";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import { Box, Button, InputAdornment, Paper, Stack, TextField, styled } from "@mui/material";
-import strings from "../../localization/strings";
-import { useApi } from "../../hooks/use-api";
 import { useSetAtom } from "jotai";
-import { errorAtom } from "../../atoms/error";
 import { useNavigate } from "react-router-dom";
-import theme from "../../styles/theme";
 
 /**
  * Styled filter container component
@@ -59,16 +59,16 @@ const SurveysScreen = () => {
         <TextField
           disabled
           sx={{ flex: 2 }}
-          label={ strings.surveysScreen.filter }
+          label={strings.surveysScreen.filter}
           size="small"
-          placeholder="Hae nimellä"
+          placeholder={strings.surveysScreen.findByName}
           InputProps={{
-            endAdornment: <InputAdornment position="end"><Search/></InputAdornment>
+            endAdornment: <InputAdornment position="end"><Search /></InputAdornment>
           }}
         />
         <TextField
           sx={{ flex: 1 }}
-          label={ strings.surveysScreen.show }
+          label={strings.surveysScreen.show}
           size="small"
           select
           disabled
@@ -83,7 +83,7 @@ const SurveysScreen = () => {
         </TextField>
         <TextField
           sx={{ flex: 1 }}
-          label={ strings.surveysScreen.sortBy }
+          label={strings.surveysScreen.sortBy}
           size="small"
           select
           disabled
@@ -98,7 +98,7 @@ const SurveysScreen = () => {
         </TextField>
         <TextField
           sx={{ flex: 1 }}
-          label={ strings.surveysScreen.category }
+          label={strings.surveysScreen.category}
           size="small"
           select
           disabled
@@ -107,10 +107,10 @@ const SurveysScreen = () => {
           <Button
             size="large"
             variant="contained"
-            startIcon={ <AddCircleIcon /> }
-            onClick={ createSurvey }
+            startIcon={<AddCircleIcon />}
+            onClick={createSurvey}
           >
-            { strings.surveysScreen.createButton }
+            {strings.surveysScreen.createButton}
           </Button>
         </Box>
       </Stack>

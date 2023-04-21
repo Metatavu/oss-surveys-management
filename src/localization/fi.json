@@ -43,7 +43,8 @@
     "category": "Kategoria",
     "filter": "Suodata",
     "createButton": "Luo uusi kysely",
-    "newSurvey": "Uusi kysely"
+    "newSurvey": "Uusi kysely",
+    "findByName": "Hae nimellä"
   },
   "editSurveysScreen": {
     "addNewPage": "Lisää uusi sivu",

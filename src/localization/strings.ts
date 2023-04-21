@@ -41,10 +41,10 @@ export interface Localized extends LocalizedStringsMethods {
     };
     surveysScreen: {
       createSurveyError: string;
-    }
+    };
     editSurveysScreen: {
       surveyNotFound: string;
-    }
+    };
   };
 
   /**
@@ -70,7 +70,8 @@ export interface Localized extends LocalizedStringsMethods {
     filter: string;
     createButton: string;
     newSurvey: string;
-  }
+    findByName: string;
+  };
 
   /**
    * Translations related to surveys screen
@@ -82,8 +83,8 @@ export interface Localized extends LocalizedStringsMethods {
     published: string;
     statistics: string;
     preview: string;
-  }
-};
+  };
+}
 /**
  * Initialized localized strings
  */

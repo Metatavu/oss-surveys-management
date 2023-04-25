@@ -222,8 +222,18 @@ export default createTheme({
     },
     MuiTextField: {
       defaultProps: {
+        variant: "standard",
         margin: "dense",
         size: "small",
+      }
+    },
+    MuiInput: {
+      styleOverrides: {
+        root: {
+          "&:before": {
+            borderBottom: "1px solid rgba(0,0,0,0)"
+          }
+        }
       }
     },
     MuiTooltip: {

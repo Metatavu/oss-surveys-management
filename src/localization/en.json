@@ -52,6 +52,12 @@
     "publish": "Publish",
     "published": "Published",
     "statistics": "Statistics",
-    "preview": "Preview"
+    "preview": "Preview",
+    "editSurveyPanel": {
+      "name": "Name",
+      "description": "Description",
+      "category": "Category",
+      "returnTimeout": "Return to home screen timeout"
+    }
   }
 }

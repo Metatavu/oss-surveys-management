@@ -1,4 +1,4 @@
-import { Paper, styled } from "@mui/material";
+import { Paper, Stack, styled } from "@mui/material";
 import { FC, ReactNode } from "react";
 
 /**
@@ -27,7 +27,9 @@ interface Props {
 const PropertiesPanel: FC<Props> = ({ children }) => {
   return (
     <Panel elevation={0}>
-      { children }
+      <Stack>
+        { children }
+      </Stack>
     </Panel>
   )
 };

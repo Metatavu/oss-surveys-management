@@ -46,8 +46,7 @@ const WithDebounce: FC<Props> = ({
   placeholder
 }) => {
   const [ inputValue, setInputValue ] = useState(value);
-  // TODO: Typing issue to resolve.
-  const [ debounceTimer, setDebounceTimer ] = useState<NodeJS.Timeout | undefined>(undefined);
+  const [ debounceTimer, setDebounceTimer ] = useState<number | undefined>(undefined);
 
   useEffect(() => {
     if (value !== inputValue) {
@@ -63,7 +62,7 @@ const WithDebounce: FC<Props> = ({
   const onInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     debounceTimer && clearTimeout(debounceTimer);
 
-    const newDebounceTimer = setTimeout(() => onChange(event), debounceTimeout ?? 1000);
+    const newDebounceTimer = window.setTimeout(() => onChange(event), debounceTimeout ?? 1000);
 
     setDebounceTimer(newDebounceTimer);
     setInputValue(event.target.value);

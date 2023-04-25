@@ -1,6 +1,5 @@
 import { Add } from "@mui/icons-material";
 import { Box, Button, Stack, Typography, styled } from "@mui/material";
-import { FC } from "react";
 import strings from "../../localization/strings";
 
 /**
@@ -42,13 +41,22 @@ const IconContainer = styled(Box, {
 }));
 
 /**
+ * Component props
+ */
+interface Props {
+  onClick(): void;
+  disabled?: boolean;
+}
+
+
+/**
  * New page button component
  *
  * @param props component properties
  */
-const NewPageButton: FC = () => {
+const NewPageButton = ({ onClick, disabled }: Props) => {
   return (
-    <Root>
+    <Root onClick={onClick} disabled={disabled}>
       <Stack gap={2}>
         <IconContainer>
           <Add color="primary"/>

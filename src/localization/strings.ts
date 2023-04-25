@@ -84,6 +84,20 @@ export interface Localized extends LocalizedStringsMethods {
     statistics: string;
     preview: string;
   };
+
+  /**
+   * Translations related to page layouts
+   */
+  layouts: {
+    title: string;
+    questionnaire: string;
+    info: string;
+    infoImage: string;
+    paragraphImage: string;
+    imageParagraph: string;
+    questionnaireInfo: string;
+    statistics: string;
+  }
 }
 /**
  * Initialized localized strings

@@ -53,5 +53,15 @@
     "published": "Julkaistu",
     "statistics": "Tilastot",
     "preview": "Esikatselu"
+  },
+  "layouts": {
+    "title": "Valitse sivun rakenne alla olevista vaihtoehdoista",
+    "questionnaire": "Kysely",
+    "info": "Info",
+    "infoImage": "Kuva",
+    "paragraphImage": "Info + kuva",
+    "imageParagraph": "Kuva + info",
+    "questionnaireInfo": "Kysely + info",
+    "statistics": "Tilastot"
   }
 }

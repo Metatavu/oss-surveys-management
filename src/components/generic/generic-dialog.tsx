@@ -1,4 +1,4 @@
-import { FC, ReactNode } from "react";
+import { ReactNode } from "react";
 import {
   Dialog,
   DialogTitle,
@@ -6,7 +6,7 @@ import {
   DialogActions,
   Button,
   IconButton,
-  Divider
+  Box,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 
@@ -15,11 +15,11 @@ import CloseIcon from "@mui/icons-material/Close";
  */
 interface Props {
   title: string;
-  closeButtonText?: string;
-  reloadButtonText?: string;
+  confirmButtonText?: string;
+  cancelButtonText?: string;
   onClose: () => void;
   onCancel: () => void;
-  onConfirm: () => void | Promise<void>;
+  onConfirm?: () => void | Promise<void>;
   open: boolean;
   error?: boolean;
   fullScreen?: boolean;
@@ -28,6 +28,7 @@ interface Props {
   disabled?: boolean;
   ignoreOutsideClicks?: boolean;
   children: ReactNode;
+  maxWidth?: "xs" | "sm" |"md" | "lg" | "xl";
 }
 
 /**
@@ -35,10 +36,10 @@ interface Props {
  *
  * @param props component properties
  */
-const GenericDialog: FC<Props> = ({
+const GenericDialog = ({
   open,
-  closeButtonText,
-  reloadButtonText,
+  confirmButtonText,
+  cancelButtonText,
   onClose,
   onCancel,
   title,
@@ -46,11 +47,12 @@ const GenericDialog: FC<Props> = ({
   error,
   fullScreen,
   fullWidth,
+  maxWidth,
   disableEnforceFocus,
   disabled,
   ignoreOutsideClicks,
   children
-}) => {
+}: Props) => {
   /**
    * Event handler for on close click
    *
@@ -64,13 +66,6 @@ const GenericDialog: FC<Props> = ({
   };
 
   /**
-   * Reload button click event handler
-   */
-  const onReloadClick = () => {
-    window.location.reload();
-  };
-
-  /**
    * Component render
    */
   return (
@@ -79,25 +74,33 @@ const GenericDialog: FC<Props> = ({
       onClose={onCloseClick}
       fullScreen={fullScreen}
       fullWidth={fullWidth}
+      maxWidth={maxWidth}
       disableEnforceFocus={disableEnforceFocus}
     >
-      <DialogTitle variant="h2">
+      <DialogTitle>
         {title}
-        <IconButton style={{ float: "right" }} size="small" onClick={onCancel}>
-          <CloseIcon />
+        <IconButton
+          aria-label="close"
+          size="small"
+          onClick={ onCancel }
+        >
+          <CloseIcon/>
         </IconButton>
-        <Divider />
       </DialogTitle>
-      <DialogContent>{children}</DialogContent>
+      <DialogContent>
+        <Box p={3}>
+          {children}
+        </Box>
+      </DialogContent>
       <DialogActions>
-        {reloadButtonText && (
-          <Button onClick={onReloadClick} color="error" style={{ float: "left" }}>
-            {reloadButtonText}
+        {cancelButtonText && (
+          <Button onClick={onClose}>
+            {cancelButtonText}
           </Button>
         )}
-        {closeButtonText && (
-          <Button disabled={error || disabled} onClick={onConfirm} color="primary" autoFocus>
-            {closeButtonText}
+        {confirmButtonText && (
+          <Button variant="contained" disabled={error || disabled} onClick={onConfirm} color="primary" autoFocus>
+            {confirmButtonText}
           </Button>
         )}
       </DialogActions>

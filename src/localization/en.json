@@ -59,5 +59,8 @@
       "category": "Category",
       "returnTimeout": "Return to home screen timeout"
     }
+  },
+  "previewScreen": {
+    "sharePreview": "Share preview"
   }
 }

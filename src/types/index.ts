@@ -20,7 +20,8 @@ export enum SurveyScreens {
 export enum NavigationLinks {
   OVERVIEW = "overview",
   SURVEYS = "surveys",
-  SCREENS = "screens"
+  SCREENS = "screens",
+  PREVIEW = "preview"
 };
 
 /**

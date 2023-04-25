@@ -42,7 +42,7 @@ const EditSurveysScreen = () => {
     getSurvey();
   },[id]);
 
-  if (!survey) return null;
+  if (!survey || !survey.id) return null;
 
   /**
    * Persist changes to survey properties
@@ -61,7 +61,10 @@ const EditSurveysScreen = () => {
 
   return (
     <>
-      <Toolbar surveyName={ survey?.title || "" } />
+      <Toolbar
+        surveyName={ survey?.title || "" }
+        surveyId={ survey.id }
+      />
       <Stack direction="row" flex={1}>
         <Editor setPanelProperties={ setPanelProperties } />
         <PropertiesPanel>

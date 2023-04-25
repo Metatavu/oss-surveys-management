@@ -59,5 +59,8 @@
       "category": "Kategoriat",
       "returnTimeout": "Palaa alkunäyttöön"
     }
+  },
+  "previewScreen": {
+    "sharePreview": "Jaa esikatselu"
   }
 }

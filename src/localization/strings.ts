@@ -90,6 +90,13 @@ export interface Localized extends LocalizedStringsMethods {
       returnTimeout: string;
     }
   };
+
+  /**
+   * Translations related to preview screen
+   */
+  previewScreen: {
+    sharePreview: string;
+  }
 }
 /**
  * Initialized localized strings

@@ -22,3 +22,11 @@ export enum NavigationLinks {
   SURVEYS = "surveys",
   SCREENS = "screens"
 };
+
+/**
+ * Enum for editor panel properties
+ */
+export enum EditorPanelProperties {
+  SURVEY = "SURVEY",
+  PAGE = "PAGE"
+};

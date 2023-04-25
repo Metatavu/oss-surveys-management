@@ -10,6 +10,8 @@ import Editor from "../layout-components/editor";
 import { Stack } from "@mui/material";
 import PropertiesPanel from "../layout-components/properties-panel";
 import SurveyProperties from "../layout-components/survey-properties";
+import { EditorPanelProperties } from "../../types";
+import PageProperties from "../layout-components/page-properties";
 
 /**
  * Renders edit surveys screen
@@ -20,6 +22,7 @@ const EditSurveysScreen = () => {
   const setError = useSetAtom(errorAtom);
 
   const [ survey, setSurvey ] = useState<Survey>();
+  const [ panelProperties, setPanelProperties ] = useState<EditorPanelProperties>(EditorPanelProperties.SURVEY);
 
   /**
    * Get Survey from route id
@@ -44,7 +47,7 @@ const EditSurveysScreen = () => {
   /**
    * Persist changes to survey properties
    *
-   * event event
+   * @param event event
    */
   const onSaveSurvey = async ({ target: { value, name } }: ChangeEvent<HTMLInputElement>) => {
     const editedSurvey = {
@@ -60,16 +63,18 @@ const EditSurveysScreen = () => {
     <>
       <Toolbar surveyName={ survey?.title || "" } />
       <Stack direction="row" flex={1}>
-        <Editor/>
+        <Editor setPanelProperties={ setPanelProperties } />
         <PropertiesPanel>
-          <SurveyProperties
-            survey={ survey }
-            onSaveSurvey={ onSaveSurvey }
-          />
+          { panelProperties === EditorPanelProperties.SURVEY
+            ? <SurveyProperties
+                survey={ survey }
+                onSaveSurvey={ onSaveSurvey }
+              />
+            : <PageProperties /> }
         </PropertiesPanel>
       </Stack>
     </>
   )
-}
+};
 
 export default EditSurveysScreen;

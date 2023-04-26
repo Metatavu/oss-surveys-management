@@ -27,7 +27,7 @@ const EditorContainer = styled(Stack, {
  * Styled preview container component
  */
 const PreviewContainer = styled(Box, {
-  label: "new-page-button"
+  label: "preview-container"
 })(({ theme }) => ({
   borderWidth: 1,
   borderStyle: "solid",
@@ -48,7 +48,9 @@ const PreviewContainer = styled(Box, {
  */
 const Editor = ({ setPanelProperties }: Props) => {
   // TODO: Waiting backend, Editor can recieve survey as props from editSurveysScreen, this will contain HTML data
-  const dummyHTML = "<div>Dummy html</div>";
+  // This should be done using the data component type
+  const dummyHTML = "<div><div>Dummy html</div><div>Second div</div><button>Click</button></div>";
+
   const survey = {
     pages: [
       {

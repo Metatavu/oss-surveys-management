@@ -6,6 +6,29 @@ import { useSetAtom } from "jotai";
 import { errorAtom } from "../../atoms/error";
 import { useApi } from "../../hooks/use-api";
 import strings from "../../localization/strings";
+import Preview from "../layout-components/preview";
+import { Box, Stack, styled } from "@mui/material";
+
+/**
+ * Styled preview container component
+ */
+const PreviewContainer = styled(Box, {
+  label: "preview-screen-preview-container"
+})(({ theme }) => ({
+  borderWidth: 1,
+  borderStyle: "solid",
+  borderColor: theme.palette.primary.main,
+  display: "flex",
+  alignItems: "center",
+  alignSelf: "center",
+  justifyContent: "center",
+  width: 280,
+  height: 497,
+  "&:hover": {
+    borderStyle: "solid",
+    color: theme.palette.primary.dark
+  }
+}));
 
 /**
  * Renders preview screen
@@ -16,6 +39,7 @@ const PreviewScreen = () => {
   const setError = useSetAtom(errorAtom);
 
   const [ survey, setSurvey ] = useState<Survey>();
+  const dummyHTML = "<div><div>Dummy html</div><div>Second div</div><button>Click</button></div>";
 
   /**
    * Get Survey from route id
@@ -31,18 +55,22 @@ const PreviewScreen = () => {
     }
   };
 
-    useEffect(() => {
-      getSurvey();
-    },[id]);
+  useEffect(() => {
+    getSurvey();
+  },[id]);
 
   if (!survey) return null;
 
   return (
-    <>
+    <Stack>
       <PreviewToolbar surveyName={ survey.title } />
-      {/* TODO: Preview using data passed from id of survey */}
+      <PreviewContainer>
+        <Preview
+          htmlString={ dummyHTML }
+        />
+      </PreviewContainer>
       {/* TODO: the page count display */}
-    </>
+    </Stack>
   )
 };
 

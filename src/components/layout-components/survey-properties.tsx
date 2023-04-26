@@ -4,6 +4,7 @@ import { Survey } from '../../generated/client';
 import { ChangeEvent } from 'react';
 import WithDebounce from '../generic/with-debounce';
 import TimerOutlinedIcon from '@mui/icons-material/TimerOutlined';
+import { Edit } from '@mui/icons-material';
 
 /**
  * Component props
@@ -22,7 +23,8 @@ const SurveyProperties = ({ survey, onSaveSurvey }: Props) => {
     name: string,
     onChange: (event: ChangeEvent<HTMLInputElement>) => void,
     value: string,
-    placeholder: string
+    placeholder: string,
+    endAdornment: boolean
   ) => (
     <WithDebounce
       name={ name }
@@ -31,7 +33,17 @@ const SurveyProperties = ({ survey, onSaveSurvey }: Props) => {
       placeholder={ placeholder }
       component={ props =>
         <TextField
-          { ...props }/>
+          { ...props }
+          fullWidth
+          InputProps={{
+            endAdornment: (
+              endAdornment &&
+              <InputAdornment position="end">
+                <Edit fontSize="small" color="primary" />
+              </InputAdornment>
+            )
+          }}
+        />
       }
     />
   );
@@ -45,8 +57,8 @@ const SurveyProperties = ({ survey, onSaveSurvey }: Props) => {
             "title",
             onSaveSurvey,
             survey.title,
-            strings.editSurveysScreen.editSurveyPanel.name
-
+            strings.editSurveysScreen.editSurveyPanel.name,
+            true
           )
         }
       </Box>
@@ -54,14 +66,16 @@ const SurveyProperties = ({ survey, onSaveSurvey }: Props) => {
         <Typography>{ strings.editSurveysScreen.editSurveyPanel.description }</Typography>
         {/* TODO: Update with Debounce when backend ready */}
         <TextField
+          fullWidth
+          multiline
           placeholder={ strings.editSurveysScreen.editSurveyPanel.description }
-        />
-      </Box>
-      <Box p={2} sx={{ borderBottom: "1px solid #DADCDE" }}>
-        <Typography>{ strings.editSurveysScreen.editSurveyPanel.category }</Typography>
-        {/* TODO: Update with Debounce when backend ready */}
-        <TextField
-          placeholder={ strings.editSurveysScreen.editSurveyPanel.category }
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <Edit fontSize="small" color="primary" />
+              </InputAdornment>
+            )
+          }}
         />
       </Box>
       <Box p={2} sx={{ borderBottom: "1px solid #DADCDE" }}>
@@ -69,6 +83,7 @@ const SurveyProperties = ({ survey, onSaveSurvey }: Props) => {
         {/* TODO: Update with Debounce when backend ready */}
         <TextField
           type="number"
+          fullWidth
           placeholder={ strings.editSurveysScreen.editSurveyPanel.returnTimeout }
           InputProps={{
             startAdornment: (

@@ -9,7 +9,7 @@ const Panel = styled(Paper, {
 })(() => ({
   display: "flex",
   borderLeft: "1px solid #DADCDE",
-  width: 250,
+  width: 392,
   borderRadius: 0,
   overflow: "auto"
 }));
@@ -27,7 +27,7 @@ interface Props {
 const PropertiesPanel: FC<Props> = ({ children }) => {
   return (
     <Panel elevation={0}>
-      <Stack>
+      <Stack flex={1}>
         { children }
       </Stack>
     </Panel>

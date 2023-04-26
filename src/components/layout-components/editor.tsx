@@ -48,7 +48,6 @@ const PreviewContainer = styled(Box, {
  */
 const Editor = ({ setPanelProperties }: Props) => {
   // TODO: Waiting backend, Editor can recieve survey as props from editSurveysScreen, this will contain HTML data
-  // This should be done using the data component type
   const dummyHTML = "<div><div>Dummy html</div><div>Second div</div><button>Click</button></div>";
 
   const survey = {

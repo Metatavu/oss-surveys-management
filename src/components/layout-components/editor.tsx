@@ -31,63 +31,61 @@ const EditorContainer = styled(Stack, {
  * Renders editor component
  */
 const Editor = () => {
-  const [ showAddPage, setShowAddPage ] = useState<boolean>(false);
-
-
+  const [ showAddPage, setShowAddPage ] = useState(false);
 
   const renderAddNewPageDialog = () => (
     <GenericDialog
       maxWidth="lg"
-      open={showAddPage}
-      onCancel={() => setShowAddPage(false)}
-      onClose={() => setShowAddPage(false)}
+      open={ showAddPage }
+      onCancel={ () => setShowAddPage(false) }
+      onClose={ () => setShowAddPage(false) }
       cancelButtonText="Peruuta"
       title="Lisää uusi sivu"
     >
-      <Typography>{strings.layouts.title}</Typography>
+      <Typography>{ strings.layouts.title }</Typography>
       <Stack direction="row" gap={2} pt={3}>
-        <ImageButton 
-          title={strings.layouts.questionnaire}
-          image={<QuestionnaireLayoutImage/>}
-          onClick={() => {}}
-          selected={false}
+        <ImageButton
+          title={ strings.layouts.questionnaire }
+          image={ <QuestionnaireLayoutImage/> }
+          onClick={ () => {} }
+          selected={ false }
         />
         <ImageButton
-          title={strings.layouts.info}
-          image={<InfoLayoutImage/>}
-          onClick={() => {}}
-          selected={false}
+          title={ strings.layouts.info }
+          image={ <InfoLayoutImage/> }
+          onClick={ () => {} }
+          selected={ false }
         />
         <ImageButton
-          title={strings.layouts.infoImage}
-          image={<InfoImageLayoutImage/>}
-          onClick={() => {}}
-          selected={false}
+          title={ strings.layouts.infoImage }
+          image={ <InfoImageLayoutImage/> }
+          onClick={ () => {} }
+          selected={ false }
         />
         <ImageButton
-          title={strings.layouts.questionnaireInfo}
-          image={<QuestionnaireParagraphLayoutImage/>}
-          onClick={() => {}}
-          selected={false}
+          title={ strings.layouts.questionnaireInfo }
+          image={ <QuestionnaireParagraphLayoutImage/> }
+          onClick={ () => {} }
+          selected={ false }
         />
         <ImageButton
-          title={strings.layouts.imageParagraph}
-          image={<ImageParagraphLayoutImage/>}
-          onClick={() => {}}
-          selected={false}
+          title={ strings.layouts.imageParagraph }
+          image={ <ImageParagraphLayoutImage/> }
+          onClick={ () => {} }
+          selected={ false }
         />
         <ImageButton
-          title={strings.layouts.paragraphImage}
-          image={<ParagraphImageLayoutImage/>}
-          onClick={() => {}}
-          selected={false}
+          title={ strings.layouts.paragraphImage }
+          image={ <ParagraphImageLayoutImage/> }
+          onClick={ () => {} }
+          selected={ false }
         />
         <ImageButton
           disabled
-          title={strings.layouts.statistics}
-          image={<StatisticsLayoutImage/>}
-          onClick={() => {}}
-          selected={false}
+          title={ strings.layouts.statistics }
+          image={ <StatisticsLayoutImage/> }
+          onClick={ () => {} }
+          selected={ false }
         />
       </Stack>
     </GenericDialog>
@@ -95,8 +93,8 @@ const Editor = () => {
 
   return (
     <EditorContainer direction="row" gap={4}>
-      <NewPageButton onClick={() => setShowAddPage(true)}/>
-      {renderAddNewPageDialog()}
+      <NewPageButton onClick={ () => setShowAddPage(true) }/>
+      { renderAddNewPageDialog() }
     </EditorContainer>
   )
 };

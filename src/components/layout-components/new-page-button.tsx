@@ -48,7 +48,6 @@ interface Props {
   disabled?: boolean;
 }
 
-
 /**
  * New page button component
  *
@@ -56,12 +55,12 @@ interface Props {
  */
 const NewPageButton = ({ onClick, disabled }: Props) => {
   return (
-    <Root onClick={onClick} disabled={disabled}>
+    <Root onClick={ onClick } disabled={ disabled }>
       <Stack gap={2}>
         <IconContainer>
           <Add color="primary"/>
         </IconContainer>
-        <Typography color="primary">{strings.editSurveysScreen.addNewPage}</Typography>
+        <Typography color="primary">{ strings.editSurveysScreen.addNewPage }</Typography>
       </Stack>
     </Root>
   )

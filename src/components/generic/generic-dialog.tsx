@@ -70,15 +70,15 @@ const GenericDialog = ({
    */
   return (
     <Dialog
-      open={open}
-      onClose={onCloseClick}
-      fullScreen={fullScreen}
-      fullWidth={fullWidth}
-      maxWidth={maxWidth}
-      disableEnforceFocus={disableEnforceFocus}
+      open={ open }
+      onClose={ onCloseClick }
+      fullScreen={ fullScreen }
+      fullWidth={ fullWidth }
+      maxWidth={ maxWidth }
+      disableEnforceFocus={ disableEnforceFocus }
     >
       <DialogTitle>
-        {title}
+        { title }
         <IconButton
           aria-label="close"
           size="small"
@@ -89,18 +89,24 @@ const GenericDialog = ({
       </DialogTitle>
       <DialogContent>
         <Box p={3}>
-          {children}
+          { children }
         </Box>
       </DialogContent>
       <DialogActions>
-        {cancelButtonText && (
+        { cancelButtonText && (
           <Button onClick={onClose}>
             {cancelButtonText}
           </Button>
-        )}
+        ) }
         {confirmButtonText && (
-          <Button variant="contained" disabled={error || disabled} onClick={onConfirm} color="primary" autoFocus>
-            {confirmButtonText}
+          <Button
+            variant="contained"
+            disabled={ error || disabled }
+            onClick={ onConfirm }
+            color="primary"
+            autoFocus
+          >
+            { confirmButtonText }
           </Button>
         )}
       </DialogActions>

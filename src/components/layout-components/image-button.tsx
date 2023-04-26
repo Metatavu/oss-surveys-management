@@ -61,12 +61,16 @@ const ImageContainer = styled(Box, {
 const ImageButton = ({ title, selected, image, disabled, onClick }: Props) => {
   return (
 
-    <Root onClick={onClick} disabled={disabled} className={selected ? "selected" : ""}>
+    <Root
+      onClick={ onClick }
+      disabled={ disabled}
+      className={ selected ? "selected" : "" }
+    >
       <Stack gap={2}>
         <ImageContainer>
-          {image}
+          { image }
         </ImageContainer>
-        <Typography color="primary">{title}</Typography>
+        <Typography color="primary">{ title }</Typography>
       </Stack>
     </Root>
   )

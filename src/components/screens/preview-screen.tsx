@@ -8,6 +8,7 @@ import { useApi } from "../../hooks/use-api";
 import strings from "../../localization/strings";
 import Preview from "../layout-components/preview";
 import { Box, Stack, styled } from "@mui/material";
+import titleAndTextTemplate from "../pages/templates/title-and-text";
 
 /**
  * Styled preview container component
@@ -39,7 +40,8 @@ const PreviewScreen = () => {
   const setError = useSetAtom(errorAtom);
 
   const [ survey, setSurvey ] = useState<Survey>();
-  const dummyHTML = "<div><div>Dummy html</div><div>Second div</div><button>Click</button></div>";
+  const htmlTemplateDummy = titleAndTextTemplate;
+
 
   /**
    * Get Survey from route id
@@ -66,7 +68,7 @@ const PreviewScreen = () => {
       <PreviewToolbar surveyName={ survey.title } />
       <PreviewContainer>
         <Preview
-          htmlString={ dummyHTML }
+          htmlString={ htmlTemplateDummy }
         />
       </PreviewContainer>
       {/* TODO: the page count display */}

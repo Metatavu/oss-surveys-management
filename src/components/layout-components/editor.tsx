@@ -3,7 +3,12 @@ import theme from "../../styles/theme";
 import NewPageButton from "./new-page-button";
 import Preview from "./preview";
 import { EditorPanelProperties } from "../../types";
+import titleAndTextTemplate from "../pages/templates/title-and-text";
 
+
+/**
+ * Component properties
+ */
 interface Props {
   setPanelProperties: (properties: EditorPanelProperties) => void;
 }
@@ -48,21 +53,22 @@ const PreviewContainer = styled(Box, {
  */
 const Editor = ({ setPanelProperties }: Props) => {
   // TODO: Waiting backend, Editor can recieve survey as props from editSurveysScreen, this will contain HTML data
-  const dummyHTML = "<div><div>Dummy html</div><div>Second div</div><button>Click</button></div>";
+
+  const htmlTemplateDummy = titleAndTextTemplate;
 
   const survey = {
     pages: [
       {
         id: 1,
-        data: dummyHTML
+        data: htmlTemplateDummy
       },
       {
         id: 2,
-        data: dummyHTML
+        data: htmlTemplateDummy
       },
       {
         id: 3,
-        data: dummyHTML
+        data: htmlTemplateDummy
       }
     ]
   };
@@ -76,12 +82,13 @@ const Editor = ({ setPanelProperties }: Props) => {
     >
       {
         survey.pages.map(page =>
-          <PreviewContainer
-            key={ page.id }
-            onClick={ () => setPanelProperties(EditorPanelProperties.PAGE) }
-          >
-            <Preview htmlString={ page.data } />
-          </PreviewContainer>
+          // Styling issue with this container as content from template can overflow.
+            <PreviewContainer
+              key={ page.id }
+              onClick={ () => setPanelProperties(EditorPanelProperties.PAGE) }
+            >
+              <Preview htmlString={ page.data } />
+            </PreviewContainer>
         )
       }
       <NewPageButton/>

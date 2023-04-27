@@ -4,7 +4,7 @@ import NewPageButton from "./new-page-button";
 import Preview from "./preview";
 import { EditorPanelProperties } from "../../types";
 import titleAndTextTemplate from "../pages/templates/title-and-text";
-
+import { DEVICE_HEIGHT, DEVICE_WIDTH, EDITOR_SCREEN_PREVIEW_CONTAINER_HEIGHT, EDITOR_SCREEN_PREVIEW_CONTAINER_WIDTH } from "../../constants";
 
 /**
  * Component properties
@@ -40,8 +40,8 @@ const PreviewContainer = styled(Box, {
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
-  width: 280,
-  height: 497,
+  width: EDITOR_SCREEN_PREVIEW_CONTAINER_WIDTH,
+  height: EDITOR_SCREEN_PREVIEW_CONTAINER_HEIGHT,
   "&:hover": {
     borderStyle: "solid",
     color: theme.palette.primary.dark
@@ -77,17 +77,20 @@ const Editor = ({ setPanelProperties }: Props) => {
     <EditorContainer
       direction="row"
       gap={4}
-      // TODO: When can user set properties back to survey?
       onDoubleClick={ () => setPanelProperties(EditorPanelProperties.SURVEY) }
     >
       {
         survey.pages.map(page =>
-          // Styling issue with this container as content from template can overflow.
             <PreviewContainer
               key={ page.id }
               onClick={ () => setPanelProperties(EditorPanelProperties.PAGE) }
             >
-              <Preview htmlString={ page.data } />
+              <Preview
+                htmlString={ page.data }
+                width={ DEVICE_WIDTH }
+                height={ DEVICE_HEIGHT }
+                scale={ EDITOR_SCREEN_PREVIEW_CONTAINER_WIDTH / DEVICE_WIDTH }
+              />
             </PreviewContainer>
         )
       }

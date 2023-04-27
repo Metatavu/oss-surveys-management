@@ -1,3 +1,4 @@
+// TODO: This template needs styling
 const titleAndTextTemplate = `
     <div style=" background: #00AA46; color: #ffffff; height: inherit; align-items: center; display: flex; flex-direction: column;">
       <h1 style="margin: 0; padding: 0; text-transform: uppercase;">Kiitos äänestäsi!</h1>

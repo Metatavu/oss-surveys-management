@@ -9,6 +9,7 @@ import strings from "../../localization/strings";
 import Preview from "../layout-components/preview";
 import { Box, Stack, styled } from "@mui/material";
 import titleAndTextTemplate from "../pages/templates/title-and-text";
+import { DEVICE_HEIGHT, DEVICE_WIDTH, EDITOR_SCREEN_PREVIEW_CONTAINER_HEIGHT, EDITOR_SCREEN_PREVIEW_CONTAINER_WIDTH } from "../../constants";
 
 /**
  * Styled preview container component
@@ -23,8 +24,8 @@ const PreviewContainer = styled(Box, {
   alignItems: "center",
   alignSelf: "center",
   justifyContent: "center",
-  width: 280,
-  height: 497,
+  width: EDITOR_SCREEN_PREVIEW_CONTAINER_WIDTH,
+  height: EDITOR_SCREEN_PREVIEW_CONTAINER_HEIGHT,
   "&:hover": {
     borderStyle: "solid",
     color: theme.palette.primary.dark
@@ -69,6 +70,9 @@ const PreviewScreen = () => {
       <PreviewContainer>
         <Preview
           htmlString={ htmlTemplateDummy }
+          width={ DEVICE_WIDTH }
+          height={ DEVICE_HEIGHT }
+          scale={ EDITOR_SCREEN_PREVIEW_CONTAINER_WIDTH / DEVICE_WIDTH }
         />
       </PreviewContainer>
       {/* TODO: the page count display */}

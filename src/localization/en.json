@@ -21,6 +21,9 @@
       "url": "URL: {0}",
       "errorMessage": "Error message: "
     },
+    "overviewScreen": {
+      "surveysNotFound": "Surveys not found"
+    },
     "surveysScreen": {
       "createSurveyError": "Error while creating a survey"
     },

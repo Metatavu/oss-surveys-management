@@ -1,0 +1,57 @@
+{
+  "generic": {
+    "close": "Close",
+    "logout": "Logout",
+    "notImplemented": "Not yet implemented",
+    "back": "Back"
+  },
+  "navigation": {
+    "overview": "Overview",
+    "surveys": "Surveys",
+    "screens": "Screens",
+    "logo": "Logo image"
+  },
+  "errorHandling": {
+    "title": "Error occurred",
+    "dialog": {
+      "tryAgain": "Please check your internet connection and try again.",
+      "reportIssue": "If the problem persists it is possible that the fault is in background services we're using. Feel free to contact support@metatavu.fi by email. Please include technical details in the email to speed up resolution of the problem.",
+      "technicalDetails": "Technical details:",
+      "time": "Time: {0}",
+      "url": "URL: {0}",
+      "errorMessage": "Error message: "
+    },
+    "surveysScreen": {
+      "createSurveyError": "Error while creating a survey"
+    },
+    "editSurveysScreen": {
+      "surveyNotFound": "Survey not found"
+    }
+  },
+  "overviewScreen": {
+    "surveyTitle": "Surveys",
+    "screens": "Screens",
+    "publicationDate": "Publication date",
+    "endTime": "End date",
+    "mostPopular": "Most popular screen",
+    "answers": "Answers",
+    "activeSurveys": "Active surveys {0}"
+  },
+  "surveysScreen": {
+    "show": "Show",
+    "sortBy": "Sort by",
+    "category": "Category",
+    "filter": "Filter by",
+    "createButton": "Create new survey",
+    "newSurvey": "New Survey",
+    "findByName": "Find by name"
+  },
+  "editSurveysScreen": {
+    "addNewPage": "Add new page",
+    "editing": "Editing",
+    "publish": "Publish",
+    "published": "Published",
+    "statistics": "Statistics",
+    "preview": "Preview"
+  }
+}

@@ -1,0 +1,57 @@
+{
+  "generic": {
+    "close": "Sulje",
+    "logout": "Kirjaudu ulos",
+    "notImplemented": "Ei vielä toteutettu",
+    "back": "Takaisin"
+  },
+  "navigation": {
+    "overview": "Yhteenveto",
+    "surveys": "Kyselyt",
+    "screens": "Näytöt",
+    "logo": "Logokuva"
+  },
+  "errorHandling": {
+    "title": "Tapahtui virhe",
+    "dialog": {
+      "tryAgain": "Tarkista internet-yhteytesi ja yritä uudelleen.",
+      "reportIssue": "Mikäli ongelma jatkuu, voi vika olla myös käyttämissämme taustajärjestelmissä. Voit halutessasi ottaa sähköpostilla yhteyttä osoitteeseen support@metatavu.fi. Liitä tekniset lisätiedot osaksi sähköpostia nopeuttaaksesi ongelman selvittelyä.",
+      "technicalDetails": "Teknisiä lisätietoja:",
+      "time": "Aika: {0}",
+      "url": "Osoite: {0}",
+      "errorMessage": "Virheilmoitus: "
+    },
+    "surveysScreen": {
+      "createSurveyError": "Virhe luotaessa kyselyä"
+    },
+    "editSurveysScreen": {
+      "surveyNotFound": "Kyselyä ei löytynyt"
+    }
+  },
+  "overviewScreen": {
+    "surveyTitle": "Kysely",
+    "screens": "Näytöt",
+    "publicationDate": "Julkaisuaika",
+    "endTime": "Päättymisaika",
+    "mostPopular": "Suosituin näyttö",
+    "answers": "Vastauksia",
+    "activeSurveys": "Aktiiviset kyselyt {0}"
+  },
+  "surveysScreen": {
+    "show": "Näytä",
+    "sortBy": "Järjestä",
+    "category": "Kategoria",
+    "filter": "Suodata",
+    "createButton": "Luo uusi kysely",
+    "newSurvey": "Uusi kysely",
+    "findByName": "Hae nimellä"
+  },
+  "editSurveysScreen": {
+    "addNewPage": "Lisää uusi sivu",
+    "editing": "Luonnokset",
+    "publish": "Julkaise",
+    "published": "Julkaistu",
+    "statistics": "Tilastot",
+    "preview": "Esikatselu"
+  }
+}

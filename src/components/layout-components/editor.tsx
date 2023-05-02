@@ -81,17 +81,17 @@ const Editor = ({ setPanelProperties }: Props) => {
     >
       {
         survey.pages.map(page =>
-            <PreviewContainer
-              key={ page.id }
-              onClick={ () => setPanelProperties(EditorPanelProperties.PAGE) }
-            >
-              <Preview
-                htmlString={ page.data }
-                width={ DEVICE_WIDTH }
-                height={ DEVICE_HEIGHT }
-                scale={ EDITOR_SCREEN_PREVIEW_CONTAINER_WIDTH / DEVICE_WIDTH }
-              />
-            </PreviewContainer>
+          <PreviewContainer
+            key={ page.id }
+          >
+            <Preview
+              htmlString={ page.data }
+              width={ DEVICE_WIDTH }
+              height={ DEVICE_HEIGHT }
+              scale={ EDITOR_SCREEN_PREVIEW_CONTAINER_WIDTH / DEVICE_WIDTH }
+              onPanelPropertiesChange={ () => setPanelProperties(EditorPanelProperties.PAGE) }
+            />
+          </PreviewContainer>
         )
       }
       <NewPageButton/>

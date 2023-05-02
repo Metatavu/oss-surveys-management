@@ -7,6 +7,22 @@ export type ErrorContextType = {
 };
 
 /**
+ * Question type
+ */
+export type Question = {
+  type: QuestionType;
+  data: string;
+};
+
+/**
+ * Enum for question type
+ */
+export enum QuestionType {
+  SINGLE = "SINGLE",
+  MULTIPLE = "MULTIPLE"
+};
+
+/**
  * Enum for surveys screen
  */
 export enum SurveyScreens {

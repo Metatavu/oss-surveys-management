@@ -58,6 +58,15 @@
       "description": "Description",
       "category": "Category",
       "returnTimeout": "Return to home screen timeout"
+    },
+    "pages": {
+      "noQuestion": "No questions added"
+    },
+    "editPagesPanel": {
+      "page": "Page {0}",
+      "title": "Title",
+      "question": "Question",
+      "addOption": "Add an option"
     }
   },
   "previewScreen": {

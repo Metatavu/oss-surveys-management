@@ -88,6 +88,15 @@ export interface Localized extends LocalizedStringsMethods {
       description: string;
       category: string;
       returnTimeout: string;
+    };
+    pages: {
+      noQuestion: string;
+    };
+    editPagesPanel: {
+      page: string;
+      title: string;
+      question: string;
+      addOption: string;
     }
   };
 

@@ -58,6 +58,15 @@
       "description": "Kuvaus",
       "category": "Kategoriat",
       "returnTimeout": "Palaa alkunäyttöön"
+    },
+    "pages": {
+      "noQuestion": "Ei lisättyjä kysymyksiä"
+    },
+    "editPagesPanel": {
+      "page": "Sivu {0}",
+      "title": "Ostikko",
+      "question": "Kysely",
+      "addOption": "Lisää vaihtoehto"
     }
   },
   "previewScreen": {

@@ -27,6 +27,11 @@ const wrapTemplate = (bodyContent: string) => (
   <body style="margin: 0;">
     ${ sanitizeHtml(bodyContent, sanitizeOptions) }
   </body>
+  <script>
+    document.addEventListener("click", () =>
+      window.parent.postMessage("iFrameClick")
+    )
+  </script>
   </html>`
 );
 

@@ -46,14 +46,14 @@ const Preview = ({ htmlString, width, height, scale, onPanelPropertiesChange }: 
    *
    * @param html string
    */
-  const parseHtmlToDom = (html: string) => {
+  const parseHtmlStringToDom = (html: string) => {
     return new DOMParser().parseFromString(html, "text/html").body;
   };
 
   return (
     <div style={{ scale: String(scale) }}>
       <iframe
-        srcDoc={ wrapTemplate(parseHtmlToDom(htmlString).outerHTML) }
+        srcDoc={ wrapTemplate(parseHtmlStringToDom(htmlString).outerHTML) }
         width={ width }
         height={ height }
         seamless

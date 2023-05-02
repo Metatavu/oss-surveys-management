@@ -8,6 +8,8 @@ import { DEVICE_HEIGHT, DEVICE_WIDTH, EDITOR_SCREEN_PREVIEW_CONTAINER_HEIGHT, ED
 import titleAndQueryTemplate from "../pages/templates/query-template-EXAMPLE";
 import { optionsAtom } from "../../atoms/temp-options";
 import { useAtom } from "jotai";
+import { useEffect, useState } from "react";
+import { renderSingleQuestionOptionsAsHtml } from "../../utils/PreviewUtils";
 
 /**
  * Component properties
@@ -58,22 +60,23 @@ const Editor = ({ setPanelProperties }: Props) => {
   // TODO: Waiting backend, Editor can recieve survey as props from editSurveysScreen, this will contain HTML data and the question data, for now using atom.
   const [ options, _setOptions ] = useAtom(optionsAtom);
 
-  const htmlTemplateDummy = titleAndTextTemplate;
-  // TODO: Want to pass in the options into a function which will parse them into appropriate html and then can pass into the template, which is then passed to preview...
+  // TODO: This needs to be done per page/ for each template containing options/ questions?
+  const [ questionTemplate, setQuestionTemplate ] = useState(titleAndQueryTemplate());
 
   /**
-   * TODO: Move into utils.
+   * Updates "static" template containing questions
    */
-  // const renderQuestionOptionsAsHtml = () => {
+  useEffect(() => {
+    setQuestionTemplate(titleAndQueryTemplate(renderSingleQuestionOptionsAsHtml(options)));
+  }, [options]);
 
-  // }
-  // const templateWithOptions = titleAndQueryTemplate();
+  const htmlTemplateDummy = titleAndTextTemplate;
 
   const survey = {
     pages: [
       {
         id: 1,
-        data: htmlTemplateDummy
+        data: questionTemplate
       },
       {
         id: 2,

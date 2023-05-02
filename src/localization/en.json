@@ -3,7 +3,8 @@
     "close": "Close",
     "logout": "Logout",
     "notImplemented": "Not yet implemented",
-    "back": "Back"
+    "back": "Back",
+    "confirm": "Confirm"
   },
   "navigation": {
     "overview": "Overview",
@@ -66,7 +67,8 @@
       "page": "Page {0}",
       "title": "Title",
       "question": "Question",
-      "addOption": "Add an option"
+      "addOption": "Add an option",
+      "confirmDeleteOption": "Are you sure you want to delete this option?"
     }
   },
   "previewScreen": {

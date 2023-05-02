@@ -14,6 +14,7 @@ export interface Localized extends LocalizedStringsMethods {
     logout: string;
     notImplemented: string;
     back: string;
+    confirm: string;
   };
 
   /**
@@ -97,6 +98,7 @@ export interface Localized extends LocalizedStringsMethods {
       title: string;
       question: string;
       addOption: string;
+      confirmDeleteOption: string;
     }
   };
 

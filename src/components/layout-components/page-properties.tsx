@@ -3,10 +3,12 @@ import strings from "../../localization/strings";
 import { Edit } from "@mui/icons-material";
 import { Question, QuestionType } from "../../types";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
+import DeleteIcon from '@mui/icons-material/Delete';
 import { ChangeEvent, useState } from "react";
 import { v4 as uuid } from 'uuid';
 import { optionsAtom } from "../../atoms/temp-options";
 import { useAtom } from "jotai";
+import GenericDialog from "../generic/generic-dialog";
 
 /**
  * Renders page properties component
@@ -17,6 +19,8 @@ const PageProperties = () => {
 
   //TODO:  Using atom to pass to the preview, this can later be done via backend and correct survey/ option/ page type.
   const [ questionOptions, setQuestionOptions ] =  useAtom(optionsAtom);
+  const [ deleteDialogOpen, setDeleteDialogOpen ] = useState(false);
+  const [ optionToDelete, setOptionToDelete] = useState<Question | undefined>();
 
   /**
    * Handle question option change
@@ -35,15 +39,53 @@ const PageProperties = () => {
     setQuestionOptions(updatedOptions);
   };
 
-  const newQuestionOption = {
-    id: uuid(),
-    data: "",
-    // TODO: this should handle multiple type later on also.
-    type: QuestionType.SINGLE
-  }
+  /**
+   * Adds new question option to question otions
+   */
+  const addNewQuestionOption = () => {
+    const newQuestionOption = {
+      id: uuid(),
+      data: "",
+      // TODO: this should handle multiple type later on also.
+      type: QuestionType.SINGLE
+    };
+
+    questionOptions
+    ? setQuestionOptions([ ...questionOptions, newQuestionOption ])
+    : setQuestionOptions([ newQuestionOption ]);
+  };
+
+  /**
+   * Removes the selected option from the list
+   */
+  const deleteOption = () => {
+    if (!optionToDelete) return;
+
+    const updatedList = questionOptions.filter(option => option.id !== optionToDelete.id);
+
+    setQuestionOptions(updatedList);
+    setDeleteDialogOpen(false);
+  };
+
+  /**
+   * Trigger delete confirm dialog and store option to be deleted state
+   */
+  const handleDeleteClick = (optionId: Question) => {
+    setDeleteDialogOpen(true);
+    setOptionToDelete(optionId);
+  };
 
   return (
     <>
+      <GenericDialog
+        title={ strings.editSurveysScreen.editPagesPanel.confirmDeleteOption }
+        open={ deleteDialogOpen }
+        onCancel={ () => setDeleteDialogOpen(false) }
+        onClose={ () => setDeleteDialogOpen(false) }
+        onConfirm={ deleteOption }
+        children={ <div>{ optionToDelete?.data }</div> }
+        closeButtonText={ strings.generic.confirm }
+      />
       <Box p={2} sx={{ borderBottom: "1px solid #DADCDE" }}>
         <Typography>
           {strings.formatString(strings.editSurveysScreen.editPagesPanel.page, `(${1})`)}
@@ -106,18 +148,25 @@ const PageProperties = () => {
         <Box p={2} sx={{ borderBottom: "1px solid #DADCDE" }}>
           { questionOptions?.map(option =>
             <TextField
-              key={option.id}
+              key={ option.id }
               fullWidth
               multiline
               value={ option.data }
               name={ option.data }
               onChange={ (e) => handleQuestionOptionChange(e, option.id) }
-              placeholder={strings.editSurveysScreen.editPagesPanel.title}
+              placeholder={ strings.editSurveysScreen.editPagesPanel.title }
               InputProps={{
                 endAdornment: (
-                  // TODO: Does this need delete functionality?
                   <InputAdornment position="end">
-                    <Edit fontSize="small" color="primary" />
+                    <Edit
+                      fontSize="small"
+                      color="primary"
+                    />
+                    <DeleteIcon
+                      fontSize="small"
+                      color="error"
+                      onClick={ () => handleDeleteClick(option) }
+                    />
                   </InputAdornment>
                 )
               }}
@@ -130,7 +179,7 @@ const PageProperties = () => {
           size="large"
           variant="contained"
           startIcon={ <AddCircleIcon /> }
-          onClick={ () => questionOptions ? setQuestionOptions([...questionOptions, newQuestionOption ]) : setQuestionOptions([newQuestionOption]) }
+          onClick={ addNewQuestionOption }
         >
           { strings.editSurveysScreen.editPagesPanel.addOption }
         </Button>

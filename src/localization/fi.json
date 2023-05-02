@@ -3,7 +3,8 @@
     "close": "Sulje",
     "logout": "Kirjaudu ulos",
     "notImplemented": "Ei vielä toteutettu",
-    "back": "Takaisin"
+    "back": "Takaisin",
+    "confirm": "Vahvistaa"
   },
   "navigation": {
     "overview": "Yhteenveto",
@@ -66,7 +67,8 @@
       "page": "Sivu {0}",
       "title": "Ostikko",
       "question": "Kysely",
-      "addOption": "Lisää vaihtoehto"
+      "addOption": "Lisää vaihtoehto",
+      "confirmDeleteOption": "Haluatko varmasti poistaa tämän vaihtoehdon?"
     }
   },
   "previewScreen": {

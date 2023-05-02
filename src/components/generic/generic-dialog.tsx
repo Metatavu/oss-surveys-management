@@ -95,7 +95,7 @@ const GenericDialog = ({
       <DialogActions>
         { cancelButtonText && (
           <Button onClick={ onClose }>
-            {cancelButtonText}
+            { cancelButtonText }
           </Button>
         ) }
         {confirmButtonText && (

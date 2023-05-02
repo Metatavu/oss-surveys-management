@@ -8,7 +8,8 @@ import { NavigationLinks } from "../types";
   export const getTranslatedNavigation = (navigation: NavigationLinks): string => ({
     [NavigationLinks.OVERVIEW]: "/overview",
     [NavigationLinks.SURVEYS]: "/surveys",
-    [NavigationLinks.SCREENS]: "/screens"
+    [NavigationLinks.SCREENS]: "/screens",
+    [NavigationLinks.PREVIEW]: "/preview"
   })[navigation];
 
   /**

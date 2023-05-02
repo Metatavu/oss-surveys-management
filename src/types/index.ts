@@ -10,6 +10,7 @@ export type ErrorContextType = {
  * Question type
  */
 export type Question = {
+  id: string;
   type: QuestionType;
   data: string;
 };

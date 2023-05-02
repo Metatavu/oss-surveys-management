@@ -5,6 +5,9 @@ import Preview from "./preview";
 import { EditorPanelProperties } from "../../types";
 import titleAndTextTemplate from "../pages/templates/title-and-text";
 import { DEVICE_HEIGHT, DEVICE_WIDTH, EDITOR_SCREEN_PREVIEW_CONTAINER_HEIGHT, EDITOR_SCREEN_PREVIEW_CONTAINER_WIDTH } from "../../constants";
+import titleAndQueryTemplate from "../pages/templates/query-template-EXAMPLE";
+import { optionsAtom } from "../../atoms/temp-options";
+import { useAtom } from "jotai";
 
 /**
  * Component properties
@@ -52,9 +55,19 @@ const PreviewContainer = styled(Box, {
  * Renders editor component
  */
 const Editor = ({ setPanelProperties }: Props) => {
-  // TODO: Waiting backend, Editor can recieve survey as props from editSurveysScreen, this will contain HTML data
+  // TODO: Waiting backend, Editor can recieve survey as props from editSurveysScreen, this will contain HTML data and the question data, for now using atom.
+  const [ options, _setOptions ] = useAtom(optionsAtom);
 
   const htmlTemplateDummy = titleAndTextTemplate;
+  // TODO: Want to pass in the options into a function which will parse them into appropriate html and then can pass into the template, which is then passed to preview...
+
+  /**
+   * TODO: Move into utils.
+   */
+  // const renderQuestionOptionsAsHtml = () => {
+
+  // }
+  // const templateWithOptions = titleAndQueryTemplate();
 
   const survey = {
     pages: [

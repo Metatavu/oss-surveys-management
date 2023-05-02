@@ -1,22 +1,22 @@
 import { Box, Button, InputAdornment, MenuItem, TextField, Typography } from "@mui/material";
 import strings from "../../localization/strings";
 import { Edit } from "@mui/icons-material";
-import { QuestionType } from "../../types";
+import { Question, QuestionType } from "../../types";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import { ChangeEvent, useState } from "react";
 import { v4 as uuid } from 'uuid';
+import { optionsAtom } from "../../atoms/temp-options";
+import { useAtom } from "jotai";
 
-// TODO: This type will come from generated files.
-type QuestionOptions = {
-  id: string;
-  question: string;
-}
 /**
  * Renders page properties component
  */
 const PageProperties = () => {
-  // TODO: Populated with options from the backend and debounce
-  const [ questionOptions, setQuestionOptions ] = useState<QuestionOptions[]>();
+  // TODO: Populated with options from the backend and debounce, to replace below atom
+  // const [ questionOptions, setQuestionOptions ] = useState<Question[]>();
+
+  //TODO:  Using atom to pass to the preview, this can later be done via backend and correct survey/ option/ page type.
+  const [ questionOptions, setQuestionOptions ] =  useAtom(optionsAtom);
 
   /**
    * Handle question option change
@@ -26,7 +26,7 @@ const PageProperties = () => {
 
     const updatedOptions = questionOptions.map(option => {
       if (option.id === id) {
-        return {...option, question: event.target.value}
+        return { ...option, data: event.target.value }
       }
       return option;
     });
@@ -35,7 +35,12 @@ const PageProperties = () => {
     setQuestionOptions(updatedOptions);
   };
 
-  const newQuestionOption = { id: uuid(), question: "" }
+  const newQuestionOption = {
+    id: uuid(),
+    data: "",
+    // TODO: this should handle multiple type later on also.
+    type: QuestionType.SINGLE
+  }
 
   return (
     <>
@@ -83,6 +88,7 @@ const PageProperties = () => {
           label={ strings.editSurveysScreen.editPagesPanel.question }
           size="small"
           select
+          // TODO: this should handle Multiple question types later
           defaultValue={ QuestionType.SINGLE }
         >
           <MenuItem
@@ -91,9 +97,9 @@ const PageProperties = () => {
           >
             { QuestionType.SINGLE }
           </MenuItem>
-          <MenuItem key={ QuestionType.MULTIPLE } value={ QuestionType.MULTIPLE }>
+          {/* <MenuItem key={ QuestionType.MULTIPLE } value={ QuestionType.MULTIPLE }>
             { QuestionType.MULTIPLE }
-          </MenuItem>
+          </MenuItem> */}
         </TextField>
       </Box>
       { questionOptions &&
@@ -103,12 +109,13 @@ const PageProperties = () => {
               key={option.id}
               fullWidth
               multiline
-              value={ option.question }
-              name={ option.question }
+              value={ option.data }
+              name={ option.data }
               onChange={ (e) => handleQuestionOptionChange(e, option.id) }
               placeholder={strings.editSurveysScreen.editPagesPanel.title}
               InputProps={{
                 endAdornment: (
+                  // TODO: Does this need delete functionality?
                   <InputAdornment position="end">
                     <Edit fontSize="small" color="primary" />
                   </InputAdornment>

@@ -1,4 +1,3 @@
-import * as React from "react";
 import { SvgIcon, SvgIconProps, styled } from "@mui/material";
 
 /**

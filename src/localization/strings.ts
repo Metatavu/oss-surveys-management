@@ -39,6 +39,9 @@ export interface Localized extends LocalizedStringsMethods {
       url: string;
       errorMessage: string;
     };
+    overviewScreen: {
+      surveysNotFound: string;
+    };
     surveysScreen: {
       createSurveyError: string;
     };

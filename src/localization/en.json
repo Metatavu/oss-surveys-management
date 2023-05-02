@@ -22,7 +22,7 @@
       "errorMessage": "Error message: "
     },
     "overviewScreen": {
-      "surveysNotFound": "Surveys not found"
+      "surveysNotFound": "Error while loading surveys"
     },
     "surveysScreen": {
       "createSurveyError": "Error while creating a survey"

@@ -9,7 +9,7 @@ interface Props {
   width: number;
   height: number;
   scale: number;
-  onPanelPropertiesChange: () => void;
+  onPanelPropertiesChange?: () => void;
 }
 
 /**
@@ -20,9 +20,11 @@ const Preview = ({ htmlString, width, height, scale, onPanelPropertiesChange }: 
    * Set up event listener to recieve post message from iframe
    */
   useEffect(() => {
-    window.addEventListener("message", handlePostMessageEventListener);
+    if (onPanelPropertiesChange) {
+      window.addEventListener("message", handlePostMessageEventListener);
 
-    return () => window.removeEventListener("message", handlePostMessageEventListener);
+      return () => window.removeEventListener("message", handlePostMessageEventListener);
+    }
   },[]);
 
   /**
@@ -31,9 +33,11 @@ const Preview = ({ htmlString, width, height, scale, onPanelPropertiesChange }: 
    * @param event message event
    */
   const handlePostMessageEventListener = (event: MessageEvent) => {
-    // TODO: This could be secured using the origin from postMessage?
-    if (event.data === "iFrameClick") {
-      onPanelPropertiesChange();
+    if (onPanelPropertiesChange) {
+        // TODO: This could be secured using the origin from postMessage?
+      if (event.data === "iFrameClick") {
+        onPanelPropertiesChange();
+      }
     }
   };
 

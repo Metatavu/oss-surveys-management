@@ -54,7 +54,7 @@ const ImageContainer = styled(Box, {
 }));
 
 /**
- * NavButton component
+ * Image button component
  *
  * @param props component properties
  */

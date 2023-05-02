@@ -1,7 +1,6 @@
 import * as React from "react";
 import { SvgIcon, SvgIconProps, styled } from "@mui/material";
 
-
 /**
  * Interface representing component properties
  */

@@ -6,13 +6,22 @@ export type ErrorContextType = {
   setError: (message: string, error?: any) => void;
 };
 
+// TODO: Question types below should be removed when available from generated files
 /**
- * Question type
+ * Interface for Question
  */
-export type Question = {
+export interface Question {
   id: string;
   type: QuestionType;
-  data: string;
+  options: QuestionOption[];
+};
+
+/**
+ * Question option type
+ */
+export type QuestionOption = {
+  id: string;
+  text: string;
 };
 
 /**

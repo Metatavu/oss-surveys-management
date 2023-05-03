@@ -1,12 +1,12 @@
 import { Box, Button, InputAdornment, MenuItem, TextField, Typography } from "@mui/material";
 import strings from "../../localization/strings";
 import { Edit } from "@mui/icons-material";
-import { Question, QuestionType } from "../../types";
+import { QuestionOption, QuestionType } from "../../types";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import DeleteIcon from '@mui/icons-material/Delete';
 import { ChangeEvent, useState } from "react";
 import { v4 as uuid } from 'uuid';
-import { optionsAtom } from "../../atoms/temp-options";
+import { optionsAtom } from "../../atoms/question-options-temporary";
 import { useAtom } from "jotai";
 import GenericDialog from "../generic/generic-dialog";
 
@@ -17,10 +17,10 @@ const PageProperties = () => {
   // TODO: Populated with options from the backend and debounce, to replace below atom
   // const [ questionOptions, setQuestionOptions ] = useState<Question[]>();
 
-  //TODO:  Using atom to pass to the preview, this can later be done via backend and correct survey/ option/ page type.
+  //TODO:  Using atom to pass to the preview, this can later be done via backend and be associated with the correct survey/ page/ question type.
   const [ questionOptions, setQuestionOptions ] =  useAtom(optionsAtom);
   const [ deleteDialogOpen, setDeleteDialogOpen ] = useState(false);
-  const [ optionToDelete, setOptionToDelete] = useState<Question | undefined>();
+  const [ optionToDelete, setOptionToDelete] = useState<QuestionOption | undefined>();
 
   /**
    * Handle question option change
@@ -30,7 +30,7 @@ const PageProperties = () => {
 
     const updatedOptions = questionOptions.map(option => {
       if (option.id === id) {
-        return { ...option, data: event.target.value }
+        return { ...option, text: event.target.value }
       }
       return option;
     });
@@ -40,14 +40,12 @@ const PageProperties = () => {
   };
 
   /**
-   * Adds new question option to question otions
+   * Adds new question option to question options
    */
   const addNewQuestionOption = () => {
-    const newQuestionOption = {
+    const newQuestionOption: QuestionOption = {
       id: uuid(),
-      data: "",
-      // TODO: this should handle multiple type later on also.
-      type: QuestionType.SINGLE
+      text: "",
     };
 
     questionOptions
@@ -70,7 +68,7 @@ const PageProperties = () => {
   /**
    * Trigger delete confirm dialog and store option to be deleted state
    */
-  const handleDeleteClick = (optionId: Question) => {
+  const handleDeleteClick = (optionId: QuestionOption) => {
     setDeleteDialogOpen(true);
     setOptionToDelete(optionId);
   };
@@ -83,7 +81,7 @@ const PageProperties = () => {
         onCancel={ () => setDeleteDialogOpen(false) }
         onClose={ () => setDeleteDialogOpen(false) }
         onConfirm={ deleteOption }
-        children={ <div>{ optionToDelete?.data }</div> }
+        children={ <div>{ optionToDelete?.text }</div> }
         closeButtonText={ strings.generic.confirm }
       />
       <Box p={2} sx={{ borderBottom: "1px solid #DADCDE" }}>
@@ -107,12 +105,12 @@ const PageProperties = () => {
         />
       </Box>
       <Box p={2} sx={{ borderBottom: "1px solid #DADCDE" }}>
-        <Typography>{strings.editSurveysScreen.editPagesPanel.title}</Typography>
+        <Typography>{ strings.editSurveysScreen.editPagesPanel.title }</Typography>
         {/* TODO: Update with Debounce when backend ready */}
         <TextField
           fullWidth
           multiline
-          placeholder={strings.editSurveysScreen.editPagesPanel.title}
+          placeholder={ strings.editSurveysScreen.editPagesPanel.title }
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">
@@ -151,8 +149,8 @@ const PageProperties = () => {
               key={ option.id }
               fullWidth
               multiline
-              value={ option.data }
-              name={ option.data }
+              value={ option.text }
+              name={ option.text }
               onChange={ (e) => handleQuestionOptionChange(e, option.id) }
               placeholder={ strings.editSurveysScreen.editPagesPanel.title }
               InputProps={{

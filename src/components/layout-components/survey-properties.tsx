@@ -21,7 +21,7 @@ const SurveyProperties = ({ survey, onSaveSurvey }: Props) => {
 
   const renderWithDebounceTextField = (
     name: string,
-    onChange: (event: ChangeEvent<HTMLInputElement>) => void,
+    onChange: (event: ChangeEvent<HTMLInputElement>) => Promise<void>,
     value: string,
     placeholder: string,
     endAdornment: boolean

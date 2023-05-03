@@ -1,6 +1,6 @@
 import sanitizeHtml, { IOptions } from "sanitize-html";
 
-// TODO: This may want refining
+// TODO: These options may want refining
 /**
  * Options for html sanitizer
  */

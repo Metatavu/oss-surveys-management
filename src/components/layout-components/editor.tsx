@@ -113,14 +113,8 @@ const Editor = ({ setPanelProperties }: Props) => {
       const templateDom = new DOMParser().parseFromString(data, "text/html");
       const questionPlaceholder = templateDom.querySelector("div[data-component='question']");
 
-      if (!questionPlaceholder) {
-        console.warn("Could not find question placeholder in template.");
-      }
-      else {
-        console.info("Found placeholder", questionElement);
-        questionPlaceholder?.replaceWith(questionElement.body);
-        htmlData = templateDom.body.innerHTML;
-      }
+      questionPlaceholder?.replaceWith(questionElement.body);
+      htmlData = templateDom.body.innerHTML;
     }
 
     return (

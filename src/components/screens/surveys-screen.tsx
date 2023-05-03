@@ -7,6 +7,7 @@ import AddCircleIcon from "@mui/icons-material/AddCircle";
 import { Box, Button, InputAdornment, Paper, Stack, TextField, styled } from "@mui/material";
 import { useSetAtom } from "jotai";
 import { useNavigate } from "react-router-dom";
+import { SurveyStatus } from "../../generated/client";
 
 /**
  * Styled filter container component
@@ -39,7 +40,8 @@ const SurveysScreen = () => {
     try {
       const newSurvey = await surveysApi.createSurvey({
         survey: {
-          title: strings.surveysScreen.newSurvey
+          title: strings.surveysScreen.newSurvey,
+          status: SurveyStatus.Draft
         }
       });
 

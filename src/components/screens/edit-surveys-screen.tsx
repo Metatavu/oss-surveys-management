@@ -30,17 +30,15 @@ const EditSurveysScreen = () => {
   const getSurvey = async () => {
     if (!id) return null;
 
-    try {
-      const survey = await surveysApi.findSurvey({ surveyId: id });
-      setSurvey(survey);
-    } catch (error: any) {
-      setError(`${ strings.errorHandling.editSurveysScreen.surveyNotFound }, ${ error }`);
-    }
+    const survey = await surveysApi.findSurvey({ surveyId: id });
+    setSurvey(survey);
   };
 
   useEffect(() => {
-    getSurvey();
-  },[id]);
+    getSurvey()
+      .catch(error =>
+        setError(`${ strings.errorHandling.editSurveysScreen.surveyNotFound }, ${ error }`));
+  }, [id]);
 
   if (!survey || !survey.id) return null;
 
@@ -54,7 +52,12 @@ const EditSurveysScreen = () => {
       ...survey,
       [name]: value
     };
+
+    console.log("survey in update", survey);
+
     const updatedSurvey = await surveysApi.updateSurvey({ surveyId: survey.id!, survey: editedSurvey });
+
+    console.log("updated survey", updatedSurvey);
 
     setSurvey(updatedSurvey);
   };

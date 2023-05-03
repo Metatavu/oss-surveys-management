@@ -34,7 +34,7 @@ const EditSurveysScreen = () => {
       const survey = await surveysApi.findSurvey({ surveyId: id });
       setSurvey(survey);
     } catch (error: any) {
-      setError(`${ strings.errorHandling.editSurveysScreen.surveyNotFound }, ${ error }`)
+      setError(`${ strings.errorHandling.editSurveysScreen.surveyNotFound }, ${ error }`);
     }
   };
 

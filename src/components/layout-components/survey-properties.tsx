@@ -11,7 +11,7 @@ import { Edit } from '@mui/icons-material';
  */
 interface Props {
   survey: Survey;
-  onSaveSurvey: (event: ChangeEvent<HTMLInputElement>) => void;
+  onSaveSurvey: (event: ChangeEvent<HTMLInputElement>) => Promise<void>;
 }
 
 /**

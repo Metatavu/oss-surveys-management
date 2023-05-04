@@ -91,6 +91,7 @@ export interface Localized extends LocalizedStringsMethods {
       description: string;
       category: string;
       returnTimeout: string;
+      readyForPublish: string;
     }
   };
 }

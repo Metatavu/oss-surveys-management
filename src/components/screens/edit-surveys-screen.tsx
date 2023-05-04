@@ -47,11 +47,13 @@ const EditSurveysScreen = () => {
    * event event
    */
   const onSaveSurvey = async ({ target: { value, name } }: ChangeEvent<HTMLInputElement>) => {
+    if(!survey.id) return;
+
     const editedSurvey = {
       ...survey,
       [name]: value
     };
-    const updatedSurvey = await surveysApi.updateSurvey({ surveyId: survey.id!, survey: editedSurvey });
+    const updatedSurvey = await surveysApi.updateSurvey({ surveyId: survey.id, survey: editedSurvey });
 
     setSurvey(updatedSurvey);
   };

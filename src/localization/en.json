@@ -60,7 +60,8 @@
       "name": "Name",
       "description": "Description",
       "category": "Category",
-      "returnTimeout": "Return to home screen timeout"
+      "returnTimeout": "Return to home screen timeout",
+      "readyForPublish": "Ready to publish"
     }
   }
 }

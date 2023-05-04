@@ -60,7 +60,8 @@
       "name": "Nimi",
       "description": "Kuvaus",
       "category": "Kategoriat",
-      "returnTimeout": "Palaa alkunäyttöön"
+      "returnTimeout": "Palaa alkunäyttöön",
+      "readyForPublish": "Julkaisukelpoinen"
     }
   }
 }

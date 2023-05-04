@@ -21,6 +21,9 @@
       "url": "Osoite: {0}",
       "errorMessage": "Virheilmoitus: "
     },
+    "overviewScreen": {
+      "surveysNotFound": "Virhe ladattaessa kyselyitä"
+    },
     "surveysScreen": {
       "createSurveyError": "Virhe luotaessa kyselyä"
     },

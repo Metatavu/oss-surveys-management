@@ -16,7 +16,7 @@ interface Props {
 }
 
 /**
- * Renders Survey Properties component
+ * Survey Properties component
  */
 const SurveyProperties = ({ survey, onSaveSurvey }: Props) => {
 

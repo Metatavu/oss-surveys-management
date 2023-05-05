@@ -78,22 +78,13 @@ const SurveyProperties = ({ survey, onSaveSurvey }: Props) => {
     />
   );
 
-  const onReadyToPublishChange = (event: ChangeEvent<HTMLInputElement>) => {
-    if (event.target.checked) {
+  const onReadyToPublishChange = ({target: {checked}}: ChangeEvent<HTMLInputElement>) => {
       onSaveSurvey({
         target: {
           name: "status",
-          value: SurveyStatus.Approved
-        }
-      } as ChangeEvent<HTMLInputElement>);
-    } else {
-      onSaveSurvey({
-        target: {
-          name: "status",
-          value: SurveyStatus.Draft
-        }
-      } as ChangeEvent<HTMLInputElement>);
-    }
+          value: checked ? SurveyStatus.Approved : SurveyStatus.DRAFT
+          }
+        } as ChangeEvent<HTMLInputElement>);
   }
 
   return (

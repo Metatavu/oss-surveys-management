@@ -41,7 +41,8 @@ const SurveysScreen = () => {
       const newSurvey = await surveysApi.createSurvey({
         survey: {
           title: strings.surveysScreen.newSurvey,
-          status: SurveyStatus.Draft
+          status: SurveyStatus.Draft,
+          timeout: 60,
         }
       });
 

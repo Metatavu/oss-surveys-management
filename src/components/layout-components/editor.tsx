@@ -1,6 +1,17 @@
-import { Box, Stack, styled } from "@mui/material";
+import { Box, Stack, Typography, styled } from "@mui/material";
 import theme from "../../styles/theme";
 import NewPageButton from "./new-page-button";
+import GenericDialog from "../generic/generic-dialog";
+import { useState } from "react";
+import ImageButton from "./image-button";
+import QuestionLayoutImage from "../images/svg/layout-thumbnails/question";
+import InfoLayoutImage from "../images/svg/layout-thumbnails/info";
+import InfoImageLayoutImage from "../images/svg/layout-thumbnails/info-image";
+import strings from "../../localization/strings";
+import QuestionParagraphLayoutImage from "../images/svg/layout-thumbnails/question-paragraph";
+import ImageParagraphLayoutImage from "../images/svg/layout-thumbnails/image-paragraph";
+import ParagraphImageLayoutImage from "../images/svg/layout-thumbnails/paragraph-image";
+import StatisticsLayoutImage from "../images/svg/layout-thumbnails/statistics";
 import Preview from "./preview";
 import { EditorPanelProperties } from "../../types";
 import titleAndTextTemplate from "../pages/templates/title-and-text";
@@ -52,6 +63,66 @@ const PreviewContainer = styled(Box, {
  * Renders editor component
  */
 const Editor = ({ setPanelProperties }: Props) => {
+  const [ showAddPage, setShowAddPage ] = useState(false);
+
+  const renderAddNewPageDialog = () => (
+    <GenericDialog
+      maxWidth="lg"
+      open={ showAddPage }
+      onCancel={ () => setShowAddPage(false) }
+      onClose={ () => setShowAddPage(false) }
+      cancelButtonText="Peruuta"
+      title="Lisää uusi sivu"
+    >
+      <Typography>{ strings.layouts.title }</Typography>
+      <Stack direction="row" gap={2} pt={3}>
+        <ImageButton
+          title={ strings.layouts.question }
+          image={ <QuestionLayoutImage/> }
+          onClick={ () => {} }
+          selected={ false }
+        />
+        <ImageButton
+          title={ strings.layouts.info }
+          image={ <InfoLayoutImage/> }
+          onClick={ () => {} }
+          selected={ false }
+        />
+        <ImageButton
+          title={ strings.layouts.infoImage }
+          image={ <InfoImageLayoutImage/> }
+          onClick={ () => {} }
+          selected={ false }
+        />
+        <ImageButton
+          title={ strings.layouts.questionInfo }
+          image={ <QuestionParagraphLayoutImage/> }
+          onClick={ () => {} }
+          selected={ false }
+        />
+        <ImageButton
+          title={ strings.layouts.imageParagraph }
+          image={ <ImageParagraphLayoutImage/> }
+          onClick={ () => {} }
+          selected={ false }
+        />
+        <ImageButton
+          title={ strings.layouts.paragraphImage }
+          image={ <ParagraphImageLayoutImage/> }
+          onClick={ () => {} }
+          selected={ false }
+        />
+        <ImageButton
+          disabled
+          title={ strings.layouts.statistics }
+          image={ <StatisticsLayoutImage/> }
+          onClick={ () => {} }
+          selected={ false }
+        />
+      </Stack>
+    </GenericDialog>
+  );
+
   // TODO: Waiting backend, Editor can recieve survey as props from editSurveysScreen, this will contain HTML data
 
   const htmlTemplateDummy = titleAndTextTemplate;
@@ -95,7 +166,8 @@ const Editor = ({ setPanelProperties }: Props) => {
           </PreviewContainer>
         )
       }
-      <NewPageButton/>
+      <NewPageButton onClick={ () => setShowAddPage(true) }/>
+      { renderAddNewPageDialog() }
     </EditorContainer>
   )
 };

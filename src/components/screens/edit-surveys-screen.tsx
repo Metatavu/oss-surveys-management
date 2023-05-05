@@ -28,7 +28,7 @@ const EditSurveysScreen = () => {
    * Get Survey from route id
    */
   const getSurvey = async () => {
-    if (!id) return null;
+    if (!id) return;
 
     try {
       const survey = await surveysApi.findSurvey({ surveyId: id });
@@ -39,8 +39,14 @@ const EditSurveysScreen = () => {
   };
 
   useEffect(() => {
-    getSurvey();
-  },[id]);
+    (async () => {
+      try {
+        await getSurvey();
+      } catch (error) {
+        setError(`${ strings.errorHandling.editSurveysScreen.surveyNotFound }, ${ error }`)
+      }
+    })();
+  }, [id]);
 
   if (!survey || !survey.id) return null;
 
@@ -50,13 +56,18 @@ const EditSurveysScreen = () => {
    * @param event event
    */
   const onSaveSurvey = async ({ target: { value, name } }: ChangeEvent<HTMLInputElement>) => {
-    const editedSurvey = {
-      ...survey,
-      [name]: value
-    };
-    const updatedSurvey = await surveysApi.updateSurvey({ surveyId: survey.id!, survey: editedSurvey });
+    if(!survey.id) return;
 
-    setSurvey(updatedSurvey);
+    try {
+      const editedSurvey = {
+        ...survey,
+        [name]: value
+      };
+      const updatedSurvey = await surveysApi.updateSurvey({ surveyId: survey.id, survey: editedSurvey });
+      setSurvey(updatedSurvey);
+    } catch (error: any) {
+      setError(`${ strings.errorHandling.editSurveysScreen.surveyNotSaved }, ${ error }`)
+    }
   };
 
   return (

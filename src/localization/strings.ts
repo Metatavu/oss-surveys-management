@@ -39,11 +39,15 @@ export interface Localized extends LocalizedStringsMethods {
       url: string;
       errorMessage: string;
     };
+    overviewScreen: {
+      surveysNotFound: string;
+    };
     surveysScreen: {
       createSurveyError: string;
     };
     editSurveysScreen: {
       surveyNotFound: string;
+      surveyNotSaved: string;
     };
   };
 
@@ -88,8 +92,23 @@ export interface Localized extends LocalizedStringsMethods {
       description: string;
       category: string;
       returnTimeout: string;
+      readyForPublish: string;
     }
   };
+
+  /**
+   * Translations related to page layouts
+   */
+  layouts: {
+    title: string;
+    question: string;
+    info: string;
+    infoImage: string;
+    paragraphImage: string;
+    imageParagraph: string;
+    questionInfo: string;
+    statistics: string;
+  }
 
   /**
    * Translations related to preview screen

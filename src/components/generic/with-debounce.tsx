@@ -12,8 +12,10 @@ interface Props {
   label?: string;
   debounceTimeout?: number;
   value?: string | number;
-  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onChange: (event: React.ChangeEvent<HTMLInputElement>) => Promise<void>;
   placeholder: string;
+  type?: string;
+  fullWidth?: boolean;
 }
 
 /**
@@ -28,6 +30,8 @@ interface DebounceProps {
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   className?: string;
   placeholder: string;
+  type?: string;
+  fullWidth?: boolean;
 }
 
 /**
@@ -43,7 +47,9 @@ const WithDebounce: FC<Props> = ({
   key,
   onChange,
   component,
-  placeholder
+  placeholder,
+  type,
+  fullWidth
 }) => {
   const [ inputValue, setInputValue ] = useState(value);
   const [ debounceTimer, setDebounceTimer ] = useState<number | undefined>(undefined);
@@ -76,7 +82,9 @@ const WithDebounce: FC<Props> = ({
     key: key,
     label: label,
     onChange: onInputChange,
-    placeholder: placeholder
+    placeholder: placeholder,
+    type: type ?? "text",
+    fullWidth: fullWidth
   });
 };
 

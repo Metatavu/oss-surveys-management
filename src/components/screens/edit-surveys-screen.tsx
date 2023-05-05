@@ -35,7 +35,15 @@ const EditSurveysScreen = () => {
     }
   };
 
-  useEffect(() => { getSurvey(); }, [id]);
+  useEffect(() => {
+    (async () => {
+      try {
+        await getSurvey();
+      } catch (error) {
+        setError(`${ strings.errorHandling.editSurveysScreen.surveyNotFound }, ${ error }`)
+      }
+    })();
+  }, [id]);
 
   if (!survey) return null;
 

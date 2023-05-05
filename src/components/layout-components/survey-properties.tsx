@@ -12,7 +12,7 @@ import theme from "../../styles/theme";
  */
 interface Props {
   survey: Survey;
-  onSaveSurvey: (event: ChangeEvent<HTMLInputElement>) => void;
+  onSaveSurvey: (event: ChangeEvent<HTMLInputElement>) => Promise<void>;
 }
 
 /**

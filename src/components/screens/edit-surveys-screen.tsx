@@ -25,7 +25,7 @@ const EditSurveysScreen = () => {
    * Get Survey from route id
    */
   const getSurvey = async () => {
-    if (!id) return null;
+    if (!id) return;
 
     try {
       const survey = await surveysApi.findSurvey({ surveyId: id });
@@ -35,9 +35,7 @@ const EditSurveysScreen = () => {
     }
   };
 
-  useEffect(() => {
-    getSurvey();
-  },[id]);
+  useEffect(() => { getSurvey(); }, [id]);
 
   if (!survey) return null;
 

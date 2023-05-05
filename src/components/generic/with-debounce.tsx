@@ -12,7 +12,7 @@ interface Props {
   label?: string;
   debounceTimeout?: number;
   value?: string | number;
-  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onChange: (event: React.ChangeEvent<HTMLInputElement>) => Promise<void>;
   placeholder: string;
   type?: string;
   fullWidth?: boolean;

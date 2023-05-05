@@ -7,29 +7,49 @@ import { errorAtom } from "../../atoms/error";
 import { useApi } from "../../hooks/use-api";
 import strings from "../../localization/strings";
 import Preview from "../layout-components/preview";
-import { Box, Stack, styled } from "@mui/material";
+import { Box, Toolbar, Typography, styled } from "@mui/material";
 import titleAndTextTemplate from "../pages/templates/title-and-text";
 import { DEVICE_HEIGHT, DEVICE_WIDTH, EDITOR_SCREEN_PREVIEW_CONTAINER_HEIGHT, EDITOR_SCREEN_PREVIEW_CONTAINER_WIDTH } from "../../constants";
+import { useWindowSize } from "usehooks-ts";
+import theme from "../../styles/theme";
+
+/**
+ * Styled preview root component
+ */
+const Root = styled(Box, {
+  label: "preview-screen-preview-root"
+})(({ theme }) => ({
+  display: "flex",
+  flexDirection: "column",
+  flex: 1,
+  backgroundColor: theme.palette.common.black
+}));
+
+/**
+ * Styled preview container component
+ */
+const PreviewArea = styled(Box, {
+  label: "preview-screen-preview-area-container"
+})(() => ({
+  display: "flex",
+  alignItems: "center",
+  alignSelf: "center",
+  justifyContent: "center",
+  flex: 1,
+  width: "100%"
+}));
 
 /**
  * Styled preview container component
  */
 const PreviewContainer = styled(Box, {
   label: "preview-screen-preview-container"
-})(({ theme }) => ({
-  borderWidth: 1,
-  borderStyle: "solid",
-  borderColor: theme.palette.primary.main,
+})(() => ({
   display: "flex",
-  alignItems: "center",
-  alignSelf: "center",
   justifyContent: "center",
+  alignItems: "center",
   width: EDITOR_SCREEN_PREVIEW_CONTAINER_WIDTH,
-  height: EDITOR_SCREEN_PREVIEW_CONTAINER_HEIGHT,
-  "&:hover": {
-    borderStyle: "solid",
-    color: theme.palette.primary.dark
-  }
+  height: EDITOR_SCREEN_PREVIEW_CONTAINER_HEIGHT
 }));
 
 /**
@@ -39,7 +59,7 @@ const PreviewScreen = () => {
   const { id } = useParams();
   const { surveysApi } = useApi();
   const setError = useSetAtom(errorAtom);
-
+  const { height } = useWindowSize();
   const [ survey, setSurvey ] = useState<Survey>();
   const htmlTemplateDummy = titleAndTextTemplate;
 
@@ -64,19 +84,32 @@ const PreviewScreen = () => {
 
   if (!survey) return null;
 
+  /**
+   * Render page count method
+   * 
+   * TODO: implement the page count
+   */
+  const renderPageCount = () => (
+    <Toolbar sx={{ justifyContent: "center" }}>
+      <Typography color={ theme.palette.common.white }>1 / 1</Typography>
+    </Toolbar>
+  );
+
   return (
-    <Stack>
+    <Root>
       <PreviewToolbar surveyName={ survey.title } />
-      <PreviewContainer>
-        <Preview
-          htmlString={ htmlTemplateDummy }
-          width={ DEVICE_WIDTH }
-          height={ DEVICE_HEIGHT }
-          scale={ EDITOR_SCREEN_PREVIEW_CONTAINER_WIDTH / DEVICE_WIDTH }
-        />
-      </PreviewContainer>
-      {/* TODO: the page count display */}
-    </Stack>
+      <PreviewArea>
+        <PreviewContainer>
+          <Preview
+            htmlString={ htmlTemplateDummy }
+            width={ DEVICE_WIDTH }
+            height={ DEVICE_HEIGHT }
+            scale={ (height / 1.5) / DEVICE_HEIGHT }
+          />
+        </PreviewContainer>
+      </PreviewArea>
+      { renderPageCount() }
+    </Root>
   )
 };
 

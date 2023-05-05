@@ -36,7 +36,6 @@ const EditorContainer = styled(Stack, {
   flexWrap: "wrap",
   flex: 1,
   flexDirection: "row",
-  justifyContent: "space-between"
 }));
 
 /**
@@ -45,17 +44,22 @@ const EditorContainer = styled(Stack, {
 const PreviewContainer = styled(Box, {
   label: "preview-container"
 })(({ theme }) => ({
-  borderWidth: 1,
+  borderWidth: 2,
   borderStyle: "solid",
-  borderColor: theme.palette.primary.main,
+  borderColor: "transparent",
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
   width: EDITOR_SCREEN_PREVIEW_CONTAINER_WIDTH,
   height: EDITOR_SCREEN_PREVIEW_CONTAINER_HEIGHT,
+  cursor: "pointer",
+  boxSizing: "content-box",
+  transition: "border 0.2s ease-out",
   "&:hover": {
-    borderStyle: "solid",
-    color: theme.palette.primary.dark
+    borderColor: theme.palette.primary.dark
+  },
+  "&.selected": {
+    borderColor: theme.palette.primary.light
   }
 }));
 

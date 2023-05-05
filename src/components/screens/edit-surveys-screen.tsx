@@ -50,7 +50,7 @@ const EditSurveysScreen = () => {
   /**
    * Persist changes to survey properties
    *
-   * event event
+   * @param event event
    */
   const onSaveSurvey = async ({ target: { value, name } }: ChangeEvent<HTMLInputElement>) => {
     if(!survey.id) return;

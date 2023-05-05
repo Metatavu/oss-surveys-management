@@ -28,7 +28,8 @@
       "createSurveyError": "Virhe luotaessa kyselyä"
     },
     "editSurveysScreen": {
-      "surveyNotFound": "Kyselyä ei löytynyt"
+      "surveyNotFound": "Kyselyä ei löytynyt",
+      "surveyNotSaved": "Virhe tallennettaessa kyselyä"
     }
   },
   "overviewScreen": {

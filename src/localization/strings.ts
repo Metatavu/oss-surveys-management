@@ -47,6 +47,7 @@ export interface Localized extends LocalizedStringsMethods {
     };
     editSurveysScreen: {
       surveyNotFound: string;
+      surveyNotSaved: string;
     };
   };
 

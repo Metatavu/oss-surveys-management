@@ -49,13 +49,16 @@ const EditSurveysScreen = () => {
   const onSaveSurvey = async ({ target: { value, name } }: ChangeEvent<HTMLInputElement>) => {
     if(!survey.id) return;
 
-    const editedSurvey = {
-      ...survey,
-      [name]: value
-    };
-    const updatedSurvey = await surveysApi.updateSurvey({ surveyId: survey.id, survey: editedSurvey });
-
-    setSurvey(updatedSurvey);
+    try {
+      const editedSurvey = {
+        ...survey,
+        [name]: value
+      };
+      const updatedSurvey = await surveysApi.updateSurvey({ surveyId: survey.id, survey: editedSurvey });
+      setSurvey(updatedSurvey);
+    } catch (error: any) {
+      setError(`${ strings.errorHandling.editSurveysScreen.surveyNotSaved }, ${ error }`)
+    }
   };
 
   return (

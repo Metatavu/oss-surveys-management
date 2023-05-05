@@ -28,7 +28,8 @@
       "createSurveyError": "Error while creating a survey"
     },
     "editSurveysScreen": {
-      "surveyNotFound": "Survey not found"
+      "surveyNotFound": "Survey not found",
+      "surveyNotSaved": "Error while saving survey"
     }
   },
   "overviewScreen": {

@@ -20,6 +20,16 @@ interface Props {
  */
 const SurveyProperties = ({ survey, onSaveSurvey }: Props) => {
 
+  /**
+   * Renders text field with debounce
+   * 
+   * @param name name
+   * @param onChange onChange event handler
+   * @param value value
+   * @param placeholder placeholder 
+   * @param endAdornment end adornment true/false 
+   * @returns debounced text field
+   */
   const renderWithDebounceTextField = (
     name: string,
     onChange: (event: ChangeEvent<HTMLInputElement>) => void,
@@ -49,23 +59,33 @@ const SurveyProperties = ({ survey, onSaveSurvey }: Props) => {
     />
   );
 
+  /**
+   * Renders number field with debounce
+   * 
+   * @param name name
+   * @param onChange onChange event handler
+   * @param value value
+   * @param placeholder placeholder
+   * @returns debounced number field
+   */
   const renderWithDebounceNumberField = (
     name: string,
     onChange: (event: ChangeEvent<HTMLInputElement>) => void,
     value: number,
-    placeholder: string
+    placeholder: string,
+    type: string,
+    fullWidth: boolean
   ) => (
     <WithDebounce
       name={ name }
       value={ value }
       onChange={ onChange }
       placeholder={ placeholder }
+      type={ type }
+      fullWidth={ fullWidth }
       component={ props =>
         <TextField
           { ...props }
-          type="number"
-          fullWidth
-          placeholder={ strings.editSurveysScreen.editSurveyPanel.returnTimeout }
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">
@@ -78,11 +98,16 @@ const SurveyProperties = ({ survey, onSaveSurvey }: Props) => {
     />
   );
 
+  /**
+   * Switch event handler
+   * 
+   * @param param event target
+   */
   const onReadyToPublishChange = ({target: {checked}}: ChangeEvent<HTMLInputElement>) => {
       onSaveSurvey({
         target: {
           name: "status",
-          value: checked ? SurveyStatus.Approved : SurveyStatus.DRAFT
+          value: checked ? SurveyStatus.Approved : SurveyStatus.Draft
           }
         } as ChangeEvent<HTMLInputElement>);
   }
@@ -120,7 +145,9 @@ const SurveyProperties = ({ survey, onSaveSurvey }: Props) => {
             "timeout",
             onSaveSurvey,
             survey.timeout ? Number(survey.timeout) : 60,
-            strings.editSurveysScreen.editSurveyPanel.returnTimeout
+            strings.editSurveysScreen.editSurveyPanel.returnTimeout,
+            "number",
+            true
           )
         }
       </Box>

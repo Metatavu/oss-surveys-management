@@ -35,7 +35,7 @@ const EditSurveysScreen = () => {
     }
   };
 
-  useEffect(() => { getSurvey(); }, [id]);
+  useEffect(() => { async () => await getSurvey(); }, [id]);
 
   if (!survey) return null;
 

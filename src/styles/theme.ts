@@ -171,7 +171,7 @@ export default createTheme({
     },
     MuiButton: {
       defaultProps: {
-        size: "small"
+        disableElevation: true
       }
     },
     MuiButtonGroup: {
@@ -241,5 +241,31 @@ export default createTheme({
         arrow: true
       }
     },
+    MuiDialogTitle: {
+      styleOverrides: {
+        root: {
+          display: "flex",
+          justifyContent: "space-between",
+          borderBottom: "1px solid #DADCDE"
+        }
+      }
+    },
+    MuiDialogContent: {
+      styleOverrides: {
+        root: {
+          display: "flex",
+          flexDirection: "column",
+          padding: 0
+        }
+      }
+    },
+    MuiDialogActions: {
+      styleOverrides: {
+        root: {
+          borderTop: "1px solid #DADCDE",
+          gap: spacing(2)
+        }
+      }
+    }
   },
 });

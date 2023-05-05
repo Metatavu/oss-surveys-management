@@ -64,5 +64,15 @@
       "returnTimeout": "Return to home screen timeout",
       "readyForPublish": "Ready to publish"
     }
+  },
+  "layouts": {
+    "title": "Select page layout",
+    "question": "Question",
+    "info": "Info",
+    "infoImage": "Image",
+    "paragraphImage": "Info + image",
+    "imageParagraph": "Image + info",
+    "questionInfo": "Question + info",
+    "statistics": "Statistics"
   }
 }

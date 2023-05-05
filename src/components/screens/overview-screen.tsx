@@ -1,10 +1,11 @@
+import { useNavigate } from "react-router-dom";
 import { errorAtom } from "../../atoms/error";
 import { Survey } from "../../generated/client";
 import { useApi } from "../../hooks/use-api";
 import strings from "../../localization/strings";
 import { SurveyScreens } from "../../types";
 import TabPanel from "../surveys/TabPanel";
-import { Box, List, ListItem, ListItemText, Paper, Tab, Tabs } from "@mui/material";
+import { Box, List, ListItem, ListItemButton, ListItemText, Paper, Tab, Tabs } from "@mui/material";
 import { useSetAtom } from "jotai";
 import { useEffect, useState } from "react";
 
@@ -13,6 +14,7 @@ import { useEffect, useState } from "react";
  */
 const OverviewScreen = () => {
   const [activeTab, setActiveTab] = useState(SurveyScreens.ACTIVE);
+  const navigate = useNavigate();
   const { surveysApi } = useApi();
   const setError = useSetAtom(errorAtom);
   const [surveys, setSurveys] = useState<Survey[]>([]);
@@ -55,14 +57,14 @@ const OverviewScreen = () => {
       <List>
         {renderSurveyListHeadings()}
         {surveys.map(survey => (
-          <ListItem key={survey.id}>
+          <ListItemButton key={survey.id} onClick={() => navigate(`/surveys/edit/${survey.id}`)}>
             <ListItemText secondary={survey.title} />
             <ListItemText secondary={strings.generic.notImplemented} />
             <ListItemText secondary={strings.generic.notImplemented} />
             <ListItemText secondary={strings.generic.notImplemented} />
             <ListItemText secondary={strings.generic.notImplemented} />
             <ListItemText secondary={strings.generic.notImplemented} />
-          </ListItem>
+          </ListItemButton>
         ))}
       </List>
     )

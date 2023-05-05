@@ -95,6 +95,20 @@ export interface Localized extends LocalizedStringsMethods {
       readyForPublish: string;
     }
   };
+
+  /**
+   * Translations related to page layouts
+   */
+  layouts: {
+    title: string;
+    question: string;
+    info: string;
+    infoImage: string;
+    paragraphImage: string;
+    imageParagraph: string;
+    questionInfo: string;
+    statistics: string;
+  }
 }
 /**
  * Initialized localized strings

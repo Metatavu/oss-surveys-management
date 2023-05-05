@@ -39,11 +39,15 @@ export interface Localized extends LocalizedStringsMethods {
       url: string;
       errorMessage: string;
     };
+    overviewScreen: {
+      surveysNotFound: string;
+    };
     surveysScreen: {
       createSurveyError: string;
     };
     editSurveysScreen: {
       surveyNotFound: string;
+      surveyNotSaved: string;
     };
   };
 
@@ -83,6 +87,13 @@ export interface Localized extends LocalizedStringsMethods {
     published: string;
     statistics: string;
     preview: string;
+    editSurveyPanel: {
+      name: string;
+      description: string;
+      category: string;
+      returnTimeout: string;
+      readyForPublish: string;
+    }
   };
 
   /**

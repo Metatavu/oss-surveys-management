@@ -21,11 +21,15 @@
       "url": "URL: {0}",
       "errorMessage": "Error message: "
     },
+    "overviewScreen": {
+      "surveysNotFound": "Error while loading surveys"
+    },
     "surveysScreen": {
       "createSurveyError": "Error while creating a survey"
     },
     "editSurveysScreen": {
-      "surveyNotFound": "Survey not found"
+      "surveyNotFound": "Survey not found",
+      "surveyNotSaved": "Error while saving survey"
     }
   },
   "overviewScreen": {
@@ -52,7 +56,14 @@
     "publish": "Publish",
     "published": "Published",
     "statistics": "Statistics",
-    "preview": "Preview"
+    "preview": "Preview",
+    "editSurveyPanel": {
+      "name": "Name",
+      "description": "Description",
+      "category": "Category",
+      "returnTimeout": "Return to home screen timeout",
+      "readyForPublish": "Ready to publish"
+    }
   },
   "layouts": {
     "title": "Select page layout",

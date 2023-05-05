@@ -21,11 +21,15 @@
       "url": "Osoite: {0}",
       "errorMessage": "Virheilmoitus: "
     },
+    "overviewScreen": {
+      "surveysNotFound": "Virhe ladattaessa kyselyitä"
+    },
     "surveysScreen": {
       "createSurveyError": "Virhe luotaessa kyselyä"
     },
     "editSurveysScreen": {
-      "surveyNotFound": "Kyselyä ei löytynyt"
+      "surveyNotFound": "Kyselyä ei löytynyt",
+      "surveyNotSaved": "Virhe tallennettaessa kyselyä"
     }
   },
   "overviewScreen": {
@@ -52,7 +56,14 @@
     "publish": "Julkaise",
     "published": "Julkaistu",
     "statistics": "Tilastot",
-    "preview": "Esikatselu"
+    "preview": "Esikatselu",
+    "editSurveyPanel": {
+      "name": "Nimi",
+      "description": "Kuvaus",
+      "category": "Kategoriat",
+      "returnTimeout": "Palaa alkunäyttöön",
+      "readyForPublish": "Julkaisukelpoinen"
+    }
   },
   "layouts": {
     "title": "Valitse sivun rakenne alla olevista vaihtoehdoista",

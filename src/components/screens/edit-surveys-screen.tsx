@@ -1,14 +1,15 @@
 import { useParams } from "react-router-dom";
 import Toolbar from "../layout-components/toolbar";
-import { useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { useApi } from "../../hooks/use-api";
 import { Survey } from "../../generated/client";
 import { useSetAtom } from "jotai";
 import { errorAtom } from "../../atoms/error";
 import strings from "../../localization/strings";
 import Editor from "../layout-components/editor";
-import { Box, Stack, Typography } from "@mui/material";
+import { Stack } from "@mui/material";
 import PropertiesPanel from "../layout-components/properties-panel";
+import SurveyProperties from "../layout-components/survey-properties";
 
 /**
  * Renders edit surveys screen
@@ -24,7 +25,7 @@ const EditSurveysScreen = () => {
    * Get Survey from route id
    */
   const getSurvey = async () => {
-    if (!id) return null;
+    if (!id) return;
 
     try {
       const survey = await surveysApi.findSurvey({ surveyId: id });
@@ -32,13 +33,39 @@ const EditSurveysScreen = () => {
     } catch (error: any) {
       setError(`${ strings.errorHandling.editSurveysScreen.surveyNotFound }, ${ error }`)
     }
-  }
+  };
 
   useEffect(() => {
-    getSurvey();
-  },[id])
+    (async () => {
+      try {
+        await getSurvey();
+      } catch (error) {
+        setError(`${ strings.errorHandling.editSurveysScreen.surveyNotFound }, ${ error }`)
+      }
+    })();
+  }, [id]);
 
   if (!survey) return null;
+
+  /**
+   * Persist changes to survey properties
+   *
+   * @param event event
+   */
+  const onSaveSurvey = async ({ target: { value, name } }: ChangeEvent<HTMLInputElement>) => {
+    if(!survey.id) return;
+
+    try {
+      const editedSurvey = {
+        ...survey,
+        [name]: value
+      };
+      const updatedSurvey = await surveysApi.updateSurvey({ surveyId: survey.id, survey: editedSurvey });
+      setSurvey(updatedSurvey);
+    } catch (error: any) {
+      setError(`${ strings.errorHandling.editSurveysScreen.surveyNotSaved }, ${ error }`)
+    }
+  };
 
   return (
     <>
@@ -46,9 +73,10 @@ const EditSurveysScreen = () => {
       <Stack direction="row" flex={1}>
         <Editor/>
         <PropertiesPanel>
-          <Box p={2} sx={{ borderBottom: "1px solid #DADCDE" }}>
-            <Typography>{strings.generic.notImplemented}</Typography>
-          </Box>
+          <SurveyProperties
+            survey={ survey }
+            onSaveSurvey={ onSaveSurvey }
+          />
         </PropertiesPanel>
       </Stack>
     </>

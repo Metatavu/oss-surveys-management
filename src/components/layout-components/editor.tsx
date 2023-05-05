@@ -45,7 +45,7 @@ const Editor = () => {
       <Typography>{ strings.layouts.title }</Typography>
       <Stack direction="row" gap={2} pt={3}>
         <ImageButton
-          title={ strings.layouts.questionnaire }
+          title={ strings.layouts.question }
           image={ <QuestionnaireLayoutImage/> }
           onClick={ () => {} }
           selected={ false }
@@ -63,7 +63,7 @@ const Editor = () => {
           selected={ false }
         />
         <ImageButton
-          title={ strings.layouts.questionnaireInfo }
+          title={ strings.layouts.questionInfo }
           image={ <QuestionnaireParagraphLayoutImage/> }
           onClick={ () => {} }
           selected={ false }

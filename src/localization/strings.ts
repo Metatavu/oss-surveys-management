@@ -90,12 +90,12 @@ export interface Localized extends LocalizedStringsMethods {
    */
   layouts: {
     title: string;
-    questionnaire: string;
+    question: string;
     info: string;
     infoImage: string;
     paragraphImage: string;
     imageParagraph: string;
-    questionnaireInfo: string;
+    questionInfo: string;
     statistics: string;
   }
 }

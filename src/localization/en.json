@@ -56,12 +56,12 @@
   },
   "layouts": {
     "title": "Select page layout",
-    "questionnaire": "Questionnaire",
+    "question": "Question",
     "info": "Info",
     "infoImage": "Image",
     "paragraphImage": "Info + image",
     "imageParagraph": "Image + info",
-    "questionnaireInfo": "Questionnaire + info",
+    "questionInfo": "Question + info",
     "statistics": "Statistics"
   }
 }

@@ -103,8 +103,8 @@ const SurveyProperties = ({ survey, onSaveSurvey }: Props) => {
    * 
    * @param param event target
    */
-  const onReadyToPublishChange = ({target: {checked}}: ChangeEvent<HTMLInputElement>) => {
-      onSaveSurvey({
+  const onReadyToPublishChange = async ({target: {checked}}: ChangeEvent<HTMLInputElement>) => {
+      await onSaveSurvey({
         target: {
           name: "status",
           value: checked ? SurveyStatus.Approved : SurveyStatus.Draft

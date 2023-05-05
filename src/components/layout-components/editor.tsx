@@ -4,11 +4,11 @@ import NewPageButton from "./new-page-button";
 import GenericDialog from "../generic/generic-dialog";
 import { useState } from "react";
 import ImageButton from "./image-button";
-import QuestionnaireLayoutImage from "../images/svg/layout-thumbnails/questionnaire";
+import QuestionLayoutImage from "../images/svg/layout-thumbnails/question";
 import InfoLayoutImage from "../images/svg/layout-thumbnails/info";
 import InfoImageLayoutImage from "../images/svg/layout-thumbnails/info-image";
 import strings from "../../localization/strings";
-import QuestionnaireParagraphLayoutImage from "../images/svg/layout-thumbnails/questionnaire-paragraph";
+import QuestionParagraphLayoutImage from "../images/svg/layout-thumbnails/question-paragraph";
 import ImageParagraphLayoutImage from "../images/svg/layout-thumbnails/image-paragraph";
 import ParagraphImageLayoutImage from "../images/svg/layout-thumbnails/paragraph-image";
 import StatisticsLayoutImage from "../images/svg/layout-thumbnails/statistics";
@@ -46,7 +46,7 @@ const Editor = () => {
       <Stack direction="row" gap={2} pt={3}>
         <ImageButton
           title={ strings.layouts.question }
-          image={ <QuestionnaireLayoutImage/> }
+          image={ <QuestionLayoutImage/> }
           onClick={ () => {} }
           selected={ false }
         />
@@ -64,7 +64,7 @@ const Editor = () => {
         />
         <ImageButton
           title={ strings.layouts.questionInfo }
-          image={ <QuestionnaireParagraphLayoutImage/> }
+          image={ <QuestionParagraphLayoutImage/> }
           onClick={ () => {} }
           selected={ false }
         />

@@ -10,7 +10,7 @@ interface Props extends SvgIconProps {}
  */
 const Root = styled(SvgIcon, {
   label: "custom-icon-root"
-})(({ theme }) => ({
+})(() => ({
   width: 115,
   height: 205,
   fill: "transparent"

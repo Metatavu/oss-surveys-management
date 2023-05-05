@@ -10,16 +10,16 @@ interface Props extends SvgIconProps {}
  */
 const Root = styled(SvgIcon, {
   label: "custom-icon-root"
-})(({ theme }) => ({
+})(() => ({
   width: 115,
   height: 205,
   fill: "transparent"
 }));
 
 /**
- * Render questionnaire layout image
+ * Render question layout image
  */
-const QuestionnaireLayoutImage = (props: Props) => {
+const QuestionLayoutImage = (props: Props) => {
   return (
     <Root viewBox="0 0 115 205" {...props}>
       <rect x="0.5" y="0.5" width="115" height="205" rx="2.5" fill="#EFF0F1"/>
@@ -32,4 +32,4 @@ const QuestionnaireLayoutImage = (props: Props) => {
   )
 }
 
-export default QuestionnaireLayoutImage;
+export default QuestionLayoutImage;

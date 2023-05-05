@@ -35,7 +35,10 @@ const EditSurveysScreen = () => {
     }
   };
 
-  useEffect(() => { async () => await getSurvey(); }, [id]);
+  useEffect(() => {
+    const fetchSurveyData = async () => await getSurvey();
+    fetchSurveyData();
+  }, [id]);;
 
   if (!survey) return null;
 

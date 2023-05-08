@@ -70,23 +70,21 @@ const PreviewScreen = () => {
   const getSurvey = async () => {
     if (!id) return null;
 
-    try {
-      const survey = await surveysApi.findSurvey({ surveyId: id });
-      setSurvey(survey);
-    } catch (error: any) {
-      setError(`${ strings.errorHandling.editSurveysScreen.surveyNotFound }, ${ error }`)
-    }
+    const survey = await surveysApi.findSurvey({ surveyId: id });
+    setSurvey(survey);
   };
 
   useEffect(() => {
-    getSurvey();
+    getSurvey()
+      .catch(error =>
+        setError(`${ strings.errorHandling.editSurveysScreen.surveyNotFound }, ${ error }`));
   },[id]);
 
   if (!survey) return null;
 
   /**
    * Render page count method
-   * 
+   *
    * TODO: implement the page count
    */
   const renderPageCount = () => (

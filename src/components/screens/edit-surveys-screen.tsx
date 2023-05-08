@@ -53,11 +53,7 @@ const EditSurveysScreen = () => {
       [name]: value
     };
 
-    console.log("survey in update", survey);
-
     const updatedSurvey = await surveysApi.updateSurvey({ surveyId: survey.id!, survey: editedSurvey });
-
-    console.log("updated survey", updatedSurvey);
 
     setSurvey(updatedSurvey);
   };

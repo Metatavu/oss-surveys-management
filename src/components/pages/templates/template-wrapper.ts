@@ -1,13 +1,12 @@
 import sanitizeHtml, { IOptions } from "sanitize-html";
 
-// TODO: These options need refining
 /**
  * Options for html sanitizer
  */
 const sanitizeOptions: IOptions = {
   allowedTags: sanitizeHtml.defaults.allowedTags.concat(["button"]),
   allowedAttributes: {
-    "*": ["style"],
+    "*": ["style", "id"],
   }
 };
 
@@ -33,6 +32,15 @@ const wrapTemplate = (bodyContent: string) => (
     document.addEventListener("click", () =>
       window.parent.postMessage("iFrameClick")
     )
+    const allElements = document.body.getElementsByTagName("*");
+
+    for (const element of allElements) {
+      if (element.addEventListener) {
+        element.addEventListener("click", () => {
+          window.parent.postMessage(element.id)
+        })
+      }
+    }
   </script>
   </html>`
 );

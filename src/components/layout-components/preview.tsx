@@ -34,9 +34,12 @@ const Preview = ({ htmlString, width, height, scale, onPanelPropertiesChange }: 
    */
   const handlePostMessageEventListener = (event: MessageEvent) => {
     if (onPanelPropertiesChange) {
-        // TODO: This could be secured using the origin from postMessage?
       if (event.data === "iFrameClick") {
         onPanelPropertiesChange();
+      }
+      else {
+        // Proof of concept for clicking specific elements within iframe
+        console.log("button click", event)
       }
     }
   };

@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import wrapTemplate from "../pages/templates/template-wrapper";
+import { parseHtmlToDom } from "../../utils/PreviewUtils";
 
 /**
  * Component props
@@ -9,10 +10,10 @@ interface Props {
   width: number;
   height: number;
   scale: number;
-  onPanelPropertiesChange: () => void;
-  pageNumber: number;
+  onPanelPropertiesChange?: () => void;
+  pageNumber?: number;
   selectedPage?: number;
-  setSelectedPage: (pageNumber: number) => void;
+  setSelectedPage?: (pageNumber: number) => void;
 }
 
 /**
@@ -36,6 +37,8 @@ const Preview = ({ htmlString, width, height, scale, onPanelPropertiesChange, pa
    * @param event message event
    */
   const handlePostMessageEventListener = (event: MessageEvent<string>) => {
+    if (!onPanelPropertiesChange || !setSelectedPage) return;
+
     if (typeof event.data === "string" && event.data.includes("iFrameClick-")) {
       const messagePage = event.data.match(/\d+/g)?.join();
 
@@ -48,15 +51,6 @@ const Preview = ({ htmlString, width, height, scale, onPanelPropertiesChange, pa
         setSelectedPage(messagePageNumber);
       }
     }
-  };
-
-  /**
-   * Parse HTML string to dom element
-   *
-   * @param html string
-   */
-  const parseHtmlToDom = (html: string) => {
-    return new DOMParser().parseFromString(html, "text/html").body;
   };
 
   return (

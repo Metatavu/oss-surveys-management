@@ -1,17 +1,20 @@
 import { useEffect, useState } from "react";
 import PreviewToolbar from "../layout-components/preview-toolbar";
-import { Survey } from "../../generated/client";
+import { Page, Survey } from "../../generated/client";
 import { useParams } from "react-router-dom";
-import { useSetAtom } from "jotai";
+import { useAtom, useSetAtom } from "jotai";
 import { errorAtom } from "../../atoms/error";
 import { useApi } from "../../hooks/use-api";
 import strings from "../../localization/strings";
 import Preview from "../layout-components/preview";
 import { Box, Toolbar, Typography, styled } from "@mui/material";
-import titleAndTextTemplate from "../pages/templates/title-and-text";
 import { DEVICE_HEIGHT, DEVICE_WIDTH, EDITOR_SCREEN_PREVIEW_CONTAINER_HEIGHT, EDITOR_SCREEN_PREVIEW_CONTAINER_WIDTH } from "../../constants";
 import { useWindowSize } from "usehooks-ts";
 import theme from "../../styles/theme";
+import { pagesAtom } from "../../atoms/pages";
+import { layoutsAtom } from "../../atoms/layouts";
+import { parseHtmlToDom } from "../../utils/PreviewUtils";
+import wrapTemplate from "../pages/templates/template-wrapper";
 
 /**
  * Styled preview root component
@@ -61,8 +64,10 @@ const PreviewScreen = () => {
   const setError = useSetAtom(errorAtom);
   const { height } = useWindowSize();
   const [ survey, setSurvey ] = useState<Survey>();
-  const htmlTemplateDummy = titleAndTextTemplate;
-
+  const [ surveyPages, _setSurveyPages ] = useAtom(pagesAtom);
+  const [ pageLayouts, _setPageLayouts ] = useAtom(layoutsAtom);
+  // TODO: update current page when changing pages in full screen preview.
+  const [ currentPage, _setCurrentPage ] = useState(1);
 
   /**
    * Get Survey from route id
@@ -83,13 +88,29 @@ const PreviewScreen = () => {
   if (!survey) return null;
 
   /**
-   * Render page count method
+   * Get the page layout based on page layout id
    *
-   * TODO: implement the page count
+   * @param page Page
+   * @returns layout html
+   */
+  const getPageLayout = (page: Page) => {
+    const layout = pageLayouts.find(layout => layout.id === page.layoutId);
+
+    if (!layout) return;
+
+    return layout.html;
+  }
+
+  const htmlString = getPageLayout(surveyPages[currentPage]);
+
+  if (!htmlString) return;
+
+  /**
+   * Render page count method
    */
   const renderPageCount = () => (
     <Toolbar sx={{ justifyContent: "center" }}>
-      <Typography color={ theme.palette.common.white }>1 / 1</Typography>
+      <Typography color={ theme.palette.common.white }> {currentPage} / {surveyPages.length}</Typography>
     </Toolbar>
   );
 
@@ -99,7 +120,7 @@ const PreviewScreen = () => {
       <PreviewArea>
         <PreviewContainer>
           <Preview
-            htmlString={ htmlTemplateDummy }
+            htmlString={ wrapTemplate(parseHtmlToDom(htmlString).outerHTML) }
             width={ DEVICE_WIDTH }
             height={ DEVICE_HEIGHT }
             scale={ (height / 1.5) / DEVICE_HEIGHT }

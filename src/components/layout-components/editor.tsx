@@ -21,6 +21,7 @@ import { errorAtom } from "../../atoms/error";
 import { useAtom, useSetAtom } from "jotai";
 import { v4 as uuid } from 'uuid';
 import { layoutsAtom } from "../../atoms/layouts";
+import { pagesAtom } from "../../atoms/pages";
 
 /**
  * Component properties
@@ -76,7 +77,7 @@ const PreviewContainer = styled(Box, {
 const Editor = ({ setPanelProperties, surveyId }: Props) => {
   const [ showAddPage, setShowAddPage ] = useState(false);
   const setError = useSetAtom(errorAtom);
-  const [ surveyPages, setSurveyPages ] = useState<Page[]>([]);
+  const [ surveyPages, setSurveyPages ] = useAtom(pagesAtom);
   const [ pageLayouts, setPageLayouts ] = useAtom(layoutsAtom);
   const [ selectedPage, setSelectedPage ] = useState<number | undefined>();
 
@@ -194,7 +195,7 @@ const Editor = ({ setPanelProperties, surveyId }: Props) => {
   );
 
   /**
-   *  Get the page layout based on page layout id
+   * Get the page layout based on page layout id
    *
    * @param page Page
    * @returns layout html

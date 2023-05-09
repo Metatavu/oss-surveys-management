@@ -50,6 +50,7 @@ export interface Localized extends LocalizedStringsMethods {
       surveyNotSaved: string;
       surveyPagesNotFound: string;
       pageLayoutsNotFound: string;
+      pageLayoutNotFound: string;
     };
   };
 

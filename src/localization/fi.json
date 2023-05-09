@@ -31,7 +31,8 @@
       "surveyNotFound": "Kyselyä ei löytynyt",
       "surveyNotSaved": "Virhe tallennettaessa kyselyä",
       "surveyPagesNotFound": "Kyselysivuja ei löytynyt",
-      "pageLayoutsNotFound": "Sivuasetteluja ei löytynyt"
+      "pageLayoutsNotFound": "Sivuasetteluja ei löytynyt",
+      "pageLayoutNotFound": "Sivuasetteluja ei löytynyt"
     }
   },
   "overviewScreen": {

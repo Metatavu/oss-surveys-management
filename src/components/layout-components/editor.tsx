@@ -64,10 +64,6 @@ const PreviewContainer = styled(Box, {
   transition: "border 0.2s ease-out",
   "&:hover": {
     borderColor: theme.palette.primary.dark
-  },
-  // TODO: Not working
-  "&.selected": {
-    borderColor: theme.palette.primary.light
   }
 }));
 
@@ -206,7 +202,7 @@ const Editor = ({ setPanelProperties, surveyId }: Props) => {
     if (!layout) return;
 
     return layout.html;
-  }
+  };
 
   return (
     <EditorContainer
@@ -220,7 +216,7 @@ const Editor = ({ setPanelProperties, surveyId }: Props) => {
             key={ page.id }
           >
             <Preview
-              htmlString={ getPageLayout(page) }
+              htmlString={getPageLayout(page) || strings.errorHandling.editSurveysScreen.pageLayoutsNotFound}
               width={ DEVICE_WIDTH }
               height={ DEVICE_HEIGHT }
               scale={ EDITOR_SCREEN_PREVIEW_CONTAINER_WIDTH / DEVICE_WIDTH }

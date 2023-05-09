@@ -31,7 +31,8 @@
       "surveyNotFound": "Survey not found",
       "surveyNotSaved": "Error while saving survey",
       "surveyPagesNotFound": "Survey pages not found",
-      "pageLayoutsNotFound": "Page layouts not found"
+      "pageLayoutsNotFound": "Page layouts not found",
+      "pageLayoutNotFound": "Page layout not found"
     }
   },
   "overviewScreen": {

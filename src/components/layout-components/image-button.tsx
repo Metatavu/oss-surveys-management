@@ -1,5 +1,5 @@
 import { Box, Button, Stack, Typography, styled } from "@mui/material";
-import { FC, ReactNode } from "react";
+import { ReactNode } from "react";
 
 /**
  * Component props
@@ -9,7 +9,8 @@ interface Props {
   image: ReactNode;
   selected: boolean;
   disabled?: boolean;
-  onClick(): void;
+  // TODO: Can remove void when all Image button onclicks are in place.
+  onClick(): void | Promise<void>;
 }
 
 /**

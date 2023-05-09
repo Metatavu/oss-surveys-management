@@ -101,9 +101,9 @@ const PreviewScreen = () => {
     return layout.html;
   }
 
-  const htmlString = getPageLayout(surveyPages[currentPage]);
+  const htmlString = getPageLayout(surveyPages[currentPage-1]);
 
-  if (!htmlString) return;
+  if (!htmlString) return setError(strings.errorHandling.editSurveysScreen.pageLayoutNotFound);
 
   /**
    * Render page count method

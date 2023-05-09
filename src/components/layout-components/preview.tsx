@@ -6,7 +6,7 @@ import { parseHtmlToDom } from "../../utils/PreviewUtils";
  * Component props
  */
 interface Props {
-  htmlString?: string;
+  htmlString: string;
   width: number;
   height: number;
   scale: number;
@@ -20,8 +20,6 @@ interface Props {
  * Renders preview component
  */
 const Preview = ({ htmlString, width, height, scale, onPanelPropertiesChange, pageNumber, selectedPage, setSelectedPage }: Props) => {
-  if (!htmlString) return null;
-
   /**
    * Set up event listener to recieve post message from iframe
    */
@@ -60,7 +58,7 @@ const Preview = ({ htmlString, width, height, scale, onPanelPropertiesChange, pa
         width={ width }
         height={ height }
         seamless
-        style={{ border: selectedPage === pageNumber ? "10px solid #000" : "none" }}
+        style={{ border: selectedPage === pageNumber ? "20px solid #46dc78" : "none" }}
       />
     </div>
   )

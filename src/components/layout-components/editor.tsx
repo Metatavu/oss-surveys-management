@@ -226,7 +226,7 @@ const Editor = ({ setPanelProperties, surveyId }: Props) => {
               height={ DEVICE_HEIGHT }
               scale={ EDITOR_SCREEN_PREVIEW_CONTAINER_WIDTH / DEVICE_WIDTH }
               onPanelPropertiesChange={ () => setPanelProperties(EditorPanelProperties.PAGE) }
-              setSelectedPage={setSelectedPage}
+              setSelectedPage={() => setSelectedPage(page.orderNumber) }
               selectedPage={selectedPage}
               pageNumber={page.orderNumber}
             />

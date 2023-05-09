@@ -21,8 +21,6 @@ interface Props {
 const Preview = ({ htmlString, width, height, scale, onPanelPropertiesChange, pageNumber, selectedPage, setSelectedPage }: Props) => {
   if (!htmlString) return null;
 
-  console.log("page number and selected page", pageNumber, selectedPage);
-
   /**
    * Set up event listener to recieve post message from iframe
    */
@@ -37,13 +35,18 @@ const Preview = ({ htmlString, width, height, scale, onPanelPropertiesChange, pa
    *
    * @param event message event
    */
-  const handlePostMessageEventListener = (event: MessageEvent) => {
-    // TODO: This could be secured using the origin from postMessage?
-    if (event.data === "iFrameClick") {
-      onPanelPropertiesChange();
-      // TODO: This is not working to select a specific selected page
-      // setSelectedPage(pageNumber);
-      // console.log("selected page is set to ", pageNumber)
+  const handlePostMessageEventListener = (event: MessageEvent<string>) => {
+    if (typeof event.data === "string" && event.data.includes("iFrameClick-")) {
+      const messagePage = event.data.match(/\d+/g)?.join();
+
+      if (!messagePage!) return;
+
+      const messagePageNumber = parseInt(messagePage);
+
+      if (messagePageNumber && messagePageNumber === pageNumber) {
+        onPanelPropertiesChange();
+        setSelectedPage(messagePageNumber);
+      }
     }
   };
 
@@ -59,7 +62,7 @@ const Preview = ({ htmlString, width, height, scale, onPanelPropertiesChange, pa
   return (
     <div style={{ scale: String(scale) }}>
       <iframe
-        srcDoc={ wrapTemplate(parseHtmlToDom(htmlString).outerHTML) }
+        srcDoc={ wrapTemplate(parseHtmlToDom(htmlString).outerHTML, pageNumber) }
         width={ width }
         height={ height }
         seamless

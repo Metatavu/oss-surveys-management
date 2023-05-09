@@ -17,7 +17,7 @@ const sanitizeOptions: IOptions = {
  * @param bodyContent
  * @returns HTML string
  */
-const wrapTemplate = (bodyContent: string) => (
+const wrapTemplate = (bodyContent: string, pageNumber: number) => (
   `<!DOCTYPE html>
   <html lang="en">
   <head>
@@ -31,7 +31,7 @@ const wrapTemplate = (bodyContent: string) => (
   </body>
   <script>
     document.addEventListener("click", () =>
-      window.parent.postMessage("iFrameClick")
+      window.parent.postMessage("iFrameClick-${pageNumber}")
     )
   </script>
   </html>`

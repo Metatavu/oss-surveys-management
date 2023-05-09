@@ -69,7 +69,7 @@ const EditSurveysScreen = () => {
         surveyId={ survey.id }
       />
       <Stack direction="row" flex={1}>
-        <Editor setPanelProperties={ setPanelProperties } />
+        <Editor setPanelProperties={ setPanelProperties } surveyId={survey.id} />
         <PropertiesPanel>
           { panelProperties === EditorPanelProperties.SURVEY
             ? <SurveyProperties

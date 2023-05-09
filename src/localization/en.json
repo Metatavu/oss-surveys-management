@@ -29,7 +29,9 @@
     },
     "editSurveysScreen": {
       "surveyNotFound": "Survey not found",
-      "surveyNotSaved": "Error while saving survey"
+      "surveyNotSaved": "Error while saving survey",
+      "surveyPagesNotFound": "Survey pages not found",
+      "pageLayoutsNotFound": "Page layouts not found"
     }
   },
   "overviewScreen": {

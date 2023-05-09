@@ -95,17 +95,13 @@ const PreviewScreen = () => {
    * @returns layout html
    */
   const getPageLayout = (page: Page) => {
-    const layout = pageLayouts.find(layout => layout.id === page.layoutId);
-
-    if (!layout) return;
-
-    return layout.html;
-  }
+    return pageLayouts.find(layout => layout.id === page.layoutId)?.html;
+  };
 
   const htmlString = getPageLayout(surveyPages[currentPage-1]);
 
   if (!htmlString) {
-    setError(strings.errorHandling.editSurveysScreen.pageLayoutNotFound)
+    setError(strings.errorHandling.editSurveysScreen.pageLayoutNotFound);
     return null;
   }
 
@@ -114,7 +110,7 @@ const PreviewScreen = () => {
    */
   const renderPageCount = () => (
     <Toolbar sx={{ justifyContent: "center" }}>
-      <Typography color={ theme.palette.common.white }> {currentPage} / {surveyPages.length}</Typography>
+      <Typography color={ theme.palette.common.white }>{currentPage} / {surveyPages.length}</Typography>
     </Toolbar>
   );
 

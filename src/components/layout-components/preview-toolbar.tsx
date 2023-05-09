@@ -35,6 +35,8 @@ const ToolbarContent = styled(Stack, {
 
 /**
  * Renders preview toolbar
+ *
+ * @param props component properties
  */
 const PreviewToolbar = ({ surveyName }: Props) => {
   const navigate = useNavigate();

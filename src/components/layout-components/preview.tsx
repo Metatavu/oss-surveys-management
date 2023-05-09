@@ -18,8 +18,19 @@ interface Props {
 
 /**
  * Renders preview component
+ *
+ * @param props component properties
  */
-const Preview = ({ htmlString, width, height, scale, onPanelPropertiesChange, pageNumber, selectedPage, setSelectedPage }: Props) => {
+const Preview = ({
+  htmlString,
+  width,
+  height,
+  scale,
+  onPanelPropertiesChange,
+  pageNumber,
+  selectedPage,
+  setSelectedPage
+}: Props) => {
   /**
    * Set up event listener to recieve post message from iframe
    */

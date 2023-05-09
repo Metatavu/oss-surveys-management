@@ -22,7 +22,7 @@ const EditSurveysScreen = () => {
   const setError = useSetAtom(errorAtom);
 
   const [ survey, setSurvey ] = useState<Survey>();
-  const [ panelProperties, setPanelProperties ] = useState<EditorPanelProperties>(EditorPanelProperties.SURVEY);
+  const [ panelProperties, setPanelProperties ] = useState(EditorPanelProperties.SURVEY);
 
   /**
    * Get Survey from route id

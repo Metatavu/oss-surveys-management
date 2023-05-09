@@ -69,13 +69,15 @@ const PreviewContainer = styled(Box, {
 
 /**
  * Renders editor component
+ *
+ * @param props component properties
  */
 const Editor = ({ setPanelProperties, surveyId }: Props) => {
   const [ showAddPage, setShowAddPage ] = useState(false);
   const setError = useSetAtom(errorAtom);
   const [ surveyPages, setSurveyPages ] = useAtom(pagesAtom);
   const [ pageLayouts, setPageLayouts ] = useAtom(layoutsAtom);
-  const [ selectedPage, setSelectedPage ] = useState<number | undefined>();
+  const [ selectedPage, setSelectedPage ] = useState<number>();
 
   const { pagesApi, layoutsApi } = useApi();
 
@@ -197,11 +199,7 @@ const Editor = ({ setPanelProperties, surveyId }: Props) => {
    * @returns layout html
    */
   const getPageLayout = (page: Page) => {
-    const layout = pageLayouts.find(layout => layout.id === page.layoutId);
-
-    if (!layout) return;
-
-    return layout.html;
+    return pageLayouts.find(layout => layout.id === page.layoutId)?.html;
   };
 
   return (
@@ -210,8 +208,7 @@ const Editor = ({ setPanelProperties, surveyId }: Props) => {
       gap={4}
       onClick={ () => setPanelProperties(EditorPanelProperties.SURVEY) }
     >
-      {
-        !!surveyPages.length && surveyPages.map(page =>
+      { !!surveyPages.length && surveyPages.map(page =>
           <PreviewContainer
             key={ page.id }
           >

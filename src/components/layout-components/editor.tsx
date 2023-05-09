@@ -83,11 +83,9 @@ const Editor = ({ setPanelProperties, surveyId }: Props) => {
   const { pagesApi, layoutsApi } = useApi();
 
   useEffect(() => {
-    if (!pageLayouts.length) {
-      getPageLayouts()
-        .catch(error =>
-          setError(`${strings.errorHandling.editSurveysScreen.pageLayoutsNotFound}, ${error}`));
-    }
+    getPageLayouts()
+      .catch(error =>
+        setError(`${strings.errorHandling.editSurveysScreen.pageLayoutsNotFound}, ${error}`));
 
     getSurveyPages()
       .catch(error =>

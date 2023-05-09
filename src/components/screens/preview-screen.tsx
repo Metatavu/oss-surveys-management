@@ -85,7 +85,7 @@ const PreviewScreen = () => {
         setError(`${ strings.errorHandling.editSurveysScreen.surveyNotFound }, ${ error }`));
   },[id]);
 
-  if (!survey) return null;
+  if (!survey) return;
 
   /**
    * Get the page layout based on page layout id
@@ -103,7 +103,7 @@ const PreviewScreen = () => {
 
   const htmlString = getPageLayout(surveyPages[currentPage-1]);
 
-  if (!htmlString) return setError(strings.errorHandling.editSurveysScreen.pageLayoutNotFound);
+  if (!htmlString) return;
 
   /**
    * Render page count method

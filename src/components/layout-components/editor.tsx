@@ -103,6 +103,7 @@ const Editor = ({ setPanelProperties, surveyId }: Props) => {
     setSurveyPages(surveyPages);
   };
 
+  // TODO: Is loading spinner for this
   /**
    * Get layouts
    */
@@ -203,7 +204,7 @@ const Editor = ({ setPanelProperties, surveyId }: Props) => {
    * @returns layout html
    */
   const getPageLayout = (page: Page) => {
-    return pageLayouts.find(layout => layout.id === page.layoutId)!.html;
+    return pageLayouts.find(layout => layout.id === page.layoutId)?.html;
   };
 
   // TODO: This will need to be done for the preview screen?

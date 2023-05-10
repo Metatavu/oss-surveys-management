@@ -58,7 +58,7 @@ const Preview = ({
   };
 
   return (
-    <div style={{ scale: String(scale) }}>
+    <div style={{ scale: `${scale}` }}>
       <iframe
         srcDoc={ wrapTemplate(parseHtmlToDom(htmlString).outerHTML, pageNumber) }
         width={ width }

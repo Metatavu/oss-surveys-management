@@ -82,7 +82,7 @@ const PageProperties = () => {
         onClose={ () => setDeleteDialogOpen(false) }
         onConfirm={ deleteOption }
         children={ <div>{ optionToDelete?.text }</div> }
-        closeButtonText={ strings.generic.confirm }
+        confirmButtonText={ strings.generic.confirm }
       />
       <Box p={2} sx={{ borderBottom: "1px solid #DADCDE" }}>
         <Typography>

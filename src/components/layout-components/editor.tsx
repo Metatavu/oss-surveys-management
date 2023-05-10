@@ -23,9 +23,9 @@ import { v4 as uuid } from 'uuid';
 import { layoutsAtom } from "../../atoms/layouts";
 import { pagesAtom } from "../../atoms/pages";
 import { optionsAtom } from "../../atoms/question-options-temporary";
-import { useAtom } from "jotai";
 import questionRendererFactory from "../../question-renderer/question-renderer";
 import titleAndQuestionTemplate from "../pages/templates/title-and-question";
+import titleAndTextTemplate from "../pages/templates/title-and-text";
 
 /**
  * Component properties
@@ -76,7 +76,7 @@ const PreviewContainer = styled(Box, {
  *
  * @param props component properties
  */
-const Editor = ({ setPanelProperties }: Props) => {
+const Editor = ({ setPanelProperties, surveyId }: Props) => {
   const [ selectedQuestionOptions, _setSelectedQuestionOptions ] = useAtom(optionsAtom);
   const [ showAddPage, setShowAddPage ] = useState(false);
   const setError = useSetAtom(errorAtom);
@@ -130,7 +130,6 @@ const Editor = ({ setPanelProperties }: Props) => {
         id: uuid(),
         layoutId: layoutId,
         title: templateType,
-        html: "Html key to be removed",
         orderNumber: surveyPages.length + 1
       }
     });
@@ -207,24 +206,24 @@ const Editor = ({ setPanelProperties }: Props) => {
     return pageLayouts.find(layout => layout.id === page.layoutId)?.html;
   };
 
-  const htmlTemplateDummy = titleAndTextTemplate;
+  // const htmlTemplateDummy = titleAndTextTemplate;
 
-  const survey = {
-    pages: [
-      {
-        id: 1,
-        data: htmlTemplateDummy
-      },
-      {
-        id: 2,
-        data: htmlTemplateDummy
-      },
-      {
-        id: 3,
-        data: htmlTemplateDummy
-      }
-    ] as SurveyPage[]
-  };
+  // const survey = {
+  //   pages: [
+  //     {
+  //       id: 1,
+  //       data: htmlTemplateDummy
+  //     },
+  //     {
+  //       id: 2,
+  //       data: htmlTemplateDummy
+  //     },
+  //     {
+  //       id: 3,
+  //       data: htmlTemplateDummy
+  //     }
+  //   ] as Page[]
+  // };
 
   return (
     <EditorContainer

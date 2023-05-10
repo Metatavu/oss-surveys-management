@@ -15,7 +15,7 @@
       }
     },
     "ignore": [
-      "./src/generated/"
+      "/generated"
     ]
   },
   "javascript": {
@@ -30,7 +30,7 @@
     "indentStyle": "space",
     "formatWithErrors": false,
     "ignore": [
-      "./src/generated/"
+      "/generated"
     ]
   }
 }

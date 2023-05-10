@@ -1,8 +1,8 @@
-import { Stack, Typography, styled } from "@mui/material";
+import { Box, Stack, Typography, styled } from "@mui/material";
 import theme from "../../styles/theme";
 import NewPageButton from "./new-page-button";
 import GenericDialog from "../generic/generic-dialog";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ImageButton from "./image-button";
 import QuestionLayoutImage from "../images/svg/layout-thumbnails/question";
 import InfoLayoutImage from "../images/svg/layout-thumbnails/info";
@@ -12,6 +12,24 @@ import QuestionParagraphLayoutImage from "../images/svg/layout-thumbnails/questi
 import ImageParagraphLayoutImage from "../images/svg/layout-thumbnails/image-paragraph";
 import ParagraphImageLayoutImage from "../images/svg/layout-thumbnails/paragraph-image";
 import StatisticsLayoutImage from "../images/svg/layout-thumbnails/statistics";
+import Preview from "./preview";
+import { EditorPanelProperties } from "../../types";
+import { DEVICE_HEIGHT, DEVICE_WIDTH, EDITOR_SCREEN_PREVIEW_CONTAINER_HEIGHT, EDITOR_SCREEN_PREVIEW_CONTAINER_WIDTH } from "../../constants";
+import { useApi } from "../../hooks/use-api";
+import { Page } from "../../generated/client";
+import { errorAtom } from "../../atoms/error";
+import { useAtom, useSetAtom } from "jotai";
+import { v4 as uuid } from 'uuid';
+import { layoutsAtom } from "../../atoms/layouts";
+import { pagesAtom } from "../../atoms/pages";
+
+/**
+ * Component properties
+ */
+interface Props {
+  setPanelProperties: (properties: EditorPanelProperties) => void;
+  surveyId: string;
+}
 
 /**
  * Styled editor container component
@@ -22,16 +40,99 @@ const EditorContainer = styled(Stack, {
   position: "relative",
   padding: theme.spacing(4),
   display: "flex",
+  flexWrap: "wrap",
   flex: 1,
   flexDirection: "row",
-  justifyContent: "space-between"
+}));
+
+/**
+ * Styled preview container component
+ */
+const PreviewContainer = styled(Box, {
+  label: "preview-container"
+})(({ theme }) => ({
+  borderWidth: 2,
+  borderStyle: "solid",
+  borderColor: "transparent",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  width: EDITOR_SCREEN_PREVIEW_CONTAINER_WIDTH,
+  height: EDITOR_SCREEN_PREVIEW_CONTAINER_HEIGHT,
+  cursor: "pointer",
+  boxSizing: "content-box",
+  transition: "border 0.2s ease-out",
+  "&:hover": {
+    borderColor: theme.palette.primary.dark
+  }
 }));
 
 /**
  * Renders editor component
+ *
+ * @param props component properties
  */
-const Editor = () => {
+const Editor = ({ setPanelProperties, surveyId }: Props) => {
   const [ showAddPage, setShowAddPage ] = useState(false);
+  const setError = useSetAtom(errorAtom);
+  const [ surveyPages, setSurveyPages ] = useAtom(pagesAtom);
+  const [ pageLayouts, setPageLayouts ] = useAtom(layoutsAtom);
+  const [ selectedPage, setSelectedPage ] = useState<number>();
+
+  const { pagesApi, layoutsApi } = useApi();
+
+  useEffect(() => {
+    getPageLayouts()
+      .catch(error =>
+        setError(`${strings.errorHandling.editSurveysScreen.pageLayoutsNotFound}, ${error}`));
+
+    getSurveyPages()
+      .catch(error =>
+        setError(`${strings.errorHandling.editSurveysScreen.surveyPagesNotFound}, ${error}`));
+  },[]);
+
+  /**
+   * Get surveys pages
+   */
+  const getSurveyPages = async () => {
+    const surveyPages = await pagesApi.listSurveyPages({surveyId: surveyId});
+    setSurveyPages(surveyPages);
+  };
+
+  /**
+   * Get layouts
+   */
+  const getPageLayouts = async () => {
+    const layouts = await layoutsApi.listLayouts();
+    setPageLayouts(layouts);
+  }
+
+  /**
+   * Create a new page based on selected template
+   *
+   * @param templateType string
+   */
+  const createPage = async (templateType: string) => {
+    const layouts = await layoutsApi.listLayouts();
+    setPageLayouts(layouts);
+    const layoutId = layouts.find(layout => layout.name === templateType.toLocaleLowerCase())?.id;
+
+    if (!layoutId) return;
+
+    const newPage = await pagesApi.createSurveyPage({
+      surveyId: surveyId,
+      page: {
+        id: uuid(),
+        layoutId: layoutId,
+        title: templateType,
+        html: "Html key to be removed",
+        orderNumber: surveyPages.length + 1
+      }
+    });
+
+    setSurveyPages([...surveyPages, newPage]);
+    setShowAddPage(false)
+  };
 
   const renderAddNewPageDialog = () => (
     <GenericDialog
@@ -53,7 +154,7 @@ const Editor = () => {
         <ImageButton
           title={ strings.layouts.info }
           image={ <InfoLayoutImage/> }
-          onClick={ () => {} }
+          onClick={ () => createPage(strings.layouts.info) }
           selected={ false }
         />
         <ImageButton
@@ -91,8 +192,39 @@ const Editor = () => {
     </GenericDialog>
   );
 
+  /**
+   * Get the page layout based on page layout id
+   *
+   * @param page Page
+   * @returns layout html
+   */
+  const getPageLayout = (page: Page) => {
+    return pageLayouts.find(layout => layout.id === page.layoutId)?.html;
+  };
+
   return (
-    <EditorContainer direction="row" gap={4}>
+    <EditorContainer
+      direction="row"
+      gap={4}
+      onClick={ () => setPanelProperties(EditorPanelProperties.SURVEY) }
+    >
+      { !!surveyPages.length && surveyPages.map(page =>
+          <PreviewContainer
+            key={ page.id }
+          >
+            <Preview
+              htmlString={getPageLayout(page) || strings.errorHandling.editSurveysScreen.pageLayoutsNotFound}
+              width={ DEVICE_WIDTH }
+              height={ DEVICE_HEIGHT }
+              scale={ EDITOR_SCREEN_PREVIEW_CONTAINER_WIDTH / DEVICE_WIDTH }
+              onPanelPropertiesChange={ () => setPanelProperties(EditorPanelProperties.PAGE) }
+              setSelectedPage={() => setSelectedPage(page.orderNumber) }
+              selectedPage={selectedPage}
+              pageNumber={page.orderNumber}
+            />
+          </PreviewContainer>
+        )
+      }
       <NewPageButton onClick={ () => setShowAddPage(true) }/>
       { renderAddNewPageDialog() }
     </EditorContainer>

@@ -29,7 +29,16 @@
     },
     "editSurveysScreen": {
       "surveyNotFound": "Survey not found",
-      "surveyNotSaved": "Error while saving survey"
+      "surveyNotSaved": "Error while saving survey",
+      "surveyPagesNotFound": "Survey pages not found",
+      "pageLayoutsNotFound": "Page layouts not found",
+      "pageLayoutNotFound": "Page layout not found"
+    },
+    "previewScreen": {
+      "surveyNotFound": "Survey not found",
+      "surveyPagesNotFound": "Survey pages not found",
+      "pageLayoutsNotFound": "Page layouts not found",
+      "previewNotFound": "Error while loading preview"
     }
   },
   "overviewScreen": {
@@ -74,5 +83,8 @@
     "imageParagraph": "Image + info",
     "questionInfo": "Question + info",
     "statistics": "Statistics"
+  },
+  "previewScreen": {
+    "sharePreview": "Share preview"
   }
 }

@@ -44,12 +44,13 @@ const ControlsContainer = styled(Stack, {
  */
 interface Props {
   surveyName: string;
+  surveyId: string;
 }
 
 /**
  * Renders toolbar component
  */
-const Toolbar = ({ surveyName }: Props) => {
+const Toolbar = ({ surveyName, surveyId }: Props) => {
   const navigate = useNavigate();
 
   const renderTitle = () => (
@@ -79,10 +80,10 @@ const Toolbar = ({ surveyName }: Props) => {
         {strings.editSurveysScreen.statistics}
       </Button>
       <Button
-        disabled
         color="primary"
         title={strings.generic.notImplemented}
         startIcon={<PlayArrowOutlined/>}
+        onClick={ () => navigate(`/preview/${surveyId}`) }
       >
         {strings.editSurveysScreen.preview}
       </Button>

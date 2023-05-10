@@ -1,6 +1,7 @@
 import Header from "../layout-components/header";
 import { Stack } from "@mui/material";
-import { Outlet } from "react-router-dom";
+import { Outlet, useMatch } from "react-router-dom";
+import { NavigationLinks } from "../../types";
 
 /**
  * Basic layout component
@@ -8,12 +9,15 @@ import { Outlet } from "react-router-dom";
  * @param props component properties
  */
 const BasicLayout = () => {
+  const isPreviewPath = !!useMatch(`${NavigationLinks.PREVIEW}/:id`);
+
   /**
    * Component render
    */
   return (
     <>
-      <Header />
+    {/* TODO: Is there a better way to do this? */}
+      { !isPreviewPath && <Header /> }
       <Stack flex={1}>
         <Outlet/>
       </Stack>

@@ -48,6 +48,15 @@ export interface Localized extends LocalizedStringsMethods {
     editSurveysScreen: {
       surveyNotFound: string;
       surveyNotSaved: string;
+      surveyPagesNotFound: string;
+      pageLayoutsNotFound: string;
+      pageLayoutNotFound: string;
+    };
+    previewScreen: {
+      surveyNotFound: string;
+      surveyPagesNotFound: string;
+      pageLayoutsNotFound: string;
+      previewNotFound: string;
     };
   };
 
@@ -108,6 +117,13 @@ export interface Localized extends LocalizedStringsMethods {
     imageParagraph: string;
     questionInfo: string;
     statistics: string;
+  }
+
+  /**
+   * Translations related to preview screen
+   */
+  previewScreen: {
+    sharePreview: string;
   }
 }
 /**

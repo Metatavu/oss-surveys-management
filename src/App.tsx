@@ -9,6 +9,7 @@ import ScreensScreen from "./components/screens/screens-screen";
 import SurveysScreen from "./components/screens/surveys-screen";
 import theme from "./styles/theme";
 import EditSurveysScreen from "./components/screens/edit-surveys-screen";
+import PreviewScreen from "./components/screens/preview-screen";
 
 const router = createBrowserRouter([
   {
@@ -33,6 +34,10 @@ const router = createBrowserRouter([
       {
         path: "/",
         element: <Navigate to="/overview" />
+      },
+      {
+        path:"/preview/:id",
+        element: <PreviewScreen />
       }
     ]
   }

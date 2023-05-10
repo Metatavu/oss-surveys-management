@@ -29,7 +29,16 @@
     },
     "editSurveysScreen": {
       "surveyNotFound": "Kyselyä ei löytynyt",
-      "surveyNotSaved": "Virhe tallennettaessa kyselyä"
+      "surveyNotSaved": "Virhe tallennettaessa kyselyä",
+      "surveyPagesNotFound": "Kyselysivuja ei löytynyt",
+      "pageLayoutsNotFound": "Sivuasetteluja ei löytynyt",
+      "pageLayoutNotFound": "Sivuasetteluja ei löytynyt"
+    },
+    "previewScreen": {
+      "surveyNotFound": "Kyselyä ei löytynyt",
+      "surveyPagesNotFound": "Kyselysivuja ei löytynyt",
+      "pageLayoutsNotFound": "Sivuasetteluja ei löytynyt",
+      "previewNotFound": "Virhe ladattaessa esikatselua"
     }
   },
   "overviewScreen": {
@@ -74,5 +83,8 @@
     "imageParagraph": "Kuva + info",
     "questionInfo": "Kysymys + info",
     "statistics": "Tilastot"
+  },
+  "previewScreen": {
+    "sharePreview": "Jaa esikatselu"
   }
 }

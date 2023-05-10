@@ -145,7 +145,7 @@ const PreviewScreen = () => {
    * @returns layout html
    */
   const getPageLayout = (page: Page) => {
-    return pageLayouts.find(layout => layout.id === page.layoutId)?.html!;
+    return pageLayouts.find(layout => layout.id === page.layoutId)!.html;
   };
 
   const htmlString = getPageLayout(surveyPages[currentPage-1]);

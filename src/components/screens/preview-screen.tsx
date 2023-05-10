@@ -67,7 +67,7 @@ const PreviewScreen = () => {
   const [ surveyPages, setSurveyPages ] = useAtom(pagesAtom);
   const [ pageLayouts, setPageLayouts ] = useAtom(layoutsAtom);
   // TODO: update current page when changing pages in full screen preview.
-  const [ currentPage, _setCurrentPage ] = useState(1);
+  const [ currentPage ] = useState(1);
   const [ isLoading, setIsLoading ] = useState(false);
 
   /**

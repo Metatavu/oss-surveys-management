@@ -109,7 +109,6 @@ const PreviewScreen = () => {
     await getPageLayouts()
       .catch(error =>
         setError(`${ strings.errorHandling.previewScreen.pageLayoutsNotFound }, ${ error }`));
-    setIsLoading(false);
   };
 
   useEffect(() => {
@@ -117,6 +116,7 @@ const PreviewScreen = () => {
     getPreview()
       .catch(error =>
         setError(`${ strings.errorHandling.previewScreen.previewNotFound }, ${ error }`));
+    setIsLoading(false);
   },[id]);
 
   if (!survey || isLoading) {

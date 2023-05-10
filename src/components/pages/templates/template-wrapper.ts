@@ -29,7 +29,17 @@ const wrapTemplate = (bodyContent: string, pageNumber?: number) => `<!DOCTYPE ht
   </body>
   <script>
     document.addEventListener("click", () =>
-      window.parent.postMessage("iFrameClick-${pageNumber}")
+      window.parent.dispatchEvent(
+        new CustomEvent(
+          "message-${pageNumber}",
+          {
+            detail: {
+              eventType: "iframeclick",
+              pageNumber: ${pageNumber}
+            }
+          }
+        )
+      )
     )
   </script>
   </html>`;

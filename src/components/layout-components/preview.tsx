@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import wrapTemplate from "../pages/templates/template-wrapper";
 import { parseHtmlToDom } from "../../utils/PreviewUtils";
+import { IframeClickEvent } from "../../types";
 
 /**
  * Component props
@@ -35,9 +36,11 @@ const Preview = ({
    * Set up event listener to recieve post message from iframe
    */
   useEffect(() => {
-    window.addEventListener("message", handlePostMessageEventListener);
+    // TODO: In the future when we need more event handlers within the iframe we can use a switch statement to replace the handlePostMessageEventListener.
+    // This can direct us to the appropriate event listener based upon the type of the Event e.g. IframeClickEvent, IframeButtonClickEvent etc.
+    window.addEventListener(`message-${pageNumber}`, handlePostMessageEventListener);
 
-    return () => window.removeEventListener("message", handlePostMessageEventListener);
+    return () => window.removeEventListener(`message-${pageNumber}`, handlePostMessageEventListener);
   },[]);
 
   /**
@@ -45,21 +48,13 @@ const Preview = ({
    *
    * @param event message event
    */
-  const handlePostMessageEventListener = (event: MessageEvent<string>) => {
+  const handlePostMessageEventListener = (event: any) => {
     if (!onPanelPropertiesChange || !setSelectedPage) return;
 
-    if (typeof event.data === "string" && event.data.includes("iFrameClick-")) {
-      const messagePage = event.data.match(/\d+/g)?.join();
+    const typedEvent = event as IframeClickEvent;
 
-      if (!messagePage!) return;
-
-      const messagePageNumber = parseInt(messagePage);
-
-      if (messagePageNumber && messagePageNumber === pageNumber) {
-        onPanelPropertiesChange();
-        setSelectedPage(messagePageNumber);
-      }
-    }
+    onPanelPropertiesChange();
+    setSelectedPage(typedEvent.detail.pageNumber);
   };
 
   return (

@@ -70,34 +70,23 @@ const PreviewScreen = () => {
   const [ currentPage, _setCurrentPage ] = useState(1);
   const [ isLoading, setIsLoading ] = useState(false);
 
-  if (!id) return null;
-
   /**
    * Get Survey from route id
    */
   const getSurvey = async () => {
+    if (!id) return null;
     const survey = await surveysApi.findSurvey({ surveyId: id });
     setSurvey(survey);
-    getSurveyPages()
-      .catch(error =>
-        setError(`${ strings.errorHandling.editSurveysScreen.surveyNotFound }, ${ error }`));
-    setIsLoading(false);
   };
 
   /**
    * Get surveys pages
    */
   const getSurveyPages = async () => {
+    if (!id) return null;
     const surveyPages = await pagesApi.listSurveyPages({surveyId: id});
     setSurveyPages(surveyPages);
   };
-
-  useEffect(() => {
-    setIsLoading(true);
-    getSurvey()
-      .catch(error =>
-        setError(`${ strings.errorHandling.editSurveysScreen.surveyNotFound }, ${ error }`));
-  },[id]);
 
   /**
    * Get layouts
@@ -105,13 +94,30 @@ const PreviewScreen = () => {
   const getPageLayouts = async () => {
     const layouts = await layoutsApi.listLayouts();
     setPageLayouts(layouts);
+  };
+
+  /**
+   * Make all requests to generate preview
+   */
+  const getPreview = async () => {
+    await getSurvey()
+      .catch(error =>
+        setError(`${ strings.errorHandling.previewScreen.surveyNotFound }, ${ error }`));
+    await getSurveyPages()
+      .catch(error =>
+        setError(`${ strings.errorHandling.previewScreen.surveyNotFound }, ${ error }`));
+    await getPageLayouts()
+      .catch(error =>
+        setError(`${ strings.errorHandling.previewScreen.pageLayoutsNotFound }, ${ error }`));
     setIsLoading(false);
   };
 
-  if (!pageLayouts) {
+  useEffect(() => {
     setIsLoading(true);
-    getPageLayouts();
-  }
+    getPreview()
+      .catch(error =>
+        setError(`${ strings.errorHandling.previewScreen.previewNotFound }, ${ error }`));
+  },[id]);
 
   if (!survey || isLoading) {
     return (

@@ -35,7 +35,10 @@
       "pageLayoutNotFound": "Page layout not found"
     },
     "previewScreen": {
-      "surveyPagesNotFound": "Survey pages not found"
+      "surveyNotFound": "Survey not found",
+      "surveyPagesNotFound": "Survey pages not found",
+      "pageLayoutsNotFound": "Page layouts not found",
+      "previewNotFound": "Error while loading preview"
     }
   },
   "overviewScreen": {

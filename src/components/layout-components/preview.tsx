@@ -1,5 +1,7 @@
 import { useEffect } from 'react';
 import wrapTemplate from "../pages/templates/template-wrapper";
+import { parseHtmlToDom } from "../../utils/PreviewUtils";
+import { IframeClickEvent } from "../../types";
 
 /**
  * Component props
@@ -10,21 +12,35 @@ interface Props {
   height: number;
   scale: number;
   onPanelPropertiesChange?: () => void;
+  pageNumber?: number;
+  selectedPage?: number;
+  setSelectedPage?: (pageNumber: number) => void;
 }
 
 /**
  * Renders preview component
+ *
+ * @param props component properties
  */
-const Preview = ({ htmlString, width, height, scale, onPanelPropertiesChange }: Props) => {
+const Preview = ({
+  htmlString,
+  width,
+  height,
+  scale,
+  onPanelPropertiesChange,
+  pageNumber,
+  selectedPage,
+  setSelectedPage
+}: Props) => {
   /**
    * Set up event listener to recieve post message from iframe
    */
   useEffect(() => {
-    if (onPanelPropertiesChange) {
-      window.addEventListener("message", handlePostMessageEventListener);
+    // TODO: In the future when we need more event handlers within the iframe we can use a switch statement to replace the handlePostMessageEventListener.
+    // This can direct us to the appropriate event listener based upon the type of the Event e.g. IframeClickEvent, IframeButtonClickEvent etc.
+    window.addEventListener(`message-${pageNumber}`, handlePostMessageEventListener);
 
-      return () => window.removeEventListener("message", handlePostMessageEventListener);
-    }
+    return () => window.removeEventListener(`message-${pageNumber}`, handlePostMessageEventListener);
   },[]);
 
   /**
@@ -32,34 +48,23 @@ const Preview = ({ htmlString, width, height, scale, onPanelPropertiesChange }: 
    *
    * @param event message event
    */
-  const handlePostMessageEventListener = (event: MessageEvent) => {
-    if (onPanelPropertiesChange) {
-      if (event.data === "iFrameClick") {
-        onPanelPropertiesChange();
-      }
-      else {
-        // Proof of concept for clicking specific elements within iframe
-        console.log("button click", event)
-      }
-    }
-  };
+  const handlePostMessageEventListener = (event: any) => {
+    if (!onPanelPropertiesChange || !setSelectedPage) return;
 
-  /**
-   * Parse HTML string to dom element
-   *
-   * @param html string
-   */
-  const parseHtmlStringToDom = (html: string) => {
-    return new DOMParser().parseFromString(html, "text/html").body;
+    const typedEvent = event as IframeClickEvent;
+
+    onPanelPropertiesChange();
+    setSelectedPage(typedEvent.detail.pageNumber);
   };
 
   return (
-    <div style={{ scale: String(scale) }}>
+    <div style={{ scale: `${scale}` }}>
       <iframe
-        srcDoc={ wrapTemplate(parseHtmlStringToDom(htmlString).outerHTML) }
+        srcDoc={ wrapTemplate(parseHtmlToDom(htmlString).outerHTML, pageNumber) }
         width={ width }
         height={ height }
         seamless
+        style={{ border: selectedPage === pageNumber ? "20px solid #46dc78" : "none" }}
       />
     </div>
   )

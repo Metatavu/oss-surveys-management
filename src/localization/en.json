@@ -22,11 +22,24 @@
       "url": "URL: {0}",
       "errorMessage": "Error message: "
     },
+    "overviewScreen": {
+      "surveysNotFound": "Error while loading surveys"
+    },
     "surveysScreen": {
       "createSurveyError": "Error while creating a survey"
     },
     "editSurveysScreen": {
-      "surveyNotFound": "Survey not found"
+      "surveyNotFound": "Survey not found",
+      "surveyNotSaved": "Error while saving survey",
+      "surveyPagesNotFound": "Survey pages not found",
+      "pageLayoutsNotFound": "Page layouts not found",
+      "pageLayoutNotFound": "Page layout not found"
+    },
+    "previewScreen": {
+      "surveyNotFound": "Survey not found",
+      "surveyPagesNotFound": "Survey pages not found",
+      "pageLayoutsNotFound": "Page layouts not found",
+      "previewNotFound": "Error while loading preview"
     }
   },
   "overviewScreen": {
@@ -58,7 +71,8 @@
       "name": "Name",
       "description": "Description",
       "category": "Category",
-      "returnTimeout": "Return to home screen timeout"
+      "returnTimeout": "Return to home screen timeout",
+      "readyForPublish": "Ready to publish"
     },
     "pages": {
       "noQuestion": "No questions added"
@@ -70,6 +84,16 @@
       "addOption": "Add an option",
       "confirmDeleteOption": "Are you sure you want to delete this option?"
     }
+  },
+  "layouts": {
+    "title": "Select page layout",
+    "question": "Question",
+    "info": "Info",
+    "infoImage": "Image",
+    "paragraphImage": "Info + image",
+    "imageParagraph": "Image + info",
+    "questionInfo": "Question + info",
+    "statistics": "Statistics"
   },
   "previewScreen": {
     "sharePreview": "Share preview"

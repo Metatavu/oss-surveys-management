@@ -33,6 +33,16 @@ export enum QuestionType {
 };
 
 /**
+ * Interface to describe iframe click event
+ */
+export interface IframeClickEvent extends Event {
+  detail: {
+    eventType: "iframeclick";
+    pageNumber: number;
+  }
+};
+
+/**
  * Enum for surveys screen
  */
 export enum SurveyScreens {

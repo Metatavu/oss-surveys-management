@@ -2,6 +2,8 @@ import config from "../app/config";
 import {
   Configuration,
   ConfigurationParameters,
+  LayoutsApi,
+  PagesApi,
   SurveysApi
 } from "../generated/client";
 
@@ -20,6 +22,8 @@ export const getApiClient = (accessToken?: string) => {
   const getConfiguration = getConfigurationFactory(Configuration, config.api.baseUrl, accessToken);
 
   return {
-    surveysApi: new SurveysApi(getConfiguration())
+    surveysApi: new SurveysApi(getConfiguration()),
+    pagesApi: new PagesApi(getConfiguration()),
+    layoutsApi: new LayoutsApi(getConfiguration())
   };
 };

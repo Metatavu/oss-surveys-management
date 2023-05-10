@@ -1,4 +1,4 @@
-import { Box, Button, Stack, Typography } from '@mui/material';
+import { Box, Button, Stack, Toolbar, Typography, styled } from '@mui/material';
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ShareIcon from '@mui/icons-material/Share';
 import { useNavigate } from 'react-router-dom';
@@ -13,40 +13,69 @@ interface Props {
 }
 
 /**
+ * Styled preview toolbar component
+ */
+const StyledToolbar = styled(Toolbar, {
+  label: "preview-toolbar"
+})(({theme}) => ({
+  width: "100%",
+  background: theme.palette.common.black
+}));
+
+/**
+ * Styled preview toolbar component
+ */
+const ToolbarContent = styled(Stack, {
+  label: "preview-toolbar-content"
+})(({theme}) => ({
+  width: "100%",
+  color: theme.palette.primary.light,
+  background: theme.palette.common.black
+}));
+
+/**
  * Renders preview toolbar
+ *
+ * @param props component properties
  */
 const PreviewToolbar = ({ surveyName }: Props) => {
   const navigate = useNavigate();
 
   return (
-    <Stack direction="row">
-      <Box flex={1}>
-        <Button
-          startIcon={ <ArrowBackIcon /> }
-          onClick={ () => navigate(-1) }
+    <StyledToolbar>
+      <ToolbarContent direction="row">
+        <Box flex={ 1 }>
+          <Button
+            startIcon={ <ArrowBackIcon /> }
+            onClick={ () => navigate(-1) }
+          >
+            { strings.generic.back }
+          </Button>
+        </Box>
+        <Stack
+          spacing={ 1 }
+          direction="row"
+          alignItems="center"
+          flex={ 1 }
+          justifyContent="center"
         >
-          { strings.generic.back }
-        </Button>
-      </Box>
-      <Stack
-        spacing={1}
-        direction="row"
-        alignItems="center"
-        flex={1}
-        justifyContent="center"
-      >
-        <Typography>{ strings.editSurveysScreen.editing }</Typography>
-        <Typography>/</Typography>
-        <Typography variant="h6" color={ theme.palette.primary.main }>{ surveyName }</Typography>
-      </Stack>
-      <Box flex={1}>
-        <Button
-          endIcon={ <ShareIcon /> }
+          <Typography color={theme.palette.common.white}>{ strings.editSurveysScreen.editing }</Typography>
+          <Typography>/</Typography>
+          <Typography variant="h6" color={ theme.palette.primary.main }>{ surveyName }</Typography>
+        </Stack>
+        <Box
+          display="flex"
+          flex={ 1 }
+          justifyContent="flex-end"
         >
-          { strings.previewScreen.sharePreview }
-        </Button>
-      </Box>
-    </Stack>
+          <Button
+            endIcon={ <ShareIcon /> }
+          >
+            { strings.previewScreen.sharePreview }
+          </Button>
+        </Box>
+      </ToolbarContent>
+    </StyledToolbar>
   )
 };
 

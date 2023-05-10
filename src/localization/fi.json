@@ -22,11 +22,24 @@
       "url": "Osoite: {0}",
       "errorMessage": "Virheilmoitus: "
     },
+    "overviewScreen": {
+      "surveysNotFound": "Virhe ladattaessa kyselyitä"
+    },
     "surveysScreen": {
       "createSurveyError": "Virhe luotaessa kyselyä"
     },
     "editSurveysScreen": {
-      "surveyNotFound": "Kyselyä ei löytynyt"
+      "surveyNotFound": "Kyselyä ei löytynyt",
+      "surveyNotSaved": "Virhe tallennettaessa kyselyä",
+      "surveyPagesNotFound": "Kyselysivuja ei löytynyt",
+      "pageLayoutsNotFound": "Sivuasetteluja ei löytynyt",
+      "pageLayoutNotFound": "Sivuasetteluja ei löytynyt"
+    },
+    "previewScreen": {
+      "surveyNotFound": "Kyselyä ei löytynyt",
+      "surveyPagesNotFound": "Kyselysivuja ei löytynyt",
+      "pageLayoutsNotFound": "Sivuasetteluja ei löytynyt",
+      "previewNotFound": "Virhe ladattaessa esikatselua"
     }
   },
   "overviewScreen": {
@@ -58,7 +71,8 @@
       "name": "Nimi",
       "description": "Kuvaus",
       "category": "Kategoriat",
-      "returnTimeout": "Palaa alkunäyttöön"
+      "returnTimeout": "Palaa alkunäyttöön",
+      "readyForPublish": "Julkaisukelpoinen"
     },
     "pages": {
       "noQuestion": "Ei lisättyjä kysymyksiä"
@@ -70,6 +84,16 @@
       "addOption": "Lisää vaihtoehto",
       "confirmDeleteOption": "Haluatko varmasti poistaa tämän vaihtoehdon?"
     }
+  },
+  "layouts": {
+    "title": "Valitse sivun rakenne alla olevista vaihtoehdoista",
+    "question": "Kysymys",
+    "info": "Info",
+    "infoImage": "Kuva",
+    "paragraphImage": "Info + kuva",
+    "imageParagraph": "Kuva + info",
+    "questionInfo": "Kysymys + info",
+    "statistics": "Tilastot"
   },
   "previewScreen": {
     "sharePreview": "Jaa esikatselu"

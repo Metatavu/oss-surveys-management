@@ -16,8 +16,7 @@ const sanitizeOptions: IOptions = {
  * @param bodyContent
  * @returns HTML string
  */
-const wrapTemplate = (bodyContent: string) => (
-  `<!DOCTYPE html>
+const wrapTemplate = (bodyContent: string, pageNumber?: number) => `<!DOCTYPE html>
   <html lang="en">
   <head>
     <meta charset="UTF-8">
@@ -26,23 +25,23 @@ const wrapTemplate = (bodyContent: string) => (
     <title>Document</title>
   </head>
   <body style="margin: 0;">
-    ${ sanitizeHtml(bodyContent, sanitizeOptions) }
+    ${sanitizeHtml(bodyContent, sanitizeOptions)}
   </body>
   <script>
     document.addEventListener("click", () =>
-      window.parent.postMessage("iFrameClick")
+      window.parent.dispatchEvent(
+        new CustomEvent(
+          "message-${pageNumber}",
+          {
+            detail: {
+              eventType: "iframeclick",
+              pageNumber: ${pageNumber}
+            }
+          }
+        )
+      )
     )
-    const allElements = document.body.getElementsByTagName("*");
-
-    for (const element of allElements) {
-      if (element.addEventListener) {
-        element.addEventListener("click", () => {
-          window.parent.postMessage(element.id)
-        })
-      }
-    }
   </script>
-  </html>`
-);
+  </html>`;
 
 export default wrapTemplate;

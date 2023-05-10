@@ -7,7 +7,7 @@ import { useSetAtom } from "jotai";
 import { errorAtom } from "../../atoms/error";
 import strings from "../../localization/strings";
 import Editor from "../layout-components/editor";
-import { Stack } from "@mui/material";
+import { CircularProgress, Stack } from "@mui/material";
 import PropertiesPanel from "../layout-components/properties-panel";
 import SurveyProperties from "../layout-components/survey-properties";
 import { EditorPanelProperties } from "../../types";
@@ -23,6 +23,7 @@ const EditSurveysScreen = () => {
 
   const [ survey, setSurvey ] = useState<Survey>();
   const [ panelProperties, setPanelProperties ] = useState(EditorPanelProperties.SURVEY);
+  const [ isLoading, setIsLoading ] = useState(false);
 
   /**
    * Get Survey from route id
@@ -32,15 +33,23 @@ const EditSurveysScreen = () => {
 
     const survey = await surveysApi.findSurvey({ surveyId: id });
     setSurvey(survey);
+    setIsLoading(false);
   };
 
   useEffect(() => {
+    setIsLoading(true);
     getSurvey()
       .catch(error =>
         setError(`${ strings.errorHandling.editSurveysScreen.surveyNotFound }, ${ error }`));
   }, [id]);
 
-  if (!survey || !survey.id) return null;
+  if (!survey || !survey.id || isLoading) {
+    return (
+      <Stack flex={1} justifyContent="center" alignItems="center">
+        <CircularProgress />
+      </Stack>
+    )
+  }
 
   /**
    * Persist changes to survey properties

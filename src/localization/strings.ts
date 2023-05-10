@@ -52,6 +52,9 @@ export interface Localized extends LocalizedStringsMethods {
       pageLayoutsNotFound: string;
       pageLayoutNotFound: string;
     };
+    previewScreen: {
+      surveyPagesNotFound: string;
+    };
   };
 
   /**

@@ -95,8 +95,8 @@ const Editor = ({ setPanelProperties, surveyId }: Props) => {
    * Get surveys pages
    */
   const getSurveyPages = async () => {
-    const surveys = await pagesApi.listSurveyPages({surveyId: surveyId});
-    setSurveyPages(surveys);
+    const surveyPages = await pagesApi.listSurveyPages({surveyId: surveyId});
+    setSurveyPages(surveyPages);
   };
 
   /**

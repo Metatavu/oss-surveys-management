@@ -33,6 +33,9 @@
       "surveyPagesNotFound": "Kyselysivuja ei löytynyt",
       "pageLayoutsNotFound": "Sivuasetteluja ei löytynyt",
       "pageLayoutNotFound": "Sivuasetteluja ei löytynyt"
+    },
+    "previewScreen": {
+      "surveyPagesNotFound": "Kyselysivuja ei löytynyt"
     }
   },
   "overviewScreen": {

@@ -7,7 +7,7 @@ import { errorAtom } from "../../atoms/error";
 import { useApi } from "../../hooks/use-api";
 import strings from "../../localization/strings";
 import Preview from "../layout-components/preview";
-import { Box, Toolbar, Typography, styled } from "@mui/material";
+import { Box, CircularProgress, Stack, Toolbar, Typography, styled } from "@mui/material";
 import { DEVICE_HEIGHT, DEVICE_WIDTH, EDITOR_SCREEN_PREVIEW_CONTAINER_HEIGHT, EDITOR_SCREEN_PREVIEW_CONTAINER_WIDTH } from "../../constants";
 import { useWindowSize } from "usehooks-ts";
 import theme from "../../styles/theme";
@@ -60,33 +60,77 @@ const PreviewContainer = styled(Box, {
  */
 const PreviewScreen = () => {
   const { id } = useParams();
-  const { surveysApi } = useApi();
+  const { surveysApi, layoutsApi, pagesApi } = useApi();
   const setError = useSetAtom(errorAtom);
   const { height } = useWindowSize();
   const [ survey, setSurvey ] = useState<Survey>();
-  const [ surveyPages, _setSurveyPages ] = useAtom(pagesAtom);
-  const [ pageLayouts, _setPageLayouts ] = useAtom(layoutsAtom);
+  const [ surveyPages, setSurveyPages ] = useAtom(pagesAtom);
+  const [ pageLayouts, setPageLayouts ] = useAtom(layoutsAtom);
   // TODO: update current page when changing pages in full screen preview.
   const [ currentPage, _setCurrentPage ] = useState(1);
+  const [ isLoading, setIsLoading ] = useState(false);
+
+  if (!id) return null;
 
   /**
    * Get Survey from route id
    */
   const getSurvey = async () => {
-    if (!id) return null;
-
     const survey = await surveysApi.findSurvey({ surveyId: id });
     setSurvey(survey);
+    getSurveyPages()
+      .catch(error =>
+        setError(`${ strings.errorHandling.editSurveysScreen.surveyNotFound }, ${ error }`));
+    setIsLoading(false);
+  };
+
+  /**
+   * Get surveys pages
+   */
+  const getSurveyPages = async () => {
+    const surveyPages = await pagesApi.listSurveyPages({surveyId: id});
+    setSurveyPages(surveyPages);
   };
 
   useEffect(() => {
+    setIsLoading(true);
     getSurvey()
       .catch(error =>
         setError(`${ strings.errorHandling.editSurveysScreen.surveyNotFound }, ${ error }`));
   },[id]);
 
-  // TODO: I'm sure this is not correct but setting an error here causes issues.
-  if (!survey) return null;
+  /**
+   * Get layouts
+   */
+  const getPageLayouts = async () => {
+    const layouts = await layoutsApi.listLayouts();
+    setPageLayouts(layouts);
+    setIsLoading(false);
+  };
+
+  if (!pageLayouts) {
+    setIsLoading(true);
+    getPageLayouts();
+  }
+
+  if (!survey || isLoading) {
+    return (
+      <Stack flex={1} justifyContent="center" alignItems="center">
+        <CircularProgress />
+      </Stack>
+    )
+  }
+
+  if (!surveyPages.length) {
+    return (
+      <Root>
+        <PreviewToolbar surveyName={ survey.title } />
+        <PreviewArea style={{ color: theme.palette.error.main }}>
+          {strings.errorHandling.previewScreen.surveyPagesNotFound}
+        </PreviewArea>
+      </Root>
+    )
+  }
 
   /**
    * Get the page layout based on page layout id
@@ -95,15 +139,10 @@ const PreviewScreen = () => {
    * @returns layout html
    */
   const getPageLayout = (page: Page) => {
-    return pageLayouts.find(layout => layout.id === page.layoutId)?.html;
+    return pageLayouts.find(layout => layout.id === page.layoutId)?.html!;
   };
 
   const htmlString = getPageLayout(surveyPages[currentPage-1]);
-
-  if (!htmlString) {
-    setError(strings.errorHandling.editSurveysScreen.pageLayoutNotFound);
-    return null;
-  }
 
   /**
    * Render page count method

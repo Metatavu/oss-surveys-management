@@ -9,25 +9,39 @@ import { v4 as uuid } from 'uuid';
 import { optionsAtom } from "../../atoms/question-options-temporary";
 import { useAtom } from "jotai";
 import GenericDialog from "../generic/generic-dialog";
+import { pagesAtom } from "../../atoms/pages";
+import { useApi } from "../../hooks/use-api";
+
+/**
+ * Component properties
+ */
+interface Props {
+  pageNumber: number;
+  surveyId: string;
+};
 
 /**
  * Renders page properties component
  */
-const PageProperties = () => {
-  // TODO: Populated with options from the backend and debounce, to replace below atom
-  // const [ questionOptions, setQuestionOptions ] = useState<Question[]>();
-
-  //TODO:  Using atom to pass to the preview, this can later be done via backend and be associated with the correct survey/ page/ question type.
+const PageProperties = ({pageNumber, surveyId}: Props) => {
+  //TODO:  Using atom to pass to the preview, this can later be done via backend and be associated with the correct survey/ page/ question type. Can then delete this atom
   const [ questionOptions, setQuestionOptions ] =  useAtom(optionsAtom);
+
+  const [ surveyPages ] = useAtom(pagesAtom);
   const [ deleteDialogOpen, setDeleteDialogOpen ] = useState(false);
   const [ optionToDelete, setOptionToDelete] = useState<QuestionOption | undefined>();
+  const { pagesApi } = useApi();
 
   /**
    * Handle question option change
+   *
+   * @param event Event
+   * @param id string
    */
-  const handleQuestionOptionChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, id: string) => {
+  const handleQuestionOptionChange = async (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, id: string) => {
     if (!questionOptions) return;
 
+    // TODO: Save to the page properties as a stringified array of the options, key and value OPTIONS
     const updatedOptions = questionOptions.map(option => {
       if (option.id === id) {
         return { ...option, text: event.target.value }
@@ -35,7 +49,17 @@ const PageProperties = () => {
       return option;
     });
 
-    // TODO: Debounce with backend
+    // const updatedPage: Page = {
+    //   ...surveyPages[pageNumber-1],
+    //   properties
+    // };
+
+    // await pagesApi.updateSurveyPage({
+    //   pageId: surveyPages[pageNumber].id!,
+    //   surveyId: surveyId,
+    //   page: surveyPages[0]
+    // });
+    // TODO: Debounce with backend, this state is not needed when its working?
     setQuestionOptions(updatedOptions);
   };
 
@@ -86,15 +110,17 @@ const PageProperties = () => {
       />
       <Box p={2} sx={{ borderBottom: "1px solid #DADCDE" }}>
         <Typography>
-          {strings.formatString(strings.editSurveysScreen.editPagesPanel.page, `(${1})`)}
+          {strings.formatString(strings.editSurveysScreen.editPagesPanel.page, `(${pageNumber})`)}
         </Typography>
         {/* TODO: Update with Debounce when backend ready */}
+        {/* TODO: CHeck should this be able to be overridden? IF so then need to change the logic for rendering the question options in this panel. */}
         <TextField
           fullWidth
           multiline
           placeholder={
-            strings.formatString(strings.editSurveysScreen.editPagesPanel.page, `(${1})`) as string
+            strings.formatString(strings.editSurveysScreen.editPagesPanel.page, `(${pageNumber})`) as string
           }
+          value={surveyPages[pageNumber-1].title}
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">
@@ -120,29 +146,31 @@ const PageProperties = () => {
           }}
         />
       </Box>
-      <Box p={2} sx={{ borderBottom: "1px solid #DADCDE" }}>
-        <Typography>{ strings.editSurveysScreen.editPagesPanel.question }</Typography>
-        {/* TODO: Update with Debounce when backend ready */}
-        <TextField
-          fullWidth
-          label={ strings.editSurveysScreen.editPagesPanel.question }
-          size="small"
-          select
-          // TODO: this should handle Multiple question types later
-          defaultValue={ QuestionType.SINGLE }
-        >
-          <MenuItem
-            key={ QuestionType.SINGLE}
-            value={ QuestionType.SINGLE }
+      { surveyPages[pageNumber-1].title === strings.layouts.question &&
+        <Box p={2} sx={{ borderBottom: "1px solid #DADCDE" }}>
+          <Typography>{ strings.editSurveysScreen.editPagesPanel.question }</Typography>
+          {/* TODO: Update with Debounce when backend ready */}
+          <TextField
+            fullWidth
+            label={ strings.editSurveysScreen.editPagesPanel.question }
+            size="small"
+            select
+            // TODO: this should handle Multiple question types later
+            defaultValue={ QuestionType.SINGLE }
           >
-            { QuestionType.SINGLE }
-          </MenuItem>
-          {/* <MenuItem key={ QuestionType.MULTIPLE } value={ QuestionType.MULTIPLE }>
-            { QuestionType.MULTIPLE }
-          </MenuItem> */}
-        </TextField>
-      </Box>
-      { questionOptions &&
+            <MenuItem
+              key={ QuestionType.SINGLE}
+              value={ QuestionType.SINGLE }
+            >
+              { QuestionType.SINGLE }
+            </MenuItem>
+            {/* <MenuItem key={ QuestionType.MULTIPLE } value={ QuestionType.MULTIPLE }>
+              { QuestionType.MULTIPLE }
+            </MenuItem> */}
+          </TextField>
+        </Box>
+      }
+      { surveyPages[pageNumber-1].title === strings.layouts.question && !!questionOptions.length &&
         <Box p={2} sx={{ borderBottom: "1px solid #DADCDE" }}>
           { questionOptions?.map(option =>
             <TextField
@@ -172,16 +200,18 @@ const PageProperties = () => {
           )}
         </Box>
       }
-      <Box>
-        <Button
-          size="large"
-          variant="contained"
-          startIcon={ <AddCircleIcon /> }
-          onClick={ addNewQuestionOption }
-        >
-          { strings.editSurveysScreen.editPagesPanel.addOption }
-        </Button>
-      </Box>
+      { surveyPages[pageNumber-1].title === strings.layouts.question &&
+        <Box>
+          <Button
+            size="large"
+            variant="contained"
+            startIcon={ <AddCircleIcon /> }
+            onClick={ addNewQuestionOption }
+          >
+            { strings.editSurveysScreen.editPagesPanel.addOption }
+          </Button>
+        </Box>
+      }
     </>
   );
 };

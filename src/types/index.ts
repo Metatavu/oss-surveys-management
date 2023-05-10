@@ -17,6 +17,14 @@ export interface Question {
 };
 
 /**
+ * Interface for Panel properties
+ */
+export interface PanelProperties {
+  panelType: EditorPanel;
+  pageNumber?: number;
+};
+
+/**
  * Question option type
  */
 export type QuestionOption = {
@@ -63,7 +71,7 @@ export enum NavigationLinks {
 /**
  * Enum for editor panel properties
  */
-export enum EditorPanelProperties {
+export enum EditorPanel {
   SURVEY = "SURVEY",
   PAGE = "PAGE"
 };

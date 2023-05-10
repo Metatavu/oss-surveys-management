@@ -4,7 +4,7 @@ import { v4 as uuid } from 'uuid';
 /**
  * Interface for QuestionRendererOption
  */
-interface QuestionRenderOptions {
+export interface QuestionRenderOptions {
   question: Question;
 };
 

@@ -5,7 +5,7 @@ const titleAndQuestionTemplate = `
       <div style="width: 100%;">
         <div data-component="question"></div>
       </div>
-    /div>
+    </div>
     <button style="width: 100%; background-color: transparent; border: 20px solid #ffffff; color: #ffffff; height: 250px; font-family: SBonusText-Bold; font-size: 6rem;">Seuraava</button>
   </div>`;
 

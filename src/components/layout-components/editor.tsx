@@ -13,7 +13,7 @@ import ImageParagraphLayoutImage from "../images/svg/layout-thumbnails/image-par
 import ParagraphImageLayoutImage from "../images/svg/layout-thumbnails/paragraph-image";
 import StatisticsLayoutImage from "../images/svg/layout-thumbnails/statistics";
 import Preview from "./preview";
-import { EditorPanel, PanelProperties, QuestionType } from "../../types";
+import { EditorPanel, PanelProperties, QuestionType, Templates } from "../../types";
 import { DEVICE_HEIGHT, DEVICE_WIDTH, EDITOR_SCREEN_PREVIEW_CONTAINER_HEIGHT, EDITOR_SCREEN_PREVIEW_CONTAINER_WIDTH } from "../../constants";
 import { useApi } from "../../hooks/use-api";
 import { Page } from "../../generated/client";
@@ -130,11 +130,7 @@ const Editor = ({ setPanelProperties, surveyId }: Props) => {
    * @param templateType string
    */
   const createPage = async (templateType: string) => {
-    const layouts = await layoutsApi.listLayouts();
-    setPageLayouts(layouts);
-    const layoutId = layouts.find(layout => layout.name === templateType.toLocaleLowerCase())?.id;
-
-    if (!layoutId) return;
+    const layoutId = pageLayouts.find(layout => layout.name === templateType)!.id!;
 
     const newPage = await pagesApi.createSurveyPage({
       surveyId: surveyId,
@@ -147,7 +143,7 @@ const Editor = ({ setPanelProperties, surveyId }: Props) => {
     });
 
     setSurveyPages([...surveyPages, newPage]);
-    setShowAddPage(false)
+    setShowAddPage(false);
   };
 
   const renderAddNewPageDialog = () => (
@@ -164,13 +160,13 @@ const Editor = ({ setPanelProperties, surveyId }: Props) => {
         <ImageButton
           title={ strings.layouts.question }
           image={ <QuestionLayoutImage/> }
-          onClick={ () => createPage(strings.layouts.question) }
+          onClick={ () => createPage(Templates.QUESTION) }
           selected={ false }
         />
         <ImageButton
           title={ strings.layouts.info }
           image={ <InfoLayoutImage/> }
-          onClick={ () => createPage(strings.layouts.info) }
+          onClick={ () => createPage(Templates.INFO) }
           selected={ false }
         />
         <ImageButton
@@ -231,7 +227,8 @@ const Editor = ({ setPanelProperties, surveyId }: Props) => {
     let htmlData = getPageLayout(page);
 
     // TODO: This should be based on the page.properties, wherer the key and type is OPTIONS, for now this will default as a single QuestionType but should be changed in the spec.
-    if (page.title === strings.layouts.question) {
+    // Condition below to be replaced with if properties contains an options, rather than being based on the page title
+    if (page.title === strings.layouts.question || page.title === Templates.QUESTION) {
       const questionRenderer = questionRendererFactory.getRenderer(QuestionType.SINGLE);
       // TODO: The question should come from the value of the stringified page properties OPTIONS array, this will not have an id or type, it will just be an array of strings (the optsion text)
       const tempQuestion: QuestionRenderOptions = {

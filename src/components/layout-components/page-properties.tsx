@@ -12,6 +12,7 @@ import GenericDialog from "../generic/generic-dialog";
 import { pagesAtom } from "../../atoms/pages";
 import { useApi } from "../../hooks/use-api";
 import { Page, PagePropertyType } from "../../generated/client";
+import { layoutsAtom } from "../../atoms/layouts";
 
 /**
  * Component properties
@@ -30,6 +31,7 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
   const [options, setOptions] = useState<string[]>([]);
 
   const [surveyPages] = useAtom(pagesAtom);
+  const [ pageLayouts ] = useAtom(layoutsAtom);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [optionToDelete, setOptionToDelete] = useState<QuestionOption | undefined>();
   const { pagesApi } = useApi();
@@ -201,7 +203,7 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
           }}
         />
       </Box>
-      {surveyPages[pageNumber - 1].title === Templates.QUESTION && (
+      {!!pageLayouts.find(layout => layout.id === surveyPages[pageNumber - 1].layoutId && layout.name === Templates.QUESTION) && (
         <Box p={2} sx={{ borderBottom: "1px solid #DADCDE" }}>
           <Typography>{strings.editSurveysScreen.editPagesPanel.question}</Typography>
           {/* TODO: Update with Debounce when backend ready */}
@@ -222,7 +224,7 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
           </TextField>
         </Box>
       )}
-      {surveyPages[pageNumber - 1].title === Templates.QUESTION &&
+      {!!pageLayouts.find(layout => layout.id === surveyPages[pageNumber - 1].layoutId && layout.name === Templates.QUESTION) &&
         !!questionOptions.length && (
           <Box p={2} sx={{ borderBottom: "1px solid #DADCDE" }}>
             {questionOptions?.map((option) => (
@@ -250,7 +252,7 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
             ))}
           </Box>
         )}
-      {surveyPages[pageNumber - 1].title === Templates.QUESTION && (
+      {!!pageLayouts.find(layout => layout.id === surveyPages[pageNumber - 1].layoutId && layout.name === Templates.QUESTION) && (
         <Box>
           <Button
             size="large"

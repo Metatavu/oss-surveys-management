@@ -1,4 +1,4 @@
-import { Box, Stack, Typography, styled } from "@mui/material";
+import { Box, CircularProgress, Stack, Typography, styled } from "@mui/material";
 import theme from "../../styles/theme";
 import NewPageButton from "./new-page-button";
 import GenericDialog from "../generic/generic-dialog";
@@ -82,10 +82,13 @@ const Editor = ({ setPanelProperties, surveyId }: Props) => {
   const [ surveyPages, setSurveyPages ] = useAtom(pagesAtom);
   const [ pageLayouts, setPageLayouts ] = useAtom(layoutsAtom);
   const [ selectedPage, setSelectedPage ] = useState<number>();
+  const [ isLoading, setIsLoading ] = useState(false);
 
   const { pagesApi, layoutsApi } = useApi();
 
   useEffect(() => {
+    setIsLoading(true);
+
     getPageLayouts()
       .catch(error =>
         setError(`${strings.errorHandling.editSurveysScreen.pageLayoutsNotFound}, ${error}`));
@@ -93,6 +96,8 @@ const Editor = ({ setPanelProperties, surveyId }: Props) => {
     getSurveyPages()
       .catch(error =>
         setError(`${strings.errorHandling.editSurveysScreen.surveyPagesNotFound}, ${error}`));
+
+    setIsLoading(false);
   },[]);
 
   /**
@@ -103,13 +108,20 @@ const Editor = ({ setPanelProperties, surveyId }: Props) => {
     setSurveyPages(surveyPages);
   };
 
-  // TODO: Is loading spinner for this
   /**
    * Get layouts
    */
   const getPageLayouts = async () => {
     const layouts = await layoutsApi.listLayouts();
     setPageLayouts(layouts);
+  };
+
+  if (isLoading) {
+    return (
+      <Stack flex={1} justifyContent="center" alignItems="center">
+        <CircularProgress />
+      </Stack>
+    )
   }
 
   /**
@@ -130,7 +142,6 @@ const Editor = ({ setPanelProperties, surveyId }: Props) => {
         id: uuid(),
         layoutId: layoutId,
         title: templateType,
-        html: "property to be removed",
         orderNumber: surveyPages.length + 1
       }
     });
@@ -204,7 +215,7 @@ const Editor = ({ setPanelProperties, surveyId }: Props) => {
    * @returns layout html
    */
   const getPageLayout = (page: Page) => {
-    return pageLayouts.find(layout => layout.id === page.layoutId)?.html;
+    return pageLayouts.find(layout => layout.id === page.layoutId)!.html;
   };
 
   // TODO: This will need to be done for the preview screen?

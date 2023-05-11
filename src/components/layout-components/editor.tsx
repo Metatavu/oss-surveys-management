@@ -22,7 +22,6 @@ import { useAtom, useSetAtom } from "jotai";
 import { v4 as uuid } from 'uuid';
 import { layoutsAtom } from "../../atoms/layouts";
 import { pagesAtom } from "../../atoms/pages";
-import { optionsAtom } from "../../atoms/question-options-temporary";
 import questionRendererFactory from "../../question-renderer/question-renderer";
 
 /**
@@ -75,8 +74,6 @@ const PreviewContainer = styled(Box, {
  * @param props component properties
  */
 const Editor = ({ setPanelProperties, surveyId }: Props) => {
-  // TODO: Not needed once the options are coming from back end rather than this 'mock' example
-  const [ questionOptions, _setQuestionOptions ] = useAtom(optionsAtom);
   const [ showAddPage, setShowAddPage ] = useState(false);
   const setError = useSetAtom(errorAtom);
   const [ surveyPages, setSurveyPages ] = useAtom(pagesAtom);

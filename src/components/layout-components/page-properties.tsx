@@ -1,18 +1,17 @@
 import { Box, Button, InputAdornment, MenuItem, TextField, Typography } from "@mui/material";
 import strings from "../../localization/strings";
 import { Edit } from "@mui/icons-material";
-import { QuestionOption, QuestionType, Templates } from "../../types";
+import { QuestionType, Templates } from "../../types";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { ChangeEvent, useEffect, useState } from "react";
-import { v4 as uuid } from "uuid";
-import { optionsAtom } from "../../atoms/question-options-temporary";
 import { useAtom } from "jotai";
 import GenericDialog from "../generic/generic-dialog";
 import { pagesAtom } from "../../atoms/pages";
 import { useApi } from "../../hooks/use-api";
-import { Page, PagePropertyType } from "../../generated/client";
+import { Page, PageProperty, PagePropertyType } from "../../generated/client";
 import { layoutsAtom } from "../../atoms/layouts";
+import WithDebounce from "../generic/with-debounce";
 
 /**
  * Component properties
@@ -26,14 +25,12 @@ interface Props {
  * Renders page properties component
  */
 const PageProperties = ({ pageNumber, surveyId }: Props) => {
-  //TODO: Using atom to pass to the preview, this can later be done via backend and be associated with the correct survey/ page/ question type. Can then delete this atom
-  const [questionOptions, setQuestionOptions] = useAtom(optionsAtom);
   const [options, setOptions] = useState<string[]>([]);
 
-  const [surveyPages] = useAtom(pagesAtom);
+  const [surveyPages, setSurveyPages] = useAtom(pagesAtom);
   const [ pageLayouts ] = useAtom(layoutsAtom);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
-  const [optionToDelete, setOptionToDelete] = useState<QuestionOption | undefined>();
+  const [optionToDelete, setOptionToDelete] = useState<string | undefined>();
   const { pagesApi } = useApi();
 
   /**
@@ -44,14 +41,73 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
       (property) => property.key === PagePropertyType.Options
     )?.value;
 
-    if (!optionsArrayString) return;
+    if (!optionsArrayString) {
+      setOptions([]);
+      return;
+    }
     setOptions(JSON.parse(optionsArrayString));
   };
 
   useEffect(() => {
     getQuestionOptions();
-  }, []);
+  }, [pageNumber]);
 
+  // TODO: Debounce is set up but not smooth & losing focus on the text input- related to missing children keys?
+    /**
+   * Renders text field with debounce
+   *
+   * @param name name
+   * @param onChange onChange event handler
+   * @param value value
+   * @param placeholder placeholder
+   * @param endAdornment end adornment true/false
+   * @returns debounced text field
+   */
+    const renderOptionsWithDebounceTextField = (
+      name: string,
+      onChange: (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, previousOption?: string) => Promise<void>,
+      value: string,
+      placeholder: string,
+      endAdornment: boolean,
+      key: string
+    ) => {
+      console.log("in render debounce", key)
+    return (
+      <WithDebounce
+        name={ name }
+        value={ value }
+        onChange={ onChange }
+        placeholder={ placeholder }
+        optionKey={key}
+        component={ props =>
+          <TextField
+            { ...props }
+            key={key}
+            fullWidth
+            multiline
+            value={value}
+            name={name}
+            onChange={(e) => onChange(e, value)}
+            placeholder={strings.editSurveysScreen.editPagesPanel.title}
+            InputProps={{
+              endAdornment: (
+                endAdornment &&
+                <InputAdornment position="end">
+                  <DeleteIcon
+                    fontSize="small"
+                    color="error"
+                    onClick={() => handleDeleteClick(value)}
+                  />
+                </InputAdornment>
+              )
+            }}
+          />
+        }
+      />
+    )
+  }
+
+  // TODO: This function needs refactoring
   /**
    * Handle question option change
    *
@@ -60,75 +116,74 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
    */
   const handleQuestionOptionChange = async (
     event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-    id: string
+    previousOption: string
   ) => {
-    // TODO: Demo Using the local atom state, to be removed when connected to backend
-    if (!questionOptions) return;
+    let updatedOptions: string;
+    if (options.length) {
+      const tempOptions = options.map(option => {
+        if (option === previousOption) {
+          return event.target.value;
+        }
+        return option;
+      })
+      updatedOptions = JSON.stringify(tempOptions);
+    } else {
+      updatedOptions = JSON.stringify([ event.target.value ]);
+    }
 
-    const updatedOptions = questionOptions.map((option) => {
-      if (option.id === id) {
-        return { ...option, text: event.target.value };
-      }
-      return option;
+    let updatedProperties: PageProperty[] = [];
+
+    if (surveyPages[pageNumber-1].properties?.some(property => property.type === PagePropertyType.Options)) {
+      updatedProperties = surveyPages[pageNumber-1].properties!.map(property => {
+        if (property.key === PagePropertyType.Options) {
+          return {
+            ...property,
+            value: updatedOptions
+          };
+        }
+        return property;
+      });
+    } else {
+      updatedProperties = [
+        ...surveyPages[pageNumber-1].properties!,
+        {
+          key: PagePropertyType.Options,
+          value: updatedOptions,
+          type: PagePropertyType.Options
+        }
+      ];
+    }
+
+    const updatesToPage: Page = {
+      ...surveyPages[pageNumber-1],
+      properties: updatedProperties
+    };
+
+    // TODO: Wrap in try catch
+    const updatedPage = await pagesApi.updateSurveyPage({
+      pageId: surveyPages[pageNumber-1].id!,
+      surveyId: surveyId,
+      page: updatesToPage
     });
 
-    setQuestionOptions(updatedOptions);
+    const updatedSurveyPages = surveyPages.map(page => {
+      if (page.id === updatedPage.id) {
+        return updatedPage;
+      }
+      return page;
+    });
 
-
-    // Persisting across the backend
-
-    // let updatedOptions: string;
-    // if (options.length) {
-    // updatedOptions = JSON.stringify([...options, event.target.value]);
-    // } else {
-    // updatedOptions = JSON.stringify([ event.target.value ]);
-    // }
-
-    // TODO: need an updatedProperties object updating the object with key OPTIONS
-
-    // const updatedPage: Page = {
-    // ...surveyPages[pageNumber-1],
-    // properties: {
-    // ...surveyPages[pageNumber-1].properties,
-    // [PagePropertyType.Options]: updatedOptions
-    // }
-    // };
-
-    // console.log("Add to existing options", updatedPage);
-
-    // await pagesApi.updateSurveyPage({
-    // pageId: surveyPages[pageNumber].id!,
-    // surveyId: surveyId,
-    // page: surveyPages[0]
-    // });
-    // }
-
-    // const updatedPage: Page = {
-    // ...surveyPages[pageNumber-1],
-    // properties
-    // };
-
-    // await pagesApi.updateSurveyPage({
-    // pageId: surveyPages[pageNumber].id!,
-    // surveyId: surveyId,
-    // page: surveyPages[0]
-    // });
-    // TODO: Debounce with backend, this state is not needed when its working?
-    // setQuestionOptions(updatedOptions);
+    setSurveyPages(updatedSurveyPages);
+    setOptions(JSON.parse(updatedOptions));
   };
 
   /**
    * Adds new question option to question options
    */
   const addNewQuestionOption = () => {
-    const newQuestionOption: QuestionOption = {
-      id: uuid(),
-      text: ""
-    };
-
-    questionOptions
-      ? setQuestionOptions([...questionOptions, newQuestionOption])
-      : setQuestionOptions([newQuestionOption]);
+    options.length
+      ? setOptions([...options, ""])
+      : setOptions([""]);
   };
 
   /**
@@ -137,18 +192,19 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
   const deleteOption = () => {
     if (!optionToDelete) return;
 
-    const updatedList = questionOptions.filter((option) => option.id !== optionToDelete.id);
+    const updatedList = options.filter(option => option !== optionToDelete);
 
-    setQuestionOptions(updatedList);
+    // TODO: Delete on backend
+    setOptions(updatedList);
     setDeleteDialogOpen(false);
   };
 
   /**
    * Trigger delete confirm dialog and store option to be deleted state
    */
-  const handleDeleteClick = (optionId: QuestionOption) => {
+  const handleDeleteClick = (option: string) => {
     setDeleteDialogOpen(true);
-    setOptionToDelete(optionId);
+    setOptionToDelete(option);
   };
 
   return (
@@ -159,15 +215,14 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
         onCancel={() => setDeleteDialogOpen(false)}
         onClose={() => setDeleteDialogOpen(false)}
         onConfirm={deleteOption}
-        children={<div>{optionToDelete?.text}</div>}
+        children={<div>{optionToDelete}</div>}
         confirmButtonText={strings.generic.confirm}
       />
       <Box p={2} sx={{ borderBottom: "1px solid #DADCDE" }}>
         <Typography>
           {strings.formatString(strings.editSurveysScreen.editPagesPanel.page, `(${pageNumber})`)}
         </Typography>
-        {/* TODO: Update with Debounce when backend ready */}
-        {/* TODO: CHeck should this be able to be overridden? IF so then need to change the logic for rendering the question options in this panel. */}
+        {/* TODO: Update with Debounce when backend ready, should this even change? */}
         <TextField
           fullWidth
           multiline
@@ -225,30 +280,17 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
         </Box>
       )}
       {!!pageLayouts.find(layout => layout.id === surveyPages[pageNumber - 1].layoutId && layout.name === Templates.QUESTION) &&
-        !!questionOptions.length && (
+        !!options.length && (
           <Box p={2} sx={{ borderBottom: "1px solid #DADCDE" }}>
-            {questionOptions?.map((option) => (
-              <TextField
-                key={option.id}
-                fullWidth
-                multiline
-                value={option.text}
-                name={option.text}
-                onChange={(e) => handleQuestionOptionChange(e, option.id)}
-                placeholder={strings.editSurveysScreen.editPagesPanel.title}
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <Edit fontSize="small" color="primary" />
-                      <DeleteIcon
-                        fontSize="small"
-                        color="error"
-                        onClick={() => handleDeleteClick(option)}
-                      />
-                    </InputAdornment>
-                  )
-                }}
-              />
+            {options?.map((option, i) => (
+              renderOptionsWithDebounceTextField(
+                "option",
+                (e) => handleQuestionOptionChange(e, option),
+                option,
+                "option",
+                true,
+                `${i}`
+              )
             ))}
           </Box>
         )}

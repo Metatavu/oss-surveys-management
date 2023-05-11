@@ -1,18 +1,11 @@
-import { Question, QuestionType } from "../types";
+import { QuestionType } from "../types";
 import { v4 as uuid } from 'uuid';
-
-/**
- * Interface for QuestionRendererOption
- */
-export interface QuestionRenderOptions {
-  question: Question;
-};
 
 /**
  * Abstract class for QuestionRenderer
  */
 abstract class AbstractQuestionRenderer {
-  public abstract render (options: QuestionRenderOptions): string;
+  public abstract render (options: string[]): string;
 };
 
 /**
@@ -25,19 +18,17 @@ class SingleSelectTextQuestionRenderer extends AbstractQuestionRenderer {
    * @param options QuestionRenderOptions
    * @returns html string
    */
-  public render(options: QuestionRenderOptions): string {
+  public render(options: string[]): string {
     let htmlString  = "";
 
-    options.question.options.forEach(option => {
-      if (!option.text) return ;
-
+    options.forEach(option => {
       htmlString = htmlString.concat(
         `<div>
           <button
             id="${ uuid() }"
             style="width: 100%; height: 100px; font-size: 5rem;"
           >
-            ${ option.text }
+            ${ option }
           </button>
         </div>`)
     });

@@ -16,14 +16,14 @@ import Preview from "./preview";
 import { EditorPanel, PanelProperties, QuestionType, Templates } from "../../types";
 import { DEVICE_HEIGHT, DEVICE_WIDTH, EDITOR_SCREEN_PREVIEW_CONTAINER_HEIGHT, EDITOR_SCREEN_PREVIEW_CONTAINER_WIDTH } from "../../constants";
 import { useApi } from "../../hooks/use-api";
-import { Page } from "../../generated/client";
+import { Page, PagePropertyType } from "../../generated/client";
 import { errorAtom } from "../../atoms/error";
 import { useAtom, useSetAtom } from "jotai";
 import { v4 as uuid } from 'uuid';
 import { layoutsAtom } from "../../atoms/layouts";
 import { pagesAtom } from "../../atoms/pages";
 import { optionsAtom } from "../../atoms/question-options-temporary";
-import questionRendererFactory, { QuestionRenderOptions } from "../../question-renderer/question-renderer";
+import questionRendererFactory from "../../question-renderer/question-renderer";
 
 /**
  * Component properties
@@ -116,7 +116,7 @@ const Editor = ({ setPanelProperties, surveyId }: Props) => {
     setPageLayouts(layouts);
   };
 
-  if (isLoading) {
+  if (isLoading || !surveyPages.length || !pageLayouts.length) {
     return (
       <Stack flex={1} justifyContent="center" alignItems="center">
         <CircularProgress />
@@ -222,24 +222,14 @@ const Editor = ({ setPanelProperties, surveyId }: Props) => {
    * @returns PreviewContainer and Preview
    */
   const renderPagePreview = (page: Page) => {
-    // TODO: Replace the tempQuestion with the options data from the page properties
-    // const { _properties  } = page;
+    const { properties  } = page;
     let htmlData = getPageLayout(page);
 
-    // TODO: This should be based on the page.properties, wherer the key and type is OPTIONS, for now this will default as a single QuestionType but should be changed in the spec.
-    // Condition below to be replaced with if properties contains an options, rather than being based on the page title
-    if (page.title === strings.layouts.question || page.title === Templates.QUESTION) {
+    const optionsProperty = properties?.find(property => property.type === PagePropertyType.Options);
+    if (optionsProperty) {
       const questionRenderer = questionRendererFactory.getRenderer(QuestionType.SINGLE);
-      // TODO: The question should come from the value of the stringified page properties OPTIONS array, this will not have an id or type, it will just be an array of strings (the optsion text)
-      const tempQuestion: QuestionRenderOptions = {
-        question: {
-          id: "12341234",
-          type: QuestionType.SINGLE,
-          options: questionOptions
-        }
-      };
 
-      const questionHtml = questionRenderer.render(tempQuestion);
+      const questionHtml = questionRenderer.render(JSON.parse(optionsProperty.value));
       const questionElement = new DOMParser().parseFromString(questionHtml, "text/html");
 
       const templateDom = new DOMParser().parseFromString(htmlData, "text/html");

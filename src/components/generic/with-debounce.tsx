@@ -72,7 +72,7 @@ const WithDebounce: FC<Props> = ({
    */
   const onInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     debounceTimer && clearTimeout(debounceTimer);
-
+    console.log("in debounce valu & inputvalue:", value, inputValue);
     const newDebounceTimer = previousOption ?
       window.setTimeout(() => onChange(event, previousOption), debounceTimeout ?? 1000)
       : window.setTimeout(() => onChange(event), debounceTimeout ?? 1000);

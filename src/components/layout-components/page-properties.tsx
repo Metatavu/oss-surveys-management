@@ -1,9 +1,8 @@
-import { Box, Button, InputAdornment, MenuItem, TextField, Typography } from "@mui/material";
+import { Box, Button, IconButton, InputAdornment, MenuItem, TextField, Typography } from "@mui/material";
 import strings from "../../localization/strings";
-import { Edit } from "@mui/icons-material";
+import { Close, Edit } from "@mui/icons-material";
 import { QuestionType, Templates } from "../../types";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
-import DeleteIcon from "@mui/icons-material/Delete";
 import { ChangeEvent, useEffect, useState } from "react";
 import { useAtom } from "jotai";
 import GenericDialog from "../generic/generic-dialog";
@@ -88,16 +87,14 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
             value={value}
             name={name}
             onChange={(e) => onChange(e, value)}
-            placeholder={strings.editSurveysScreen.editPagesPanel.title}
+            placeholder={strings.editSurveysScreen.editPagesPanel.answerOptionPlaceholder}
             InputProps={{
               endAdornment: (
                 endAdornment &&
-                <InputAdornment position="end">
-                  <DeleteIcon
-                    fontSize="small"
-                    color="error"
-                    onClick={() => handleDeleteClick(value)}
-                  />
+                <InputAdornment position="end" className="on-hover">
+                  <IconButton title={strings.editSurveysScreen.editPagesPanel.deleteAnswerOptionTitle} onClick={() => handleDeleteClick(value)}>
+                    <Close fontSize="small"/>
+                  </IconButton>
                 </InputAdornment>
               )
             }}
@@ -219,8 +216,8 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
         confirmButtonText={strings.generic.confirm}
       />
       <Box p={2} sx={{ borderBottom: "1px solid #DADCDE" }}>
-        <Typography>
-          {strings.formatString(strings.editSurveysScreen.editPagesPanel.page, `(${pageNumber})`)}
+        <Typography variant="h6">
+          {strings.formatString(strings.editSurveysScreen.editPagesPanel.page, `${pageNumber}`)}
         </Typography>
         {/* TODO: Update with Debounce when backend ready, should this even change? */}
         <TextField
@@ -229,7 +226,7 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
           placeholder={
             strings.formatString(
               strings.editSurveysScreen.editPagesPanel.page,
-              `(${pageNumber})`
+              `${pageNumber}`
             ) as string
           }
           value={surveyPages[pageNumber - 1].title}
@@ -243,7 +240,7 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
         />
       </Box>
       <Box p={2} sx={{ borderBottom: "1px solid #DADCDE" }}>
-        <Typography>{strings.editSurveysScreen.editPagesPanel.title}</Typography>
+        <Typography variant="h6">{strings.editSurveysScreen.editPagesPanel.title}</Typography>
         {/* TODO: Update with Debounce when backend ready */}
         <TextField
           fullWidth
@@ -259,12 +256,11 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
         />
       </Box>
       {!!pageLayouts.find(layout => layout.id === surveyPages[pageNumber - 1].layoutId && layout.name === Templates.QUESTION) && (
-        <Box p={2} sx={{ borderBottom: "1px solid #DADCDE" }}>
-          <Typography>{strings.editSurveysScreen.editPagesPanel.question}</Typography>
+        <Box p={2}>
+          <Typography variant="h6">{strings.editSurveysScreen.editPagesPanel.questionType}</Typography>
           {/* TODO: Update with Debounce when backend ready */}
           <TextField
             fullWidth
-            label={strings.editSurveysScreen.editPagesPanel.question}
             size="small"
             select
             // TODO: this should handle Multiple question types later
@@ -281,7 +277,8 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
       )}
       {!!pageLayouts.find(layout => layout.id === surveyPages[pageNumber - 1].layoutId && layout.name === Templates.QUESTION) &&
         !!options.length && (
-          <Box p={2} sx={{ borderBottom: "1px solid #DADCDE" }}>
+          <Box p={2}>
+            <Typography variant="h6">{strings.editSurveysScreen.editPagesPanel.answerOptions}</Typography>
             {options?.map((option, i) => (
               renderOptionsWithDebounceTextField(
                 "option",
@@ -295,10 +292,10 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
           </Box>
         )}
       {!!pageLayouts.find(layout => layout.id === surveyPages[pageNumber - 1].layoutId && layout.name === Templates.QUESTION) && (
-        <Box>
+        <Box p={2} sx={{ borderBottom: "1px solid #DADCDE" }}>
           <Button
             size="large"
-            variant="contained"
+            variant="text"
             startIcon={<AddCircleIcon />}
             onClick={addNewQuestionOption}
           >

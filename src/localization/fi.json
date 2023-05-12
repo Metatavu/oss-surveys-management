@@ -4,7 +4,8 @@
     "logout": "Kirjaudu ulos",
     "notImplemented": "Ei vielä toteutettu",
     "back": "Takaisin",
-    "confirm": "Vahvistaa"
+    "confirm": "Vahvista",
+    "cancel": "Peruuta"
   },
   "navigation": {
     "overview": "Yhteenveto",
@@ -80,12 +81,16 @@
     "editPagesPanel": {
       "page": "Sivu {0}",
       "title": "Ostikko",
-      "question": "Kysely",
+      "questionType": "Kyselyn tyyppi",
+      "answerOptions": "Vastausvaihtoehdot",
+      "answerOptionPlaceholder": "Vaihtoehto",
+      "deleteAnswerOptionTitle": "Poista vastausvaihtoehto",
       "addOption": "Lisää vaihtoehto",
       "confirmDeleteOption": "Haluatko varmasti poistaa tämän vaihtoehdon?"
     }
   },
   "layouts": {
+    "addNewPage": "Lisää uusi sivu",
     "title": "Valitse sivun rakenne alla olevista vaihtoehdoista",
     "question": "Kysymys",
     "info": "Info",

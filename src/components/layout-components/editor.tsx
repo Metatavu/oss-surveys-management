@@ -149,8 +149,8 @@ const Editor = ({ setPanelProperties, surveyId }: Props) => {
       open={ showAddPage }
       onCancel={ () => setShowAddPage(false) }
       onClose={ () => setShowAddPage(false) }
-      cancelButtonText="Peruuta"
-      title="Lisää uusi sivu"
+      cancelButtonText={strings.generic.cancel}
+      title={strings.layouts.addNewPage}
     >
       <Typography>{ strings.layouts.title }</Typography>
       <Stack direction="row" gap={2} pt={3}>
@@ -167,24 +167,28 @@ const Editor = ({ setPanelProperties, surveyId }: Props) => {
           selected={ false }
         />
         <ImageButton
+          disabled
           title={ strings.layouts.infoImage }
           image={ <InfoImageLayoutImage/> }
           onClick={ () => {} }
           selected={ false }
         />
         <ImageButton
+          disabled
           title={ strings.layouts.questionInfo }
           image={ <QuestionParagraphLayoutImage/> }
           onClick={ () => {} }
           selected={ false }
         />
         <ImageButton
+          disabled
           title={ strings.layouts.imageParagraph }
           image={ <ImageParagraphLayoutImage/> }
           onClick={ () => {} }
           selected={ false }
         />
         <ImageButton
+          disabled
           title={ strings.layouts.paragraphImage }
           image={ <ParagraphImageLayoutImage/> }
           onClick={ () => {} }
@@ -262,7 +266,7 @@ const Editor = ({ setPanelProperties, surveyId }: Props) => {
   return (
     <EditorContainer
       direction="row"
-      gap={4}
+      gap={2}
       onClick={ () => {
         setPanelProperties({panelType: EditorPanel.SURVEY})
         setSelectedPage(undefined);

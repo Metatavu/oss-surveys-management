@@ -57,7 +57,7 @@ const Toolbar = ({ surveyName, surveyId }: Props) => {
     <Stack spacing={1} direction="row" alignItems="center" flex={1} justifyContent="center">
       <Typography>{strings.editSurveysScreen.editing}</Typography>
       <Typography>/</Typography>
-      <Typography variant="h6" color={theme.palette.primary.main}>{surveyName}</Typography>
+      <Typography variant="h5" color={theme.palette.primary.main}>{surveyName}</Typography>
     </Stack>
   );
 

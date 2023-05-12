@@ -5,13 +5,14 @@ import { QuestionType, Templates } from "../../types";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { ChangeEvent, useEffect, useState } from "react";
-import { useAtom } from "jotai";
+import { useAtom, useSetAtom } from "jotai";
 import GenericDialog from "../generic/generic-dialog";
 import { pagesAtom } from "../../atoms/pages";
 import { useApi } from "../../hooks/use-api";
 import { Page, PageProperty, PagePropertyType } from "../../generated/client";
 import { layoutsAtom } from "../../atoms/layouts";
 import WithDebounce from "../generic/with-debounce";
+import { errorAtom } from "../../atoms/error";
 
 /**
  * Component properties
@@ -32,6 +33,7 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [optionToDelete, setOptionToDelete] = useState<string | undefined>();
   const { pagesApi } = useApi();
+  const setError = useSetAtom(errorAtom);
 
   /**
    * Set the question options state if contained within the page properties
@@ -52,7 +54,6 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
     getQuestionOptions();
   }, [pageNumber]);
 
-  // TODO: Debounce is set up but not smooth & losing focus on the text input- related to missing children keys?
     /**
    * Renders text field with debounce
    *
@@ -70,9 +71,7 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
       placeholder: string,
       endAdornment: boolean,
       key: string
-    ) => {
-      console.log("in render debounce", key)
-    return (
+    ) => (
       <WithDebounce
         name={ name }
         value={ value }
@@ -85,9 +84,7 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
             key={key}
             fullWidth
             multiline
-            value={value}
             name={name}
-            onChange={(e) => onChange(e, value)}
             placeholder={strings.editSurveysScreen.editPagesPanel.title}
             InputProps={{
               endAdornment: (
@@ -104,10 +101,8 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
           />
         }
       />
-    )
-  }
+    );
 
-  // TODO: This function needs refactoring
   /**
    * Handle question option change
    *
@@ -118,64 +113,45 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
     event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
     previousOption: string
   ) => {
-    let updatedOptions: string;
-    if (options.length) {
-      const tempOptions = options.map(option => {
-        if (option === previousOption) {
-          return event.target.value;
-        }
-        return option;
-      })
-      updatedOptions = JSON.stringify(tempOptions);
-    } else {
-      updatedOptions = JSON.stringify([ event.target.value ]);
-    }
-
-    let updatedProperties: PageProperty[] = [];
-
-    if (surveyPages[pageNumber-1].properties?.some(property => property.type === PagePropertyType.Options)) {
-      updatedProperties = surveyPages[pageNumber-1].properties!.map(property => {
-        if (property.key === PagePropertyType.Options) {
-          return {
-            ...property,
-            value: updatedOptions
-          };
-        }
-        return property;
-      });
-    } else {
-      updatedProperties = [
-        ...surveyPages[pageNumber-1].properties!,
-        {
-          key: PagePropertyType.Options,
-          value: updatedOptions,
-          type: PagePropertyType.Options
-        }
-      ];
-    }
-
+    const updatedOptions = options.map(option => {
+      return option === previousOption ? event.target.value : option;
+    });
+  
+    const updatedProperties: PageProperty[] = surveyPages[pageNumber - 1].properties?.some(property => property.type === PagePropertyType.Options)
+      ? surveyPages[pageNumber - 1].properties!.map(property => {
+          return property.type === PagePropertyType.Options
+            ? { ...property, value: JSON.stringify(updatedOptions) }
+            : property;
+        })
+      : [
+          ...surveyPages[pageNumber - 1].properties!,
+          {
+            key: PagePropertyType.Options,
+            value: JSON.stringify(updatedOptions),
+            type: PagePropertyType.Options,
+          },
+        ];
+  
     const updatesToPage: Page = {
-      ...surveyPages[pageNumber-1],
-      properties: updatedProperties
+      ...surveyPages[pageNumber - 1],
+      properties: updatedProperties,
     };
-
-    // TODO: Wrap in try catch
-    const updatedPage = await pagesApi.updateSurveyPage({
-      pageId: surveyPages[pageNumber-1].id!,
-      surveyId: surveyId,
-      page: updatesToPage
-    });
-
-    const updatedSurveyPages = surveyPages.map(page => {
-      if (page.id === updatedPage.id) {
-        return updatedPage;
-      }
-      return page;
-    });
-
-    setSurveyPages(updatedSurveyPages);
-    setOptions(JSON.parse(updatedOptions));
+  
+    try {
+      const updatedPage = await pagesApi.updateSurveyPage({
+        pageId: surveyPages[pageNumber - 1].id!,
+        surveyId: surveyId,
+        page: updatesToPage,
+      });
+  
+      const updatedSurveyPages = surveyPages.map(page => (page.id === updatedPage.id ? updatedPage : page));
+  
+      setSurveyPages(updatedSurveyPages);
+      setOptions(updatedOptions);
+    } catch (error) {
+      setError(`${ strings.errorHandling.editSurveysScreen.pageNotSaved }, ${ error }`)    }
   };
+  
 
   /**
    * Adds new question option to question options
@@ -189,7 +165,7 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
   /**
    * Removes the selected option from the list
    */
-  const deleteOption = () => {
+  const deleteOption = async () => {
     if (!optionToDelete) return;
 
     const updatedList = options.filter(option => option !== optionToDelete);

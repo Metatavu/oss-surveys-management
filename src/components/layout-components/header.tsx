@@ -50,8 +50,8 @@ const Header = () => {
 
   /**
    * Renders navigation buttons
-   * TODO: add links and selection check
-   * @returns
+   *
+   * @returns Navigation
    */
   const renderNavigation = () => {
     return (

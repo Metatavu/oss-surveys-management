@@ -56,9 +56,13 @@ export default createTheme({
     },
     h3: {},
     h4: {},
-    h5: {},
+    h5: {
+      fontFamily: "SBonusText-Bold",
+      fontSize: 18
+    },
     h6: {
-      fontFamily: "SBonusText-Bold"
+      fontFamily: "SBonusText-Bold",
+      fontSize: 16
     },
     button: {
       fontFamily: "SBonusText-Bold",
@@ -232,6 +236,21 @@ export default createTheme({
         root: {
           "&:before": {
             borderBottom: "1px solid rgba(0,0,0,0)"
+          },
+          "&:hover": {
+            "& .MuiInputAdornment-root.on-hover": {
+              opacity: 1
+            }
+          }
+        }
+      }
+    },
+    MuiInputAdornment: {
+      styleOverrides: {
+        root: {
+          "&.on-hover": {
+            transition: "opacity 0.2s ease-out",
+            opacity: 0
           }
         }
       }

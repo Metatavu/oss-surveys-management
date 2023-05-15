@@ -14,6 +14,8 @@ export interface Localized extends LocalizedStringsMethods {
     logout: string;
     notImplemented: string;
     back: string;
+    confirm: string;
+    cancel: string;
   };
 
   /**
@@ -51,6 +53,7 @@ export interface Localized extends LocalizedStringsMethods {
       surveyPagesNotFound: string;
       pageLayoutsNotFound: string;
       pageLayoutNotFound: string;
+      pageNotSaved: string;
     };
     previewScreen: {
       surveyNotFound: string;
@@ -102,6 +105,19 @@ export interface Localized extends LocalizedStringsMethods {
       category: string;
       returnTimeout: string;
       readyForPublish: string;
+    };
+    pages: {
+      noQuestion: string;
+    };
+    editPagesPanel: {
+      page: string;
+      title: string;
+      questionType: string;
+      answerOptions: string;
+      answerOptionPlaceholder: string;
+      deleteAnswerOptionTitle: string;
+      addOption: string;
+      confirmDeleteOption: string;
     }
   };
 
@@ -109,6 +125,7 @@ export interface Localized extends LocalizedStringsMethods {
    * Translations related to page layouts
    */
   layouts: {
+    addNewPage: string;
     title: string;
     question: string;
     info: string;

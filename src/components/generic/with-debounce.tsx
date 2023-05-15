@@ -6,16 +6,17 @@ import { ChangeEvent, FC, useEffect, useState } from "react";
 interface Props {
   className?: string;
   component: (props: DebounceProps) => React.ReactElement;
-  key?: string | number;
+  optionKey?: string | number;
   disabled?: boolean;
   name?: string;
   label?: string;
   debounceTimeout?: number;
   value?: string | number;
-  onChange: (event: React.ChangeEvent<HTMLInputElement>) => Promise<void>;
+  onChange: (event: React.ChangeEvent<HTMLInputElement>, previousOption?: string) => Promise<void>;
   placeholder: string;
   type?: string;
   fullWidth?: boolean;
+  previousOption?: string;
 }
 
 /**
@@ -27,11 +28,12 @@ interface DebounceProps {
   name?: string;
   label?: string;
   value?: string | number;
-  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onChange: (event: React.ChangeEvent<HTMLInputElement>, previousOption?: string) => void;
   className?: string;
   placeholder: string;
   type?: string;
   fullWidth?: boolean;
+  previousOption?: string;
 }
 
 /**
@@ -44,15 +46,16 @@ const WithDebounce: FC<Props> = ({
   value,
   className,
   debounceTimeout,
-  key,
+  optionKey,
   onChange,
   component,
   placeholder,
   type,
-  fullWidth
+  fullWidth,
+  previousOption
 }) => {
   const [ inputValue, setInputValue ] = useState(value);
-  const [ debounceTimer, setDebounceTimer ] = useState<number | undefined>(undefined);
+  const [ debounceTimer, setDebounceTimer ] = useState<number>();
 
   useEffect(() => {
     if (value !== inputValue) {
@@ -68,7 +71,9 @@ const WithDebounce: FC<Props> = ({
   const onInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     debounceTimer && clearTimeout(debounceTimer);
 
-    const newDebounceTimer = window.setTimeout(() => onChange(event), debounceTimeout ?? 1000);
+    const newDebounceTimer = previousOption ?
+      window.setTimeout(() => onChange(event, previousOption), debounceTimeout ?? 1000)
+      : window.setTimeout(() => onChange(event), debounceTimeout ?? 1000);
 
     setDebounceTimer(newDebounceTimer);
     setInputValue(event.target.value);
@@ -79,7 +84,7 @@ const WithDebounce: FC<Props> = ({
     disabled: disabled,
     value: inputValue,
     className: className,
-    key: key,
+    key: optionKey,
     label: label,
     onChange: onInputChange,
     placeholder: placeholder,

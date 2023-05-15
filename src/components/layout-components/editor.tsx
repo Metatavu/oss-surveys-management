@@ -1,8 +1,8 @@
-import { Box, Stack, Typography, styled } from "@mui/material";
+import { Box, CircularProgress, Stack, Typography, styled } from "@mui/material";
 import theme from "../../styles/theme";
 import NewPageButton from "./new-page-button";
 import GenericDialog from "../generic/generic-dialog";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import ImageButton from "./image-button";
 import QuestionLayoutImage from "../images/svg/layout-thumbnails/question";
 import InfoLayoutImage from "../images/svg/layout-thumbnails/info";
@@ -13,21 +13,22 @@ import ImageParagraphLayoutImage from "../images/svg/layout-thumbnails/image-par
 import ParagraphImageLayoutImage from "../images/svg/layout-thumbnails/paragraph-image";
 import StatisticsLayoutImage from "../images/svg/layout-thumbnails/statistics";
 import Preview from "./preview";
-import { EditorPanelProperties } from "../../types";
+import { EditorPanel, PanelProperties, QuestionType } from "../../types";
 import { DEVICE_HEIGHT, DEVICE_WIDTH, EDITOR_SCREEN_PREVIEW_CONTAINER_HEIGHT, EDITOR_SCREEN_PREVIEW_CONTAINER_WIDTH } from "../../constants";
 import { useApi } from "../../hooks/use-api";
-import { Page } from "../../generated/client";
+import { Layout, Page, PagePropertyType } from "../../generated/client";
 import { errorAtom } from "../../atoms/error";
 import { useAtom, useSetAtom } from "jotai";
 import { v4 as uuid } from 'uuid';
 import { layoutsAtom } from "../../atoms/layouts";
 import { pagesAtom } from "../../atoms/pages";
+import questionRendererFactory from "../../question-renderer/question-renderer";
 
 /**
  * Component properties
  */
 interface Props {
-  setPanelProperties: (properties: EditorPanelProperties) => void;
+  setPanelProperties: (properties: PanelProperties) => void;
   surveyId: string;
 }
 
@@ -35,7 +36,7 @@ interface Props {
  * Styled editor container component
  */
 const EditorContainer = styled(Stack, {
-  label: "toolbar-container"
+  label: "editor-container"
 })(() => ({
   position: "relative",
   padding: theme.spacing(4),
@@ -78,10 +79,13 @@ const Editor = ({ setPanelProperties, surveyId }: Props) => {
   const [ surveyPages, setSurveyPages ] = useAtom(pagesAtom);
   const [ pageLayouts, setPageLayouts ] = useAtom(layoutsAtom);
   const [ selectedPage, setSelectedPage ] = useState<number>();
+  const [ isLoading, setIsLoading ] = useState(false);
 
   const { pagesApi, layoutsApi } = useApi();
 
   useEffect(() => {
+    setIsLoading(true);
+
     getPageLayouts()
       .catch(error =>
         setError(`${strings.errorHandling.editSurveysScreen.pageLayoutsNotFound}, ${error}`));
@@ -89,6 +93,8 @@ const Editor = ({ setPanelProperties, surveyId }: Props) => {
     getSurveyPages()
       .catch(error =>
         setError(`${strings.errorHandling.editSurveysScreen.surveyPagesNotFound}, ${error}`));
+
+    setIsLoading(false);
   },[]);
 
   /**
@@ -105,6 +111,14 @@ const Editor = ({ setPanelProperties, surveyId }: Props) => {
   const getPageLayouts = async () => {
     const layouts = await layoutsApi.listLayouts();
     setPageLayouts(layouts);
+  };
+
+  if (isLoading || !surveyPages.length || !pageLayouts.length) {
+    return (
+      <Stack flex={1} justifyContent="center" alignItems="center">
+        <CircularProgress />
+      </Stack>
+    )
   }
 
   /**
@@ -113,11 +127,7 @@ const Editor = ({ setPanelProperties, surveyId }: Props) => {
    * @param templateType string
    */
   const createPage = async (templateType: string) => {
-    const layouts = await layoutsApi.listLayouts();
-    setPageLayouts(layouts);
-    const layoutId = layouts.find(layout => layout.name === templateType.toLocaleLowerCase())?.id;
-
-    if (!layoutId) return;
+    const layoutId = pageLayouts.find(layout => layout.name === templateType)!.id!;
 
     const newPage = await pagesApi.createSurveyPage({
       surveyId: surveyId,
@@ -125,14 +135,46 @@ const Editor = ({ setPanelProperties, surveyId }: Props) => {
         id: uuid(),
         layoutId: layoutId,
         title: templateType,
-        html: "Html key to be removed",
         orderNumber: surveyPages.length + 1
       }
     });
 
     setSurveyPages([...surveyPages, newPage]);
-    setShowAddPage(false)
+    setShowAddPage(false);
   };
+
+  /**
+   * Returns template thumbnail based on template type
+   * 
+   * @param layout Layout
+   * @returns Layout thumbnail
+   */
+  const getLayoutThumbnail = (layout: Layout) => ({
+    "question": <QuestionLayoutImage/>,
+    "info": <InfoLayoutImage/>,
+    "image": <InfoImageLayoutImage/>,
+    "question + info": <QuestionParagraphLayoutImage/>,
+    "image + info": <ImageParagraphLayoutImage/>,
+    "info + image": <ParagraphImageLayoutImage/>,
+    "statistics": <StatisticsLayoutImage/>
+  })[layout.name];
+
+  /**
+   * Renders page template preview
+   * 
+   * @returns Template preview
+  */
+  const createLayoutButtons = () => (
+    pageLayouts.map((layout) => (
+      <ImageButton
+        key={layout.id}
+        title={layout.name}
+        image={getLayoutThumbnail(layout)}
+        onClick={() => createPage(layout.name)}
+        selected={false}
+      />
+    )
+  ));
 
   const renderAddNewPageDialog = () => (
     <GenericDialog
@@ -140,54 +182,12 @@ const Editor = ({ setPanelProperties, surveyId }: Props) => {
       open={ showAddPage }
       onCancel={ () => setShowAddPage(false) }
       onClose={ () => setShowAddPage(false) }
-      cancelButtonText="Peruuta"
-      title="Lisää uusi sivu"
+      cancelButtonText={ strings.generic.cancel }
+      title={ strings.editSurveysScreen.addNewPage }
     >
       <Typography>{ strings.layouts.title }</Typography>
       <Stack direction="row" gap={2} pt={3}>
-        <ImageButton
-          title={ strings.layouts.question }
-          image={ <QuestionLayoutImage/> }
-          onClick={ () => {} }
-          selected={ false }
-        />
-        <ImageButton
-          title={ strings.layouts.info }
-          image={ <InfoLayoutImage/> }
-          onClick={ () => createPage(strings.layouts.info) }
-          selected={ false }
-        />
-        <ImageButton
-          title={ strings.layouts.infoImage }
-          image={ <InfoImageLayoutImage/> }
-          onClick={ () => {} }
-          selected={ false }
-        />
-        <ImageButton
-          title={ strings.layouts.questionInfo }
-          image={ <QuestionParagraphLayoutImage/> }
-          onClick={ () => {} }
-          selected={ false }
-        />
-        <ImageButton
-          title={ strings.layouts.imageParagraph }
-          image={ <ImageParagraphLayoutImage/> }
-          onClick={ () => {} }
-          selected={ false }
-        />
-        <ImageButton
-          title={ strings.layouts.paragraphImage }
-          image={ <ParagraphImageLayoutImage/> }
-          onClick={ () => {} }
-          selected={ false }
-        />
-        <ImageButton
-          disabled
-          title={ strings.layouts.statistics }
-          image={ <StatisticsLayoutImage/> }
-          onClick={ () => {} }
-          selected={ false }
-        />
+        { createLayoutButtons() }
       </Stack>
     </GenericDialog>
   );
@@ -199,32 +199,67 @@ const Editor = ({ setPanelProperties, surveyId }: Props) => {
    * @returns layout html
    */
   const getPageLayout = (page: Page) => {
-    return pageLayouts.find(layout => layout.id === page.layoutId)?.html;
+    return pageLayouts.find(layout => layout.id === page.layoutId)!.html;
+  };
+
+  // TODO: This will need to be done for the preview screen?
+  /**
+   * Render page preview
+   *
+   * @param page Survey page
+   * @returns PreviewContainer and Preview
+   */
+  const renderPagePreview = (page: Page) => {
+    const { properties  } = page;
+    let htmlData = getPageLayout(page);
+
+    const optionsProperty = properties?.find(property => property.type === PagePropertyType.Options);
+    if (optionsProperty) {
+      const questionRenderer = questionRendererFactory.getRenderer(QuestionType.SINGLE);
+
+      const questionHtml = questionRenderer.render(JSON.parse(optionsProperty.value));
+      const questionElement = new DOMParser().parseFromString(questionHtml, "text/html");
+
+      const templateDom = new DOMParser().parseFromString(htmlData, "text/html");
+      const questionPlaceholder = templateDom.querySelector("div[data-component='question']");
+
+      if (!questionPlaceholder) {
+        console.warn("Could not find question placeholder in template.");
+      }
+      else {
+        questionPlaceholder?.replaceWith(questionElement.body);
+        htmlData = templateDom.body.innerHTML;
+      }
+    }
+
+    return (
+      <PreviewContainer
+        key={ page.id }
+      >
+        <Preview
+          htmlString={htmlData || strings.errorHandling.editSurveysScreen.pageLayoutsNotFound}
+          width={ DEVICE_WIDTH }
+          height={ DEVICE_HEIGHT }
+          scale={ EDITOR_SCREEN_PREVIEW_CONTAINER_WIDTH / DEVICE_WIDTH }
+          onPanelPropertiesChange={ () => setPanelProperties({panelType: EditorPanel.PAGE, pageNumber: page.orderNumber}) }
+          setSelectedPage={() => setSelectedPage(page.orderNumber) }
+          selectedPage={selectedPage}
+          pageNumber={page.orderNumber}
+        />
+      </PreviewContainer>
+    )
   };
 
   return (
     <EditorContainer
       direction="row"
-      gap={4}
-      onClick={ () => setPanelProperties(EditorPanelProperties.SURVEY) }
+      gap={2}
+      onClick={ () => {
+        setPanelProperties({panelType: EditorPanel.SURVEY})
+        setSelectedPage(undefined);
+      }}
     >
-      { !!surveyPages.length && surveyPages.map(page =>
-          <PreviewContainer
-            key={ page.id }
-          >
-            <Preview
-              htmlString={getPageLayout(page) || strings.errorHandling.editSurveysScreen.pageLayoutsNotFound}
-              width={ DEVICE_WIDTH }
-              height={ DEVICE_HEIGHT }
-              scale={ EDITOR_SCREEN_PREVIEW_CONTAINER_WIDTH / DEVICE_WIDTH }
-              onPanelPropertiesChange={ () => setPanelProperties(EditorPanelProperties.PAGE) }
-              setSelectedPage={() => setSelectedPage(page.orderNumber) }
-              selectedPage={selectedPage}
-              pageNumber={page.orderNumber}
-            />
-          </PreviewContainer>
-        )
-      }
+      { !!surveyPages.length && surveyPages.map(renderPagePreview) }
       <NewPageButton onClick={ () => setShowAddPage(true) }/>
       { renderAddNewPageDialog() }
     </EditorContainer>

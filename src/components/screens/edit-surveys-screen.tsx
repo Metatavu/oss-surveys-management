@@ -10,7 +10,7 @@ import Editor from "../layout-components/editor";
 import { CircularProgress, Stack } from "@mui/material";
 import PropertiesPanel from "../layout-components/properties-panel";
 import SurveyProperties from "../layout-components/survey-properties";
-import { EditorPanelProperties } from "../../types";
+import { EditorPanel, PanelProperties } from "../../types";
 import PageProperties from "../layout-components/page-properties";
 
 /**
@@ -22,7 +22,7 @@ const EditSurveysScreen = () => {
   const setError = useSetAtom(errorAtom);
 
   const [ survey, setSurvey ] = useState<Survey>();
-  const [ panelProperties, setPanelProperties ] = useState(EditorPanelProperties.SURVEY);
+  const [ panelProperties, setPanelProperties ] = useState<PanelProperties>({panelType: EditorPanel.SURVEY});
   const [ isLoading, setIsLoading ] = useState(false);
 
   /**
@@ -80,12 +80,17 @@ const EditSurveysScreen = () => {
       <Stack direction="row" flex={1}>
         <Editor setPanelProperties={ setPanelProperties } surveyId={survey.id} />
         <PropertiesPanel>
-          { panelProperties === EditorPanelProperties.SURVEY
+          { panelProperties.panelType === EditorPanel.SURVEY
             ? <SurveyProperties
                 survey={ survey }
                 onSaveSurvey={ onSaveSurvey }
               />
-            : <PageProperties /> }
+            : panelProperties.pageNumber &&
+              <PageProperties
+                surveyId={survey.id}
+                pageNumber={panelProperties.pageNumber}
+              />
+          }
         </PropertiesPanel>
       </Stack>
     </>

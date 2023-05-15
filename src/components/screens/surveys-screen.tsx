@@ -46,9 +46,9 @@ const SurveysScreen = () => {
         }
       });
 
-      navigate(`edit/${newSurvey.id}`)
+      navigate(`edit/${newSurvey.id}`);
     } catch (error: any) {
-      setError(`${strings.errorHandling.surveysScreen.createSurveyError}, ${error}`)
+      setError(`${strings.errorHandling.surveysScreen.createSurveyError}, ${error}`);
     }
   }
 

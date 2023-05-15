@@ -3,7 +3,9 @@
     "close": "Sulje",
     "logout": "Kirjaudu ulos",
     "notImplemented": "Ei vielä toteutettu",
-    "back": "Takaisin"
+    "back": "Takaisin",
+    "confirm": "Vahvistaa",
+    "cancel": "Peruuta"
   },
   "navigation": {
     "overview": "Yhteenveto",
@@ -32,7 +34,8 @@
       "surveyNotSaved": "Virhe tallennettaessa kyselyä",
       "surveyPagesNotFound": "Kyselysivuja ei löytynyt",
       "pageLayoutsNotFound": "Sivuasetteluja ei löytynyt",
-      "pageLayoutNotFound": "Sivuasetteluja ei löytynyt"
+      "pageLayoutNotFound": "Sivuasetteluja ei löytynyt",
+      "pageNotSaved": "Virhe tallennettaessa sivua"
     },
     "previewScreen": {
       "surveyNotFound": "Kyselyä ei löytynyt",
@@ -72,9 +75,23 @@
       "category": "Kategoriat",
       "returnTimeout": "Palaa alkunäyttöön",
       "readyForPublish": "Julkaisukelpoinen"
+    },
+    "pages": {
+      "noQuestion": "Ei lisättyjä kysymyksiä"
+    },
+    "editPagesPanel": {
+      "page": "Sivu {0}",
+      "title": "Ostikko",
+      "questionType": "Kyselyn tyyppi",
+      "answerOptions": "Vastausvaihtoehdot",
+      "answerOptionPlaceholder": "Vaihtoehto",
+      "deleteAnswerOptionTitle": "Poista vastausvaihtoehto",
+      "addOption": "Lisää vaihtoehto",
+      "confirmDeleteOption": "Haluatko varmasti poistaa tämän vaihtoehdon?"
     }
   },
   "layouts": {
+    "addNewPage": "Lisää uusi sivu",
     "title": "Valitse sivun rakenne alla olevista vaihtoehdoista",
     "question": "Kysymys",
     "info": "Info",

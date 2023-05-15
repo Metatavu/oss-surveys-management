@@ -6,6 +6,40 @@ export type ErrorContextType = {
   setError: (message: string, error?: any) => void;
 };
 
+// TODO: Question types below should be removed when available from generated files
+/**
+ * Interface for Question
+ */
+export interface Question {
+  id: string;
+  type: QuestionType;
+  options: QuestionOption[];
+};
+
+/**
+ * Interface for Panel properties
+ */
+export interface PanelProperties {
+  panelType: EditorPanel;
+  pageNumber?: number;
+};
+
+/**
+ * Question option type
+ */
+export type QuestionOption = {
+  id: string;
+  text: string;
+};
+
+/**
+ * Enum for question type
+ */
+export enum QuestionType {
+  SINGLE = "SINGLE",
+  MULTIPLE = "MULTIPLE"
+};
+
 /**
  * Interface to describe iframe click event
  */
@@ -37,7 +71,20 @@ export enum NavigationLinks {
 /**
  * Enum for editor panel properties
  */
-export enum EditorPanelProperties {
+export enum EditorPanel {
   SURVEY = "SURVEY",
   PAGE = "PAGE"
+};
+
+/**
+ * Enum for template types
+ */
+export enum LayoutType {
+  QUESTION = "question",
+  INFO = "info",
+  IMAGE = "image",
+  QUESTION_INFO = "question + info",
+  IMAGE_INFO = "image + info",
+  INFO_IMAGE = "info + image",
+  STATISTICS = "statistics"
 };

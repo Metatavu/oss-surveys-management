@@ -6,7 +6,7 @@ import sanitizeHtml, { IOptions } from "sanitize-html";
 const sanitizeOptions: IOptions = {
   allowedTags: sanitizeHtml.defaults.allowedTags.concat(["button"]),
   allowedAttributes: {
-    "*": ["style"]
+    "*": ["style", "id"],
   }
 };
 

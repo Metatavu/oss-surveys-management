@@ -1,13 +1,13 @@
+import logo from "../../assets/oss.svg";
 import { authAtom, userProfileAtom } from "../../atoms/auth";
+import strings from "../../localization/strings";
+import { NavigationLinks } from "../../types";
+import { matchNavigation } from "../../utils/NavigationUtils";
+import NavButton from "./nav-button";
 import ExitToAppOutlinedIcon from "@mui/icons-material/ExitToAppOutlined";
 import { AppBar, Avatar, IconButton, Stack, Toolbar, Typography } from "@mui/material";
 import { useAtom, useAtomValue } from "jotai";
-import logo from "../../assets/oss.svg";
-import NavButton from "./nav-button";
-import strings from "../../localization/strings";
 import { useLocation } from "react-router-dom";
-import { matchNavigation } from "../../utils/NavigationUtils";
-import { NavigationLinks } from "../../types";
 
 /**
  * Header component

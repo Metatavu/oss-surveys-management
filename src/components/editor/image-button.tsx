@@ -47,7 +47,7 @@ const Root = styled(Button, {
  */
 const ImageContainer = styled(Box, {
   label: "icon-container"
-})(({ theme }) => ({
+})(() => ({
   display: "flex",
   alignItems: "center",
   justifyContent: "center",

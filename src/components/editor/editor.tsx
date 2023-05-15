@@ -1,33 +1,33 @@
-import { Box, CircularProgress, Stack, Typography, styled } from "@mui/material";
-import theme from "../../styles/theme";
-import NewPageButton from "./new-page-button";
-import GenericDialog from "../generic/generic-dialog";
-import React, { useEffect, useState } from "react";
-import ImageButton from "./image-button";
-import QuestionLayoutImage from "../images/svg/layout-thumbnails/question";
-import InfoLayoutImage from "../images/svg/layout-thumbnails/info";
-import InfoImageLayoutImage from "../images/svg/layout-thumbnails/info-image";
-import strings from "../../localization/strings";
-import QuestionParagraphLayoutImage from "../images/svg/layout-thumbnails/question-paragraph";
-import ImageParagraphLayoutImage from "../images/svg/layout-thumbnails/image-paragraph";
-import ParagraphImageLayoutImage from "../images/svg/layout-thumbnails/paragraph-image";
-import StatisticsLayoutImage from "../images/svg/layout-thumbnails/statistics";
-import Preview from "./preview";
-import { EditorPanel, PanelProperties, QuestionType } from "../../types";
+import { errorAtom } from "../../atoms/error";
+import { layoutsAtom } from "../../atoms/layouts";
+import { pagesAtom } from "../../atoms/pages";
 import {
   DEVICE_HEIGHT,
   DEVICE_WIDTH,
   EDITOR_SCREEN_PREVIEW_CONTAINER_HEIGHT,
   EDITOR_SCREEN_PREVIEW_CONTAINER_WIDTH
 } from "../../constants";
-import { useApi } from "../../hooks/use-api";
 import { Layout, Page, PagePropertyType } from "../../generated/client";
-import { errorAtom } from "../../atoms/error";
-import { useAtom, useSetAtom } from "jotai";
-import { v4 as uuid } from "uuid";
-import { layoutsAtom } from "../../atoms/layouts";
-import { pagesAtom } from "../../atoms/pages";
+import { useApi } from "../../hooks/use-api";
+import strings from "../../localization/strings";
 import questionRendererFactory from "../../question-renderer/question-renderer";
+import theme from "../../styles/theme";
+import { EditorPanel, PanelProperties, QuestionType } from "../../types";
+import GenericDialog from "../generic/generic-dialog";
+import ImageParagraphLayoutImage from "../images/svg/layout-thumbnails/image-paragraph";
+import InfoLayoutImage from "../images/svg/layout-thumbnails/info";
+import InfoImageLayoutImage from "../images/svg/layout-thumbnails/info-image";
+import ParagraphImageLayoutImage from "../images/svg/layout-thumbnails/paragraph-image";
+import QuestionLayoutImage from "../images/svg/layout-thumbnails/question";
+import QuestionParagraphLayoutImage from "../images/svg/layout-thumbnails/question-paragraph";
+import StatisticsLayoutImage from "../images/svg/layout-thumbnails/statistics";
+import Preview from "../preview/preview";
+import ImageButton from "./image-button";
+import NewPageButton from "./new-page-button";
+import { Box, CircularProgress, Stack, Typography, styled } from "@mui/material";
+import { useAtom, useSetAtom } from "jotai";
+import React, { useEffect, useState } from "react";
+import { v4 as uuid } from "uuid";
 
 /**
  * Component properties

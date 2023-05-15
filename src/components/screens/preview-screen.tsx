@@ -1,25 +1,25 @@
-import { useEffect, useState } from "react";
-import PreviewToolbar from "../layout-components/preview-toolbar";
-import { Page, Survey } from "../../generated/client";
-import { useParams } from "react-router-dom";
-import { useAtom, useSetAtom } from "jotai";
 import { errorAtom } from "../../atoms/error";
-import { useApi } from "../../hooks/use-api";
-import strings from "../../localization/strings";
-import Preview from "../layout-components/preview";
-import { Box, CircularProgress, Stack, Toolbar, Typography, styled } from "@mui/material";
+import { layoutsAtom } from "../../atoms/layouts";
+import { pagesAtom } from "../../atoms/pages";
 import {
   DEVICE_HEIGHT,
   DEVICE_WIDTH,
   EDITOR_SCREEN_PREVIEW_CONTAINER_HEIGHT,
   EDITOR_SCREEN_PREVIEW_CONTAINER_WIDTH
 } from "../../constants";
-import { useWindowSize } from "usehooks-ts";
+import { Page, Survey } from "../../generated/client";
+import { useApi } from "../../hooks/use-api";
+import strings from "../../localization/strings";
 import theme from "../../styles/theme";
-import { pagesAtom } from "../../atoms/pages";
-import { layoutsAtom } from "../../atoms/layouts";
 import { parseHtmlToDom } from "../../utils/PreviewUtils";
 import wrapTemplate from "../pages/templates/template-wrapper";
+import Preview from "../preview/preview";
+import PreviewToolbar from "../preview/preview-toolbar";
+import { Box, CircularProgress, Stack, Toolbar, Typography, styled } from "@mui/material";
+import { useAtom, useSetAtom } from "jotai";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { useWindowSize } from "usehooks-ts";
 
 /**
  * Styled preview root component

@@ -1,17 +1,17 @@
-import { useParams } from "react-router-dom";
-import Toolbar from "../layout-components/toolbar";
-import { ChangeEvent, useEffect, useState } from "react";
-import { useApi } from "../../hooks/use-api";
-import { Survey } from "../../generated/client";
-import { useSetAtom } from "jotai";
 import { errorAtom } from "../../atoms/error";
+import { Survey } from "../../generated/client";
+import { useApi } from "../../hooks/use-api";
 import strings from "../../localization/strings";
-import Editor from "../layout-components/editor";
-import { CircularProgress, Stack } from "@mui/material";
-import PropertiesPanel from "../layout-components/properties-panel";
-import SurveyProperties from "../layout-components/survey-properties";
 import { EditorPanel, PanelProperties } from "../../types";
-import PageProperties from "../layout-components/page-properties";
+import Editor from "../editor/editor";
+import PageProperties from "../editor/page-properties";
+import PropertiesPanel from "../editor/properties-panel";
+import SurveyProperties from "../editor/survey-properties";
+import Toolbar from "../layout-components/toolbar";
+import { CircularProgress, Stack } from "@mui/material";
+import { useSetAtom } from "jotai";
+import { ChangeEvent, useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 
 /**
  * Renders edit surveys screen

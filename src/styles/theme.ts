@@ -3,7 +3,7 @@ import { createTheme } from "@mui/material";
 /**
  * Values from default theme to use in custom theme
  */
-const { breakpoints, spacing } = createTheme();
+const { spacing } = createTheme();
 
 /**
  * Custom theme for Material UI

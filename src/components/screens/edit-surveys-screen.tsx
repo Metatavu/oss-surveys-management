@@ -21,9 +21,11 @@ const EditSurveysScreen = () => {
   const { surveysApi } = useApi();
   const setError = useSetAtom(errorAtom);
 
-  const [ survey, setSurvey ] = useState<Survey>();
-  const [ panelProperties, setPanelProperties ] = useState<PanelProperties>({panelType: EditorPanel.SURVEY});
-  const [ isLoading, setIsLoading ] = useState(false);
+  const [survey, setSurvey] = useState<Survey>();
+  const [panelProperties, setPanelProperties] = useState<PanelProperties>({
+    panelType: EditorPanel.SURVEY
+  });
+  const [isLoading, setIsLoading] = useState(false);
 
   /**
    * Get Survey from route id
@@ -38,17 +40,17 @@ const EditSurveysScreen = () => {
 
   useEffect(() => {
     setIsLoading(true);
-    getSurvey()
-      .catch(error =>
-        setError(`${ strings.errorHandling.editSurveysScreen.surveyNotFound }, ${ error }`));
+    getSurvey().catch((error) =>
+      setError(`${strings.errorHandling.editSurveysScreen.surveyNotFound}, ${error}`)
+    );
   }, [id]);
 
-  if (!survey || !survey.id || isLoading) {
+  if (!survey?.id || isLoading) {
     return (
       <Stack flex={1} justifyContent="center" alignItems="center">
         <CircularProgress />
       </Stack>
-    )
+    );
   }
 
   /**
@@ -57,44 +59,40 @@ const EditSurveysScreen = () => {
    * @param event event
    */
   const onSaveSurvey = async ({ target: { value, name } }: ChangeEvent<HTMLInputElement>) => {
-    if(!survey.id) return;
+    if (!survey.id) return;
 
     try {
       const editedSurvey = {
         ...survey,
         [name]: value
       };
-      const updatedSurvey = await surveysApi.updateSurvey({ surveyId: survey.id, survey: editedSurvey });
+      const updatedSurvey = await surveysApi.updateSurvey({
+        surveyId: survey.id,
+        survey: editedSurvey
+      });
       setSurvey(updatedSurvey);
     } catch (error: any) {
-      setError(`${ strings.errorHandling.editSurveysScreen.surveyNotSaved }, ${ error }`)
+      setError(`${strings.errorHandling.editSurveysScreen.surveyNotSaved}, ${error}`);
     }
   };
 
   return (
     <>
-      <Toolbar
-        surveyName={ survey?.title || "" }
-        surveyId={ survey.id }
-      />
+      <Toolbar surveyName={survey?.title || ""} surveyId={survey.id} />
       <Stack direction="row" flex={1}>
-        <Editor setPanelProperties={ setPanelProperties } surveyId={survey.id} />
+        <Editor setPanelProperties={setPanelProperties} surveyId={survey.id} />
         <PropertiesPanel>
-          { panelProperties.panelType === EditorPanel.SURVEY
-            ? <SurveyProperties
-                survey={ survey }
-                onSaveSurvey={ onSaveSurvey }
-              />
-            : panelProperties.pageNumber &&
-              <PageProperties
-                surveyId={survey.id}
-                pageNumber={panelProperties.pageNumber}
-              />
-          }
+          {panelProperties.panelType === EditorPanel.SURVEY ? (
+            <SurveyProperties survey={survey} onSaveSurvey={onSaveSurvey} />
+          ) : (
+            panelProperties.pageNumber && (
+              <PageProperties surveyId={survey.id} pageNumber={panelProperties.pageNumber} />
+            )
+          )}
         </PropertiesPanel>
       </Stack>
     </>
-  )
+  );
 };
 
 export default EditSurveysScreen;

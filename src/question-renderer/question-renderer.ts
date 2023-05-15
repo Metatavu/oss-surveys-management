@@ -1,12 +1,12 @@
 import { QuestionType } from "../types";
-import { v4 as uuid } from 'uuid';
+import { v4 as uuid } from "uuid";
 
 /**
  * Abstract class for QuestionRenderer
  */
 abstract class AbstractQuestionRenderer {
-  public abstract render (options: string[]): string;
-};
+  public abstract render(options: string[]): string;
+}
 
 /**
  * Class for SingleSelectTextQuestionRenderer
@@ -19,13 +19,13 @@ class SingleSelectTextQuestionRenderer extends AbstractQuestionRenderer {
    * @returns html string
    */
   public render(options: string[]): string {
-    let htmlString  = "";
+    let htmlString = "";
 
-    options.forEach(option => {
+    options.forEach((option) => {
       htmlString = htmlString.concat(
         `<div>
           <button
-            id="${ uuid() }"
+            id="${uuid()}"
             style="
               width: 100%;
               height: 250px;
@@ -36,20 +36,20 @@ class SingleSelectTextQuestionRenderer extends AbstractQuestionRenderer {
               border: 20px solid #fff;
             "
           >
-            ${ option }
+            ${option}
           </button>
-        </div>`)
+        </div>`
+      );
     });
 
     return htmlString;
   }
-};
+}
 
 /**
  * Class for QuestionRendererFactory
  */
 class QuestionRendererFactory {
-
   /**
    * Get renderer based on question type
    *
@@ -61,10 +61,10 @@ class QuestionRendererFactory {
       case QuestionType.SINGLE:
         return new SingleSelectTextQuestionRenderer();
       default:
-        throw new Error(`Could not find renderer for ${questionType}`)
+        throw new Error(`Could not find renderer for ${questionType}`);
     }
   };
-};
+}
 
 const questionRendererFactory = new QuestionRendererFactory();
 export default questionRendererFactory;

@@ -1,4 +1,12 @@
-import { Box, Button, IconButton, InputAdornment, MenuItem, TextField, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  IconButton,
+  InputAdornment,
+  MenuItem,
+  TextField,
+  Typography
+} from "@mui/material";
 import strings from "../../localization/strings";
 import { Close, Edit } from "@mui/icons-material";
 import { LayoutType, QuestionType } from "../../types";
@@ -28,7 +36,7 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
   const [options, setOptions] = useState<string[]>([]);
 
   const [surveyPages, setSurveyPages] = useAtom(pagesAtom);
-  const [ pageLayouts ] = useAtom(layoutsAtom);
+  const [pageLayouts] = useAtom(layoutsAtom);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [optionToDelete, setOptionToDelete] = useState<string | undefined>();
   const { pagesApi } = useApi();
@@ -53,7 +61,7 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
     getQuestionOptions();
   }, [pageNumber]);
 
-    /**
+  /**
    * Renders text field with debounce
    *
    * @param name name
@@ -63,42 +71,47 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
    * @param endAdornment end adornment true/false
    * @returns debounced text field
    */
-    const renderOptionsWithDebounceTextField = (
-      name: string,
-      onChange: (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, previousOption?: string) => Promise<void>,
-      value: string,
-      placeholder: string,
-      endAdornment: boolean,
-      key: string
-    ) => (
-      <WithDebounce
-        name={ name }
-        value={ value }
-        onChange={ onChange }
-        placeholder={ placeholder }
-        optionKey={key}
-        component={ props =>
-          <TextField
-            { ...props }
-            key={key}
-            fullWidth
-            multiline
-            name={name}
-            placeholder={strings.editSurveysScreen.editPagesPanel.answerOptionPlaceholder}
-            InputProps={{
-              endAdornment: (
-                endAdornment &&
-                <InputAdornment position="end" className="on-hover">
-                  <IconButton title={strings.editSurveysScreen.editPagesPanel.deleteAnswerOptionTitle} onClick={() => handleDeleteClick(value)}>
-                    <Close fontSize="small"/>
-                  </IconButton>
-                </InputAdornment>
-              )
-            }}
-          />
-        }
-      />
-    );
+  const renderOptionsWithDebounceTextField = (
+    name: string,
+    onChange: (
+      event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+      previousOption?: string
+    ) => Promise<void>,
+    value: string,
+    placeholder: string,
+    endAdornment: boolean,
+    key: string
+  ) => (
+    <WithDebounce
+      name={name}
+      value={value}
+      onChange={onChange}
+      placeholder={placeholder}
+      optionKey={key}
+      component={(props) => (
+        <TextField
+          {...props}
+          key={key}
+          fullWidth
+          multiline
+          name={name}
+          placeholder={strings.editSurveysScreen.editPagesPanel.answerOptionPlaceholder}
+          InputProps={{
+            endAdornment: endAdornment && (
+              <InputAdornment position="end" className="on-hover">
+                <IconButton
+                  title={strings.editSurveysScreen.editPagesPanel.deleteAnswerOptionTitle}
+                  onClick={() => handleDeleteClick(value)}
+                >
+                  <Close fontSize="small" />
+                </IconButton>
+              </InputAdornment>
+            )
+          }}
+        />
+      )}
+    />
+  );
 
   /**
    * Handle question option change
@@ -110,12 +123,14 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
     event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
     previousOption: string
   ) => {
-    const updatedOptions = options.map(option => {
+    const updatedOptions = options.map((option) => {
       return option === previousOption ? event.target.value : option;
     });
-  
-    const updatedProperties: PageProperty[] = surveyPages[pageNumber - 1].properties?.some(property => property.type === PagePropertyType.Options)
-      ? surveyPages[pageNumber - 1].properties!.map(property => {
+
+    const updatedProperties: PageProperty[] = surveyPages[pageNumber - 1].properties?.some(
+      (property) => property.type === PagePropertyType.Options
+    )
+      ? surveyPages[pageNumber - 1].properties!.map((property) => {
           return property.type === PagePropertyType.Options
             ? { ...property, value: JSON.stringify(updatedOptions) }
             : property;
@@ -125,38 +140,38 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
           {
             key: PagePropertyType.Options,
             value: JSON.stringify(updatedOptions),
-            type: PagePropertyType.Options,
-          },
+            type: PagePropertyType.Options
+          }
         ];
-  
+
     const updatesToPage: Page = {
       ...surveyPages[pageNumber - 1],
-      properties: updatedProperties,
+      properties: updatedProperties
     };
-  
+
     try {
       const updatedPage = await pagesApi.updateSurveyPage({
         pageId: surveyPages[pageNumber - 1].id!,
         surveyId: surveyId,
-        page: updatesToPage,
+        page: updatesToPage
       });
-  
-      const updatedSurveyPages = surveyPages.map(page => (page.id === updatedPage.id ? updatedPage : page));
-  
+
+      const updatedSurveyPages = surveyPages.map((page) =>
+        page.id === updatedPage.id ? updatedPage : page
+      );
+
       setSurveyPages(updatedSurveyPages);
       setOptions(updatedOptions);
     } catch (error) {
-      setError(`${ strings.errorHandling.editSurveysScreen.pageNotSaved }, ${ error }`)    }
+      setError(`${strings.errorHandling.editSurveysScreen.pageNotSaved}, ${error}`);
+    }
   };
-  
 
   /**
    * Adds new question option to question options
    */
   const addNewQuestionOption = () => {
-    options.length
-      ? setOptions([...options, ""])
-      : setOptions([""]);
+    options.length ? setOptions([...options, ""]) : setOptions([""]);
   };
 
   /**
@@ -165,7 +180,7 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
   const deleteOption = async () => {
     if (!optionToDelete) return;
 
-    const updatedList = options.filter(option => option !== optionToDelete);
+    const updatedList = options.filter((option) => option !== optionToDelete);
 
     // TODO: Delete on backend
     setOptions(updatedList);
@@ -231,9 +246,11 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
           }}
         />
       </Box>
-      {!!pageLayouts.find(layout => layout.id === surveyPages[pageNumber - 1].layoutId) && (
+      {!!pageLayouts.find((layout) => layout.id === surveyPages[pageNumber - 1].layoutId) && (
         <Box p={2}>
-          <Typography variant="h6">{strings.editSurveysScreen.editPagesPanel.questionType}</Typography>
+          <Typography variant="h6">
+            {strings.editSurveysScreen.editPagesPanel.questionType}
+          </Typography>
           {/* TODO: Update with Debounce when backend ready */}
           <TextField
             fullWidth
@@ -251,11 +268,16 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
           </TextField>
         </Box>
       )}
-      {!!pageLayouts.find(layout => layout.id === surveyPages[pageNumber - 1].layoutId && layout.name === LayoutType.QUESTION) &&
+      {!!pageLayouts.find(
+        (layout) =>
+          layout.id === surveyPages[pageNumber - 1].layoutId && layout.name === LayoutType.QUESTION
+      ) &&
         !!options.length && (
           <Box p={2}>
-            <Typography variant="h6">{strings.editSurveysScreen.editPagesPanel.answerOptions}</Typography>
-            {options?.map((option, i) => (
+            <Typography variant="h6">
+              {strings.editSurveysScreen.editPagesPanel.answerOptions}
+            </Typography>
+            {options?.map((option, i) =>
               renderOptionsWithDebounceTextField(
                 "option",
                 (e) => handleQuestionOptionChange(e, option),
@@ -264,10 +286,13 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
                 true,
                 `${i}`
               )
-            ))}
+            )}
           </Box>
         )}
-      {!!pageLayouts.find(layout => layout.id === surveyPages[pageNumber - 1].layoutId && layout.name === LayoutType.QUESTION) && (
+      {!!pageLayouts.find(
+        (layout) =>
+          layout.id === surveyPages[pageNumber - 1].layoutId && layout.name === LayoutType.QUESTION
+      ) && (
         <Box p={2} sx={{ borderBottom: "1px solid #DADCDE" }}>
           <Button
             size="large"

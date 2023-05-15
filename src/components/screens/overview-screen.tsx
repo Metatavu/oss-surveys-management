@@ -27,9 +27,9 @@ const OverviewScreen = () => {
       const surveys = await surveysApi.listSurveys({});
       setSurveys(surveys);
     } catch (error: any) {
-      setError(`${strings.errorHandling.overviewScreen.surveysNotFound}, ${error}`)
+      setError(`${strings.errorHandling.overviewScreen.surveysNotFound}, ${error}`);
     }
-  }
+  };
 
   useEffect(() => {
     getSurveys();
@@ -56,7 +56,7 @@ const OverviewScreen = () => {
     return (
       <List>
         {renderSurveyListHeadings()}
-        {surveys.map(survey => (
+        {surveys.map((survey) => (
           <ListItemButton key={survey.id} onClick={() => navigate(`/surveys/edit/${survey.id}`)}>
             <ListItemText secondary={survey.title} />
             <ListItemText secondary={strings.generic.notImplemented} />
@@ -67,26 +67,26 @@ const OverviewScreen = () => {
           </ListItemButton>
         ))}
       </List>
-    )
+    );
   };
 
   return (
     <Box p={4}>
       <Paper>
-        <Tabs value={activeTab} onChange={(_, value) => setActiveTab(value)} >
+        <Tabs value={activeTab} onChange={(_, value) => setActiveTab(value)}>
           <Tab
             value={SurveyScreens.ACTIVE}
-            label={strings.formatString(strings.overviewScreen.activeSurveys, `(${surveys.length})`)}
+            label={strings.formatString(
+              strings.overviewScreen.activeSurveys,
+              `(${surveys.length})`
+            )}
           />
-          <Tab
-            value={SurveyScreens.NOT_IMPLEMENTED}
-            label={strings.generic.notImplemented}
-          />
+          <Tab value={SurveyScreens.NOT_IMPLEMENTED} label={strings.generic.notImplemented} />
         </Tabs>
-        <TabPanel value={activeTab} index={SurveyScreens.ACTIVE} >
+        <TabPanel value={activeTab} index={SurveyScreens.ACTIVE}>
           {renderSurveysList()}
         </TabPanel>
-        <TabPanel value={activeTab} index={SurveyScreens.NOT_IMPLEMENTED} >
+        <TabPanel value={activeTab} index={SurveyScreens.NOT_IMPLEMENTED}>
           {strings.generic.notImplemented}
         </TabPanel>
       </Paper>

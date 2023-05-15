@@ -24,7 +24,7 @@ const router = createBrowserRouter([
         element: <SurveysScreen />
       },
       {
-        path:"/surveys/edit/:id",
+        path: "/surveys/edit/:id",
         element: <EditSurveysScreen />
       },
       {
@@ -36,7 +36,7 @@ const router = createBrowserRouter([
         element: <Navigate to="/overview" />
       },
       {
-        path:"/preview/:id",
+        path: "/preview/:id",
         element: <PreviewScreen />
       }
     ]
@@ -50,9 +50,9 @@ const App = () => (
   <div className="App">
     <ErrorHandler>
       <AuthenticationProvider>
-        <ThemeProvider theme={ responsiveFontSizes(theme) }>
-          <CssBaseline/>
-            <RouterProvider router={router}/>
+        <ThemeProvider theme={responsiveFontSizes(theme)}>
+          <CssBaseline />
+          <RouterProvider router={router} />
         </ThemeProvider>
       </AuthenticationProvider>
     </ErrorHandler>

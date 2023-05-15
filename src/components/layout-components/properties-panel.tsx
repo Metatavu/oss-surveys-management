@@ -27,11 +27,9 @@ interface Props {
 const PropertiesPanel: FC<Props> = ({ children }) => {
   return (
     <Panel elevation={0}>
-      <Stack flex={1}>
-        { children }
-      </Stack>
+      <Stack flex={1}>{children}</Stack>
     </Panel>
-  )
+  );
 };
 
 export default PropertiesPanel;

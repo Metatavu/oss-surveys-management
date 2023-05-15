@@ -82,33 +82,33 @@ const ErrorHandler = ({ children }: Props) => {
    */
   return (
     <>
-      { children }
+      {children}
       <GenericDialog
-        open={ error !== undefined }
-        error={ false }
-        onClose={ () => setError(undefined) }
-        onCancel={() => setError(undefined) }
-        onConfirm={ () => setError(undefined) }
-        title={ strings.errorHandling.title }
-        cancelButtonText={ strings.generic.close }
+        open={error !== undefined}
+        error={false}
+        onClose={() => setError(undefined)}
+        onCancel={() => setError(undefined)}
+        onConfirm={() => setError(undefined)}
+        title={strings.errorHandling.title}
+        cancelButtonText={strings.generic.close}
       >
         <DialogContent id="error-dialog-description">
           {error && (
             <Typography marginBottom={3} sx={{ fontSize: 16, fontWeight: "bold" }}>
-              { error }
+              {error}
             </Typography>
           )}
-          <Typography marginBottom={2}>{ strings.errorHandling.dialog.tryAgain }</Typography>
-          <Typography marginBottom={2}>{ strings.errorHandling.dialog.reportIssue }</Typography>
-          <Typography fontWeight="bold">{ strings.errorHandling.dialog.technicalDetails }</Typography>
+          <Typography marginBottom={2}>{strings.errorHandling.dialog.tryAgain}</Typography>
+          <Typography marginBottom={2}>{strings.errorHandling.dialog.reportIssue}</Typography>
+          <Typography fontWeight="bold">{strings.errorHandling.dialog.technicalDetails}</Typography>
           <Typography>
-            { strings.formatString(strings.errorHandling.dialog.time, getTime()) }
+            {strings.formatString(strings.errorHandling.dialog.time, getTime())}
           </Typography>
           <Typography>
-            { strings.formatString(strings.errorHandling.dialog.url, getURL()) }
+            {strings.formatString(strings.errorHandling.dialog.url, getURL())}
           </Typography>
-          <Typography>{ strings.errorHandling.dialog.errorMessage }</Typography>
-          <code style={{ fontSize: "12px" }}>{ error || "" }</code>
+          <Typography>{strings.errorHandling.dialog.errorMessage}</Typography>
+          <code style={{ fontSize: "12px" }}>{error || ""}</code>
         </DialogContent>
         <Divider />
       </GenericDialog>

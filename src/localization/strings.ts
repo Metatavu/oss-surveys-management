@@ -118,7 +118,7 @@ export interface Localized extends LocalizedStringsMethods {
       deleteAnswerOptionTitle: string;
       addOption: string;
       confirmDeleteOption: string;
-    }
+    };
   };
 
   /**
@@ -134,14 +134,14 @@ export interface Localized extends LocalizedStringsMethods {
     imageParagraph: string;
     questionInfo: string;
     statistics: string;
-  }
+  };
 
   /**
    * Translations related to preview screen
    */
   previewScreen: {
     sharePreview: string;
-  }
+  };
 }
 /**
  * Initialized localized strings

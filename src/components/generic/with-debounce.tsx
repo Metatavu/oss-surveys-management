@@ -54,8 +54,8 @@ const WithDebounce: FC<Props> = ({
   fullWidth,
   previousOption
 }) => {
-  const [ inputValue, setInputValue ] = useState(value);
-  const [ debounceTimer, setDebounceTimer ] = useState<number>();
+  const [inputValue, setInputValue] = useState(value);
+  const [debounceTimer, setDebounceTimer] = useState<number>();
 
   useEffect(() => {
     if (value !== inputValue) {
@@ -71,8 +71,8 @@ const WithDebounce: FC<Props> = ({
   const onInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     debounceTimer && clearTimeout(debounceTimer);
 
-    const newDebounceTimer = previousOption ?
-      window.setTimeout(() => onChange(event, previousOption), debounceTimeout ?? 1000)
+    const newDebounceTimer = previousOption
+      ? window.setTimeout(() => onChange(event, previousOption), debounceTimeout ?? 1000)
       : window.setTimeout(() => onChange(event), debounceTimeout ?? 1000);
 
     setDebounceTimer(newDebounceTimer);

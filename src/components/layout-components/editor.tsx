@@ -2,7 +2,7 @@ import { Box, CircularProgress, Stack, Typography, styled } from "@mui/material"
 import theme from "../../styles/theme";
 import NewPageButton from "./new-page-button";
 import GenericDialog from "../generic/generic-dialog";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import ImageButton from "./image-button";
 import QuestionLayoutImage from "../images/svg/layout-thumbnails/question";
 import InfoLayoutImage from "../images/svg/layout-thumbnails/info";
@@ -13,10 +13,10 @@ import ImageParagraphLayoutImage from "../images/svg/layout-thumbnails/image-par
 import ParagraphImageLayoutImage from "../images/svg/layout-thumbnails/paragraph-image";
 import StatisticsLayoutImage from "../images/svg/layout-thumbnails/statistics";
 import Preview from "./preview";
-import { EditorPanel, PanelProperties, QuestionType, Templates } from "../../types";
+import { EditorPanel, PanelProperties, QuestionType } from "../../types";
 import { DEVICE_HEIGHT, DEVICE_WIDTH, EDITOR_SCREEN_PREVIEW_CONTAINER_HEIGHT, EDITOR_SCREEN_PREVIEW_CONTAINER_WIDTH } from "../../constants";
 import { useApi } from "../../hooks/use-api";
-import { Page, PagePropertyType } from "../../generated/client";
+import { Layout, Page, PagePropertyType } from "../../generated/client";
 import { errorAtom } from "../../atoms/error";
 import { useAtom, useSetAtom } from "jotai";
 import { v4 as uuid } from 'uuid';
@@ -143,60 +143,51 @@ const Editor = ({ setPanelProperties, surveyId }: Props) => {
     setShowAddPage(false);
   };
 
+  /**
+   * Returns template thumbnail based on template type
+   * 
+   * @param layout Layout
+   * @returns Layout thumbnail
+   */
+  const getLayoutThumbnail = (layout: Layout) => ({
+    "question": <QuestionLayoutImage/>,
+    "info": <InfoLayoutImage/>,
+    "image": <InfoImageLayoutImage/>,
+    "question + info": <QuestionParagraphLayoutImage/>,
+    "image + info": <ImageParagraphLayoutImage/>,
+    "info + image": <ParagraphImageLayoutImage/>,
+    "statistics": <StatisticsLayoutImage/>
+  })[layout.name];
+
+  /**
+   * Renders page template preview
+   * 
+   * @returns Template preview
+  */
+  const createLayoutButtons = () => (
+    pageLayouts.map((layout) => (
+      <ImageButton
+        key={layout.id}
+        title={layout.name}
+        image={getLayoutThumbnail(layout)}
+        onClick={() => createPage(layout.name)}
+        selected={false}
+      />
+    )
+  ));
+
   const renderAddNewPageDialog = () => (
     <GenericDialog
       maxWidth="lg"
       open={ showAddPage }
       onCancel={ () => setShowAddPage(false) }
       onClose={ () => setShowAddPage(false) }
-      cancelButtonText="Peruuta"
-      title="Lisää uusi sivu"
+      cancelButtonText={ strings.generic.cancel }
+      title={ strings.editSurveysScreen.addNewPage }
     >
       <Typography>{ strings.layouts.title }</Typography>
       <Stack direction="row" gap={2} pt={3}>
-        <ImageButton
-          title={ strings.layouts.question }
-          image={ <QuestionLayoutImage/> }
-          onClick={ () => createPage(Templates.QUESTION) }
-          selected={ false }
-        />
-        <ImageButton
-          title={ strings.layouts.info }
-          image={ <InfoLayoutImage/> }
-          onClick={ () => createPage(Templates.INFO) }
-          selected={ false }
-        />
-        <ImageButton
-          title={ strings.layouts.infoImage }
-          image={ <InfoImageLayoutImage/> }
-          onClick={ () => {} }
-          selected={ false }
-        />
-        <ImageButton
-          title={ strings.layouts.questionInfo }
-          image={ <QuestionParagraphLayoutImage/> }
-          onClick={ () => {} }
-          selected={ false }
-        />
-        <ImageButton
-          title={ strings.layouts.imageParagraph }
-          image={ <ImageParagraphLayoutImage/> }
-          onClick={ () => {} }
-          selected={ false }
-        />
-        <ImageButton
-          title={ strings.layouts.paragraphImage }
-          image={ <ParagraphImageLayoutImage/> }
-          onClick={ () => {} }
-          selected={ false }
-        />
-        <ImageButton
-          disabled
-          title={ strings.layouts.statistics }
-          image={ <StatisticsLayoutImage/> }
-          onClick={ () => {} }
-          selected={ false }
-        />
+        { createLayoutButtons() }
       </Stack>
     </GenericDialog>
   );

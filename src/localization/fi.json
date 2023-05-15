@@ -4,7 +4,8 @@
     "logout": "Kirjaudu ulos",
     "notImplemented": "Ei vielä toteutettu",
     "back": "Takaisin",
-    "confirm": "Vahvistaa"
+    "confirm": "Vahvistaa",
+    "cancel": "Peruuta"
   },
   "navigation": {
     "overview": "Yhteenveto",

@@ -4,7 +4,8 @@
     "logout": "Logout",
     "notImplemented": "Not yet implemented",
     "back": "Back",
-    "confirm": "Confirm"
+    "confirm": "Confirm",
+    "cancel": "Cancel"
   },
   "navigation": {
     "overview": "Overview",

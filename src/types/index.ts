@@ -83,6 +83,7 @@ export enum Templates {
   QUESTION = "question",
   INFO = "info",
   IMAGE = "image",
+  QUESTION_INFO = "question + info",
   IMAGE_INFO = "image + info",
   INFO_IMAGE = "info + image",
   STATISTICS = "statistics"

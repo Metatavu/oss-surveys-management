@@ -15,6 +15,7 @@ export interface Localized extends LocalizedStringsMethods {
     notImplemented: string;
     back: string;
     confirm: string;
+    cancel: string;
   };
 
   /**

@@ -10,7 +10,7 @@ import {
 import { Layout, Page, PagePropertyType } from "../../generated/client";
 import { useApi } from "../../hooks/use-api";
 import strings from "../../localization/strings";
-import questionRendererFactory from "../../question-renderer/question-renderer";
+import questionRendererFactory from "../../question-renderer/question-renderer-factory";
 import theme from "../../styles/theme";
 import { EditorPanel, PanelProperties, QuestionType } from "../../types";
 import GenericDialog from "../generic/generic-dialog";

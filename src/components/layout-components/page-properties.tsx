@@ -1,7 +1,7 @@
 import { Box, Button, IconButton, InputAdornment, MenuItem, TextField, Typography } from "@mui/material";
 import strings from "../../localization/strings";
 import { Close, Edit } from "@mui/icons-material";
-import { QuestionType, Templates } from "../../types";
+import { LayoutType, QuestionType } from "../../types";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import { ChangeEvent, useEffect, useState } from "react";
 import { useAtom, useSetAtom } from "jotai";
@@ -231,7 +231,7 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
           }}
         />
       </Box>
-      {!!pageLayouts.find(layout => layout.id === surveyPages[pageNumber - 1].layoutId && layout.name === Templates.QUESTION) && (
+      {!!pageLayouts.find(layout => layout.id === surveyPages[pageNumber - 1].layoutId) && (
         <Box p={2}>
           <Typography variant="h6">{strings.editSurveysScreen.editPagesPanel.questionType}</Typography>
           {/* TODO: Update with Debounce when backend ready */}
@@ -251,7 +251,7 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
           </TextField>
         </Box>
       )}
-      {!!pageLayouts.find(layout => layout.id === surveyPages[pageNumber - 1].layoutId && layout.name === Templates.QUESTION) &&
+      {!!pageLayouts.find(layout => layout.id === surveyPages[pageNumber - 1].layoutId && layout.name === LayoutType.QUESTION) &&
         !!options.length && (
           <Box p={2}>
             <Typography variant="h6">{strings.editSurveysScreen.editPagesPanel.answerOptions}</Typography>
@@ -267,7 +267,7 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
             ))}
           </Box>
         )}
-      {!!pageLayouts.find(layout => layout.id === surveyPages[pageNumber - 1].layoutId && layout.name === Templates.QUESTION) && (
+      {!!pageLayouts.find(layout => layout.id === surveyPages[pageNumber - 1].layoutId && layout.name === LayoutType.QUESTION) && (
         <Box p={2} sx={{ borderBottom: "1px solid #DADCDE" }}>
           <Button
             size="large"

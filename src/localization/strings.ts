@@ -112,7 +112,10 @@ export interface Localized extends LocalizedStringsMethods {
     editPagesPanel: {
       page: string;
       title: string;
-      question: string;
+      questionType: string;
+      answerOptions: string;
+      answerOptionPlaceholder: string;
+      deleteAnswerOptionTitle: string;
       addOption: string;
       confirmDeleteOption: string;
     }
@@ -122,6 +125,7 @@ export interface Localized extends LocalizedStringsMethods {
    * Translations related to page layouts
    */
   layouts: {
+    addNewPage: string;
     title: string;
     question: string;
     info: string;

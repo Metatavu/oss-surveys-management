@@ -253,7 +253,7 @@ const Editor = ({ setPanelProperties, surveyId }: Props) => {
   return (
     <EditorContainer
       direction="row"
-      gap={4}
+      gap={2}
       onClick={ () => {
         setPanelProperties({panelType: EditorPanel.SURVEY})
         setSelectedPage(undefined);

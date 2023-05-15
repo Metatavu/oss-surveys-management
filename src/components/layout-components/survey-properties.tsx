@@ -115,7 +115,7 @@ const SurveyProperties = ({ survey, onSaveSurvey }: Props) => {
   return (
     <>
       <Box p={2} sx={{ borderBottom: "1px solid #DADCDE" }}>
-        <Typography>{strings.editSurveysScreen.editSurveyPanel.name}</Typography>
+        <Typography variant="h6">{strings.editSurveysScreen.editSurveyPanel.name}</Typography>
         {
           renderWithDebounceTextField(
             "title",
@@ -127,7 +127,7 @@ const SurveyProperties = ({ survey, onSaveSurvey }: Props) => {
         }
       </Box>
       <Box p={2} sx={{ borderBottom: "1px solid #DADCDE" }}>
-        <Typography>{ strings.editSurveysScreen.editSurveyPanel.description }</Typography>
+        <Typography variant="h6">{ strings.editSurveysScreen.editSurveyPanel.description }</Typography>
         {
           renderWithDebounceTextField(
             "description",
@@ -139,7 +139,7 @@ const SurveyProperties = ({ survey, onSaveSurvey }: Props) => {
         }
       </Box>
       <Box p={2} sx={{ borderBottom: "1px solid #DADCDE" }}>
-        <Typography>{ strings.editSurveysScreen.editSurveyPanel.returnTimeout }</Typography>
+        <Typography variant="h6">{ strings.editSurveysScreen.editSurveyPanel.returnTimeout }</Typography>
         {
           renderWithDebounceNumberField(
             "timeout",

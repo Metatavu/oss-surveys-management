@@ -61,7 +61,7 @@ const PreviewToolbar = ({ surveyName }: Props) => {
         >
           <Typography color={theme.palette.common.white}>{ strings.editSurveysScreen.editing }</Typography>
           <Typography>/</Typography>
-          <Typography variant="h6" color={ theme.palette.primary.main }>{ surveyName }</Typography>
+          <Typography variant="h5" color={ theme.palette.primary.main }>{ surveyName }</Typography>
         </Stack>
         <Box
           display="flex"

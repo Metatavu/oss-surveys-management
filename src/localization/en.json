@@ -82,12 +82,16 @@
     "editPagesPanel": {
       "page": "Page {0}",
       "title": "Title",
-      "question": "Question",
+      "questionType": "Question type",
+      "answerOptions": "Answer options",
+      "answerOptionPlaceholder": "Answer option",
+      "deleteAnswerOptionTitle": "Delete answer option",
       "addOption": "Add an option",
       "confirmDeleteOption": "Are you sure you want to delete this option?"
     }
   },
   "layouts": {
+    "addNewPage": "Add new page",
     "title": "Select page layout",
     "question": "Question",
     "info": "Info",

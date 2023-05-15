@@ -26,7 +26,15 @@ class SingleSelectTextQuestionRenderer extends AbstractQuestionRenderer {
         `<div>
           <button
             id="${ uuid() }"
-            style="width: 100%; height: 100px; font-size: 5rem;"
+            style="
+              width: 100%;
+              height: 250px;
+              font-size: 6rem;
+              font-family: 'SBonusText-Bold';
+              color: #fff;
+              background: transparent;
+              border: 20px solid #fff;
+            "
           >
             ${ option }
           </button>

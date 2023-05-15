@@ -63,8 +63,6 @@ const WithDebounce: FC<Props> = ({
     }
   }, [value]);
 
-  console.log("in debounce", optionKey);
-
   /**
    * Event handler for text field value change
    *

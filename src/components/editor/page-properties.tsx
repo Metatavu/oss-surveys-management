@@ -175,7 +175,7 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
   /**
    * Removes the selected option from the list
    */
-  const deleteOption = async () => {
+  const deleteOption = () => {
     if (!optionToDelete) return;
 
     const updatedList = options.filter((option) => option !== optionToDelete);

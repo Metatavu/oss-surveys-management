@@ -14,7 +14,7 @@ export interface Question {
   id: string;
   type: QuestionType;
   options: QuestionOption[];
-};
+}
 
 /**
  * Interface for Panel properties
@@ -22,7 +22,7 @@ export interface Question {
 export interface PanelProperties {
   panelType: EditorPanel;
   pageNumber?: number;
-};
+}
 
 /**
  * Question option type
@@ -38,7 +38,7 @@ export type QuestionOption = {
 export enum QuestionType {
   SINGLE = "SINGLE",
   MULTIPLE = "MULTIPLE"
-};
+}
 
 /**
  * Interface to describe iframe click event
@@ -47,16 +47,16 @@ export interface IframeClickEvent extends Event {
   detail: {
     eventType: "iframeclick";
     pageNumber: number;
-  }
-};
+  };
+}
 
 /**
  * Enum for surveys screen
  */
 export enum SurveyScreens {
   ACTIVE = "active",
-  NOT_IMPLEMENTED = "not_implemented",
-};
+  NOT_IMPLEMENTED = "not_implemented"
+}
 
 /**
  * Enum for navigation links
@@ -66,7 +66,7 @@ export enum NavigationLinks {
   SURVEYS = "surveys",
   SCREENS = "screens",
   PREVIEW = "preview"
-};
+}
 
 /**
  * Enum for editor panel properties
@@ -74,7 +74,7 @@ export enum NavigationLinks {
 export enum EditorPanel {
   SURVEY = "SURVEY",
   PAGE = "PAGE"
-};
+}
 
 /**
  * Enum for template types
@@ -87,4 +87,4 @@ export enum LayoutType {
   IMAGE_INFO = "image + info",
   INFO_IMAGE = "info + image",
   STATISTICS = "statistics"
-};
+}

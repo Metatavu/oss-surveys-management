@@ -5,7 +5,7 @@ import ErrorHandler from "./components/contexts/error-handler";
 import BasicLayout from "./components/layouts/basic-layout";
 import AuthenticationProvider from "./components/providers/authentication-provider";
 import OverviewScreen from "./components/screens/overview-screen";
-import ScreensScreen from "./components/screens/screens-screen";
+import ScreensScreen from "./components/screens/devices-screen";
 import SurveysScreen from "./components/screens/surveys-screen";
 import theme from "./styles/theme";
 import EditSurveysScreen from "./components/screens/edit-surveys-screen";
@@ -24,7 +24,7 @@ const router = createBrowserRouter([
         element: <SurveysScreen />
       },
       {
-        path:"/surveys/edit/:id",
+        path: "/surveys/edit/:id",
         element: <EditSurveysScreen />
       },
       {
@@ -36,7 +36,7 @@ const router = createBrowserRouter([
         element: <Navigate to="/overview" />
       },
       {
-        path:"/preview/:id",
+        path: "/preview/:id",
         element: <PreviewScreen />
       }
     ]
@@ -50,9 +50,9 @@ const App = () => (
   <div className="App">
     <ErrorHandler>
       <AuthenticationProvider>
-        <ThemeProvider theme={ responsiveFontSizes(theme) }>
-          <CssBaseline/>
-            <RouterProvider router={router}/>
+        <ThemeProvider theme={responsiveFontSizes(theme)}>
+          <CssBaseline />
+          <RouterProvider router={router} />
         </ThemeProvider>
       </AuthenticationProvider>
     </ErrorHandler>

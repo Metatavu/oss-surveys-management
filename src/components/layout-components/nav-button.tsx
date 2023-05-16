@@ -38,11 +38,9 @@ const NavigationButton = styled(Button, {
 const NavButton: FC<Props> = ({ title, selected, to }) => {
   return (
     <Link to={to}>
-      <NavigationButton className={selected ? "selected" : ""}>
-        {title}
-      </NavigationButton>
+      <NavigationButton className={selected ? "selected" : ""}>{title}</NavigationButton>
     </Link>
-  )
-}
+  );
+};
 
 export default NavButton;

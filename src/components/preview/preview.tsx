@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect } from "react";
 import wrapTemplate from "../pages/templates/template-wrapper";
 import { parseHtmlToDom } from "../../utils/PreviewUtils";
 import { IframeClickEvent } from "../../types";
@@ -40,8 +40,9 @@ const Preview = ({
     // This can direct us to the appropriate event listener based upon the type of the Event e.g. IframeClickEvent, IframeButtonClickEvent etc.
     window.addEventListener(`message-${pageNumber}`, handlePostMessageEventListener);
 
-    return () => window.removeEventListener(`message-${pageNumber}`, handlePostMessageEventListener);
-  },[]);
+    return () =>
+      window.removeEventListener(`message-${pageNumber}`, handlePostMessageEventListener);
+  }, []);
 
   /**
    * Handles post messsage event from iframe
@@ -49,7 +50,7 @@ const Preview = ({
    * @param event message event
    */
   const handlePostMessageEventListener = (event: any) => {
-    if (!onPanelPropertiesChange || !setSelectedPage) return;
+    if (!(onPanelPropertiesChange && setSelectedPage)) return;
 
     const typedEvent = event as IframeClickEvent;
 
@@ -60,14 +61,14 @@ const Preview = ({
   return (
     <div style={{ scale: `${scale}` }}>
       <iframe
-        srcDoc={ wrapTemplate(parseHtmlToDom(htmlString).outerHTML, pageNumber) }
-        width={ width }
-        height={ height }
+        srcDoc={wrapTemplate(parseHtmlToDom(htmlString).outerHTML, pageNumber)}
+        width={width}
+        height={height}
         seamless
         style={{ border: selectedPage === pageNumber ? "20px solid #46dc78" : "none" }}
       />
     </div>
-  )
+  );
 };
 
 export default Preview;

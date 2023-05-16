@@ -42,7 +42,7 @@ const SurveysScreen = () => {
         survey: {
           title: strings.surveysScreen.newSurvey,
           status: SurveyStatus.Draft,
-          timeout: 60,
+          timeout: 60
         }
       });
 
@@ -50,15 +50,11 @@ const SurveysScreen = () => {
     } catch (error: any) {
       setError(`${strings.errorHandling.surveysScreen.createSurveyError}, ${error}`);
     }
-  }
+  };
 
   return (
     <FilterContainer>
-      <Stack
-        direction="row"
-        gap={2}
-        alignItems="center"
-      >
+      <Stack direction="row" gap={2} alignItems="center">
         <TextField
           disabled
           sx={{ flex: 2 }}
@@ -66,16 +62,14 @@ const SurveysScreen = () => {
           size="small"
           placeholder={strings.surveysScreen.findByName}
           InputProps={{
-            endAdornment: <InputAdornment position="end"><Search /></InputAdornment>
+            endAdornment: (
+              <InputAdornment position="end">
+                <Search />
+              </InputAdornment>
+            )
           }}
         />
-        <TextField
-          sx={{ flex: 1 }}
-          label={strings.surveysScreen.show}
-          size="small"
-          select
-          disabled
-        >
+        <TextField sx={{ flex: 1 }} label={strings.surveysScreen.show} size="small" select disabled>
           {/* //TODO: select options not yet implemented
           {currencies.map((option) => (
             <MenuItem key={option.value} value={option.value}>

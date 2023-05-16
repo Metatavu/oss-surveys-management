@@ -1,20 +1,25 @@
-import { useEffect, useState } from "react";
-import PreviewToolbar from "../layout-components/preview-toolbar";
-import { Page, Survey } from "../../generated/client";
-import { useParams } from "react-router-dom";
-import { useAtom, useSetAtom } from "jotai";
 import { errorAtom } from "../../atoms/error";
+import { layoutsAtom } from "../../atoms/layouts";
+import { pagesAtom } from "../../atoms/pages";
+import {
+  DEVICE_HEIGHT,
+  DEVICE_WIDTH,
+  EDITOR_SCREEN_PREVIEW_CONTAINER_HEIGHT,
+  EDITOR_SCREEN_PREVIEW_CONTAINER_WIDTH
+} from "../../constants";
+import { Page, Survey } from "../../generated/client";
 import { useApi } from "../../hooks/use-api";
 import strings from "../../localization/strings";
-import Preview from "../layout-components/preview";
-import { Box, CircularProgress, Stack, Toolbar, Typography, styled } from "@mui/material";
-import { DEVICE_HEIGHT, DEVICE_WIDTH, EDITOR_SCREEN_PREVIEW_CONTAINER_HEIGHT, EDITOR_SCREEN_PREVIEW_CONTAINER_WIDTH } from "../../constants";
-import { useWindowSize } from "usehooks-ts";
 import theme from "../../styles/theme";
-import { pagesAtom } from "../../atoms/pages";
-import { layoutsAtom } from "../../atoms/layouts";
 import { parseHtmlToDom } from "../../utils/PreviewUtils";
 import wrapTemplate from "../pages/templates/template-wrapper";
+import Preview from "../preview/preview";
+import PreviewToolbar from "../preview/preview-toolbar";
+import { Box, CircularProgress, Stack, Toolbar, Typography, styled } from "@mui/material";
+import { useAtom, useSetAtom } from "jotai";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { useWindowSize } from "usehooks-ts";
 
 /**
  * Styled preview root component
@@ -63,12 +68,12 @@ const PreviewScreen = () => {
   const { surveysApi, layoutsApi, pagesApi } = useApi();
   const setError = useSetAtom(errorAtom);
   const { height } = useWindowSize();
-  const [ survey, setSurvey ] = useState<Survey>();
-  const [ surveyPages, setSurveyPages ] = useAtom(pagesAtom);
-  const [ pageLayouts, setPageLayouts ] = useAtom(layoutsAtom);
+  const [survey, setSurvey] = useState<Survey>();
+  const [surveyPages, setSurveyPages] = useAtom(pagesAtom);
+  const [pageLayouts, setPageLayouts] = useAtom(layoutsAtom);
   // TODO: update current page when changing pages in full screen preview.
-  const [ currentPage ] = useState(1);
-  const [ isLoading, setIsLoading ] = useState(false);
+  const [currentPage] = useState(1);
+  const [isLoading, setIsLoading] = useState(false);
 
   /**
    * Get Survey from route id
@@ -84,7 +89,7 @@ const PreviewScreen = () => {
    */
   const getSurveyPages = async () => {
     if (!id) return null;
-    const surveyPages = await pagesApi.listSurveyPages({surveyId: id});
+    const surveyPages = await pagesApi.listSurveyPages({ surveyId: id });
     setSurveyPages(surveyPages);
   };
 
@@ -100,42 +105,42 @@ const PreviewScreen = () => {
    * Make all requests to generate preview
    */
   const getPreview = async () => {
-    await getSurvey()
-      .catch(error =>
-        setError(`${ strings.errorHandling.previewScreen.surveyNotFound }, ${ error }`));
-    await getSurveyPages()
-      .catch(error =>
-        setError(`${ strings.errorHandling.previewScreen.surveyNotFound }, ${ error }`));
-    await getPageLayouts()
-      .catch(error =>
-        setError(`${ strings.errorHandling.previewScreen.pageLayoutsNotFound }, ${ error }`));
+    await getSurvey().catch((error) =>
+      setError(`${strings.errorHandling.previewScreen.surveyNotFound}, ${error}`)
+    );
+    await getSurveyPages().catch((error) =>
+      setError(`${strings.errorHandling.previewScreen.surveyNotFound}, ${error}`)
+    );
+    await getPageLayouts().catch((error) =>
+      setError(`${strings.errorHandling.previewScreen.pageLayoutsNotFound}, ${error}`)
+    );
   };
 
   useEffect(() => {
     setIsLoading(true);
-    getPreview()
-      .catch(error =>
-        setError(`${ strings.errorHandling.previewScreen.previewNotFound }, ${ error }`));
+    getPreview().catch((error) =>
+      setError(`${strings.errorHandling.previewScreen.previewNotFound}, ${error}`)
+    );
     setIsLoading(false);
-  },[id]);
+  }, [id]);
 
   if (!survey || isLoading) {
     return (
       <Stack flex={1} justifyContent="center" alignItems="center">
         <CircularProgress />
       </Stack>
-    )
+    );
   }
 
   if (!surveyPages.length) {
     return (
       <Root>
-        <PreviewToolbar surveyName={ survey.title } />
+        <PreviewToolbar surveyName={survey.title} />
         <PreviewArea style={{ color: theme.palette.error.main }}>
           {strings.errorHandling.previewScreen.surveyPagesNotFound}
         </PreviewArea>
       </Root>
-    )
+    );
   }
 
   /**
@@ -145,36 +150,38 @@ const PreviewScreen = () => {
    * @returns layout html
    */
   const getPageLayout = (page: Page) => {
-    return pageLayouts.find(layout => layout.id === page.layoutId)!.html;
+    return pageLayouts.find((layout) => layout.id === page.layoutId)!.html;
   };
 
-  const htmlString = getPageLayout(surveyPages[currentPage-1]);
+  const htmlString = getPageLayout(surveyPages[currentPage - 1]);
 
   /**
    * Render page count method
    */
   const renderPageCount = () => (
     <Toolbar sx={{ justifyContent: "center" }}>
-      <Typography color={ theme.palette.common.white }>{currentPage} / {surveyPages.length}</Typography>
+      <Typography color={theme.palette.common.white}>
+        {currentPage} / {surveyPages.length}
+      </Typography>
     </Toolbar>
   );
 
   return (
     <Root>
-      <PreviewToolbar surveyName={ survey.title } />
+      <PreviewToolbar surveyName={survey.title} />
       <PreviewArea>
         <PreviewContainer>
           <Preview
-            htmlString={ wrapTemplate(parseHtmlToDom(htmlString).outerHTML) }
-            width={ DEVICE_WIDTH }
-            height={ DEVICE_HEIGHT }
-            scale={ (height / 1.5) / DEVICE_HEIGHT }
+            htmlString={wrapTemplate(parseHtmlToDom(htmlString).outerHTML)}
+            width={DEVICE_WIDTH}
+            height={DEVICE_HEIGHT}
+            scale={height / 1.5 / DEVICE_HEIGHT}
           />
         </PreviewContainer>
       </PreviewArea>
-      { renderPageCount() }
+      {renderPageCount()}
     </Root>
-  )
+  );
 };
 
 export default PreviewScreen;

@@ -18,7 +18,7 @@ const Root = styled(Button, {
   height: 497,
   "&:hover": {
     borderStyle: "solid",
-    color: theme.palette.primary.dark,
+    color: theme.palette.primary.dark
   }
 }));
 
@@ -55,15 +55,15 @@ interface Props {
  */
 const NewPageButton = ({ onClick, disabled }: Props) => {
   return (
-    <Root onClick={ onClick } disabled={ disabled }>
+    <Root onClick={onClick} disabled={disabled}>
       <Stack gap={2}>
         <IconContainer>
-          <Add color="primary"/>
+          <Add color="primary" />
         </IconContainer>
-        <Typography color="primary">{ strings.editSurveysScreen.addNewPage }</Typography>
+        <Typography color="primary">{strings.editSurveysScreen.addNewPage}</Typography>
       </Stack>
     </Root>
-  )
-}
+  );
+};
 
 export default NewPageButton;

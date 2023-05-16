@@ -1,13 +1,13 @@
+import logo from "../../assets/oss.svg";
 import { authAtom, userProfileAtom } from "../../atoms/auth";
-import ExitToAppOutlinedIcon from '@mui/icons-material/ExitToAppOutlined';
+import strings from "../../localization/strings";
+import { NavigationLinks } from "../../types";
+import { matchNavigation } from "../../utils/NavigationUtils";
+import NavButton from "./nav-button";
+import ExitToAppOutlinedIcon from "@mui/icons-material/ExitToAppOutlined";
 import { AppBar, Avatar, IconButton, Stack, Toolbar, Typography } from "@mui/material";
 import { useAtom, useAtomValue } from "jotai";
-import logo from "../../assets/oss.svg";
-import NavButton from "./nav-button";
-import strings from "../../localization/strings";
 import { useLocation } from "react-router-dom";
-import { matchNavigation } from "../../utils/NavigationUtils";
-import { NavigationLinks } from "../../types";
 
 /**
  * Header component
@@ -25,8 +25,8 @@ const Header = () => {
       <IconButton onClick={auth?.logout}>
         <ExitToAppOutlinedIcon />
       </IconButton>
-    )
-  }
+    );
+  };
 
   /**
    * Renders user profile
@@ -39,14 +39,12 @@ const Header = () => {
           <Typography variant="subtitle1">
             {`${profile?.firstName} ${profile?.lastName}`}
           </Typography>
-          <Typography variant="subtitle2">
-            {profile?.email}
-          </Typography>
+          <Typography variant="subtitle2">{profile?.email}</Typography>
         </Stack>
         {renderLogOutButton()}
       </Stack>
-    )
-  }
+    );
+  };
 
   /**
    * Renders navigation buttons
@@ -72,18 +70,16 @@ const Header = () => {
           to={NavigationLinks.SCREENS}
         />
       </Stack>
-    )
-  }
+    );
+  };
 
   return (
     <AppBar position="sticky">
       <Stack gap={4} direction="row">
-        <img height={30} src={logo} alt={strings.navigation.logo}/>
+        <img height={30} src={logo} alt={strings.navigation.logo} />
         {renderNavigation()}
       </Stack>
-      <Toolbar>
-        {renderUser()}
-      </Toolbar>
+      <Toolbar>{renderUser()}</Toolbar>
     </AppBar>
   );
 };

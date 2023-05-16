@@ -16,14 +16,13 @@ const BasicLayout = () => {
    */
   return (
     <>
-    {/* TODO: Is there a better way to do this? */}
-      { !isPreviewPath && <Header /> }
+      {/* TODO: Is there a better way to do this? */}
+      {!isPreviewPath && <Header />}
       <Stack flex={1}>
-        <Outlet/>
+        <Outlet />
       </Stack>
     </>
-  )
-
+  );
 };
 
 export default BasicLayout;

@@ -8,7 +8,7 @@ interface Props {
   children: React.ReactNode;
   value: SurveyScreens;
   index: SurveyScreens;
-};
+}
 
 /**
  * Tab Panel
@@ -16,18 +16,10 @@ interface Props {
  * @param props TabPanelProps
  * @returns Tab panel
  */
-const TabPanel: React.FC<Props> = ({children, value, index}) => {
-
+const TabPanel: React.FC<Props> = ({ children, value, index }) => {
   return (
-    <div
-      role="tabpanel"
-      hidden={value !== index}
-    >
-      {value === index && (
-        <Box sx={{ p: 3 }}>
-          { children }
-        </Box>
-      )}
+    <div role="tabpanel" hidden={value !== index}>
+      {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
     </div>
   );
 };

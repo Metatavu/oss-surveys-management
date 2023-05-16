@@ -5,6 +5,6 @@ const titleAndTextTemplate = `
       <p style="font-family: SBonusDisplay-Regular; font-size: 8rem; line-height: 150%;">Infoteksti</p>
     </div>
     <button style="width: 100%; background-color: transparent; border: 20px solid #ffffff; color: #ffffff; height: 250px; font-family: SBonusText-Bold; font-size: 6rem;">Seuraava</button>
-  </div>`
+  </div>`;
 
 export default titleAndTextTemplate;

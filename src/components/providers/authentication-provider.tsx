@@ -6,7 +6,7 @@ import { useCallback, useEffect } from "react";
 
 interface Props {
   children: JSX.Element;
-};
+}
 
 const keycloak = new Keycloak(config.auth);
 

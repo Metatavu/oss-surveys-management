@@ -4,13 +4,18 @@ import theme from "../../styles/theme";
 import strings from "../../localization/strings";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { useNavigate } from "react-router-dom";
-import { BarChartOutlined, MoreHoriz, PlayArrowOutlined, PublishOutlined } from "@mui/icons-material";
+import {
+  BarChartOutlined,
+  MoreHoriz,
+  PlayArrowOutlined,
+  PublishOutlined
+} from "@mui/icons-material";
 
 /**
  * Styled toolbar container component
  */
 const ToolbarContainer = styled(Paper, {
-  label: "toolbar-container",
+  label: "toolbar-container"
 })(() => ({
   position: "relative",
   zIndex: 1100,
@@ -57,7 +62,9 @@ const Toolbar = ({ surveyName, surveyId }: Props) => {
     <Stack spacing={1} direction="row" alignItems="center" flex={1} justifyContent="center">
       <Typography>{strings.editSurveysScreen.editing}</Typography>
       <Typography>/</Typography>
-      <Typography variant="h5" color={theme.palette.primary.main}>{surveyName}</Typography>
+      <Typography variant="h5" color={theme.palette.primary.main}>
+        {surveyName}
+      </Typography>
     </Stack>
   );
 
@@ -67,7 +74,7 @@ const Toolbar = ({ surveyName, surveyId }: Props) => {
         disabled
         color="primary"
         title={strings.generic.notImplemented}
-        startIcon={<PublishOutlined/>}
+        startIcon={<PublishOutlined />}
       >
         {strings.editSurveysScreen.publish}
       </Button>
@@ -75,15 +82,15 @@ const Toolbar = ({ surveyName, surveyId }: Props) => {
         disabled
         color="primary"
         title={strings.generic.notImplemented}
-        startIcon={<BarChartOutlined/>}
+        startIcon={<BarChartOutlined />}
       >
         {strings.editSurveysScreen.statistics}
       </Button>
       <Button
         color="primary"
         title={strings.generic.notImplemented}
-        startIcon={<PlayArrowOutlined/>}
-        onClick={ () => navigate(`/preview/${surveyId}`) }
+        startIcon={<PlayArrowOutlined />}
+        onClick={() => navigate(`/preview/${surveyId}`)}
       >
         {strings.editSurveysScreen.preview}
       </Button>
@@ -93,7 +100,7 @@ const Toolbar = ({ surveyName, surveyId }: Props) => {
   const renderMenu = () => (
     <>
       <IconButton>
-        <MoreHoriz/>
+        <MoreHoriz />
       </IconButton>
     </>
   );
@@ -101,11 +108,8 @@ const Toolbar = ({ surveyName, surveyId }: Props) => {
   return (
     <ToolbarContainer elevation={0}>
       <Box flex={1}>
-        <Button
-          startIcon={ <ArrowBackIcon /> }
-          onClick={ () => navigate(-1) }
-        >
-          { strings.generic.back }
+        <Button startIcon={<ArrowBackIcon />} onClick={() => navigate(-1)}>
+          {strings.generic.back}
         </Button>
       </Box>
       {renderTitle()}
@@ -114,7 +118,7 @@ const Toolbar = ({ surveyName, surveyId }: Props) => {
         {renderMenu()}
       </ControlsContainer>
     </ToolbarContainer>
-  )
+  );
 };
 
 export default Toolbar;

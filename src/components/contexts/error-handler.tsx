@@ -1,11 +1,11 @@
-import { ReactNode, useMemo } from "react";
-import { DialogContent, Divider, Typography } from "@mui/material";
+import { errorAtom } from "../../atoms/error";
 import strings from "../../localization/strings";
 import GenericDialog from "../generic/generic-dialog";
+import { DialogContent, Divider, Typography } from "@mui/material";
 import * as Sentry from "@sentry/react";
-import moment from "moment";
-import { errorAtom } from "../../atoms/error";
 import { useAtom } from "jotai";
+import moment from "moment";
+import { ReactNode, useMemo } from "react";
 
 /**
  * Componenet properties

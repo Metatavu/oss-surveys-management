@@ -1,14 +1,14 @@
-import { ReactNode } from "react";
-import {
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  Button,
-  IconButton,
-  Box
-} from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
+import {
+  Box,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  IconButton
+} from "@mui/material";
+import { ReactNode } from "react";
 
 /**
  * Component properties
@@ -19,7 +19,7 @@ interface Props {
   cancelButtonText?: string;
   onClose: () => void;
   onCancel: () => void;
-  onConfirm?: () => void | Promise<void>;
+  onConfirm: () => void | Promise<void> | unknown;
   open: boolean;
   error?: boolean;
   fullScreen?: boolean;

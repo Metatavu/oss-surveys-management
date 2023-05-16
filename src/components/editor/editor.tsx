@@ -1,6 +1,7 @@
 import { errorAtom } from "../../atoms/error";
 import { layoutsAtom } from "../../atoms/layouts";
 import { pagesAtom } from "../../atoms/pages";
+import componentRendererFactory from "../../component-renderer/component-renderer-factory";
 import {
   DEVICE_HEIGHT,
   DEVICE_WIDTH,
@@ -10,7 +11,6 @@ import {
 import { Layout, Page, PagePropertyType } from "../../generated/client";
 import { useApi } from "../../hooks/use-api";
 import strings from "../../localization/strings";
-import questionRendererFactory from "../../question-renderer/question-renderer-factory";
 import theme from "../../styles/theme";
 import { EditorPanel, PanelProperties, QuestionType } from "../../types";
 import GenericDialog from "../generic/generic-dialog";
@@ -215,14 +215,17 @@ const Editor = ({ setPanelProperties, surveyId }: Props) => {
    * @returns PreviewContainer and Preview
    */
   const renderPagePreview = (page: Page) => {
-    const { properties } = page;
+    const { properties, title } = page;
     let htmlData = getPageLayout(page);
 
     const optionsProperty = properties?.find(
       (property) => property.type === PagePropertyType.Options
     );
+
+    const textProperty = properties?.find((property) => property.type === PagePropertyType.Text);
+
     if (optionsProperty) {
-      const questionRenderer = questionRendererFactory.getRenderer(QuestionType.SINGLE);
+      const questionRenderer = componentRendererFactory.getRenderer(QuestionType.SINGLE);
 
       const questionHtml = questionRenderer.render(JSON.parse(optionsProperty.value));
       const questionElement = new DOMParser().parseFromString(questionHtml, "text/html");
@@ -236,6 +239,30 @@ const Editor = ({ setPanelProperties, surveyId }: Props) => {
         questionPlaceholder?.replaceWith(questionElement.body);
         htmlData = templateDom.body.innerHTML;
       }
+    }
+
+    if (title) {
+      const titleRenderer = componentRendererFactory.getTitleRenderer();
+      const titleHtml = titleRenderer.render(title);
+      const titleElement = new DOMParser().parseFromString(titleHtml, "text/html");
+
+      const templateDom = new DOMParser().parseFromString(htmlData, "text/html");
+      const titlePlaceholder = templateDom.querySelector("h1");
+
+      titlePlaceholder?.replaceWith(titleElement.body);
+      htmlData = templateDom.body.innerHTML;
+    }
+
+    if (textProperty) {
+      const textRenderer = componentRendererFactory.getTextRenderer();
+      const textHtml = textRenderer.render(textProperty.value);
+      const textElement = new DOMParser().parseFromString(textHtml, "text/html");
+
+      const templateDom = new DOMParser().parseFromString(htmlData, "text/html");
+      const textPlaceholder = templateDom.querySelector("p");
+
+      textPlaceholder?.replaceWith(textElement.body);
+      htmlData = templateDom.body.innerHTML;
     }
 
     return (

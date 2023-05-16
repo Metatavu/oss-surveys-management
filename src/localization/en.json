@@ -87,7 +87,8 @@
       "answerOptionPlaceholder": "Answer option",
       "deleteAnswerOptionTitle": "Delete answer option",
       "addOption": "Add an option",
-      "confirmDeleteOption": "Are you sure you want to delete this option?"
+      "confirmDeleteOption": "Are you sure you want to delete this option?",
+      "infoText": "Paragraph"
     }
   },
   "layouts": {

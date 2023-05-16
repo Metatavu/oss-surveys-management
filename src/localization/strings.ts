@@ -118,6 +118,7 @@ export interface Localized extends LocalizedStringsMethods {
       deleteAnswerOptionTitle: string;
       addOption: string;
       confirmDeleteOption: string;
+      infoText: string;
     };
   };
 

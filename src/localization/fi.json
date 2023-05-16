@@ -87,7 +87,8 @@
       "answerOptionPlaceholder": "Vaihtoehto",
       "deleteAnswerOptionTitle": "Poista vastausvaihtoehto",
       "addOption": "Lisää vaihtoehto",
-      "confirmDeleteOption": "Haluatko varmasti poistaa tämän vaihtoehdon?"
+      "confirmDeleteOption": "Haluatko varmasti poistaa tämän vaihtoehdon?",
+      "infoText": "Leipäteksti"
     }
   },
   "layouts": {

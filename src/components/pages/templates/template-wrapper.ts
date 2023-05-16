@@ -4,7 +4,7 @@ import sanitizeHtml, { IOptions } from "sanitize-html";
  * Options for html sanitizer
  */
 const sanitizeOptions: IOptions = {
-  allowedTags: sanitizeHtml.defaults.allowedTags.concat(["button"]),
+  allowedTags: sanitizeHtml.defaults.allowedTags.concat(["button", "h1", "p"]),
   allowedAttributes: {
     "*": ["style", "id"]
   }

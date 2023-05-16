@@ -5,7 +5,7 @@ import ErrorHandler from "./components/contexts/error-handler";
 import BasicLayout from "./components/layouts/basic-layout";
 import AuthenticationProvider from "./components/providers/authentication-provider";
 import OverviewScreen from "./components/screens/overview-screen";
-import ScreensScreen from "./components/screens/screens-screen";
+import ScreensScreen from "./components/screens/devices-screen";
 import SurveysScreen from "./components/screens/surveys-screen";
 import theme from "./styles/theme";
 import EditSurveysScreen from "./components/screens/edit-surveys-screen";

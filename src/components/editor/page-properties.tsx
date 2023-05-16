@@ -170,9 +170,7 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
   /**
    * Adds new question option to question options
    */
-  const addNewQuestionOption = () => {
-    options.length ? setOptions([...options, ""]) : setOptions([""]);
-  };
+  const addNewQuestionOption = () => setOptions([...options, ""]);
 
   /**
    * Removes the selected option from the list

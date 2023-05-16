@@ -248,8 +248,8 @@ const Editor = ({ setPanelProperties, surveyId }: Props) => {
           onPanelPropertiesChange={() =>
             setPanelProperties({ panelType: EditorPanel.PAGE, pageNumber: page.orderNumber })
           }
-          setSelectedPage={() => setSelectedPage(page.orderNumber)}
-          selectedPage={selectedPage}
+          setSelectedPage={() => setSelectedPageNumber(page.orderNumber)}
+          selectedPage={selectedPageNumber}
           pageNumber={page.orderNumber}
         />
       </PreviewContainer>
@@ -262,7 +262,7 @@ const Editor = ({ setPanelProperties, surveyId }: Props) => {
       gap={2}
       onClick={() => {
         setPanelProperties({ panelType: EditorPanel.SURVEY });
-        setSelectedPage(undefined);
+        setSelectedPageNumber(undefined);
       }}
     >
       {!!surveyPages.length && surveyPages.map(renderPagePreview)}

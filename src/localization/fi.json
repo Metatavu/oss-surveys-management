@@ -4,7 +4,7 @@
     "logout": "Kirjaudu ulos",
     "notImplemented": "Ei vielä toteutettu",
     "back": "Takaisin",
-    "confirm": "Vahvistaa",
+    "confirm": "Vahvista",
     "cancel": "Peruuta"
   },
   "navigation": {
@@ -81,7 +81,7 @@
     },
     "editPagesPanel": {
       "page": "Sivu {0}",
-      "title": "Ostikko",
+      "title": "Otsikko",
       "questionType": "Kyselyn tyyppi",
       "answerOptions": "Vastausvaihtoehdot",
       "answerOptionPlaceholder": "Vaihtoehto",

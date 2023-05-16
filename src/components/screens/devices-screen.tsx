@@ -1,10 +1,10 @@
 import strings from "../../localization/strings";
 
 /**
- * Renders screens screen
+ * Renders devices screen
  */
-const ScreensScreen = () => {
+const DevicesScreen = () => {
   return <div>{strings.generic.notImplemented}</div>;
 };
 
-export default ScreensScreen;
+export default DevicesScreen;

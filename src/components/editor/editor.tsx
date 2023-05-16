@@ -83,7 +83,7 @@ const Editor = ({ setPanelProperties, surveyId }: Props) => {
   const setError = useSetAtom(errorAtom);
   const [surveyPages, setSurveyPages] = useAtom(pagesAtom);
   const [pageLayouts, setPageLayouts] = useAtom(layoutsAtom);
-  const [selectedPage, setSelectedPage] = useState<number>();
+  const [selectedPageNumber, setSelectedPageNumber] = useState<number>();
   const [isLoading, setIsLoading] = useState(false);
 
   const { pagesApi, layoutsApi } = useApi();

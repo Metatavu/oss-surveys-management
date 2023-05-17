@@ -120,6 +120,7 @@ export interface Localized extends LocalizedStringsMethods {
       confirmDeleteOption: string;
       infoText: string;
       buttonVisibility: string;
+      background: string;
     };
   };
 

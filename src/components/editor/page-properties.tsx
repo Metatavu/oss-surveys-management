@@ -1,9 +1,11 @@
 import { errorAtom } from "../../atoms/error";
 import { layoutsAtom } from "../../atoms/layouts";
 import { pagesAtom } from "../../atoms/pages";
-import { Page, PageProperty, PagePropertyType } from "../../generated/client";
+import { Page, PageProperty } from "../../generated/client";
+import { PagePropertyType } from "../../generated/client/models/PagePropertyType";
 import { useApi } from "../../hooks/use-api";
 import strings from "../../localization/strings";
+import theme from "../../styles/theme";
 import { LayoutType, QuestionType } from "../../types";
 import GenericDialog from "../generic/generic-dialog";
 import WithDebounce from "../generic/with-debounce";
@@ -37,6 +39,7 @@ interface Props {
  */
 const PageProperties = ({ pageNumber, surveyId }: Props) => {
   const [options, setOptions] = useState<string[]>([]);
+  const [backgrounds, _setBackgrounds] = useState<string[]>(["#fff", "#00AA46"]);
 
   const [surveyPages, setSurveyPages] = useAtom(pagesAtom);
   const [pageLayouts] = useAtom(layoutsAtom);
@@ -109,10 +112,10 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
     });
 
     const updatedProperties: PageProperty[] = surveyPages[pageNumber - 1].properties?.some(
-      (property) => property.type === PagePropertyType.Options
+      (property) => property.key === PagePropertyType.Options
     )
       ? surveyPages[pageNumber - 1].properties!.map((property) => {
-        return property.type === PagePropertyType.Options
+        return property.key === PagePropertyType.Options
           ? { ...property, value: JSON.stringify(updatedOptions) }
           : property;
       })
@@ -120,8 +123,7 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
         ...surveyPages[pageNumber - 1].properties!,
         {
           key: PagePropertyType.Options,
-          value: JSON.stringify(updatedOptions),
-          type: PagePropertyType.Options
+          value: JSON.stringify(updatedOptions)
         }
       ];
 
@@ -149,16 +151,60 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
   };
 
   /**
+   * Handle page background change
+   */
+  const handlePageBackgroundChange = async (
+    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const updatedProperties: PageProperty[] = surveyPages[pageNumber - 1].properties?.some(
+      (property) => property.key === PagePropertyType.ImageUrl
+    )
+      ? surveyPages[pageNumber - 1].properties!.map((property) => {
+        return property.key === PagePropertyType.ImageUrl
+          ? { ...property, value: event.target.value }
+          : property;
+      })
+      : [
+        ...surveyPages[pageNumber - 1].properties!,
+        {
+          key: PagePropertyType.ImageUrl,
+          value: event.target.value
+        }
+      ];
+
+    const updatesToPage: Page = {
+      ...surveyPages[pageNumber - 1],
+      properties: updatedProperties
+    };
+
+    try {
+      const updatedPage = await pagesApi.updateSurveyPage({
+        pageId: surveyPages[pageNumber - 1].id!,
+        surveyId: surveyId,
+        page: updatesToPage
+      });
+
+      const updatedSurveyPages = surveyPages.map((page) =>
+        page.id === updatedPage.id ? updatedPage : page
+      );
+
+      setSurveyPages(updatedSurveyPages);
+    } catch (error) {
+      setError(`${strings.errorHandling.editSurveysScreen.pageNotSaved}, ${error}`);
+    }
+  };
+
+  /**
    * Handle question text change
    */
   const handlePageTextChange = async (
     event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
-    const updatedProperties: PageProperty[] = surveyPages[pageNumber - 1].properties?.some(
-      (property) => property.type === PagePropertyType.Text
+    const updatedProperties: PageProperty[] = surveyPages[pageNumber - 1].properties?.some( //Check page numbersdfgh
+      (property) => property.key === PagePropertyType.Text
     )
       ? surveyPages[pageNumber - 1].properties!.map((property) => {
-        return property.type === PagePropertyType.Text
+        return property.key === PagePropertyType.Text
           ? { ...property, value: event.target.value }
           : property;
       })
@@ -166,8 +212,7 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
         ...surveyPages[pageNumber - 1].properties!,
         {
           key: PagePropertyType.Text,
-          value: event.target.value,
-          type: PagePropertyType.Text
+          value: event.target.value
         }
       ];
 
@@ -247,6 +292,8 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
   /* const handlePageButtonVisibilityChange = async ({ target: { checked } }: ChangeEvent<HTMLInputElement>) => {
     // TODO: Update on backend
     // const pageButtonVisibility = checked ? PageButtonVisibility.Block : PageButtonVisibility.None;
+
+    // Lacks baceknd support
   }; */
 
   /**
@@ -379,6 +426,51 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
   );
 
   /**
+   * Renders background options text field with debounce
+   * 
+   * @param name name
+   * @param onChange onChange
+   * @param value value
+   * @param placeholder placeholder
+   */
+  const renderBackgroundOptionsWithDebounceTextField = (
+    name: string,
+    onChange: (
+      event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    ) => Promise<void>,
+    value: string,
+    placeholder: string,
+  ) => (
+    <WithDebounce
+      name={name}
+      value={value}
+      placeholder={placeholder}
+      onChange={onChange}
+      component={props =>
+        <TextField
+          select
+          size="small"
+          variant="outlined"
+          InputProps={{
+            style: {
+              backgroundColor: "fff",
+              minWidth: 370,
+              color: theme.palette.primary.main
+            }
+          }}
+          {...props}
+        >
+          {backgrounds.map(background =>
+            <MenuItem key={background} value={background}>
+              {background}
+            </MenuItem>
+          )}
+        </TextField>
+      }
+    />
+  );
+
+  /**
    * Renders question type select
    */
   const renderQuestionTypeSelect = () =>
@@ -444,6 +536,25 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
   );
 
   /**
+   * Renders background image options
+   */
+  const renderBackgroundImageOptions = () => (
+    <Box p={2}>
+      <Typography variant="h6">
+        {strings.editSurveysScreen.editPagesPanel.background}
+      </Typography>
+      {
+        renderBackgroundOptionsWithDebounceTextField(
+          "background",
+          (e) => handlePageBackgroundChange(e),
+          backgrounds[0],
+          strings.editSurveysScreen.editSurveyPanel.name
+        )
+      }
+    </Box>
+  );
+
+  /**
    * Render delete option dialog
    */
   const renderDeleteOptionDialog = () => (
@@ -505,6 +616,8 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
       </Box>
 
       {renderPageButtonVisibilitySwitch()}
+
+      {renderBackgroundImageOptions()}
 
       {!!pageLayouts.find((layout) => layout.id === surveyPages[pageNumber - 1].layoutId && layout.name === LayoutType.QUESTION) && (
         renderQuestionTypeSelect()

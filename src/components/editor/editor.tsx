@@ -8,7 +8,8 @@ import {
   EDITOR_SCREEN_PREVIEW_CONTAINER_HEIGHT,
   EDITOR_SCREEN_PREVIEW_CONTAINER_WIDTH
 } from "../../constants";
-import { Layout, Page, PagePropertyType } from "../../generated/client";
+import { Layout, Page } from "../../generated/client";
+import { PagePropertyType } from "../../generated/client/models/PagePropertyType";
 import { useApi } from "../../hooks/use-api";
 import strings from "../../localization/strings";
 import theme from "../../styles/theme";
@@ -217,12 +218,14 @@ const Editor = ({ setPanelProperties, surveyId }: Props) => {
   const renderPagePreview = (page: Page) => {
     const { properties, title } = page;
     let htmlData = getPageLayout(page);
-
+    console.log("HTML", htmlData);
     const optionsProperty = properties?.find(
-      (property) => property.type === PagePropertyType.Options
+      (property) => property.key === PagePropertyType.Options
     );
+    console.log("PROPERTIES", properties)
+    //const backgroundProperty = properties?.find((property) => property.key === PagePropertyType.ImageUrl);
 
-    const textProperty = properties?.find((property) => property.type === PagePropertyType.Text);
+    const textProperty = properties?.find((property) => property.key === PagePropertyType.Text);
 
     if (optionsProperty) {
       const questionRenderer = componentRendererFactory.getRenderer(QuestionType.SINGLE);
@@ -265,6 +268,16 @@ const Editor = ({ setPanelProperties, surveyId }: Props) => {
       htmlData = templateDom.body.innerHTML;
     }
 
+    /*     if (backgroundProperty) {
+          console.log("BACKGROUND PROPERTY", backgroundProperty)
+    
+          const templateDom = new DOMParser().parseFromString(htmlData, "text/html");
+          templateDom!.querySelector("div:first-of-type").getElementsByTagName("div")[0].style.backgroundColor = backgroundProperty.value;
+    
+          htmlData = templateDom.body.innerHTML;
+          console.log("HTML DATA", htmlData)
+        }
+     */
     return (
       <PreviewContainer key={page.id}>
         <Preview

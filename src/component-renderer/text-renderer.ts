@@ -19,7 +19,7 @@ export class TextRenderer {
                     style="
                       line-height: 150%;
                       font-size: 8rem;
-                      //white-space: pre;
+                      white-space: pre;
                       font-family: SBonusDisplay-Black;
                     "
                   >

@@ -89,7 +89,8 @@
       "addOption": "Add an option",
       "confirmDeleteOption": "Are you sure you want to delete this option?",
       "infoText": "Paragraph",
-      "buttonVisibility": "Show button"
+      "buttonVisibility": "Show button",
+      "background": "Background"
     }
   },
   "layouts": {

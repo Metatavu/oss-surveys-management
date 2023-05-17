@@ -89,7 +89,8 @@
       "addOption": "Lisää vaihtoehto",
       "confirmDeleteOption": "Haluatko varmasti poistaa tämän vaihtoehdon?",
       "infoText": "Leipäteksti",
-      "buttonVisibility": "Näytä painike"
+      "buttonVisibility": "Näytä painike",
+      "background": "Tausta"
     }
   },
   "layouts": {

@@ -12,9 +12,12 @@ import AddCircleIcon from "@mui/icons-material/AddCircle";
 import {
   Box,
   Button,
+  FormControlLabel,
+  FormGroup,
   IconButton,
   InputAdornment,
   MenuItem,
+  Switch,
   TextField,
   Typography
 } from "@mui/material";
@@ -237,6 +240,16 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
   };
 
   /**
+   * Switch event handler
+   *
+   * @param param event target
+   */
+  /* const handlePageButtonVisibilityChange = async ({ target: { checked } }: ChangeEvent<HTMLInputElement>) => {
+    // TODO: Update on backend
+    // const pageButtonVisibility = checked ? PageButtonVisibility.Block : PageButtonVisibility.None;
+  }; */
+
+  /**
  * Renders options text field with debounce
  *
  * @param name name
@@ -412,6 +425,25 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
   );
 
   /**
+   * Renders pageButtonVisibility switch
+   */
+  const renderPageButtonVisibilitySwitch = () => (
+    <Box p={2} sx={{ borderBottom: "1px solid #DADCDE" }}>
+      <FormGroup>
+        <FormControlLabel
+          control={
+            <Switch
+              onChange={(e) => console.log(e)}
+              checked={true}
+            />
+          }
+          label={strings.editSurveysScreen.editPagesPanel.buttonVisibility}
+        />
+      </FormGroup>
+    </Box>
+  );
+
+  /**
    * Render delete option dialog
    */
   const renderDeleteOptionDialog = () => (
@@ -445,6 +477,7 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
   return (
     <>
       {renderDeleteOptionDialog()}
+
       <Box p={2} sx={{ borderBottom: "1px solid #DADCDE" }}>
         <Typography variant="h6">
           {strings.formatString(strings.editSurveysScreen.editPagesPanel.page, `${pageNumber}`)}
@@ -470,9 +503,13 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
           true
         )}
       </Box>
-      {!!pageLayouts.find((layout) => layout.id === surveyPages[pageNumber - 1].layoutId) && (
+
+      {renderPageButtonVisibilitySwitch()}
+
+      {!!pageLayouts.find((layout) => layout.id === surveyPages[pageNumber - 1].layoutId && layout.name === LayoutType.QUESTION) && (
         renderQuestionTypeSelect()
       )}
+
       {!!pageLayouts.find(
         (layout) =>
           layout.id === surveyPages[pageNumber - 1].layoutId && layout.name === LayoutType.QUESTION
@@ -480,6 +517,7 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
         !!options.length && (
           renderQuestionOptions()
         )}
+
       {!!pageLayouts.find(
         (layout) =>
           layout.id === surveyPages[pageNumber - 1].layoutId && layout.name === LayoutType.QUESTION

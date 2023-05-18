@@ -40,16 +40,12 @@ const OverviewScreen = () => {
    * Gets Devices
    */
   const getDevices = async () => {
-    try {
-      const devices = await devicesApi.listDevices({});
-      setDevices(devices);
+    const devices = await devicesApi.listDevices({});
+    setDevices(devices);
 
-      for (const device of devices) {
-        if (!device.id) continue;
-        await getDeviceSurveysByDevice(device.id);
-      }
-    } catch (error: any) {
-      setError(`${strings.errorHandling.overviewScreen.devicesNotFound}, ${error}`);
+    for (const device of devices) {
+      if (!device.id) continue;
+      await getDeviceSurveysByDevice(device.id);
     }
   };
 
@@ -79,7 +75,9 @@ const OverviewScreen = () => {
 
   useEffect(() => {
     getSurveys();
-    getDevices();
+    getDevices().catch((error) =>
+      setError(`${strings.errorHandling.overviewScreen.devicesNotFound}, ${error}`)
+    );
   }, []);
 
   return (

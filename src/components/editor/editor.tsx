@@ -108,7 +108,7 @@ const Editor = ({ setPanelProperties, surveyId }: Props) => {
    */
   const getSurveyPages = async () => {
     const surveyPages = await pagesApi.listSurveyPages({ surveyId: surveyId });
-    setSurveyPages(surveyPages);
+    setSurveyPages([...surveyPages.sort((a, b) => a.orderNumber - b.orderNumber)]);
   };
 
   /**

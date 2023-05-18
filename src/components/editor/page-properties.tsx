@@ -246,13 +246,47 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
   /**
    * Removes the selected option from the list
    */
-  const deleteOption = () => {
-    if (!optionToDelete) return;
+  const deleteOption = async () => {
+    const updatedOptions = options.filter((option) => option !== optionToDelete);
 
-    const updatedList = options.filter((option) => option !== optionToDelete);
+    const updatedProperties: PageProperty[] = surveyPages[pageNumber - 1].properties?.some(
+      (property) => property.key === PagePropertyType.Options
+    )
+      ? surveyPages[pageNumber - 1].properties!.map((property) => {
+        return property.key === PagePropertyType.Options
+          ? { ...property, value: JSON.stringify(updatedOptions) }
+          : property;
+      })
+      : [
+        ...surveyPages[pageNumber - 1].properties!,
+        {
+          key: PagePropertyType.Options,
+          value: JSON.stringify(updatedOptions)
+        }
+      ];
 
-    // TODO: Delete on backend
-    setOptions(updatedList);
+    const updatesToPage: Page = {
+      ...surveyPages[pageNumber - 1],
+      properties: updatedProperties
+    };
+
+    try {
+      const updatedPage = await pagesApi.updateSurveyPage({
+        pageId: surveyPages[pageNumber - 1].id!,
+        surveyId: surveyId,
+        page: updatesToPage
+      });
+
+      const updatedSurveyPages = surveyPages.map((page) =>
+        page.id === updatedPage.id ? updatedPage : page
+      );
+
+      setSurveyPages(updatedSurveyPages);
+      setOptions(updatedOptions);
+    } catch (error) {
+      setError(`${strings.errorHandling.editSurveysScreen.pageNotSaved}, ${error}`);
+    }
+
     setDeleteDialogOpen(false);
   };
 
@@ -585,6 +619,24 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
     </Box>
   );
 
+  /**
+   * Render info text field
+   */
+  const renderInfoTextField = () => {
+    return (
+      <Box p={2} sx={{ borderBottom: "1px solid #DADCDE" }}>
+        <Typography variant="h6">{strings.editSurveysScreen.editPagesPanel.infoText}</Typography>
+        {renderInfoWithDebounceTextField(
+          "info",
+          handlePageTextChange,
+          getPageInfo(),
+          strings.editSurveysScreen.editPagesPanel.infoText,
+          true
+        )}
+      </Box>
+    )
+  };
+
   return (
     <>
       {renderDeleteOptionDialog()}
@@ -604,24 +656,18 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
           true
         )}
       </Box>
-      <Box p={2} sx={{ borderBottom: "1px solid #DADCDE" }}>
-        <Typography variant="h6">{strings.editSurveysScreen.editPagesPanel.infoText}</Typography>
-        {renderInfoWithDebounceTextField(
-          "info",
-          handlePageTextChange,
-          getPageInfo(),
-          strings.editSurveysScreen.editPagesPanel.infoText,
-          true
-        )}
-      </Box>
+
+      {
+        !!pageLayouts.find((layout) => layout.id === surveyPages[pageNumber - 1].layoutId &&
+          (layout.name === LayoutType.INFO || layout.name === LayoutType.IMAGE_INFO || layout.name === LayoutType.INFO_IMAGE || layout.name === LayoutType.QUESTION_INFO)) &&
+        renderInfoTextField()
+      }
 
       {renderPageButtonVisibilitySwitch()}
 
       {renderBackgroundImageOptions()}
 
-      {!!pageLayouts.find((layout) => layout.id === surveyPages[pageNumber - 1].layoutId && layout.name === LayoutType.QUESTION) && (
-        renderQuestionTypeSelect()
-      )}
+      {!!pageLayouts.find((layout) => layout.id === surveyPages[pageNumber - 1].layoutId && layout.name === LayoutType.QUESTION) && renderQuestionTypeSelect()}
 
       {!!pageLayouts.find(
         (layout) =>

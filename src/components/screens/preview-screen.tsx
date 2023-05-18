@@ -90,7 +90,7 @@ const PreviewScreen = () => {
   const getSurveyPages = async () => {
     if (!id) return null;
     const surveyPages = await pagesApi.listSurveyPages({ surveyId: id });
-    setSurveyPages(surveyPages);
+    setSurveyPages([...surveyPages.sort((a, b) => a.orderNumber - b.orderNumber)]);
   };
 
   /**

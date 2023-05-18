@@ -51,11 +51,13 @@ export interface IframeClickEvent extends Event {
 }
 
 /**
- * Enum for surveys screen
+ * Enum for Overview Screen tabs
  */
-export enum SurveyScreens {
+export enum OverviewScreenTabs {
   ACTIVE = "active",
-  NOT_IMPLEMENTED = "not_implemented"
+  IDLE_DEVICES = "idle_devices",
+  OFFLINE_DEVICES = "offline_devices",
+  NEW_DEVICES = "new_devices"
 }
 
 /**
@@ -88,3 +90,8 @@ export enum LayoutType {
   INFO_IMAGE = "info + image",
   STATISTICS = "statistics"
 }
+
+/**
+ * Type describing available languages
+ */
+export type Language = "fi" | "en";

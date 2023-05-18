@@ -10,6 +10,8 @@ import SurveysScreen from "./components/screens/surveys-screen";
 import theme from "./styles/theme";
 import EditSurveysScreen from "./components/screens/edit-surveys-screen";
 import PreviewScreen from "./components/screens/preview-screen";
+import { useAtomValue } from "jotai";
+import { languageAtom } from "./atoms/language";
 
 const router = createBrowserRouter([
   {
@@ -46,17 +48,21 @@ const router = createBrowserRouter([
 /**
  * Application componenet
  */
-const App = () => (
-  <div className="App">
-    <ErrorHandler>
-      <AuthenticationProvider>
-        <ThemeProvider theme={responsiveFontSizes(theme)}>
-          <CssBaseline />
-          <RouterProvider router={router} />
-        </ThemeProvider>
-      </AuthenticationProvider>
-    </ErrorHandler>
-  </div>
-);
+const App = () => {
+  useAtomValue(languageAtom);
+
+  return (
+    <div className="App">
+      <ErrorHandler>
+        <AuthenticationProvider>
+          <ThemeProvider theme={responsiveFontSizes(theme)}>
+            <CssBaseline />
+            <RouterProvider router={router} />
+          </ThemeProvider>
+        </AuthenticationProvider>
+      </ErrorHandler>
+    </div>
+  );
+};
 
 export default App;

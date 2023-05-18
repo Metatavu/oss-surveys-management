@@ -14,7 +14,7 @@ interface Props {
 /**
  * Styled navigation button
  */
-const NavigationButton = styled(Button, {
+export const NavigationButton = styled(Button, {
   label: "navigation-button"
 })(({ theme }) => ({
   color: theme.palette.primary.dark,

@@ -2,6 +2,9 @@ import config from "../app/config";
 import {
   Configuration,
   ConfigurationParameters,
+  DeviceRequestsApi,
+  DeviceSurveysApi,
+  DevicesApi,
   LayoutsApi,
   PagesApi,
   SurveysApi
@@ -24,6 +27,9 @@ export const getApiClient = (accessToken?: string) => {
   return {
     surveysApi: new SurveysApi(getConfiguration()),
     pagesApi: new PagesApi(getConfiguration()),
-    layoutsApi: new LayoutsApi(getConfiguration())
+    layoutsApi: new LayoutsApi(getConfiguration()),
+    deviceSurveysApi: new DeviceSurveysApi(getConfiguration()),
+    devicesApi: new DevicesApi(getConfiguration()),
+    deviceRequestsApi: new DeviceRequestsApi(getConfiguration())
   };
 };

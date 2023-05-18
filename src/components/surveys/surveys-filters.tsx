@@ -1,9 +1,21 @@
-import { Stack, TextField, InputAdornment, Box, Button, Paper, styled } from "@mui/material";
+import {
+  Stack,
+  TextField,
+  InputAdornment,
+  Box,
+  Button,
+  Paper,
+  styled,
+  MenuItem
+} from "@mui/material";
 import strings from "../../localization/strings";
 import theme from "../../styles/theme";
 import { Search, AddCircle } from "@mui/icons-material";
-import { Survey } from "../../generated/client";
+import { DeviceSurvey, Survey } from "../../generated/client";
 import { useEffect, useState } from "react";
+import { SurveyManagementStatus, SurveySortBy } from "../../types";
+import LocalizationUtils from "../../utils/localization-utils";
+import SurveyUtils from "../../utils/survey-utils";
 
 /**
  * Styled filter container component
@@ -25,6 +37,7 @@ const FilterContainer = styled(Paper, {
  */
 interface Props {
   surveys: Survey[];
+  deviceSurveys: DeviceSurvey[];
   setFilteredSurveys: (surveys: Survey[]) => void;
   createSurvey: () => Promise<void>;
 }
@@ -32,7 +45,7 @@ interface Props {
 /**
  * Surveys Filters component
  */
-const SurveysFilters = ({ surveys, setFilteredSurveys, createSurvey }: Props) => {
+const SurveysFilters = ({ surveys, deviceSurveys, setFilteredSurveys, createSurvey }: Props) => {
   const [searchTerm, setSearchTerm] = useState<string>("");
 
   useEffect(() => {
@@ -41,6 +54,12 @@ const SurveysFilters = ({ surveys, setFilteredSurveys, createSurvey }: Props) =>
     );
   }, [searchTerm]);
 
+  useEffect(() => {
+    setFilteredSurveys(
+      surveys.sort((a, b) => SurveyUtils.sortSurveysByManagementStatus(a, b, deviceSurveys))
+    );
+  }, [surveys]);
+
   /**
    * Handler for search field change event
    *
@@ -48,6 +67,43 @@ const SurveysFilters = ({ surveys, setFilteredSurveys, createSurvey }: Props) =>
    */
   const handleSearchFieldChange = ({ target: { value } }: React.ChangeEvent<HTMLInputElement>) =>
     setSearchTerm(value);
+
+  /**
+   * Handler for show filter change event
+   *
+   * @param event event
+   */
+  const handleShowFilterChange = ({ target: { value } }: React.ChangeEvent<HTMLInputElement>) => {
+    if (value === "SHOW_ALL") {
+      setFilteredSurveys(surveys);
+    } else {
+      setFilteredSurveys(
+        surveys.filter(
+          (survey) => SurveyUtils.getSurveyManagementStatus(survey, deviceSurveys) === value
+        )
+      );
+    }
+  };
+
+  /**
+   * Renders show options
+   */
+  const renderShowOptions = () =>
+    Object.values(SurveyManagementStatus).map((status) => (
+      <MenuItem key={status} value={status}>
+        {LocalizationUtils.getLocalizedShowOptions(status as SurveyManagementStatus)}
+      </MenuItem>
+    ));
+
+  /**
+   * Renders sort options
+   */
+  const renderSortOptions = () =>
+    Object.values(SurveySortBy).map((sortBy) => (
+      <MenuItem key={sortBy} value={sortBy}>
+        {LocalizationUtils.getLocalizedSortByOptions(sortBy)}
+      </MenuItem>
+    ));
 
   return (
     <FilterContainer>
@@ -72,36 +128,33 @@ const SurveysFilters = ({ surveys, setFilteredSurveys, createSurvey }: Props) =>
           label={strings.surveysScreen.filters.show}
           size="small"
           select
-          disabled
+          defaultValue={"SHOW_ALL"}
+          onChange={handleShowFilterChange}
+          color="primary"
+          InputProps={{ color: "primary" }}
+          SelectProps={{
+            sx: {
+              "& .MuiInputBase-input": {
+                color: theme.palette.primary.main
+              }
+            }
+          }}
         >
-          {/* //TODO: select options not yet implemented
-      {currencies.map((option) => (
-        <MenuItem key={option.value} value={option.value}>
-          {option.label}
-        </MenuItem>
-      ))}
-      */}
+          <MenuItem value={"SHOW_ALL"}>{strings.surveysScreen.filters.showAll}</MenuItem>
+          {renderShowOptions()}
         </TextField>
         <TextField
           sx={{ flex: 1 }}
           label={strings.surveysScreen.filters.sortBy}
           size="small"
           select
-          disabled
         >
-          {/* //TODO: select options not yet implemented
-      {currencies.map((option) => (
-        <MenuItem key={option.value} value={option.value}>
-          {option.label}
-        </MenuItem>
-      ))}
-      */}
+          {renderSortOptions()}
         </TextField>
         <TextField
           sx={{ flex: 1 }}
           label={strings.surveysScreen.filters.category}
           size="small"
-          select
           disabled
         />
         <Box>

@@ -85,7 +85,17 @@
     "newSurvey": "New Survey",
     "filters": {
       "show": "Show",
+      "showAll": "Show all",
+      "showDrafts": "Drafts",
+      "showReadyToPublish": "Ready to publish",
+      "showScheduled": "Scheduled",
+      "showPublished": "Published",
       "sortBy": "Sort by",
+      "sortByTitle": "Title",
+      "sortByStatus": "Status",
+      "sortByPublicationDate": "Publication date",
+      "sortByCreator": "Creator",
+      "sortByModifiedAt": "Last modified at",
       "category": "Category",
       "filter": "Filter by",
       "findByName": "Find by name"

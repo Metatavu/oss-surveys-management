@@ -105,3 +105,14 @@ export enum SurveyManagementStatus {
   SCHEDULED = "scheduled",
   DRAFT = "draft"
 }
+
+/**
+ * Enum for Survey Sorting
+ */
+export enum SurveySortBy {
+  NAME = "name",
+  STATUS = "status",
+  MODIFIED = "modified",
+  CREATOR = "creator",
+  PUBLICATION_TIME = "publication_time"
+}

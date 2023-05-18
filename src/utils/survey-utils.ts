@@ -110,6 +110,30 @@ namespace SurveyUtils {
 
     return SurveyManagementStatus.PUBLISHED;
   };
+
+  /**
+   * Sorts surveys by survey management status
+   *
+   * @param surveyA survey A
+   * @param surveyB survey B
+   * @param deviceSurveys device surveys
+   */
+  export const sortSurveysByManagementStatus = (
+    surveyA: Survey,
+    surveyB: Survey,
+    deviceSurveys: DeviceSurvey[]
+  ) => {
+    const surveyAManagementStatus = getSurveyManagementStatus(surveyA, deviceSurveys);
+    const surveyBManagementStatus = getSurveyManagementStatus(surveyB, deviceSurveys);
+    // NOTE: WORK IN PROGRESS
+    if (
+      surveyAManagementStatus === SurveyManagementStatus.PUBLISHED &&
+      surveyBManagementStatus !== SurveyManagementStatus.PUBLISHED
+    )
+      return -1;
+    if (surveyAManagementStatus < surveyBManagementStatus) return 1;
+    return 0;
+  };
 }
 
 export default SurveyUtils;

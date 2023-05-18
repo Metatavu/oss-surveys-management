@@ -85,6 +85,7 @@ const SurveysScreen = () => {
     <Stack gap={1}>
       <SurveysFilters
         surveys={surveys}
+        deviceSurveys={deviceSurveys}
         setFilteredSurveys={setFilteredSurveys}
         createSurvey={createSurvey}
       />

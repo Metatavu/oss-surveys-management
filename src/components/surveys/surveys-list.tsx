@@ -42,6 +42,7 @@ const SurveysList = ({ surveys, deviceSurveys }: Props) => {
               survey,
               deviceSurveys
             );
+            const isPublished = surveyManagementStatus === SurveyManagementStatus.PUBLISHED;
 
             return (
               <ListItemButton
@@ -58,8 +59,8 @@ const SurveysList = ({ surveys, deviceSurveys }: Props) => {
                 />
                 <ListItemText
                   secondaryTypographyProps={{
-                    color:
-                      surveyManagementStatus === SurveyManagementStatus.PUBLISHED ? "primary" : ""
+                    color: isPublished ? "primary" : "",
+                    fontWeight: isPublished ? "bold" : ""
                   }}
                   secondary={LocalizationUtils.getLocalizedSurveyManagementStatus(
                     surveyManagementStatus

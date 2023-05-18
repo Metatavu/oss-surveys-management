@@ -85,7 +85,17 @@
     "newSurvey": "Uusi kysely",
     "filters": {
       "show": "Näytä",
+      "showAll": "Näytä kaikki",
+      "showDrafts": "Luonnokset",
+      "showReadyToPublish": "Valmiit julkaistavaksi",
+      "showScheduled": "Ajastetut",
+      "showPublished": "Julkaistut",
       "sortBy": "Järjestä",
+      "sortByTitle": "Nimi",
+      "sortByStatus": "Tila",
+      "sortByPublicationDate": "Julkaisuaika",
+      "sortByCreator": "Tekijä",
+      "sortByModifiedAt": "Viimeksi muokattu",
       "category": "Kategoria",
       "filter": "Suodata",
       "findByName": "Hae nimellä"

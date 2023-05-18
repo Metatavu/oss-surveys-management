@@ -115,7 +115,17 @@ export interface Localized extends LocalizedStringsMethods {
     newSurvey: string;
     filters: {
       show: string;
+      showAll: string;
+      showDrafts: string;
+      showReadyToPublish: string;
+      showScheduled: string;
+      showPublished: string;
       sortBy: string;
+      sortByTitle: string;
+      sortByStatus: string;
+      sortByPublicationDate: string;
+      sortByCreator: string;
+      sortByModifiedAt: string;
       category: string;
       filter: string;
       findByName: string;

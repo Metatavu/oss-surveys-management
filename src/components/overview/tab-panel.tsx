@@ -16,7 +16,7 @@ interface Props {
  * @param props TabPanelProps
  * @returns Tab panel
  */
-const TabPanel: React.FC<Props> = ({ children, value, index }) => {
+const TabPanel = ({ children, value, index }: Props) => {
   return (
     <div role="tabpanel" hidden={value !== index}>
       {value === index && <Box sx={{ p: 3 }}>{children}</Box>}

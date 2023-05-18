@@ -34,7 +34,10 @@
       "devicesNotFound": "Virhe ladattaessa laitteita"
     },
     "surveysScreen": {
-      "createSurveyError": "Virhe luotaessa kyselyä"
+      "createSurveyError": "Virhe luotaessa kyselyä",
+      "surveysNotFound": "Virhe ladattaessa kyselyitä",
+      "deviceSurveysNotFound": "Virde ladattaessa laitteiden kyselyitä",
+      "devicesNotFound": "Virhe ladattaessa laitteita"
     },
     "editSurveysScreen": {
       "surveyNotFound": "Kyselyä ei löytynyt",
@@ -78,13 +81,29 @@
     }
   },
   "surveysScreen": {
-    "show": "Näytä",
-    "sortBy": "Järjestä",
-    "category": "Kategoria",
-    "filter": "Suodata",
     "createButton": "Luo uusi kysely",
     "newSurvey": "Uusi kysely",
-    "findByName": "Hae nimellä"
+    "filters": {
+      "show": "Näytä",
+      "sortBy": "Järjestä",
+      "category": "Kategoria",
+      "filter": "Suodata",
+      "findByName": "Hae nimellä"
+    },
+    "headings": {
+      "surveyTitle": "Kysely",
+      "status": "Tila",
+      "publicationDate": "Julkaisuaika",
+      "category": "Kategoria",
+      "creator": "Tekijä",
+      "modifiedAt": "Muokattu"
+    },
+    "status": {
+      "draft": "Luonnos",
+      "readyToPublish": "Valmis julkaistavaksi",
+      "scheduled": "Ajastettu",
+      "published": "Julkaistu"
+    }
   },
   "editSurveysScreen": {
     "addNewPage": "Lisää uusi sivu",

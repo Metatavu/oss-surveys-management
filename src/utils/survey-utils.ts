@@ -1,7 +1,7 @@
 import { DateTime } from "luxon";
-import { DeviceSurvey } from "../generated/client";
+import { DeviceSurvey, DeviceSurveyStatus, Survey, SurveyStatus } from "../generated/client";
 import { DataValidation } from "./data-validation";
-import strings from "../localization/strings";
+import { SurveyManagementStatus } from "../types";
 
 /**
  * Namespace for Survey utilities
@@ -78,6 +78,37 @@ namespace SurveyUtils {
     );
 
     return foundDeviceSurveys.length;
+  };
+
+  /**
+   * Gets management status of survey
+   *
+   * @param survey survey
+   * @param deviceSurveys device surveys
+   * @returns management status
+   */
+  export const getSurveyManagementStatus = (survey: Survey, deviceSurveys: DeviceSurvey[]) => {
+    const foundDeviceSurvey = deviceSurveys.find(
+      (deviceSurvey) => deviceSurvey.surveyId === survey.id
+    );
+
+    if (survey.status === SurveyStatus.Draft) {
+      return SurveyManagementStatus.DRAFT;
+    }
+    if (
+      !getSurveyDeviceCount(deviceSurveys, survey.id) &&
+      survey.status === SurveyStatus.Approved
+    ) {
+      return SurveyManagementStatus.APPROVED;
+    }
+    if (
+      getSurveyDeviceCount(deviceSurveys, survey.id) === 1 &&
+      foundDeviceSurvey?.status === DeviceSurveyStatus.Scheduled
+    ) {
+      return SurveyManagementStatus.SCHEDULED;
+    }
+
+    return SurveyManagementStatus.PUBLISHED;
   };
 }
 

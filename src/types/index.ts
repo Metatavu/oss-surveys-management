@@ -95,3 +95,13 @@ export enum LayoutType {
  * Type describing available languages
  */
 export type Language = "fi" | "en";
+
+/**
+ * Enum for Survey Management status
+ */
+export enum SurveyManagementStatus {
+  PUBLISHED = "published",
+  APPROVED = "approved",
+  SCHEDULED = "scheduled",
+  DRAFT = "draft"
+}

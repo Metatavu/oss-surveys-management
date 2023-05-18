@@ -3,7 +3,7 @@ import { Device, DeviceStatus, DeviceSurvey, Survey } from "../../generated/clie
 import { useApi } from "../../hooks/use-api";
 import strings from "../../localization/strings";
 import { OverviewScreenTabs } from "../../types";
-import TabPanel from "../surveys/TabPanel";
+import TabPanel from "../overview/tab-panel";
 import { Box, Paper, Tab, Tabs } from "@mui/material";
 import { useAtomValue, useSetAtom } from "jotai";
 import { useEffect, useState } from "react";

@@ -16,6 +16,7 @@ export interface Localized extends LocalizedStringsMethods {
     back: string;
     confirm: string;
     cancel: string;
+    unnamed: string;
   };
 
   /**
@@ -26,6 +27,14 @@ export interface Localized extends LocalizedStringsMethods {
     surveys: string;
     screens: string;
     logo: string;
+  };
+
+  /**
+   * Translations related to localization
+   */
+  localization: {
+    en: string;
+    fi: string;
   };
 
   /**
@@ -43,6 +52,8 @@ export interface Localized extends LocalizedStringsMethods {
     };
     overviewScreen: {
       surveysNotFound: string;
+      deviceSurveysNotFound: string;
+      devicesNotFound: string;
     };
     surveysScreen: {
       createSurveyError: string;
@@ -67,13 +78,30 @@ export interface Localized extends LocalizedStringsMethods {
    * Translations related to overview screen
    */
   overviewScreen: {
-    surveyTitle: string;
-    screens: string;
-    publicationDate: string;
-    endTime: string;
-    mostPopular: string;
-    answers: string;
-    activeSurveys: string;
+    activeSurveysTab: string;
+    idleDevicesTab: string;
+    offlineDevicesTab: string;
+    newDevicesTab: string;
+    activeSurveys: {
+      surveyTitle: string;
+      screens: string;
+      publicationDate: string;
+      endTime: string;
+      mostPopular: string;
+      answers: string;
+    };
+    devices: {
+      idleActionButton: string;
+      oflineActionButton: string;
+      newActionButton: string;
+      headings: {
+        deviceName: string;
+        status: string;
+        description: string;
+        location: string;
+        action: string;
+      };
+    };
   };
 
   /**
@@ -134,6 +162,16 @@ export interface Localized extends LocalizedStringsMethods {
     imageParagraph: string;
     questionInfo: string;
     statistics: string;
+  };
+
+  /**
+   * Translations related to devices
+   */
+  devices: {
+    status: {
+      online: string;
+      offline: string;
+    };
   };
 
   /**

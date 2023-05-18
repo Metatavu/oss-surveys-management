@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import wrapTemplate from "../pages/templates/template-wrapper";
-import { parseHtmlToDom } from "../../utils/PreviewUtils";
+import { parseHtmlToDom } from "../../utils/preview-utils";
 import { IframeClickEvent } from "../../types";
 
 /**

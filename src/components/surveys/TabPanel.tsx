@@ -1,13 +1,13 @@
 import { Box } from "@mui/material";
-import { SurveyScreens } from "../../types";
+import { OverviewScreenTabs } from "../../types";
 
 /**
  * Interface for tab panel props
  */
 interface Props {
   children: React.ReactNode;
-  value: SurveyScreens;
-  index: SurveyScreens;
+  value: OverviewScreenTabs;
+  index: OverviewScreenTabs;
 }
 
 /**

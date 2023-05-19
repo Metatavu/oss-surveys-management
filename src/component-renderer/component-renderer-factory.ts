@@ -1,5 +1,4 @@
 import { QuestionType } from "../types";
-import { BackgroundRenderer } from "./background-renderer";
 import { ButtonRenderer } from "./button-renderer";
 import { SingleSelectTextQuestionRenderer } from "./single-question-renderer";
 import { TextRenderer } from "./text-renderer";
@@ -49,15 +48,6 @@ class ComponentRendererFactory {
    */
   public getNextButtonRenderer = () => {
     return new ButtonRenderer();
-  };
-
-  /**
-   * Get background renderers
-   *
-   * @returns Background renderer
-   */
-  public getBackgroundRenderer = () => {
-    return new BackgroundRenderer();
   };
 }
 

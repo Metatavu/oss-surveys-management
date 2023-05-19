@@ -39,7 +39,6 @@ interface Props {
  */
 const PageProperties = ({ pageNumber, surveyId }: Props) => {
   const [options, setOptions] = useState<string[]>([]);
-  const [backgrounds, _setBackgrounds] = useState<string[]>(["#fff", "#00AA46"]);
 
   const [surveyPages, setSurveyPages] = useAtom(pagesAtom);
   const [pageLayouts] = useAtom(layoutsAtom);
@@ -450,6 +449,7 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
       component={props =>
         <TextField
           select
+          defaultValue={getTranslatedBackground(value as Background)}
           size="small"
           variant="outlined"
           InputProps={{
@@ -544,8 +544,8 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
         renderBackgroundOptionsWithDebounceTextField(
           "background",
           (e) => handlePageBackgroundChange(e),
-          backgrounds[0],
-          strings.editSurveysScreen.editSurveyPanel.name
+          Background.DEFAULT,
+          strings.editSurveysScreen.editPagesPanel.backgroundImages.default
         )
       }
     </Box>
@@ -556,7 +556,7 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
    */
   const renderBackgroundImageOptions = () => (
     Object.values(Background).map(background =>
-      <MenuItem>
+      <MenuItem key={background} value={background}>
         {getTranslatedBackground(background)}
       </MenuItem>
     ));

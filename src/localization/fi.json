@@ -92,7 +92,7 @@
       "buttonVisibility": "Näytä painike",
       "background": "Tausta",
       "backgroundImages": {
-        "default": "#001146",
+        "default": "Vihreä",
         "image1": "kuva 1",
         "image2": "kuva 2",
         "image3": "kuva 3",

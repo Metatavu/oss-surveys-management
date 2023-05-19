@@ -126,7 +126,9 @@ const OverviewScreen = () => {
     getDevices().catch((error) =>
       setError(`${strings.errorHandling.overviewScreen.devicesNotFound}, ${error}`)
     );
-    getDeviceRequests();
+    getDeviceRequests().catch((error) =>
+      setError(`${strings.errorHandling.overviewScreen.deviceRequestsNotFound}, ${error}`)
+    );
     setIsLoading(false);
   }, []);
 

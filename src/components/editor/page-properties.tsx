@@ -6,11 +6,12 @@ import { useApi } from "../../hooks/use-api";
 import strings from "../../localization/strings";
 import GenericDialog from "../generic/generic-dialog";
 import WithDebounce from "../generic/with-debounce";
-import { AddCircle, Edit } from "@mui/icons-material";
+import { AddCircle, Close, Edit } from "@mui/icons-material";
 import {
   Box,
   Button,
   FormControlLabel,
+  IconButton,
   InputAdornment,
   Switch,
   TextField,
@@ -181,7 +182,6 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
         ]
       }
     };
-    console.log(pageToUpdate);
 
     await savePage(pageToUpdate);
   };
@@ -208,6 +208,25 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
             orderNumber: orderNumber
           }
         ]
+      }
+    };
+
+    await savePage(pageToUpdate);
+  };
+
+  /**
+   * Handler for question delete click
+   *
+   * @param option option
+   */
+  const handleDeleteClick = async (option: PageQuestionOption) => {
+    if (!pageToEdit?.question) return;
+
+    const pageToUpdate = {
+      ...pageToEdit,
+      question: {
+        ...pageToEdit.question,
+        options: pageToEdit.question.options.filter((opt) => opt !== option)
       }
     };
 
@@ -265,8 +284,13 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
             multiline
             InputProps={{
               endAdornment: (
-                <InputAdornment position="end">
-                  <Edit fontSize="small" color="primary" />
+                <InputAdornment position="end" className="on-hover">
+                  <IconButton
+                    title={strings.editSurveysScreen.editPagesPanel.deleteAnswerOptionTitle}
+                    onClick={() => handleDeleteClick(option)}
+                  >
+                    <Close fontSize="small" />
+                  </IconButton>
                 </InputAdornment>
               )
             }}

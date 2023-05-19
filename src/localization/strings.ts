@@ -54,6 +54,8 @@ export interface Localized extends LocalizedStringsMethods {
       surveysNotFound: string;
       deviceSurveysNotFound: string;
       devicesNotFound: string;
+      deviceRequestsNotFound: string;
+      deviceRequestUpdateError: string;
     };
     surveysScreen: {
       createSurveyError: string;
@@ -95,12 +97,23 @@ export interface Localized extends LocalizedStringsMethods {
     devices: {
       idleActionButton: string;
       oflineActionButton: string;
-      newActionButton: string;
       headings: {
         deviceName: string;
         status: string;
         description: string;
         location: string;
+        action: string;
+      };
+    };
+    deviceRequests: {
+      actionButton: string;
+      pendingStatus: string;
+      approvedStatus: string;
+      headings: {
+        serialNumber: string;
+        status: string;
+        description: string;
+        createdAt: string;
         action: string;
       };
     };

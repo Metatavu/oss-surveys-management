@@ -8,7 +8,7 @@ import {
   EDITOR_SCREEN_PREVIEW_CONTAINER_HEIGHT,
   EDITOR_SCREEN_PREVIEW_CONTAINER_WIDTH
 } from "../../constants";
-import { Layout, Page } from "../../generated/client";
+import { Layout, Page, PageQuestionType } from "../../generated/client";
 import { PagePropertyType } from "../../generated/client/models/PagePropertyType";
 import { useApi } from "../../hooks/use-api";
 import strings from "../../localization/strings";
@@ -142,7 +142,11 @@ const Editor = ({ setPanelProperties, surveyId }: Props) => {
         layoutId: layoutId,
         title: templateType,
         orderNumber: surveyPages.length + 1,
-        nextButtonVisible: true
+        nextButtonVisible: true,
+        question: {
+          type: PageQuestionType.SingleSelect,
+          options: []
+        }
       }
     });
 

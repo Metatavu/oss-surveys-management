@@ -42,7 +42,9 @@
       "surveyPagesNotFound": "Survey pages not found",
       "pageLayoutsNotFound": "Page layouts not found",
       "pageLayoutNotFound": "Page layout not found",
-      "pageNotSaved": "Error when saving page"
+      "pageNotSaved": "Error when saving page",
+      "pageNotDeleted": "Error when deleting page",
+      "pageNotCreated": "Error when creating page"
     },
     "previewScreen": {
       "surveyNotFound": "Survey not found",
@@ -88,6 +90,7 @@
   },
   "editSurveysScreen": {
     "addNewPage": "Add new page",
+    "deletePage": "Delete",
     "editing": "Editing",
     "publish": "Publish",
     "published": "Published",

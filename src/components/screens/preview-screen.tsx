@@ -150,10 +150,11 @@ const PreviewScreen = () => {
    * @returns layout html
    */
   const getPageLayout = (page: Page) => {
-    return pageLayouts.find((layout) => layout.id === page.layoutId)!.html;
-  };
+    const foundPageLayout = pageLayouts.find((layout) => layout.id === page.layoutId);
+    if (!foundPageLayout) return;
 
-  const htmlString = getPageLayout(surveyPages[currentPage - 1]);
+    return foundPageLayout;
+  };
 
   /**
    * Render page count method
@@ -172,7 +173,10 @@ const PreviewScreen = () => {
       <PreviewArea>
         <PreviewContainer>
           <Preview
-            htmlString={wrapTemplate(parseHtmlToDom(htmlString, [], []).outerHTML)}
+            htmlString={wrapTemplate(
+              parseHtmlToDom(getPageLayout(surveyPages[currentPage - 1])?.html ?? "", [], [])
+                .outerHTML
+            )}
             width={DEVICE_WIDTH}
             height={DEVICE_HEIGHT}
             scale={height / 1.5 / DEVICE_HEIGHT}

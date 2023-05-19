@@ -4,7 +4,7 @@ import { Survey } from "../../generated/client";
 import { useApi } from "../../hooks/use-api";
 import strings from "../../localization/strings";
 import { SurveyScreens } from "../../types";
-import TabPanel from "../surveys/TabPanel";
+import TabPanel from "../surveys/tab-panel";
 import { Box, List, ListItem, ListItemButton, ListItemText, Paper, Tab, Tabs } from "@mui/material";
 import { useSetAtom } from "jotai";
 import { useEffect, useState } from "react";

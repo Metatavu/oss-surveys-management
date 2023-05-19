@@ -1,4 +1,4 @@
-import { QuestionType } from "../types";
+import { PageQuestionType } from "../generated/client";
 import { ButtonRenderer } from "./button-renderer";
 import { SingleSelectTextQuestionRenderer } from "./single-question-renderer";
 import { TextRenderer } from "./text-renderer";
@@ -9,14 +9,14 @@ import { PageTitleRenderer } from "./title-renderer";
  */
 class ComponentRendererFactory {
   /**
-   * Get renderer based on question type
+   * Get question renderer based on question type
    *
    * @param questionType QuestionType
    * @returns QuestionRenderer
    */
-  public getRenderer = (questionType: QuestionType) => {
+  public getQuestionRenderer = (questionType: PageQuestionType) => {
     switch (questionType) {
-      case QuestionType.SINGLE:
+      case PageQuestionType.SingleSelect:
         return new SingleSelectTextQuestionRenderer();
       default:
         throw new Error(`Could not find renderer for ${questionType}`);

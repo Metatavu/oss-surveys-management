@@ -85,7 +85,7 @@
       "title": "Otsikko",
       "questionType": "Kyselyn tyyppi",
       "answerOptions": "Vastausvaihtoehdot",
-      "answerOptionPlaceholder": "Vaihtoehto",
+      "answerOptionPlaceholder": "Vaihtoehto {0}",
       "deleteAnswerOptionTitle": "Poista vastausvaihtoehto",
       "addOption": "Lisää vaihtoehto",
       "confirmDeleteOption": "Haluatko varmasti poistaa tämän vaihtoehdon?",

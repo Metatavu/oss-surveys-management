@@ -85,7 +85,7 @@
       "title": "Title",
       "questionType": "Question type",
       "answerOptions": "Answer options",
-      "answerOptionPlaceholder": "Answer option",
+      "answerOptionPlaceholder": "Answer option {0}",
       "deleteAnswerOptionTitle": "Delete answer option",
       "addOption": "Add an option",
       "confirmDeleteOption": "Are you sure you want to delete this option?",

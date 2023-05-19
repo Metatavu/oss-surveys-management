@@ -2,7 +2,6 @@ import { useEffect } from "react";
 import wrapTemplate from "../pages/templates/template-wrapper";
 import { parseHtmlToDom } from "../../utils/PreviewUtils";
 import { IframeClickEvent } from "../../types";
-import { LayoutVariable, PageProperty } from "../../generated/client";
 
 /**
  * Component props
@@ -62,8 +61,9 @@ const Preview = ({
   return (
     <div style={{ scale: `${scale}` }}>
       <iframe
-        srcDoc={wrapTemplate(parseHtmlToDom(htmlString).outerHTML, pageNumber)}
+        srcDoc={wrapTemplate(parseHtmlToDom(htmlString, [], []).outerHTML, pageNumber)}
         width={width}
+        title="preview"
         height={height}
         seamless
         style={{ border: selectedPage === pageNumber ? "20px solid #46dc78" : "none" }}

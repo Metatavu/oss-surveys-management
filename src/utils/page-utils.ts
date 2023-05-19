@@ -29,7 +29,7 @@ namespace PageUtils {
    * @param id id
    * @returns element
    */
-  const findHtmlElementById = (element: Element, id: string) => {
+  const findHtmlElementById = (element: Element, id: string): Element | undefined => {
     const elementId = element.id;
 
     if (elementId === id) {
@@ -40,7 +40,7 @@ namespace PageUtils {
 
     for (let i = 0; i < children.length; i++) {
       const child = children[i];
-      const foundElement: Element | null = findHtmlElementById(child, id);
+      const foundElement: Element | undefined = findHtmlElementById(child, id);
 
       if (foundElement) {
         return foundElement;
@@ -48,6 +48,27 @@ namespace PageUtils {
     }
 
     return;
+  };
+
+  /**
+   * Checks if page has questions placeholder
+   *
+   * @param layoutHtml layout html
+   * @returns true if page has questions placeholder
+   */
+  export const hasQuestionsPlaceholder = (layoutHtml?: string): boolean => {
+    if (!layoutHtml) return false;
+    const body = new DOMParser().parseFromString(layoutHtml, "text/html").body;
+    const divElements = body.getElementsByTagName("div");
+    let hasQuestionsPlaceholder = false;
+
+    for (const element of divElements) {
+      const dataComponentAttribute = element.attributes.getNamedItem("data-component")?.nodeValue;
+
+      hasQuestionsPlaceholder = dataComponentAttribute === QUESTION_PLACEHOLDER_DATA_COMPONENT;
+    }
+
+    return hasQuestionsPlaceholder;
   };
 }
 
@@ -64,5 +85,6 @@ export enum PageElementType {
 }
 
 export const EDITABLE_TEXT_PAGE_ELEMENTS = [PageElementType.H1, PageElementType.P];
+export const QUESTION_PLACEHOLDER_DATA_COMPONENT = "question";
 
 export default PageUtils;

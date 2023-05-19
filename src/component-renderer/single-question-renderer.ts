@@ -6,35 +6,25 @@ import { v4 as uuid } from "uuid";
  */
 export class SingleSelectTextQuestionRenderer extends AbstractQuestionRenderer {
   /**
-   * Convert single question type options into html buttons
+   * Convert single question type option into html buttons
    *
-   * @param options QuestionRenderOptions
+   * @param option option
    * @returns html string
    */
-  public render(options: string[]): string {
-    let htmlString = "";
-
-    options.forEach((option) => {
-      htmlString = htmlString.concat(
-        `<div>
-          <button
-            id="${uuid()}"
-            style="
-              width: 100%;
-              height: 250px;
-              font-size: 6rem;
-              font-family: 'SBonusText-Bold';
-              color: #fff;
-              background: transparent;
-              border: 20px solid #fff;
-            "
-          >
-            ${option}
-          </button>
-        </div>`
-      );
-    });
-
-    return htmlString;
-  }
+  public render = (option: string): string =>
+    `<button
+      id="${uuid()}"
+      style="
+        width: 100%;
+        height: 250px;
+        font-size: 6rem;
+        font-family: 'SBonusText-Bold';
+        color: #fff;
+        background: transparent;
+        border: 20px solid #fff;
+        margin-bottom: 6rem;
+      "
+    >
+      ${option}
+    </button>`;
 }

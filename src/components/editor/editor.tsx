@@ -3,17 +3,17 @@ import { layoutsAtom } from "../../atoms/layouts";
 import { pagesAtom } from "../../atoms/pages";
 import componentRendererFactory from "../../component-renderer/component-renderer-factory";
 import {
+  DEFAULT_QUESTION_OPTION,
   DEVICE_HEIGHT,
   DEVICE_WIDTH,
   EDITOR_SCREEN_PREVIEW_CONTAINER_HEIGHT,
   EDITOR_SCREEN_PREVIEW_CONTAINER_WIDTH
 } from "../../constants";
 import { Layout, LayoutVariableType, Page, PageQuestionType } from "../../generated/client";
-import { PagePropertyType } from "../../generated/client/models/PagePropertyType";
 import { useApi } from "../../hooks/use-api";
 import strings from "../../localization/strings";
 import theme from "../../styles/theme";
-import { EditorPanel, PanelProperties, QuestionType } from "../../types";
+import { EditorPanel, PanelProperties } from "../../types";
 import { PageElementType } from "../../utils/page-utils";
 import GenericDialog from "../generic/generic-dialog";
 import ImageParagraphLayoutImage from "../images/svg/layout-thumbnails/image-paragraph";
@@ -134,20 +134,24 @@ const Editor = ({ setPanelProperties, surveyId }: Props) => {
    * @param templateType string
    */
   const createPage = async (templateType: string) => {
-    const layoutId = pageLayouts.find((layout) => layout.name === templateType)!.id!;
+    const foundLayout = pageLayouts.find((layout) => layout.name === templateType);
+
+    if (!foundLayout?.id) return;
 
     const newPage = await pagesApi.createSurveyPage({
       surveyId: surveyId,
       page: {
         id: uuid(),
-        layoutId: layoutId,
+        layoutId: foundLayout.id,
         title: templateType,
         orderNumber: surveyPages.length + 1,
         nextButtonVisible: true,
-        question: {
-          type: PageQuestionType.SingleSelect,
-          options: []
-        }
+        question: templateType.includes("question")
+          ? {
+              type: PageQuestionType.SingleSelect,
+              options: [DEFAULT_QUESTION_OPTION(1), DEFAULT_QUESTION_OPTION(2)]
+            }
+          : undefined
       }
     });
 
@@ -214,7 +218,6 @@ const Editor = ({ setPanelProperties, surveyId }: Props) => {
     return pageLayouts.find((layout) => layout.id === page.layoutId)!;
   };
 
-  // TODO: This will need to be done for the preview screen?
   /**
    * Render page preview
    *
@@ -223,16 +226,35 @@ const Editor = ({ setPanelProperties, surveyId }: Props) => {
    */
   const renderPagePreview = (page: Page) => {
     const { properties } = page;
-    const nextButtonVisible = surveyPages.find((page) => page.id === page.id)!.nextButtonVisible;
+    const nextButtonVisible = surveyPages.find(
+      (surveyPage) => surveyPage.id === page.id
+    )?.nextButtonVisible;
     let htmlData = getPageLayout(page).html;
     const layoutVariables = getPageLayout(page).layoutVariables;
+    const templateDom = new DOMParser().parseFromString(htmlData, "text/html");
 
-    for (const variable of layoutVariables) {
+    if (!nextButtonVisible) {
+      const nextButton = templateDom.querySelector("button[data-component='next-button']");
+      nextButton?.remove();
+      htmlData = templateDom.body.innerHTML;
+    }
+
+    if (page.question) {
+      const questionRenderer = componentRendererFactory.getQuestionRenderer(page.question.type);
+      const questionPlaceholder = templateDom.querySelector("div[data-component='question']");
+      for (const option of page.question.options) {
+        const questionHtml = questionRenderer.render(option.questionOptionValue);
+        const questionElement = new DOMParser().parseFromString(questionHtml, "text/html");
+        questionPlaceholder?.appendChild(questionElement.body);
+        htmlData = templateDom.body.innerHTML;
+      }
+    }
+
+    for (const variable of layoutVariables ?? []) {
       const foundProperty = properties?.find((property) => property.key === variable.key);
       if (!foundProperty) continue;
       switch (variable.type) {
         case LayoutVariableType.Text: {
-          const templateDom = new DOMParser().parseFromString(htmlData, "text/html");
           const targetElement = templateDom.getElementById(variable.key);
           switch (targetElement?.tagName.toLocaleLowerCase()) {
             case PageElementType.H1: {

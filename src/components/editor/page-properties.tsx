@@ -257,7 +257,7 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
         value={option.questionOptionValue}
         onChange={({ target: { value } }) => handleOptionChange(option, value)}
         placeholder=""
-        optionKey={option.id}
+        optionKey={option.questionOptionValue}
         component={(props) => (
           <TextField
             {...props}

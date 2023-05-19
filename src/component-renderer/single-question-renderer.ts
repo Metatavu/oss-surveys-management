@@ -1,4 +1,4 @@
-import { AbstractQuestionRenderer } from "../utils/QuestionUtils";
+import { AbstractQuestionRenderer } from "../utils/question-utils";
 import { v4 as uuid } from "uuid";
 
 /**

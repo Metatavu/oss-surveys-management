@@ -1,3 +1,4 @@
+import { toast } from "react-toastify";
 import { errorAtom } from "../../atoms/error";
 import { layoutsAtom } from "../../atoms/layouts";
 import { pagesAtom } from "../../atoms/pages";
@@ -190,6 +191,7 @@ const Editor = ({ setPanelProperties, surveyId }: Props) => {
       }
 
       setSurveyPages(updatedPages);
+      toast.success(strings.editSurveysScreen.editPagesPanel.pageSaved);
     } catch (error: any) {
       setError(`${strings.errorHandling.editSurveysScreen.pageNotDeleted}, ${error}`);
     }

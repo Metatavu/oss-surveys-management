@@ -129,12 +129,26 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
 
     const foundProperty = pageToEdit?.properties?.find((p) => p.key === name);
 
-    if (!foundProperty) return;
-    const pageToUpdate = {
-      ...pageToEdit,
-      properties: pageToEdit.properties?.map((property) =>
-        property.key === name ? { ...property, value: value } : property
-      )
+    const updatedProperties: PageProperty[] = surveyPages[pageNumber - 1].properties?.some(
+      (property) => property.type === PagePropertyType.Options
+    )
+      ? surveyPages[pageNumber - 1].properties!.map((property) => {
+          return property.type === PagePropertyType.Options
+            ? { ...property, value: JSON.stringify(updatedOptions) }
+            : property;
+        })
+      : [
+          ...surveyPages[pageNumber - 1].properties!,
+          {
+            key: PagePropertyType.Options,
+            value: JSON.stringify(updatedOptions),
+            type: PagePropertyType.Options
+          }
+        ];
+
+    const updatesToPage: Page = {
+      ...surveyPages[pageNumber - 1],
+      properties: updatedProperties
     };
 
     if (!pageToUpdate.id) return;
@@ -318,6 +332,42 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
           <Typography variant="h6">{strings.editSurveysScreen.editPagesPanel.addOption}</Typography>
           {renderOptions()}
           {renderAddNewOption()}
+        </Box>
+      )}
+      {!!pageLayouts.find(
+        (layout) =>
+          layout.id === surveyPages[pageNumber - 1].layoutId && layout.name === LayoutType.QUESTION
+      ) &&
+        !!options.length && (
+          <Box p={2}>
+            <Typography variant="h6">
+              {strings.editSurveysScreen.editPagesPanel.answerOptions}
+            </Typography>
+            {options.map((option, i) =>
+              renderOptionsWithDebounceTextField(
+                "option",
+                (e) => handleQuestionOptionChange(e, option),
+                option,
+                "option",
+                true,
+                `${i}`
+              )
+            )}
+          </Box>
+        )}
+      {!!pageLayouts.find(
+        (layout) =>
+          layout.id === surveyPages[pageNumber - 1].layoutId && layout.name === LayoutType.QUESTION
+      ) && (
+        <Box p={2} sx={{ borderBottom: "1px solid #DADCDE" }}>
+          <Button
+            size="large"
+            variant="text"
+            startIcon={<AddCircleIcon />}
+            onClick={addNewQuestionOption}
+          >
+            {strings.editSurveysScreen.editPagesPanel.addOption}
+          </Button>
         </Box>
       )}
     </>

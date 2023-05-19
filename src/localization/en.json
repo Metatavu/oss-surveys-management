@@ -31,7 +31,9 @@
     "overviewScreen": {
       "surveysNotFound": "Error while loading surveys",
       "deviceSurveysNotFound": "Error while loading device surveys",
-      "devicesNotFound": "Error while loading devices"
+      "devicesNotFound": "Error while loading devices",
+      "deviceRequestsNotFound": "Error while loading device requests",
+      "deviceRequestUpdateError": "Error while approving device request"
     },
     "surveysScreen": {
       "createSurveyError": "Error while creating a survey"
@@ -75,6 +77,18 @@
         "status": "Status",
         "description": "Description",
         "location": "Location",
+        "action": "Action"
+      }
+    },
+    "deviceRequests": {
+      "actionButton": "Approve",
+      "pendingStatus": "Pending",
+      "approvedStatus": "Approved",
+      "headings": {
+        "serialNumber": "Serial number",
+        "status": "Status",
+        "description": "Description",
+        "createdAt": "Added",
         "action": "Action"
       }
     }

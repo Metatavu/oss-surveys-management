@@ -1,6 +1,7 @@
 import { DateTime } from "luxon";
-import { DeviceSurvey } from "../generated/client";
+import { DeviceSurvey, DeviceSurveyStatus, Survey, SurveyStatus } from "../generated/client";
 import { DataValidation } from "./data-validation";
+import { SurveyManagementStatus } from "../types";
 
 /**
  * Namespace for Survey utilities
@@ -77,6 +78,61 @@ namespace SurveyUtils {
     );
 
     return foundDeviceSurveys.length;
+  };
+
+  /**
+   * Gets management status of survey
+   *
+   * @param survey survey
+   * @param deviceSurveys device surveys
+   * @returns management status
+   */
+  export const getSurveyManagementStatus = (survey: Survey, deviceSurveys: DeviceSurvey[]) => {
+    const foundDeviceSurvey = deviceSurveys.find(
+      (deviceSurvey) => deviceSurvey.surveyId === survey.id
+    );
+
+    if (survey.status === SurveyStatus.Draft) {
+      return SurveyManagementStatus.DRAFT;
+    }
+    if (
+      !getSurveyDeviceCount(deviceSurveys, survey.id) &&
+      survey.status === SurveyStatus.Approved
+    ) {
+      return SurveyManagementStatus.APPROVED;
+    }
+    if (
+      getSurveyDeviceCount(deviceSurveys, survey.id) === 1 &&
+      foundDeviceSurvey?.status === DeviceSurveyStatus.Scheduled
+    ) {
+      return SurveyManagementStatus.SCHEDULED;
+    }
+
+    return SurveyManagementStatus.PUBLISHED;
+  };
+
+  /**
+   * Sorts surveys by survey management status
+   *
+   * @param surveyA survey A
+   * @param surveyB survey B
+   * @param deviceSurveys device surveys
+   */
+  export const sortSurveysByManagementStatus = (
+    surveyA: Survey,
+    surveyB: Survey,
+    deviceSurveys: DeviceSurvey[]
+  ) => {
+    const surveyAManagementStatus = getSurveyManagementStatus(surveyA, deviceSurveys);
+    const surveyBManagementStatus = getSurveyManagementStatus(surveyB, deviceSurveys);
+    // NOTE: WORK IN PROGRESS
+    if (
+      surveyAManagementStatus === SurveyManagementStatus.PUBLISHED &&
+      surveyBManagementStatus !== SurveyManagementStatus.PUBLISHED
+    )
+      return -1;
+    if (surveyAManagementStatus < surveyBManagementStatus) return 1;
+    return 0;
   };
 }
 

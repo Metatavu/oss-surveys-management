@@ -1,37 +1,66 @@
 import { errorAtom } from "../../atoms/error";
 import { useApi } from "../../hooks/use-api";
 import strings from "../../localization/strings";
-import theme from "../../styles/theme";
-import { Search } from "@mui/icons-material";
-import AddCircleIcon from "@mui/icons-material/AddCircle";
-import { Box, Button, InputAdornment, Paper, Stack, TextField, styled } from "@mui/material";
-import { useSetAtom } from "jotai";
+import { Stack } from "@mui/material";
+import { useAtomValue, useSetAtom } from "jotai";
 import { useNavigate } from "react-router-dom";
-import { SurveyStatus } from "../../generated/client";
-
-/**
- * Styled filter container component
- */
-const FilterContainer = styled(Paper, {
-  label: "filter-container"
-})(() => ({
-  position: "relative",
-  zIndex: 1100,
-  borderTop: "1px solid #DADCDE",
-  paddingTop: theme.spacing(2),
-  paddingBottom: theme.spacing(2),
-  paddingLeft: theme.spacing(4),
-  paddingRight: theme.spacing(4)
-}));
+import { DeviceSurvey, Survey, SurveyStatus } from "../../generated/client";
+import { languageAtom } from "../../atoms/language";
+import { useEffect, useState } from "react";
+import SurveysFilters from "../surveys/surveys-filters";
+import SurveysList from "../surveys/surveys-list";
 
 /**
  * Renders surveys screen
  */
 const SurveysScreen = () => {
-  const { surveysApi } = useApi();
+  useAtomValue(languageAtom);
+  const { surveysApi, devicesApi, deviceSurveysApi } = useApi();
 
   const setError = useSetAtom(errorAtom);
   const navigate = useNavigate();
+  const [surveys, setSurveys] = useState<Survey[]>([]);
+  const [filteredSurveys, setFilteredSurveys] = useState<Survey[]>([]);
+  const [deviceSurveys, setDeviceSurveys] = useState<DeviceSurvey[]>([]);
+
+  /**
+   * Gets Surveys
+   */
+  const getSurveys = async () => {
+    try {
+      const surveys = await surveysApi.listSurveys({});
+      setSurveys(surveys);
+    } catch (error: any) {
+      setError(`${strings.errorHandling.overviewScreen.surveysNotFound}, ${error}`);
+    }
+  };
+
+  /**
+   * Gets Device Surveys
+   */
+  const getDeviceSurveys = async () => {
+    try {
+      const devices = await devicesApi.listDevices({});
+      for (const device of devices) {
+        if (!device.id) continue;
+        const deviceSurveys = await deviceSurveysApi.listDeviceSurveys({ deviceId: device.id });
+        setDeviceSurveys([...deviceSurveys, ...deviceSurveys]);
+      }
+    } catch (error: any) {
+      setError(`${strings.errorHandling.overviewScreen.deviceSurveysNotFound}, ${error}`);
+    }
+  };
+
+  useEffect(() => {
+    getSurveys();
+    getDeviceSurveys().catch((error) =>
+      setError(`${strings.errorHandling.surveysScreen.devicesNotFound}, ${error}`)
+    );
+  }, []);
+
+  useEffect(() => {
+    setFilteredSurveys(surveys);
+  }, [surveys]);
 
   /**
    * Creates a new survey
@@ -53,65 +82,15 @@ const SurveysScreen = () => {
   };
 
   return (
-    <FilterContainer>
-      <Stack direction="row" gap={2} alignItems="center">
-        <TextField
-          disabled
-          sx={{ flex: 2 }}
-          label={strings.surveysScreen.filter}
-          size="small"
-          placeholder={strings.surveysScreen.findByName}
-          InputProps={{
-            endAdornment: (
-              <InputAdornment position="end">
-                <Search />
-              </InputAdornment>
-            )
-          }}
-        />
-        <TextField sx={{ flex: 1 }} label={strings.surveysScreen.show} size="small" select disabled>
-          {/* //TODO: select options not yet implemented
-          {currencies.map((option) => (
-            <MenuItem key={option.value} value={option.value}>
-              {option.label}
-            </MenuItem>
-          ))}
-          */}
-        </TextField>
-        <TextField
-          sx={{ flex: 1 }}
-          label={strings.surveysScreen.sortBy}
-          size="small"
-          select
-          disabled
-        >
-          {/* //TODO: select options not yet implemented
-          {currencies.map((option) => (
-            <MenuItem key={option.value} value={option.value}>
-              {option.label}
-            </MenuItem>
-          ))}
-          */}
-        </TextField>
-        <TextField
-          sx={{ flex: 1 }}
-          label={strings.surveysScreen.category}
-          size="small"
-          select
-          disabled
-        />
-        <Box>
-          <Button
-            size="large"
-            variant="contained"
-            startIcon={<AddCircleIcon />}
-            onClick={createSurvey}
-          >
-            {strings.surveysScreen.createButton}
-          </Button>
-        </Box>
-      </Stack>
-    </FilterContainer>
+    <Stack gap={1}>
+      <SurveysFilters
+        surveys={surveys}
+        deviceSurveys={deviceSurveys}
+        setFilteredSurveys={setFilteredSurveys}
+        createSurvey={createSurvey}
+      />
+      <SurveysList surveys={filteredSurveys} deviceSurveys={deviceSurveys} />
+    </Stack>
   );
 };
 

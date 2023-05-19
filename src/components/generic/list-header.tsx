@@ -8,9 +8,9 @@ interface Props {
 }
 
 /**
- * Overview screens List Header component
+ * List Header component
  */
-const OverviewListHeader = ({ headings }: Props) => {
+const ListHeader = ({ headings }: Props) => {
   return (
     <ListItem>
       {headings.map((heading) => (
@@ -20,4 +20,4 @@ const OverviewListHeader = ({ headings }: Props) => {
   );
 };
 
-export default OverviewListHeader;
+export default ListHeader;

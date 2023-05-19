@@ -125,3 +125,24 @@ export const getTranslatedBackground = (background: Background): string =>
  * Type describing available languages
  */
 export type Language = "fi" | "en";
+
+/**
+ * Enum for Survey Management status
+ */
+export enum SurveyManagementStatus {
+  PUBLISHED = "published",
+  APPROVED = "approved",
+  SCHEDULED = "scheduled",
+  DRAFT = "draft"
+}
+
+/**
+ * Enum for Survey Sorting
+ */
+export enum SurveySortBy {
+  NAME = "name",
+  STATUS = "status",
+  MODIFIED = "modified",
+  CREATOR = "creator",
+  PUBLICATION_TIME = "publication_time"
+}

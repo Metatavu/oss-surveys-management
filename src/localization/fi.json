@@ -42,7 +42,9 @@
       "surveyPagesNotFound": "Kyselysivuja ei löytynyt",
       "pageLayoutsNotFound": "Sivuasetteluja ei löytynyt",
       "pageLayoutNotFound": "Sivuasetteluja ei löytynyt",
-      "pageNotSaved": "Virhe tallennettaessa sivua"
+      "pageNotSaved": "Virhe tallennettaessa sivua",
+      "pageNotDeleted": "Virhe poistaessa sivua",
+      "pageNotCreated": "Virhe luotaessa sivua"
     },
     "previewScreen": {
       "surveyNotFound": "Kyselyä ei löytynyt",
@@ -88,6 +90,7 @@
   },
   "editSurveysScreen": {
     "addNewPage": "Lisää uusi sivu",
+    "deletePage": "Poista",
     "editing": "Luonnokset",
     "publish": "Julkaise",
     "published": "Julkaistu",

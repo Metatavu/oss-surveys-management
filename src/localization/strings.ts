@@ -65,6 +65,8 @@ export interface Localized extends LocalizedStringsMethods {
       pageLayoutsNotFound: string;
       pageLayoutNotFound: string;
       pageNotSaved: string;
+      pageNotDeleted: string;
+      pageNotCreated: string;
     };
     previewScreen: {
       surveyNotFound: string;
@@ -122,6 +124,7 @@ export interface Localized extends LocalizedStringsMethods {
    */
   editSurveysScreen: {
     addNewPage: string;
+    deletePage: string;
     editing: string;
     publish: string;
     published: string;

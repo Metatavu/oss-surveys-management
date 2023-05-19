@@ -14,6 +14,7 @@ import questionRendererFactory from "../../question-renderer/question-renderer-f
 import theme from "../../styles/theme";
 import { EditorPanel, PanelProperties, QuestionType } from "../../types";
 import GenericDialog from "../generic/generic-dialog";
+import LoaderWrapper from "../generic/loader-wrapper";
 import ImageParagraphLayoutImage from "../images/svg/layout-thumbnails/image-paragraph";
 import InfoLayoutImage from "../images/svg/layout-thumbnails/info";
 import InfoImageLayoutImage from "../images/svg/layout-thumbnails/info-image";
@@ -24,7 +25,7 @@ import StatisticsLayoutImage from "../images/svg/layout-thumbnails/statistics";
 import Preview from "../preview/preview";
 import ImageButton from "./image-button";
 import NewPageButton from "./new-page-button";
-import { Box, CircularProgress, Stack, Typography, styled } from "@mui/material";
+import { Box, Stack, Typography, styled } from "@mui/material";
 import { useAtom, useSetAtom } from "jotai";
 import React, { useEffect, useState } from "react";
 import { v4 as uuid } from "uuid";
@@ -118,34 +119,72 @@ const Editor = ({ setPanelProperties, surveyId }: Props) => {
     setPageLayouts(layouts);
   };
 
-  if (isLoading || !surveyPages.length || !pageLayouts.length) {
-    return (
-      <Stack flex={1} justifyContent="center" alignItems="center">
-        <CircularProgress />
-      </Stack>
-    );
-  }
-
   /**
    * Create a new page based on selected template
    *
    * @param templateType string
    */
   const createPage = async (templateType: string) => {
-    const layoutId = pageLayouts.find((layout) => layout.name === templateType)!.id!;
+    const foundLayout = pageLayouts.find((layout) => layout.name === templateType);
 
-    const newPage = await pagesApi.createSurveyPage({
-      surveyId: surveyId,
-      page: {
-        id: uuid(),
-        layoutId: layoutId,
-        title: templateType,
-        orderNumber: surveyPages.length + 1
+    if (!foundLayout?.id) return;
+    try {
+      setShowAddPage(false);
+      setIsLoading(true);
+      const newPage = await pagesApi.createSurveyPage({
+        surveyId: surveyId,
+        page: {
+          id: uuid(),
+          layoutId: foundLayout.id,
+          title: templateType,
+          orderNumber: surveyPages.length + 1
+        }
+      });
+
+      setSurveyPages([...surveyPages, newPage]);
+    } catch (error: any) {
+      setError(`${strings.errorHandling.editSurveysScreen.pageNotCreated}, ${error}`);
+    }
+
+    setIsLoading(false);
+  };
+
+  /**
+   * Deletes page by page number
+   *
+   * @param pageNumber page number
+   */
+  const deletePage = async (pageNumber: number) => {
+    const foundPage = surveyPages.find((page) => page.orderNumber === pageNumber);
+
+    if (!foundPage?.id) return;
+    try {
+      setIsLoading(true);
+      await pagesApi.deleteSurveyPage({ surveyId: surveyId, pageId: foundPage.id });
+      const newSurveyPages = surveyPages.filter((page) => page.orderNumber !== pageNumber);
+      newSurveyPages.sort((a, b) => a.orderNumber - b.orderNumber);
+
+      const updatedPages: Page[] = [];
+      for (const page of newSurveyPages) {
+        if (!page?.id) continue;
+        if (page.orderNumber > pageNumber) {
+          updatedPages.push(
+            await pagesApi.updateSurveyPage({
+              surveyId: surveyId,
+              pageId: page.id,
+              page: { ...page, orderNumber: page.orderNumber - 1 }
+            })
+          );
+        } else {
+          updatedPages.push(page);
+        }
       }
-    });
 
-    setSurveyPages([...surveyPages, newPage]);
-    setShowAddPage(false);
+      setSurveyPages(updatedPages);
+    } catch (error: any) {
+      setError(`${strings.errorHandling.editSurveysScreen.pageNotDeleted}, ${error}`);
+    }
+    setIsLoading(false);
   };
 
   /**
@@ -204,7 +243,10 @@ const Editor = ({ setPanelProperties, surveyId }: Props) => {
    * @returns layout html
    */
   const getPageLayout = (page: Page) => {
-    return pageLayouts.find((layout) => layout.id === page.layoutId)!.html;
+    const foundPageLayout = pageLayouts.find((layout) => layout.id === page.layoutId);
+    if (!foundPageLayout) return;
+
+    return foundPageLayout.html;
   };
 
   // TODO: This will need to be done for the preview screen?
@@ -216,7 +258,7 @@ const Editor = ({ setPanelProperties, surveyId }: Props) => {
    */
   const renderPagePreview = (page: Page) => {
     const { properties } = page;
-    let htmlData = getPageLayout(page);
+    let htmlData = getPageLayout(page) ?? "";
 
     const optionsProperty = properties?.find(
       (property) => property.type === PagePropertyType.Options
@@ -251,6 +293,7 @@ const Editor = ({ setPanelProperties, surveyId }: Props) => {
           setSelectedPage={() => setSelectedPageNumber(page.orderNumber)}
           selectedPage={selectedPageNumber}
           pageNumber={page.orderNumber}
+          deletePage={deletePage}
         />
       </PreviewContainer>
     );
@@ -265,9 +308,11 @@ const Editor = ({ setPanelProperties, surveyId }: Props) => {
         setSelectedPageNumber(undefined);
       }}
     >
-      {!!surveyPages.length && surveyPages.map(renderPagePreview)}
-      <NewPageButton onClick={() => setShowAddPage(true)} />
-      {renderAddNewPageDialog()}
+      <LoaderWrapper loading={isLoading}>
+        {!!surveyPages.length && surveyPages.map(renderPagePreview)}
+        <NewPageButton onClick={() => setShowAddPage(true)} />
+        {renderAddNewPageDialog()}
+      </LoaderWrapper>
     </EditorContainer>
   );
 };

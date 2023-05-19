@@ -120,10 +120,11 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
    * @param id string
    */
   const handleQuestionOptionChange = async (
-    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-    previousOption: string
+    _: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    __: string
   ) => {
-    const updatedOptions = options.map((option) => {
+    // TODO: Requires rework after backend changes to questions/options
+    /* const updatedOptions = options.map((option) => {
       return option === previousOption ? event.target.value : option;
     });
 
@@ -164,7 +165,7 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
       setOptions(updatedOptions);
     } catch (error) {
       setError(`${strings.errorHandling.editSurveysScreen.pageNotSaved}, ${error}`);
-    }
+    } */
   };
 
   /**

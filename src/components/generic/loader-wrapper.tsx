@@ -5,7 +5,7 @@ import { Backdrop, CircularProgress } from "@mui/material";
  */
 interface Props {
   loading: boolean;
-  children: React.ReactElement;
+  children: React.ReactNode;
 }
 
 /**

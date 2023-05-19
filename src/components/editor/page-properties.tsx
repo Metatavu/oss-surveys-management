@@ -1,7 +1,7 @@
 import { errorAtom } from "../../atoms/error";
 import { layoutsAtom } from "../../atoms/layouts";
 import { pagesAtom } from "../../atoms/pages";
-import { Page, PageProperty, PagePropertyType } from "../../generated/client";
+import { Page, PageProperty } from "../../generated/client";
 import { useApi } from "../../hooks/use-api";
 import strings from "../../localization/strings";
 import { LayoutType, QuestionType } from "../../types";
@@ -47,7 +47,7 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
    */
   const getQuestionOptions = () => {
     const optionsArrayString = surveyPages[pageNumber - 1].properties?.find(
-      (property) => property.key === PagePropertyType.Options
+      (property) => property.key === "OPTIONS"
     )?.value;
 
     if (!optionsArrayString) {
@@ -131,18 +131,18 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
       (property) => property.type === PagePropertyType.Options
     )
       ? surveyPages[pageNumber - 1].properties!.map((property) => {
-        return property.type === PagePropertyType.Options
-          ? { ...property, value: JSON.stringify(updatedOptions) }
-          : property;
-      })
+          return property.type === PagePropertyType.Options
+            ? { ...property, value: JSON.stringify(updatedOptions) }
+            : property;
+        })
       : [
-        ...surveyPages[pageNumber - 1].properties!,
-        {
-          key: PagePropertyType.Options,
-          value: JSON.stringify(updatedOptions),
-          type: PagePropertyType.Options
-        }
-      ];
+          ...surveyPages[pageNumber - 1].properties!,
+          {
+            key: PagePropertyType.Options,
+            value: JSON.stringify(updatedOptions),
+            type: PagePropertyType.Options
+          }
+        ];
 
     const updatesToPage: Page = {
       ...surveyPages[pageNumber - 1],
@@ -291,17 +291,17 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
         (layout) =>
           layout.id === surveyPages[pageNumber - 1].layoutId && layout.name === LayoutType.QUESTION
       ) && (
-          <Box p={2} sx={{ borderBottom: "1px solid #DADCDE" }}>
-            <Button
-              size="large"
-              variant="text"
-              startIcon={<AddCircleIcon />}
-              onClick={addNewQuestionOption}
-            >
-              {strings.editSurveysScreen.editPagesPanel.addOption}
-            </Button>
-          </Box>
-        )}
+        <Box p={2} sx={{ borderBottom: "1px solid #DADCDE" }}>
+          <Button
+            size="large"
+            variant="text"
+            startIcon={<AddCircleIcon />}
+            onClick={addNewQuestionOption}
+          >
+            {strings.editSurveysScreen.editPagesPanel.addOption}
+          </Button>
+        </Box>
+      )}
     </>
   );
 };

@@ -31,7 +31,9 @@
     "overviewScreen": {
       "surveysNotFound": "Virhe ladattaessa kyselyitä",
       "deviceSurveysNotFound": "Virhe ladattaessa laitteiden kyselyitä",
-      "devicesNotFound": "Virhe ladattaessa laitteita"
+      "devicesNotFound": "Virhe ladattaessa laitteita",
+      "deviceRequestsNotFound": "Virhe ladattaessa laitepyyntöjä",
+      "deviceRequestUpdateError": "Virhe hyväksyttäessä laitetta"
     },
     "surveysScreen": {
       "createSurveyError": "Virhe luotaessa kyselyä"
@@ -75,6 +77,18 @@
         "status": "Tila",
         "description": "Lisätiedot",
         "location": "Sijainti",
+        "action": "Toiminto"
+      }
+    },
+    "deviceRequests": {
+      "actionButton": "Ota käyttöön",
+      "pendingStatus": "Odottaa",
+      "approvedStatus": "Hyväksytty",
+      "headings": {
+        "serialNumber": "Sarjanumero",
+        "status": "Tila",
+        "description": "Lisätiedot",
+        "createdAt": "Lisätty",
         "action": "Toiminto"
       }
     }

@@ -7,7 +7,7 @@ import {
   EDITOR_SCREEN_PREVIEW_CONTAINER_HEIGHT,
   EDITOR_SCREEN_PREVIEW_CONTAINER_WIDTH
 } from "../../constants";
-import { Layout, Page, PagePropertyType } from "../../generated/client";
+import { Layout, Page } from "../../generated/client";
 import { useApi } from "../../hooks/use-api";
 import strings from "../../localization/strings";
 import questionRendererFactory from "../../question-renderer/question-renderer-factory";
@@ -249,7 +249,6 @@ const Editor = ({ setPanelProperties, surveyId }: Props) => {
     return foundPageLayout.html;
   };
 
-  // TODO: This will need to be done for the preview screen?
   /**
    * Render page preview
    *
@@ -260,9 +259,8 @@ const Editor = ({ setPanelProperties, surveyId }: Props) => {
     const { properties } = page;
     let htmlData = getPageLayout(page) ?? "";
 
-    const optionsProperty = properties?.find(
-      (property) => property.type === PagePropertyType.Options
-    );
+    // TODO: Whole questions/options logic should be refined due to backend changes.
+    const optionsProperty = undefined;
     if (optionsProperty) {
       const questionRenderer = questionRendererFactory.getRenderer(QuestionType.SINGLE);
 

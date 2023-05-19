@@ -11,7 +11,7 @@ import { Page, Survey } from "../../generated/client";
 import { useApi } from "../../hooks/use-api";
 import strings from "../../localization/strings";
 import theme from "../../styles/theme";
-import { parseHtmlToDom } from "../../utils/PreviewUtils";
+import { parseHtmlToDom } from "../../utils/preview-utils";
 import wrapTemplate from "../pages/templates/template-wrapper";
 import Preview from "../preview/preview";
 import PreviewToolbar from "../preview/preview-toolbar";
@@ -180,6 +180,7 @@ const PreviewScreen = () => {
             width={DEVICE_WIDTH}
             height={DEVICE_HEIGHT}
             scale={height / 1.5 / DEVICE_HEIGHT}
+            previewPage={true}
           />
         </PreviewContainer>
       </PreviewArea>

@@ -5,13 +5,18 @@
     "notImplemented": "Not yet implemented",
     "back": "Back",
     "confirm": "Confirm",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "unnamed": "Unnamed"
   },
   "navigation": {
     "overview": "Overview",
     "surveys": "Surveys",
     "screens": "Screens",
     "logo": "Logo image"
+  },
+  "localization": {
+    "en": "EN",
+    "fi": "FI"
   },
   "errorHandling": {
     "title": "Error occurred",
@@ -24,7 +29,9 @@
       "errorMessage": "Error message: "
     },
     "overviewScreen": {
-      "surveysNotFound": "Error while loading surveys"
+      "surveysNotFound": "Error while loading surveys",
+      "deviceSurveysNotFound": "Error while loading device surveys",
+      "devicesNotFound": "Error while loading devices"
     },
     "surveysScreen": {
       "createSurveyError": "Error while creating a survey"
@@ -35,7 +42,9 @@
       "surveyPagesNotFound": "Survey pages not found",
       "pageLayoutsNotFound": "Page layouts not found",
       "pageLayoutNotFound": "Page layout not found",
-      "pageNotSaved": "Error when saving page"
+      "pageNotSaved": "Error when saving page",
+      "pageNotDeleted": "Error when deleting page",
+      "pageNotCreated": "Error when creating page"
     },
     "previewScreen": {
       "surveyNotFound": "Survey not found",
@@ -45,13 +54,30 @@
     }
   },
   "overviewScreen": {
-    "surveyTitle": "Surveys",
-    "screens": "Screens",
-    "publicationDate": "Publication date",
-    "endTime": "End date",
-    "mostPopular": "Most popular screen",
-    "answers": "Answers",
-    "activeSurveys": "Active surveys {0}"
+    "activeSurveysTab": "Active surveys ({0})",
+    "idleDevicesTab": "Devices without surveys ({0})",
+    "offlineDevicesTab": "Offline devices ({0})",
+    "newDevicesTab": "New devices ({0})",
+    "activeSurveys": {
+      "surveyTitle": "Surveys",
+      "screens": "Screens",
+      "publicationDate": "Publication date",
+      "endTime": "End date",
+      "mostPopular": "Most popular screen",
+      "answers": "Answers"
+    },
+    "devices": {
+      "idleActionButton": "Add survey",
+      "oflineActionButton": "Show info",
+      "newActionButton": "Approve",
+      "headings": {
+        "deviceName": "Device",
+        "status": "Status",
+        "description": "Description",
+        "location": "Location",
+        "action": "Action"
+      }
+    }
   },
   "surveysScreen": {
     "show": "Show",
@@ -64,6 +90,7 @@
   },
   "editSurveysScreen": {
     "addNewPage": "Add new page",
+    "deletePage": "Delete",
     "surveySaved": "Survey saved",
     "editing": "Editing",
     "publish": "Publish",
@@ -116,5 +143,11 @@
   },
   "previewScreen": {
     "sharePreview": "Share preview"
+  },
+  "devices": {
+    "status": {
+      "online": "Online",
+      "offline": "Offline"
+    }
   }
 }

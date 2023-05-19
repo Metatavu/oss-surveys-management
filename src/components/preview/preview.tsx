@@ -1,7 +1,10 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import wrapTemplate from "../pages/templates/template-wrapper";
-import { parseHtmlToDom } from "../../utils/PreviewUtils";
+import { parseHtmlToDom } from "../../utils/preview-utils";
 import { IframeClickEvent } from "../../types";
+import { IconButton, Menu, MenuItem } from "@mui/material";
+import { MoreHoriz } from "@mui/icons-material";
+import strings from "../../localization/strings";
 
 /**
  * Component props
@@ -13,8 +16,10 @@ interface Props {
   scale: number;
   pageNumber?: number;
   selectedPage?: number;
+  previewPage?: boolean;
   setSelectedPage?: (pageNumber: number) => void;
   onPanelPropertiesChange?: () => void;
+  deletePage?: (pageNumber: number) => Promise<void>;
 }
 
 /**
@@ -29,9 +34,14 @@ const Preview = ({
   scale,
   pageNumber,
   selectedPage,
+  previewPage,
   setSelectedPage,
-  onPanelPropertiesChange
+  onPanelPropertiesChange,
+  deletePage
 }: Props) => {
+  const [anchorEl, setAnchorEl] = useState<HTMLElement>();
+  const [pageMenuOpen, setPageMenuOpen] = useState(false);
+
   /**
    * Set up event listener to recieve post message from iframe
    */
@@ -58,16 +68,46 @@ const Preview = ({
     setSelectedPage(typedEvent.detail.pageNumber);
   };
 
+  /**
+   * Handles page menu click
+   *
+   * @param event event
+   */
+  const handlePageMenuClick = ({ target }: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(target as HTMLElement);
+    setPageMenuOpen(!pageMenuOpen);
+  };
+
   return (
-    <div style={{ scale: `${scale}` }}>
+    <div style={{ scale: `${scale}`, position: "relative" }}>
+      {!previewPage && (
+        <IconButton
+          onClick={handlePageMenuClick}
+          sx={{ position: "absolute", top: 0, right: 0, zIndex: 100000, padding: 0, margin: 0 }}
+        >
+          <MoreHoriz sx={{ width: "12.5rem", height: "12.5rem" }} style={{ color: "#ffffff" }} />
+        </IconButton>
+      )}
       <iframe
         srcDoc={wrapTemplate(parseHtmlToDom(htmlString, [], []).outerHTML, pageNumber)}
+        title="preview"
         width={width}
         title="preview"
         height={height}
         seamless
         style={{ border: selectedPage === pageNumber ? "20px solid #46dc78" : "none" }}
       />
+      {!previewPage && deletePage && pageNumber && (
+        <Menu
+          anchorEl={anchorEl}
+          open={pageMenuOpen}
+          onClose={() => setPageMenuOpen(!pageMenuOpen)}
+        >
+          <MenuItem onClick={() => deletePage(pageNumber)}>
+            {strings.editSurveysScreen.deletePage}
+          </MenuItem>
+        </Menu>
+      )}
     </div>
   );
 };

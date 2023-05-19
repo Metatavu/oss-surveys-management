@@ -5,13 +5,18 @@
     "notImplemented": "Ei vielä toteutettu",
     "back": "Takaisin",
     "confirm": "Vahvista",
-    "cancel": "Peruuta"
+    "cancel": "Peruuta",
+    "unnamed": "Nimetön"
   },
   "navigation": {
     "overview": "Yhteenveto",
     "surveys": "Kyselyt",
     "screens": "Näytöt",
     "logo": "Logokuva"
+  },
+  "localization": {
+    "en": "EN",
+    "fi": "FI"
   },
   "errorHandling": {
     "title": "Tapahtui virhe",
@@ -24,7 +29,9 @@
       "errorMessage": "Virheilmoitus: "
     },
     "overviewScreen": {
-      "surveysNotFound": "Virhe ladattaessa kyselyitä"
+      "surveysNotFound": "Virhe ladattaessa kyselyitä",
+      "deviceSurveysNotFound": "Virhe ladattaessa laitteiden kyselyitä",
+      "devicesNotFound": "Virhe ladattaessa laitteita"
     },
     "surveysScreen": {
       "createSurveyError": "Virhe luotaessa kyselyä"
@@ -35,7 +42,9 @@
       "surveyPagesNotFound": "Kyselysivuja ei löytynyt",
       "pageLayoutsNotFound": "Sivuasetteluja ei löytynyt",
       "pageLayoutNotFound": "Sivuasetteluja ei löytynyt",
-      "pageNotSaved": "Virhe tallennettaessa sivua"
+      "pageNotSaved": "Virhe tallennettaessa sivua",
+      "pageNotDeleted": "Virhe poistaessa sivua",
+      "pageNotCreated": "Virhe luotaessa sivua"
     },
     "previewScreen": {
       "surveyNotFound": "Kyselyä ei löytynyt",
@@ -45,13 +54,30 @@
     }
   },
   "overviewScreen": {
-    "surveyTitle": "Kysely",
-    "screens": "Näytöt",
-    "publicationDate": "Julkaisuaika",
-    "endTime": "Päättymisaika",
-    "mostPopular": "Suosituin näyttö",
-    "answers": "Vastauksia",
-    "activeSurveys": "Aktiiviset kyselyt {0}"
+    "activeSurveysTab": "Aktiiviset kyselyt ({0})",
+    "idleDevicesTab": "Näytöt ilman sisältöä ({0})",
+    "offlineDevicesTab": "Sammuneet näytöt ({0})",
+    "newDevicesTab": "Uudet lisättävät näytö ({0})",
+    "activeSurveys": {
+      "surveyTitle": "Kysely",
+      "screens": "Näytöt",
+      "publicationDate": "Julkaisuaika",
+      "endTime": "Päättymisaika",
+      "mostPopular": "Suosituin näyttö",
+      "answers": "Vastauksia"
+    },
+    "devices": {
+      "idleActionButton": "Lisää kysely",
+      "oflineActionButton": "Näytä tiedot",
+      "newActionButton": "Ota käyttöön",
+      "headings": {
+        "deviceName": "Näyttö",
+        "status": "Tila",
+        "description": "Lisätiedot",
+        "location": "Sijainti",
+        "action": "Toiminto"
+      }
+    }
   },
   "surveysScreen": {
     "show": "Näytä",
@@ -64,6 +90,7 @@
   },
   "editSurveysScreen": {
     "addNewPage": "Lisää uusi sivu",
+    "deletePage": "Poista",
     "surveySaved": "Kysely tallennettu",
     "editing": "Luonnokset",
     "publish": "Julkaise",
@@ -116,5 +143,11 @@
   },
   "previewScreen": {
     "sharePreview": "Jaa esikatselu"
+  },
+  "devices": {
+    "status": {
+      "online": "Päällä",
+      "offline": "Sammunut"
+    }
   }
 }

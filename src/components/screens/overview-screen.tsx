@@ -1,26 +1,31 @@
-import { useNavigate } from "react-router-dom";
 import { errorAtom } from "../../atoms/error";
-import { Survey } from "../../generated/client";
+import { Device, DeviceStatus, DeviceSurvey, Survey } from "../../generated/client";
 import { useApi } from "../../hooks/use-api";
 import strings from "../../localization/strings";
-import { SurveyScreens } from "../../types";
+import { OverviewScreenTabs } from "../../types";
 import TabPanel from "../surveys/tab-panel";
-import { Box, List, ListItem, ListItemButton, ListItemText, Paper, Tab, Tabs } from "@mui/material";
-import { useSetAtom } from "jotai";
+import { Box, Paper, Tab, Tabs } from "@mui/material";
+import { useAtomValue, useSetAtom } from "jotai";
 import { useEffect, useState } from "react";
+import DeviceUtils from "../../utils/device-utils";
+import OverviewSurveyList from "../overview/overview-surveys-list";
+import OverviewDevicesList from "../overview/overview-devices-list";
+import { languageAtom } from "../../atoms/language";
 
 /**
  *  Renders overview screen
  */
 const OverviewScreen = () => {
-  const [activeTab, setActiveTab] = useState(SurveyScreens.ACTIVE);
-  const navigate = useNavigate();
-  const { surveysApi } = useApi();
+  useAtomValue(languageAtom);
+  const [activeTab, setActiveTab] = useState(OverviewScreenTabs.ACTIVE);
+  const { surveysApi, deviceSurveysApi, devicesApi } = useApi();
   const setError = useSetAtom(errorAtom);
   const [surveys, setSurveys] = useState<Survey[]>([]);
+  const [devices, setDevices] = useState<Device[]>([]);
+  const [deviceSurveys, setDeviceSurveys] = useState<DeviceSurvey[]>([]);
 
   /**
-   * Get active Surveys
+   * Gets Surveys
    */
   const getSurveys = async () => {
     try {
@@ -31,62 +36,95 @@ const OverviewScreen = () => {
     }
   };
 
+  /**
+   * Gets Devices
+   */
+  const getDevices = async () => {
+    const devices = await devicesApi.listDevices({});
+    setDevices(devices);
+
+    for (const device of devices) {
+      if (!device.id) continue;
+      await getDeviceSurveysByDevice(device.id);
+    }
+  };
+
+  /**
+   * Gets Device Surveys for a specific device
+   *
+   * Device Surveys define what surveys are assigned to what devices.
+   *
+   * @param deviceId device id
+   */
+  const getDeviceSurveysByDevice = async (deviceId: string) => {
+    try {
+      const deviceSurveys = await deviceSurveysApi.listDeviceSurveys({ deviceId: deviceId });
+      setDeviceSurveys([...deviceSurveys, ...deviceSurveys]);
+    } catch (error: any) {
+      setError(`${strings.errorHandling.overviewScreen.deviceSurveysNotFound}, ${error}`);
+    }
+  };
+
+  /**
+   * Handles device overview action button click
+   * TODO: Add actual functionality once backend is ready
+   *
+   * @param _ device
+   */
+  const handleActionButtonClick = async (_: Device) => alert(strings.generic.notImplemented);
+
   useEffect(() => {
     getSurveys();
-  }, []);
-
-  /**
-   * Render survey list headings
-   */
-  const renderSurveyListHeadings = () => (
-    <ListItem>
-      <ListItemText primary={strings.overviewScreen.surveyTitle} />
-      <ListItemText primary={strings.overviewScreen.screens} />
-      <ListItemText primary={strings.overviewScreen.publicationDate} />
-      <ListItemText primary={strings.overviewScreen.endTime} />
-      <ListItemText primary={strings.overviewScreen.mostPopular} />
-      <ListItemText primary={strings.overviewScreen.answers} />
-    </ListItem>
-  );
-
-  /**
-   * Renders list of surveys
-   */
-  const renderSurveysList = () => {
-    return (
-      <List>
-        {renderSurveyListHeadings()}
-        {surveys.map((survey) => (
-          <ListItemButton key={survey.id} onClick={() => navigate(`/surveys/edit/${survey.id}`)}>
-            <ListItemText secondary={survey.title} />
-            <ListItemText secondary={strings.generic.notImplemented} />
-            <ListItemText secondary={strings.generic.notImplemented} />
-            <ListItemText secondary={strings.generic.notImplemented} />
-            <ListItemText secondary={strings.generic.notImplemented} />
-            <ListItemText secondary={strings.generic.notImplemented} />
-          </ListItemButton>
-        ))}
-      </List>
+    getDevices().catch((error) =>
+      setError(`${strings.errorHandling.overviewScreen.devicesNotFound}, ${error}`)
     );
-  };
+  }, []);
 
   return (
     <Box p={4}>
       <Paper>
         <Tabs value={activeTab} onChange={(_, value) => setActiveTab(value)}>
           <Tab
-            value={SurveyScreens.ACTIVE}
+            value={OverviewScreenTabs.ACTIVE}
+            label={strings.formatString(strings.overviewScreen.activeSurveysTab, surveys.length)}
+          />
+          <Tab
+            value={OverviewScreenTabs.IDLE_DEVICES}
             label={strings.formatString(
-              strings.overviewScreen.activeSurveys,
-              `(${surveys.length})`
+              strings.overviewScreen.idleDevicesTab,
+              DeviceUtils.getDevicesWithoutSurveys(devices, deviceSurveys).length
             )}
           />
-          <Tab value={SurveyScreens.NOT_IMPLEMENTED} label={strings.generic.notImplemented} />
+          <Tab
+            value={OverviewScreenTabs.OFFLINE_DEVICES}
+            label={strings.formatString(
+              strings.overviewScreen.offlineDevicesTab,
+              DeviceUtils.getDevicesByStatus(devices, DeviceStatus.Offline).length
+            )}
+          />
+          <Tab
+            value={OverviewScreenTabs.NEW_DEVICES}
+            label={strings.formatString(strings.overviewScreen.newDevicesTab, 0)}
+          />
         </Tabs>
-        <TabPanel value={activeTab} index={SurveyScreens.ACTIVE}>
-          {renderSurveysList()}
+        <TabPanel value={activeTab} index={OverviewScreenTabs.ACTIVE}>
+          <OverviewSurveyList surveys={surveys} deviceSurveys={deviceSurveys} />
         </TabPanel>
-        <TabPanel value={activeTab} index={SurveyScreens.NOT_IMPLEMENTED}>
+        <TabPanel value={activeTab} index={OverviewScreenTabs.IDLE_DEVICES}>
+          <OverviewDevicesList
+            devices={DeviceUtils.getDevicesWithoutSurveys(devices, deviceSurveys)}
+            actionButtonText={strings.overviewScreen.devices.idleActionButton}
+            onClick={handleActionButtonClick}
+          />
+        </TabPanel>
+        <TabPanel value={activeTab} index={OverviewScreenTabs.OFFLINE_DEVICES}>
+          <OverviewDevicesList
+            devices={DeviceUtils.getDevicesByStatus(devices, DeviceStatus.Offline)}
+            actionButtonText={strings.overviewScreen.devices.oflineActionButton}
+            onClick={handleActionButtonClick}
+          />
+        </TabPanel>
+        <TabPanel value={activeTab} index={OverviewScreenTabs.NEW_DEVICES}>
           {strings.generic.notImplemented}
         </TabPanel>
       </Paper>

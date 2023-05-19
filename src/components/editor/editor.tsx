@@ -271,8 +271,8 @@ const Editor = ({ setPanelProperties, surveyId }: Props) => {
     const nextButtonVisible = surveyPages.find(
       (surveyPage) => surveyPage.id === page.id
     )?.nextButtonVisible;
-    let htmlData = getPageLayout(page).html;
-    const layoutVariables = getPageLayout(page).layoutVariables;
+    let htmlData = getPageLayout(page)!.html;
+    const layoutVariables = getPageLayout(page)!.layoutVariables;
     const templateDom = new DOMParser().parseFromString(htmlData, "text/html");
 
     if (!nextButtonVisible) {

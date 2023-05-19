@@ -18,7 +18,7 @@ namespace PageUtils {
 
     return {
       type: foundElement?.tagName.toLowerCase() as PageElementType,
-      element: foundElement,
+      element: foundElement!,
       id: id
     };
   };

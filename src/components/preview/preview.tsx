@@ -92,7 +92,6 @@ const Preview = ({
         srcDoc={wrapTemplate(parseHtmlToDom(htmlString, [], []).outerHTML, pageNumber)}
         title="preview"
         width={width}
-        title="preview"
         height={height}
         seamless
         style={{ border: selectedPage === pageNumber ? "20px solid #46dc78" : "none" }}

@@ -1,7 +1,6 @@
 import { DateTime } from "luxon";
 import { DeviceSurvey } from "../generated/client";
 import { DataValidation } from "./data-validation";
-import strings from "../localization/strings";
 
 /**
  * Namespace for Survey utilities

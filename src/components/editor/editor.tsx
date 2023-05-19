@@ -7,12 +7,12 @@ import {
   EDITOR_SCREEN_PREVIEW_CONTAINER_HEIGHT,
   EDITOR_SCREEN_PREVIEW_CONTAINER_WIDTH
 } from "../../constants";
-import { Layout, Page, PagePropertyType } from "../../generated/client";
+import { Layout, Page, PageQuestionType } from "../../generated/client";
 import { useApi } from "../../hooks/use-api";
 import strings from "../../localization/strings";
 import questionRendererFactory from "../../question-renderer/question-renderer-factory";
 import theme from "../../styles/theme";
-import { EditorPanel, PanelProperties, QuestionType } from "../../types";
+import { EditorPanel, PanelProperties } from "../../types";
 import GenericDialog from "../generic/generic-dialog";
 import LoaderWrapper from "../generic/loader-wrapper";
 import ImageParagraphLayoutImage from "../images/svg/layout-thumbnails/image-paragraph";
@@ -137,7 +137,8 @@ const Editor = ({ setPanelProperties, surveyId }: Props) => {
           id: uuid(),
           layoutId: foundLayout.id,
           title: templateType,
-          orderNumber: surveyPages.length + 1
+          orderNumber: surveyPages.length + 1,
+          nextButtonVisible: true
         }
       });
 
@@ -249,7 +250,6 @@ const Editor = ({ setPanelProperties, surveyId }: Props) => {
     return foundPageLayout.html;
   };
 
-  // TODO: This will need to be done for the preview screen?
   /**
    * Render page preview
    *
@@ -257,28 +257,9 @@ const Editor = ({ setPanelProperties, surveyId }: Props) => {
    * @returns PreviewContainer and Preview
    */
   const renderPagePreview = (page: Page) => {
-    const { properties } = page;
-    let htmlData = getPageLayout(page) ?? "";
+    const htmlData = getPageLayout(page) ?? "";
 
-    const optionsProperty = properties?.find(
-      (property) => property.type === PagePropertyType.Options
-    );
-    if (optionsProperty) {
-      const questionRenderer = questionRendererFactory.getRenderer(QuestionType.SINGLE);
-
-      const questionHtml = questionRenderer.render(JSON.parse(optionsProperty.value));
-      const questionElement = new DOMParser().parseFromString(questionHtml, "text/html");
-
-      const templateDom = new DOMParser().parseFromString(htmlData, "text/html");
-      const questionPlaceholder = templateDom.querySelector("div[data-component='question']");
-
-      if (!questionPlaceholder) {
-        console.warn("Could not find question placeholder in template.");
-      } else {
-        questionPlaceholder?.replaceWith(questionElement.body);
-        htmlData = templateDom.body.innerHTML;
-      }
-    }
+    // TODO: Whole questions/options logic should be refined due to backend changes.
 
     return (
       <PreviewContainer key={page.id}>

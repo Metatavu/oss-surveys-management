@@ -2,7 +2,6 @@ import { toast } from "react-toastify";
 import { errorAtom } from "../../atoms/error";
 import { layoutsAtom } from "../../atoms/layouts";
 import { pagesAtom } from "../../atoms/pages";
-import componentRendererFactory from "../../component-renderer/component-renderer-factory";
 import {
   DEFAULT_QUESTION_OPTION,
   DEVICE_HEIGHT,
@@ -10,12 +9,12 @@ import {
   EDITOR_SCREEN_PREVIEW_CONTAINER_HEIGHT,
   EDITOR_SCREEN_PREVIEW_CONTAINER_WIDTH
 } from "../../constants";
-import { Layout, LayoutVariableType, Page, PageQuestionType } from "../../generated/client";
+import { Layout, Page, PageQuestionType } from "../../generated/client";
 import { useApi } from "../../hooks/use-api";
 import strings from "../../localization/strings";
 import theme from "../../styles/theme";
 import { EditorPanel, PanelProperties } from "../../types";
-import { PageElementType } from "../../utils/page-utils";
+import PageUtils from "../../utils/page-utils";
 import GenericDialog from "../generic/generic-dialog";
 import LoaderWrapper from "../generic/loader-wrapper";
 import ImageParagraphLayoutImage from "../images/svg/layout-thumbnails/image-paragraph";
@@ -271,8 +270,12 @@ const Editor = ({ setPanelProperties, surveyId }: Props) => {
     const nextButtonVisible = surveyPages.find(
       (surveyPage) => surveyPage.id === page.id
     )?.nextButtonVisible;
-    let htmlData = getPageLayout(page)!.html;
-    const layoutVariables = getPageLayout(page)!.layoutVariables;
+    const pageLayout = getPageLayout(page);
+
+    if (!pageLayout) return;
+
+    let htmlData = pageLayout.html;
+    const layoutVariables = pageLayout.layoutVariables;
     const templateDom = new DOMParser().parseFromString(htmlData, "text/html");
 
     if (!nextButtonVisible) {
@@ -282,43 +285,15 @@ const Editor = ({ setPanelProperties, surveyId }: Props) => {
     }
 
     if (page.question) {
-      const questionRenderer = componentRendererFactory.getQuestionRenderer(page.question.type);
-      const questionPlaceholder = templateDom.querySelector("div[data-component='question']");
-      for (const option of page.question.options) {
-        const questionHtml = questionRenderer.render(option.questionOptionValue);
-        const questionElement = new DOMParser().parseFromString(questionHtml, "text/html");
-        questionPlaceholder?.appendChild(questionElement.body);
-        htmlData = templateDom.body.innerHTML;
-      }
+      htmlData = PageUtils.handlePageQuestionsRendering(templateDom, page.question);
     }
 
     for (const variable of layoutVariables ?? []) {
       const foundProperty = properties?.find((property) => property.key === variable.key);
       if (!foundProperty) continue;
-      switch (variable.type) {
-        case LayoutVariableType.Text: {
-          const targetElement = templateDom.getElementById(variable.key);
-          switch (targetElement?.tagName.toLocaleLowerCase()) {
-            case PageElementType.H1: {
-              const titleRenderer = componentRendererFactory.getTitleRenderer();
-              const textHtml = titleRenderer.render(foundProperty.value);
-              const textElement = new DOMParser().parseFromString(textHtml, "text/html");
-              targetElement?.replaceWith(textElement.body);
-              htmlData = templateDom.body.innerHTML;
-              break;
-            }
-            case PageElementType.P: {
-              const textRenderer = componentRendererFactory.getTextRenderer();
-              const textHtml = textRenderer.render(foundProperty.value);
-              const textElement = new DOMParser().parseFromString(textHtml, "text/html");
-              targetElement?.replaceWith(textElement.body);
-              htmlData = templateDom.body.innerHTML;
-              break;
-            }
-          }
-        }
-      }
+      htmlData = PageUtils.handlePagePropertiesRendering(templateDom, variable, foundProperty);
     }
+
     return (
       <PreviewContainer key={page.id}>
         <Preview

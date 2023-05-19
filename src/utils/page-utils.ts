@@ -1,3 +1,11 @@
+import componentRendererFactory from "../component-renderer/component-renderer-factory";
+import {
+  LayoutVariable,
+  LayoutVariableType,
+  PageProperty,
+  PageQuestion
+} from "../generated/client";
+
 /**
  * Namespace for Page utilities
  */
@@ -9,45 +17,17 @@ namespace PageUtils {
    * @param id id
    * @returns page text element type and id
    */
-  export const getPageTextElementTypeAndId = (
-    layoutHtml: string,
-    id: string
-  ): EditablePageElement => {
-    const body = new DOMParser().parseFromString(layoutHtml, "text/html").body;
-    const foundElement = findHtmlElementById(body, id);
+  export const getPageTextElementTypeAndId = (layoutHtml: string, id: string) => {
+    const dom = new DOMParser().parseFromString(layoutHtml, "text/html");
+    const foundElement = dom.getElementById(id);
+
+    if (!foundElement) throw new Error(`Element with id ${id} not found`);
 
     return {
       type: foundElement?.tagName.toLowerCase() as PageElementType,
-      element: foundElement!,
+      element: foundElement,
       id: id
     };
-  };
-
-  /**
-   * Finds element from HTML by id
-   *
-   * @param id id
-   * @returns element
-   */
-  const findHtmlElementById = (element: Element, id: string): Element | undefined => {
-    const elementId = element.id;
-
-    if (elementId === id) {
-      return element;
-    }
-
-    const children = element.children;
-
-    for (let i = 0; i < children.length; i++) {
-      const child = children[i];
-      const foundElement: Element | undefined = findHtmlElementById(child, id);
-
-      if (foundElement) {
-        return foundElement;
-      }
-    }
-
-    return;
   };
 
   /**
@@ -69,6 +49,62 @@ namespace PageUtils {
     }
 
     return hasQuestionsPlaceholder;
+  };
+
+  /**
+   * Handles page questions rendering
+   *
+   * @param document document
+   * @param page page
+   */
+  export const handlePageQuestionsRendering = (document: Document, pageQuestion: PageQuestion) => {
+    let htmlData = "";
+    const questionRenderer = componentRendererFactory.getQuestionRenderer(pageQuestion.type);
+    const questionPlaceholder = document.querySelector("div[data-component='question']");
+    for (const option of pageQuestion.options) {
+      const questionHtml = questionRenderer.render(option.questionOptionValue);
+      const questionElement = new DOMParser().parseFromString(questionHtml, "text/html");
+      questionPlaceholder?.appendChild(questionElement.body);
+      htmlData = document.body.innerHTML;
+    }
+
+    return htmlData;
+  };
+
+  /**
+   * Handles page properties rendering
+   */
+  export const handlePagePropertiesRendering = (
+    document: Document,
+    variable: LayoutVariable,
+    property: PageProperty
+  ) => {
+    let htmlData = document.body.outerHTML;
+    switch (variable.type) {
+      case LayoutVariableType.Text: {
+        const targetElement = document.getElementById(variable.key);
+        switch (targetElement?.tagName.toLocaleLowerCase()) {
+          case PageElementType.H1: {
+            const titleRenderer = componentRendererFactory.getTitleRenderer();
+            const textHtml = titleRenderer.render(property.value);
+            const textElement = new DOMParser().parseFromString(textHtml, "text/html");
+            targetElement?.replaceWith(textElement.body);
+            htmlData = document.body.innerHTML;
+            break;
+          }
+          case PageElementType.P: {
+            const textRenderer = componentRendererFactory.getTextRenderer();
+            const textHtml = textRenderer.render(property.value);
+            const textElement = new DOMParser().parseFromString(textHtml, "text/html");
+            targetElement?.replaceWith(textElement.body);
+            htmlData = document.body.innerHTML;
+            break;
+          }
+        }
+      }
+    }
+
+    return htmlData;
   };
 }
 

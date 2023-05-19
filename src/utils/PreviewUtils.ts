@@ -1,20 +1,39 @@
+import { LayoutVariable, PageProperty } from "../generated/client";
+import PageUtils from "./page-utils";
+
 import { Background } from "../types";
 
 /**
  * Parse HTML string to dom element
  *
  * @param html string
+ * @param layoutVariables layout variables
+ * @param pageProperties page properties
  */
-export const parseHtmlToDom = (html: string) => {
+export const parseHtmlToDom = (
+  html: string,
+  layoutVariables: LayoutVariable[],
+  pageProperties: PageProperty[]
+) => {
   const body = new DOMParser().parseFromString(html, "text/html").body;
-  //const image = "https://images.pexels.com/photos/842711/pexels-photo-842711.jpeg?w=3084&h=2160";
-  const image = "";
-  if (image) {
-    (body.children[0] as HTMLElement).style.setProperty("background-image", `url("${image}")`);
-  }
-  (body.children[0] as HTMLElement).style.setProperty(
-    "background-color",
-    `"${Background.DEFAULT}")`
-  );
   return body;
+};
+
+/**
+ * TODO: ADD DOCS
+ */
+const updateHtmlElement = (element: Element, pageProperties: PageProperty[]) => {
+  const elementId = element.id;
+  const pageProperty = pageProperties.find((property) => property.key === elementId);
+  console.log(pageProperty);
+  if (pageProperty) {
+    element.innerHTML = pageProperty.value;
+  } else {
+    const childrenCopy = [...element.children];
+    for (const child of childrenCopy) {
+      element.replaceChild(child, updateHtmlElement(child, pageProperties));
+    }
+  }
+
+  return element;
 };

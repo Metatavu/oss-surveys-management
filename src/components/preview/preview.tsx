@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import wrapTemplate from "../pages/templates/template-wrapper";
 import { parseHtmlToDom } from "../../utils/PreviewUtils";
 import { IframeClickEvent } from "../../types";
+import { LayoutVariable, PageProperty } from "../../generated/client";
 
 /**
  * Component props
@@ -11,10 +12,10 @@ interface Props {
   width: number;
   height: number;
   scale: number;
-  onPanelPropertiesChange?: () => void;
   pageNumber?: number;
   selectedPage?: number;
   setSelectedPage?: (pageNumber: number) => void;
+  onPanelPropertiesChange?: () => void;
 }
 
 /**
@@ -27,10 +28,10 @@ const Preview = ({
   width,
   height,
   scale,
-  onPanelPropertiesChange,
   pageNumber,
   selectedPage,
-  setSelectedPage
+  setSelectedPage,
+  onPanelPropertiesChange
 }: Props) => {
   /**
    * Set up event listener to recieve post message from iframe

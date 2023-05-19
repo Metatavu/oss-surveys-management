@@ -8,12 +8,13 @@ import {
   EDITOR_SCREEN_PREVIEW_CONTAINER_HEIGHT,
   EDITOR_SCREEN_PREVIEW_CONTAINER_WIDTH
 } from "../../constants";
-import { Layout, Page, PageQuestionType } from "../../generated/client";
+import { Layout, LayoutVariableType, Page, PageQuestionType } from "../../generated/client";
 import { PagePropertyType } from "../../generated/client/models/PagePropertyType";
 import { useApi } from "../../hooks/use-api";
 import strings from "../../localization/strings";
 import theme from "../../styles/theme";
 import { EditorPanel, PanelProperties, QuestionType } from "../../types";
+import { PageElementType } from "../../utils/page-utils";
 import GenericDialog from "../generic/generic-dialog";
 import ImageParagraphLayoutImage from "../images/svg/layout-thumbnails/image-paragraph";
 import InfoLayoutImage from "../images/svg/layout-thumbnails/info";
@@ -119,7 +120,7 @@ const Editor = ({ setPanelProperties, surveyId }: Props) => {
     setPageLayouts(layouts);
   };
 
-  if (isLoading || !surveyPages.length || !pageLayouts.length) {
+  if (isLoading || !pageLayouts.length) {
     return (
       <Stack flex={1} justifyContent="center" alignItems="center">
         <CircularProgress />
@@ -210,7 +211,7 @@ const Editor = ({ setPanelProperties, surveyId }: Props) => {
    * @returns layout html
    */
   const getPageLayout = (page: Page) => {
-    return pageLayouts.find((layout) => layout.id === page.layoutId)!.html;
+    return pageLayouts.find((layout) => layout.id === page.layoutId)!;
   };
 
   // TODO: This will need to be done for the preview screen?
@@ -221,80 +222,39 @@ const Editor = ({ setPanelProperties, surveyId }: Props) => {
    * @returns PreviewContainer and Preview
    */
   const renderPagePreview = (page: Page) => {
-    const { properties, title } = page;
+    const { properties } = page;
     const nextButtonVisible = surveyPages.find((page) => page.id === page.id)!.nextButtonVisible;
-    let htmlData = getPageLayout(page);
-    console.log("HTML", htmlData);
-    const optionsProperty = properties?.find(
-      (property) => property.key === PagePropertyType.Options
-    );
-    console.log("PROPERTIES", properties)
-    //const backgroundProperty = properties?.find((property) => property.key === PagePropertyType.ImageUrl);
+    let htmlData = getPageLayout(page).html;
+    const layoutVariables = getPageLayout(page).layoutVariables;
 
-    const textProperty = properties?.find((property) => property.key === PagePropertyType.Text);
-
-    if (optionsProperty) {
-      const questionRenderer = componentRendererFactory.getRenderer(QuestionType.SINGLE);
-
-      const questionHtml = questionRenderer.render(JSON.parse(optionsProperty.value));
-      const questionElement = new DOMParser().parseFromString(questionHtml, "text/html");
-
-      const templateDom = new DOMParser().parseFromString(htmlData, "text/html");
-      const questionPlaceholder = templateDom.querySelector("div[data-component='question']");
-
-      if (!questionPlaceholder) {
-        console.warn("Could not find question placeholder in template.");
-      } else {
-        questionPlaceholder?.replaceWith(questionElement.body);
-        htmlData = templateDom.body.innerHTML;
+    for (const variable of layoutVariables) {
+      const foundProperty = properties?.find((property) => property.key === variable.key);
+      if (!foundProperty) continue;
+      switch (variable.type) {
+        case LayoutVariableType.Text: {
+          const templateDom = new DOMParser().parseFromString(htmlData, "text/html");
+          const targetElement = templateDom.getElementById(variable.key);
+          switch (targetElement?.tagName.toLocaleLowerCase()) {
+            case PageElementType.H1: {
+              const titleRenderer = componentRendererFactory.getTitleRenderer();
+              const textHtml = titleRenderer.render(foundProperty.value);
+              const textElement = new DOMParser().parseFromString(textHtml, "text/html");
+              targetElement?.replaceWith(textElement.body);
+              htmlData = templateDom.body.innerHTML;
+              break;
+            }
+            case PageElementType.P: {
+              const textRenderer = componentRendererFactory.getTextRenderer();
+              const textHtml = textRenderer.render(foundProperty.value);
+              const textElement = new DOMParser().parseFromString(textHtml, "text/html");
+              targetElement?.replaceWith(textElement.body);
+              htmlData = templateDom.body.innerHTML;
+              break;
+            }
+          }
+        }
       }
     }
-
-    if (title) {
-      const titleRenderer = componentRendererFactory.getTitleRenderer();
-      const titleHtml = titleRenderer.render(title);
-      const titleElement = new DOMParser().parseFromString(titleHtml, "text/html");
-
-      const templateDom = new DOMParser().parseFromString(htmlData, "text/html");
-      const titlePlaceholder = templateDom.querySelector("h1");
-
-      titlePlaceholder?.replaceWith(titleElement.body);
-      htmlData = templateDom.body.innerHTML;
-    }
-
-    if (nextButtonVisible) {
-      const nextButtonRenderer = componentRendererFactory.getNextButtonRenderer();
-      const nextButtonHtml = nextButtonRenderer.render(nextButtonVisible);
-      const nextButtonElement = new DOMParser().parseFromString(nextButtonHtml, "text/html");
-
-      const templateDom = new DOMParser().parseFromString(htmlData, "text/html");
-      const nextButtonPlaceholder = templateDom.querySelector("button");
-      nextButtonPlaceholder?.replaceWith(nextButtonElement.body);
-      htmlData = templateDom.body.innerHTML;
-    }
-
-    if (textProperty) {
-      const textRenderer = componentRendererFactory.getTextRenderer();
-      const textHtml = textRenderer.render(textProperty.value);
-      const textElement = new DOMParser().parseFromString(textHtml, "text/html");
-
-      const templateDom = new DOMParser().parseFromString(htmlData, "text/html");
-      const textPlaceholder = templateDom.querySelector("p");
-
-      textPlaceholder?.replaceWith(textElement.body);
-      htmlData = templateDom.body.innerHTML;
-    }
-
-    /*     if (backgroundProperty) {
-          console.log("BACKGROUND PROPERTY", backgroundProperty)
-    
-          const templateDom = new DOMParser().parseFromString(htmlData, "text/html");
-          templateDom!.querySelector("div:first-of-type").getElementsByTagName("div")[0].style.backgroundColor = backgroundProperty.value;
-    
-          htmlData = templateDom.body.innerHTML;
-          console.log("HTML DATA", htmlData)
-        }
-     */
     return (
       <PreviewContainer key={page.id}>
         <Preview

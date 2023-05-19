@@ -94,6 +94,7 @@ export interface Localized extends LocalizedStringsMethods {
    */
   editSurveysScreen: {
     addNewPage: string;
+    surveySaved: string;
     editing: string;
     publish: string;
     published: string;
@@ -129,6 +130,7 @@ export interface Localized extends LocalizedStringsMethods {
         image4: string;
         image5: string;
       };
+      pageSaved: string;
     };
   };
 

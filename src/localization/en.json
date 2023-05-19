@@ -64,6 +64,7 @@
   },
   "editSurveysScreen": {
     "addNewPage": "Add new page",
+    "surveySaved": "Survey saved",
     "editing": "Editing",
     "publish": "Publish",
     "published": "Published",
@@ -98,7 +99,8 @@
         "image3": "image 3",
         "image4": "image 4",
         "image5": "image 5"
-      }
+      },
+      "pageSaved": "Page saved"
     }
   },
   "layouts": {

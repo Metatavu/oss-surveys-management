@@ -172,7 +172,7 @@ const PreviewScreen = () => {
       <PreviewArea>
         <PreviewContainer>
           <Preview
-            htmlString={wrapTemplate(parseHtmlToDom(htmlString).outerHTML)}
+            htmlString={wrapTemplate(parseHtmlToDom(htmlString, [], []).outerHTML)}
             width={DEVICE_WIDTH}
             height={DEVICE_HEIGHT}
             scale={height / 1.5 / DEVICE_HEIGHT}

@@ -1,12 +1,12 @@
 import { errorAtom } from "../../atoms/error";
 import { layoutsAtom } from "../../atoms/layouts";
 import { pagesAtom } from "../../atoms/pages";
-import { Page, PageProperty } from "../../generated/client";
+import { Layout, Page, PageProperty } from "../../generated/client";
 import { PagePropertyType } from "../../generated/client/models/PagePropertyType";
 import { useApi } from "../../hooks/use-api";
 import strings from "../../localization/strings";
 import theme from "../../styles/theme";
-import { LayoutType, QuestionType } from "../../types";
+import { Background, LayoutType, QuestionType, getTranslatedBackground } from "../../types";
 import GenericDialog from "../generic/generic-dialog";
 import WithDebounce from "../generic/with-debounce";
 import { Close, Edit } from "@mui/icons-material";
@@ -44,9 +44,17 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
   const [surveyPages, setSurveyPages] = useAtom(pagesAtom);
   const [pageLayouts] = useAtom(layoutsAtom);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
-  const [optionToDelete, setOptionToDelete] = useState<string | undefined>();
+  const [optionToDelete, setOptionToDelete] = useState<string>();
   const { pagesApi } = useApi();
   const setError = useSetAtom(errorAtom);
+  const [pageToEdit, setPageToEdit] = useState<Page>();
+  const [pageToEditLayout, setPageToEditLayout] = useState<Layout>();
+
+  useEffect(() => {
+    const foundPage = surveyPages.find((page) => page.orderNumber === pageNumber)
+    setPageToEdit(foundPage);
+    setPageToEditLayout(pageLayouts.find((layout) => layout.id === foundPage?.layoutId));
+  }), [];
 
   /**
    * Set the question options state if contained within the page properties
@@ -78,21 +86,7 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
       title: event.target.value
     };
 
-    try {
-      const updatedPage = await pagesApi.updateSurveyPage({
-        pageId: surveyPages[pageNumber - 1].id!,
-        surveyId: surveyId,
-        page: updatesToPage
-      });
-
-      const updatedSurveyPages = surveyPages.map((page) =>
-        page.id === updatedPage.id ? updatedPage : page
-      );
-
-      setSurveyPages(updatedSurveyPages);
-    } catch (error) {
-      setError(`${strings.errorHandling.editSurveysScreen.pageNotSaved}, ${error}`);
-    }
+    await handlePageSave(updatesToPage);
   };
 
 
@@ -132,22 +126,9 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
       properties: updatedProperties
     };
 
-    try {
-      const updatedPage = await pagesApi.updateSurveyPage({
-        pageId: surveyPages[pageNumber - 1].id!,
-        surveyId: surveyId,
-        page: updatesToPage
-      });
+    await handlePageSave(updatesToPage);
+    setOptions(updatedOptions);
 
-      const updatedSurveyPages = surveyPages.map((page) =>
-        page.id === updatedPage.id ? updatedPage : page
-      );
-
-      setSurveyPages(updatedSurveyPages);
-      setOptions(updatedOptions);
-    } catch (error) {
-      setError(`${strings.errorHandling.editSurveysScreen.pageNotSaved}, ${error}`);
-    }
   };
 
   /**
@@ -177,21 +158,7 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
       properties: updatedProperties
     };
 
-    try {
-      const updatedPage = await pagesApi.updateSurveyPage({
-        pageId: surveyPages[pageNumber - 1].id!,
-        surveyId: surveyId,
-        page: updatesToPage
-      });
-
-      const updatedSurveyPages = surveyPages.map((page) =>
-        page.id === updatedPage.id ? updatedPage : page
-      );
-
-      setSurveyPages(updatedSurveyPages);
-    } catch (error) {
-      setError(`${strings.errorHandling.editSurveysScreen.pageNotSaved}, ${error}`);
-    }
+    await handlePageSave(updatesToPage);
   };
 
   /**
@@ -200,7 +167,8 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
   const handlePageTextChange = async (
     event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
-    const updatedProperties: PageProperty[] = surveyPages[pageNumber - 1].properties?.some( //Check page numbersdfgh
+
+    /* const updatedProperties: PageProperty[] = surveyPages[pageNumber - 1].properties?.some( //Check page numbersdfgh
       (property) => property.key === PagePropertyType.Text
     )
       ? surveyPages[pageNumber - 1].properties!.map((property) => {
@@ -220,22 +188,8 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
       ...surveyPages[pageNumber - 1],
       properties: updatedProperties
     };
-
-    try {
-      const updatedPage = await pagesApi.updateSurveyPage({
-        pageId: surveyPages[pageNumber - 1].id!,
-        surveyId: surveyId,
-        page: updatesToPage
-      });
-
-      const updatedSurveyPages = surveyPages.map((page) =>
-        page.id === updatedPage.id ? updatedPage : page
-      );
-
-      setSurveyPages(updatedSurveyPages);
-    } catch (error) {
-      setError(`${strings.errorHandling.editSurveysScreen.pageNotSaved}, ${error}`);
-    }
+ */
+    await handlePageSave(updatesToPage);
   };
 
   /**
@@ -270,6 +224,18 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
       properties: updatedProperties
     };
 
+    await handlePageSave(updatesToPage);
+
+    setOptions(updatedOptions);
+    setDeleteDialogOpen(false);
+  };
+
+  /**
+   * Handle page save
+   */
+  const handlePageSave = async (updatesToPage: Page) => {
+    if (!updatesToPage) return;
+
     try {
       const updatedPage = await pagesApi.updateSurveyPage({
         pageId: surveyPages[pageNumber - 1].id!,
@@ -282,13 +248,11 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
       );
 
       setSurveyPages(updatedSurveyPages);
-      setOptions(updatedOptions);
     } catch (error) {
       setError(`${strings.errorHandling.editSurveysScreen.pageNotSaved}, ${error}`);
     }
-
-    setDeleteDialogOpen(false);
   };
+
 
   /**
    * Trigger delete confirm dialog and store option to be deleted state
@@ -323,12 +287,15 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
    *
    * @param param event target
    */
-  /* const handlePageButtonVisibilityChange = async ({ target: { checked } }: ChangeEvent<HTMLInputElement>) => {
-    // TODO: Update on backend
-    // const pageButtonVisibility = checked ? PageButtonVisibility.Block : PageButtonVisibility.None;
+  const handlePageButtonVisibilityChange = async ({ target: { checked } }: ChangeEvent<HTMLInputElement>) => {
 
-    // Lacks baceknd support
-  }; */
+    const updatesToPage: Page = {
+      ...surveyPages[pageNumber - 1],
+      nextButtonVisible: checked
+    };
+
+    await handlePageSave(updatesToPage);
+  };
 
   /**
  * Renders options text field with debounce
@@ -494,11 +461,7 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
           }}
           {...props}
         >
-          {backgrounds.map(background =>
-            <MenuItem key={background} value={background}>
-              {background}
-            </MenuItem>
-          )}
+          {renderBackgroundImageOptions()}
         </TextField>
       }
     />
@@ -559,8 +522,8 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
         <FormControlLabel
           control={
             <Switch
-              onChange={(e) => console.log(e)}
-              checked={true}
+              onChange={handlePageButtonVisibilityChange}
+              checked={surveyPages[pageNumber - 1].nextButtonVisible}
             />
           }
           label={strings.editSurveysScreen.editPagesPanel.buttonVisibility}
@@ -570,9 +533,9 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
   );
 
   /**
-   * Renders background image options
+   * Renders background image select
    */
-  const renderBackgroundImageOptions = () => (
+  const renderBackgroundImageSelect = () => (
     <Box p={2}>
       <Typography variant="h6">
         {strings.editSurveysScreen.editPagesPanel.background}
@@ -587,6 +550,16 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
       }
     </Box>
   );
+
+  /**
+   * Renders background image options
+   */
+  const renderBackgroundImageOptions = () => (
+    Object.values(Background).map(background =>
+      <MenuItem>
+        {getTranslatedBackground(background)}
+      </MenuItem>
+    ));
 
   /**
    * Render delete option dialog
@@ -665,7 +638,7 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
 
       {renderPageButtonVisibilitySwitch()}
 
-      {renderBackgroundImageOptions()}
+      {renderBackgroundImageSelect()}
 
       {!!pageLayouts.find((layout) => layout.id === surveyPages[pageNumber - 1].layoutId && layout.name === LayoutType.QUESTION) && renderQuestionTypeSelect()}
 

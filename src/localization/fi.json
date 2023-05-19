@@ -90,7 +90,15 @@
       "confirmDeleteOption": "Haluatko varmasti poistaa tämän vaihtoehdon?",
       "infoText": "Leipäteksti",
       "buttonVisibility": "Näytä painike",
-      "background": "Tausta"
+      "background": "Tausta",
+      "backgroundImages": {
+        "default": "#001146",
+        "image1": "kuva 1",
+        "image2": "kuva 2",
+        "image3": "kuva 3",
+        "image4": "kuva 4",
+        "image5": "kuva 5"
+      }
     }
   },
   "layouts": {

@@ -121,6 +121,14 @@ export interface Localized extends LocalizedStringsMethods {
       infoText: string;
       buttonVisibility: string;
       background: string;
+      backgroundImages: {
+        default: string;
+        image1: string;
+        image2: string;
+        image3: string;
+        image4: string;
+        image5: string;
+      };
     };
   };
 

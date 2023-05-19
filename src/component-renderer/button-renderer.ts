@@ -7,10 +7,10 @@ export class ButtonRenderer {
   /**
    * Convert button into html
    *
-   * @param text Text
+   * @param displayState Boolean
    * @returns html string
    */
-  public render(displayState: string): string {
+  public render(displayState: boolean): string {
     let htmlString = "";
 
     htmlString = `
@@ -24,7 +24,7 @@ export class ButtonRenderer {
                     height: 250px;
                     font-family: SBonusText-Bold;
                     font-size: 6rem;
-                    display: ${displayState};
+                    display: ${displayState === true ? "block" : "none"};
                   >
                     Seuraava
                   </button>

@@ -141,7 +141,8 @@ const Editor = ({ setPanelProperties, surveyId }: Props) => {
         id: uuid(),
         layoutId: layoutId,
         title: templateType,
-        orderNumber: surveyPages.length + 1
+        orderNumber: surveyPages.length + 1,
+        nextButtonVisible: true
       }
     });
 
@@ -217,6 +218,7 @@ const Editor = ({ setPanelProperties, surveyId }: Props) => {
    */
   const renderPagePreview = (page: Page) => {
     const { properties, title } = page;
+    const nextButtonVisible = surveyPages.find((page) => page.id === page.id)!.nextButtonVisible;
     let htmlData = getPageLayout(page);
     console.log("HTML", htmlData);
     const optionsProperty = properties?.find(
@@ -253,6 +255,17 @@ const Editor = ({ setPanelProperties, surveyId }: Props) => {
       const titlePlaceholder = templateDom.querySelector("h1");
 
       titlePlaceholder?.replaceWith(titleElement.body);
+      htmlData = templateDom.body.innerHTML;
+    }
+
+    if (nextButtonVisible) {
+      const nextButtonRenderer = componentRendererFactory.getNextButtonRenderer();
+      const nextButtonHtml = nextButtonRenderer.render(nextButtonVisible);
+      const nextButtonElement = new DOMParser().parseFromString(nextButtonHtml, "text/html");
+
+      const templateDom = new DOMParser().parseFromString(htmlData, "text/html");
+      const nextButtonPlaceholder = templateDom.querySelector("button");
+      nextButtonPlaceholder?.replaceWith(nextButtonElement.body);
       htmlData = templateDom.body.innerHTML;
     }
 

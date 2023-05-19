@@ -43,11 +43,11 @@ class ComponentRendererFactory {
   };
 
   /**
-   * Get text renderer
+   * Get button renderer
    *
-   * @returns Text renderer
+   * @returns Next button renderer
    */
-  public getButtonRenderer = () => {
+  public getNextButtonRenderer = () => {
     return new ButtonRenderer();
   };
 

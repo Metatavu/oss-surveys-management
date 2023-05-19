@@ -1,3 +1,5 @@
+import strings from "../localization/strings";
+
 /**
  * Error context type
  */
@@ -88,3 +90,20 @@ export enum LayoutType {
   INFO_IMAGE = "info + image",
   STATISTICS = "statistics"
 }
+
+/**
+ * Enum for background colors and image paths
+ */
+export enum Background {
+  DEFAULT = "#00aa46"
+}
+
+/**
+ * Gets translated background
+ *
+ * @param background navigation
+ */
+export const getTranslatedBackground = (background: Background): string =>
+  ({
+    [Background.DEFAULT]: strings.editSurveysScreen.addNewPage
+  })[background];

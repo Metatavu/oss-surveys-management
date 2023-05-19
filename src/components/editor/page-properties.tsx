@@ -320,42 +320,6 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
           {renderAddNewOption()}
         </Box>
       )}
-      {!!pageLayouts.find(
-        (layout) =>
-          layout.id === surveyPages[pageNumber - 1].layoutId && layout.name === LayoutType.QUESTION
-      ) &&
-        !!options.length && (
-          <Box p={2}>
-            <Typography variant="h6">
-              {strings.editSurveysScreen.editPagesPanel.answerOptions}
-            </Typography>
-            {options.map((option, i) =>
-              renderOptionsWithDebounceTextField(
-                "option",
-                (e) => handleQuestionOptionChange(e, option),
-                option,
-                "option",
-                true,
-                `${i}`
-              )
-            )}
-          </Box>
-        )}
-      {!!pageLayouts.find(
-        (layout) =>
-          layout.id === surveyPages[pageNumber - 1].layoutId && layout.name === LayoutType.QUESTION
-      ) && (
-        <Box p={2} sx={{ borderBottom: "1px solid #DADCDE" }}>
-          <Button
-            size="large"
-            variant="text"
-            startIcon={<AddCircleIcon />}
-            onClick={addNewQuestionOption}
-          >
-            {strings.editSurveysScreen.editPagesPanel.addOption}
-          </Button>
-        </Box>
-      )}
     </>
   );
 };

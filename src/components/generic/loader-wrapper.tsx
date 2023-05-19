@@ -16,13 +16,13 @@ const LoaderWrapper = ({ loading, children }: Props) => {
     return (
       <>
         <Backdrop sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }} open={loading}>
-          <CircularProgress color="inherit" />
+          <CircularProgress color="primary" />
         </Backdrop>
         {children}
       </>
     );
 
-  return children;
+  return <>{children}</>;
 };
 
 export default LoaderWrapper;

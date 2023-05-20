@@ -18,11 +18,9 @@ import {
 } from "@mui/material";
 import { useAtom, useSetAtom } from "jotai";
 import { ChangeEvent, Fragment, useEffect, useState } from "react";
-import PageUtils, {
-  EDITABLE_TEXT_PAGE_ELEMENTS,
-  EditablePageElement,
-  PageElementType
-} from "../../utils/page-utils";
+import PageUtils from "../../utils/page-utils";
+import { EditablePageElement, PageElementType } from "../../types";
+import { EDITABLE_TEXT_PAGE_ELEMENTS } from "../../constants";
 import { toast } from "react-toastify";
 import { v4 as uuid } from "uuid";
 

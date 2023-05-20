@@ -1,33 +1,27 @@
 import { v4 as uuid } from "uuid";
+import { AbstractQuestionRenderer } from "../utils/question-utils";
 
 /**
  * Class for PageTitleRenderer
  */
-export class PageTitleRenderer {
+export class PageTitleRenderer extends AbstractQuestionRenderer {
   /**
-   * Convert single question type options into html buttons
+   * Convert page title text to html string
    *
    * @param title title
    * @returns html string
    */
-  public render(title: string): string {
-    let htmlString = "";
-
-    htmlString = `
-                  <h1
-                    id="${uuid()}"
-                    style="
-                      margin: 0;
-                      padding: 0;
-                      text-transform: uppercase;
-                      font-size: 12rem;
-                      font-family: SBonusDisplay-Black;
-                    "
-                  >
-                    ${title}
-                  </h1>
-                `;
-
-    return htmlString;
-  }
+  public render = (title: string): string =>
+    `<h1
+      id="${uuid()}"
+      style="
+        margin: 0;
+        padding: 0;
+        text-transform: uppercase;
+        font-size: 12rem;
+        font-family: SBonusDisplay-Black;
+      "
+      >
+      ${title}
+    </h1>`;
 }

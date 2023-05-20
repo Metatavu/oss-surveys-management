@@ -1,5 +1,4 @@
-import strings from "../localization/strings";
-import { v4 as uuid } from "uuid";
+import { PageElementType } from "../types";
 
 export const EDITOR_SCREEN_PREVIEW_CONTAINER_WIDTH = 280;
 
@@ -9,10 +8,6 @@ export const DEVICE_WIDTH = 2160;
 
 export const DEVICE_HEIGHT = 3840;
 
-export const DEFAULT_QUESTION_OPTION = (orderNumber: number) => ({
-  id: uuid(),
-  orderNumber: orderNumber,
-  questionOptionValue: strings
-    .formatString(strings.editSurveysScreen.editPagesPanel.answerOptionPlaceholder, orderNumber)
-    .toString()
-});
+export const EDITABLE_TEXT_PAGE_ELEMENTS = [PageElementType.H1, PageElementType.P];
+
+export const QUESTION_PLACEHOLDER_DATA_COMPONENT = "question";

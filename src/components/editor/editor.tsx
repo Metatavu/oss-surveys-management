@@ -3,7 +3,6 @@ import { errorAtom } from "../../atoms/error";
 import { layoutsAtom } from "../../atoms/layouts";
 import { pagesAtom } from "../../atoms/pages";
 import {
-  DEFAULT_QUESTION_OPTION,
   DEVICE_HEIGHT,
   DEVICE_WIDTH,
   EDITOR_SCREEN_PREVIEW_CONTAINER_HEIGHT,
@@ -144,7 +143,10 @@ const Editor = ({ setPanelProperties, surveyId }: Props) => {
           question: templateType.includes("question")
             ? {
                 type: PageQuestionType.SingleSelect,
-                options: [DEFAULT_QUESTION_OPTION(1), DEFAULT_QUESTION_OPTION(2)]
+                options: [
+                  PageUtils.getDefaultQuestionOption(1),
+                  PageUtils.getDefaultQuestionOption(2)
+                ]
               }
             : undefined
         }

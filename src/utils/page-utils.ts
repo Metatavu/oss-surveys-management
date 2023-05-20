@@ -5,6 +5,10 @@ import {
   PageProperty,
   PageQuestion
 } from "../generated/client";
+import { PageElementType } from "../types";
+import strings from "../localization/strings";
+import { v4 as uuid } from "uuid";
+import { QUESTION_PLACEHOLDER_DATA_COMPONENT } from "../constants";
 
 /**
  * Namespace for Page utilities
@@ -106,21 +110,20 @@ namespace PageUtils {
 
     return htmlData;
   };
+
+  /**
+   * Gets default question option with placeholder and provided order number
+   *
+   * @param orderNumber order number
+   * @returns page question option
+   */
+  export const getDefaultQuestionOption = (orderNumber: number) => ({
+    id: uuid(),
+    orderNumber: orderNumber,
+    questionOptionValue: strings
+      .formatString(strings.editSurveysScreen.editPagesPanel.answerOptionPlaceholder, orderNumber)
+      .toString()
+  });
 }
-
-export type EditablePageElement = {
-  type: PageElementType;
-  element: Element;
-  id: string;
-};
-
-export enum PageElementType {
-  H1 = "h1",
-  P = "p",
-  DIV = "div"
-}
-
-export const EDITABLE_TEXT_PAGE_ELEMENTS = [PageElementType.H1, PageElementType.P];
-export const QUESTION_PLACEHOLDER_DATA_COMPONENT = "question";
 
 export default PageUtils;

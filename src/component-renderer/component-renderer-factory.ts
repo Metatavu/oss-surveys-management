@@ -1,5 +1,4 @@
 import { PageQuestionType } from "../generated/client";
-import { ButtonRenderer } from "./button-renderer";
 import { SingleSelectTextQuestionRenderer } from "./single-question-renderer";
 import { TextRenderer } from "./text-renderer";
 import { PageTitleRenderer } from "./title-renderer";
@@ -39,15 +38,6 @@ class ComponentRendererFactory {
    */
   public getTextRenderer = () => {
     return new TextRenderer();
-  };
-
-  /**
-   * Get button renderer
-   *
-   * @returns Next button renderer
-   */
-  public getNextButtonRenderer = () => {
-    return new ButtonRenderer();
   };
 }
 

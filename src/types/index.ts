@@ -125,3 +125,23 @@ export const getTranslatedBackground = (background: Background): string =>
  * Type describing available languages
  */
 export type Language = "fi" | "en";
+
+/**
+ * Type describing editable page elements
+ */
+export type EditablePageElement = {
+  type: PageElementType;
+  element: Element;
+  id: string;
+};
+
+/**
+ * Enum describing editable page element types
+ *
+ * Note: Currently these are the tag names of the elements that can contain layout variables and there will probably be more eventually.
+ */
+export enum PageElementType {
+  H1 = "h1",
+  P = "p",
+  DIV = "div"
+}

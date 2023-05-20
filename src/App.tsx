@@ -12,6 +12,8 @@ import EditSurveysScreen from "./components/screens/edit-surveys-screen";
 import PreviewScreen from "./components/screens/preview-screen";
 import { useAtomValue } from "jotai";
 import { languageAtom } from "./atoms/language";
+import { Flip, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const router = createBrowserRouter([
   {
@@ -56,6 +58,12 @@ const App = () => {
       <ErrorHandler>
         <AuthenticationProvider>
           <ThemeProvider theme={responsiveFontSizes(theme)}>
+            <ToastContainer
+              position="bottom-right"
+              autoClose={2000}
+              transition={Flip}
+              hideProgressBar
+            />
             <CssBaseline />
             <RouterProvider router={router} />
           </ThemeProvider>

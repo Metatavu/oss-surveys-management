@@ -90,7 +90,7 @@ const PreviewScreen = () => {
   const getSurveyPages = async () => {
     if (!id) return null;
     const surveyPages = await pagesApi.listSurveyPages({ surveyId: id });
-    setSurveyPages(surveyPages);
+    setSurveyPages([...surveyPages.sort((a, b) => a.orderNumber - b.orderNumber)]);
   };
 
   /**
@@ -150,10 +150,10 @@ const PreviewScreen = () => {
    * @returns layout html
    */
   const getPageLayout = (page: Page) => {
-    const foundLayout = pageLayouts.find((layout) => layout.id === page.layoutId);
-    if (!foundLayout) return;
+    const foundPageLayout = pageLayouts.find((layout) => layout.id === page.layoutId);
+    if (!foundPageLayout) return;
 
-    return foundLayout.html;
+    return foundPageLayout;
   };
 
   /**
@@ -173,7 +173,9 @@ const PreviewScreen = () => {
       <PreviewArea>
         <PreviewContainer>
           <Preview
-            htmlString={wrapTemplate(parseHtmlToDom(getPageLayout(surveyPages[currentPage - 1]) ?? "").outerHTML)}
+            htmlString={wrapTemplate(
+              parseHtmlToDom(getPageLayout(surveyPages[currentPage - 1])?.html ?? "").outerHTML
+            )}
             width={DEVICE_WIDTH}
             height={DEVICE_HEIGHT}
             scale={height / 1.5 / DEVICE_HEIGHT}

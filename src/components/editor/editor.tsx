@@ -1,3 +1,4 @@
+import { toast } from "react-toastify";
 import { errorAtom } from "../../atoms/error";
 import { layoutsAtom } from "../../atoms/layouts";
 import { pagesAtom } from "../../atoms/pages";
@@ -10,9 +11,9 @@ import {
 import { Layout, Page, PageQuestionType } from "../../generated/client";
 import { useApi } from "../../hooks/use-api";
 import strings from "../../localization/strings";
-import questionRendererFactory from "../../question-renderer/question-renderer-factory";
 import theme from "../../styles/theme";
 import { EditorPanel, PanelProperties } from "../../types";
+import PageUtils from "../../utils/page-utils";
 import GenericDialog from "../generic/generic-dialog";
 import LoaderWrapper from "../generic/loader-wrapper";
 import ImageParagraphLayoutImage from "../images/svg/layout-thumbnails/image-paragraph";
@@ -108,7 +109,7 @@ const Editor = ({ setPanelProperties, surveyId }: Props) => {
    */
   const getSurveyPages = async () => {
     const surveyPages = await pagesApi.listSurveyPages({ surveyId: surveyId });
-    setSurveyPages(surveyPages);
+    setSurveyPages([...surveyPages.sort((a, b) => a.orderNumber - b.orderNumber)]);
   };
 
   /**
@@ -138,7 +139,16 @@ const Editor = ({ setPanelProperties, surveyId }: Props) => {
           layoutId: foundLayout.id,
           title: templateType,
           orderNumber: surveyPages.length + 1,
-          nextButtonVisible: true
+          nextButtonVisible: true,
+          question: templateType.includes("question")
+            ? {
+                type: PageQuestionType.SingleSelect,
+                options: [
+                  PageUtils.getDefaultQuestionOption(1),
+                  PageUtils.getDefaultQuestionOption(2)
+                ]
+              }
+            : undefined
         }
       });
 
@@ -182,6 +192,7 @@ const Editor = ({ setPanelProperties, surveyId }: Props) => {
       }
 
       setSurveyPages(updatedPages);
+      toast.success(strings.editSurveysScreen.editPagesPanel.pageSaved);
     } catch (error: any) {
       setError(`${strings.errorHandling.editSurveysScreen.pageNotDeleted}, ${error}`);
     }
@@ -247,7 +258,7 @@ const Editor = ({ setPanelProperties, surveyId }: Props) => {
     const foundPageLayout = pageLayouts.find((layout) => layout.id === page.layoutId);
     if (!foundPageLayout) return;
 
-    return foundPageLayout.html;
+    return foundPageLayout;
   };
 
   /**
@@ -257,9 +268,33 @@ const Editor = ({ setPanelProperties, surveyId }: Props) => {
    * @returns PreviewContainer and Preview
    */
   const renderPagePreview = (page: Page) => {
-    const htmlData = getPageLayout(page) ?? "";
+    const { properties } = page;
+    const nextButtonVisible = surveyPages.find(
+      (surveyPage) => surveyPage.id === page.id
+    )?.nextButtonVisible;
+    const pageLayout = getPageLayout(page);
 
-    // TODO: Whole questions/options logic should be refined due to backend changes.
+    if (!pageLayout) return;
+
+    let htmlData = pageLayout.html;
+    const layoutVariables = pageLayout.layoutVariables;
+    const templateDom = new DOMParser().parseFromString(htmlData, "text/html");
+
+    if (!nextButtonVisible) {
+      const nextButton = templateDom.querySelector("button[data-component='next-button']");
+      nextButton?.remove();
+      htmlData = templateDom.body.innerHTML;
+    }
+
+    if (page.question) {
+      htmlData = PageUtils.handlePageQuestionsRendering(templateDom, page.question);
+    }
+
+    for (const variable of layoutVariables ?? []) {
+      const foundProperty = properties?.find((property) => property.key === variable.key);
+      if (!foundProperty) continue;
+      htmlData = PageUtils.handlePagePropertiesRendering(templateDom, variable, foundProperty);
+    }
 
     return (
       <PreviewContainer key={page.id}>

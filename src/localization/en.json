@@ -105,6 +105,7 @@
   "editSurveysScreen": {
     "addNewPage": "Add new page",
     "deletePage": "Delete",
+    "surveySaved": "Survey saved",
     "editing": "Editing",
     "publish": "Publish",
     "published": "Published",
@@ -125,10 +126,22 @@
       "title": "Title",
       "questionType": "Question type",
       "answerOptions": "Answer options",
-      "answerOptionPlaceholder": "Answer option",
+      "answerOptionPlaceholder": "Answer option {0}",
       "deleteAnswerOptionTitle": "Delete answer option",
       "addOption": "Add an option",
-      "confirmDeleteOption": "Are you sure you want to delete this option?"
+      "confirmDeleteOption": "Are you sure you want to delete this option?",
+      "infoText": "Paragraph",
+      "buttonVisibility": "Show button",
+      "background": "Background",
+      "backgroundImages": {
+        "default": "Green",
+        "image1": "image 1",
+        "image2": "image 2",
+        "image3": "image 3",
+        "image4": "image 4",
+        "image5": "image 5"
+      },
+      "pageSaved": "Page saved"
     }
   },
   "layouts": {

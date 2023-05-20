@@ -138,6 +138,7 @@ export interface Localized extends LocalizedStringsMethods {
   editSurveysScreen: {
     addNewPage: string;
     deletePage: string;
+    surveySaved: string;
     editing: string;
     publish: string;
     published: string;
@@ -162,6 +163,18 @@ export interface Localized extends LocalizedStringsMethods {
       deleteAnswerOptionTitle: string;
       addOption: string;
       confirmDeleteOption: string;
+      infoText: string;
+      buttonVisibility: string;
+      background: string;
+      backgroundImages: {
+        default: string;
+        image1: string;
+        image2: string;
+        image3: string;
+        image4: string;
+        image5: string;
+      };
+      pageSaved: string;
     };
   };
 

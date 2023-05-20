@@ -89,7 +89,7 @@ const Preview = ({
         </IconButton>
       )}
       <iframe
-        srcDoc={wrapTemplate(parseHtmlToDom(htmlString, [], []).outerHTML, pageNumber)}
+        srcDoc={wrapTemplate(parseHtmlToDom(htmlString).outerHTML, pageNumber)}
         title="preview"
         width={width}
         height={height}

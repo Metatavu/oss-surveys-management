@@ -174,8 +174,7 @@ const PreviewScreen = () => {
         <PreviewContainer>
           <Preview
             htmlString={wrapTemplate(
-              parseHtmlToDom(getPageLayout(surveyPages[currentPage - 1])?.html ?? "", [], [])
-                .outerHTML
+              parseHtmlToDom(getPageLayout(surveyPages[currentPage - 1])?.html ?? "").outerHTML
             )}
             width={DEVICE_WIDTH}
             height={DEVICE_HEIGHT}

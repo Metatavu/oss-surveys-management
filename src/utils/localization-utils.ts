@@ -1,6 +1,6 @@
-import { DeviceStatus } from "../generated/client";
+import { DeviceApprovalStatus, DeviceStatus } from "../generated/client";
 import strings from "../localization/strings";
-import { SurveyManagementStatus, SurveySortBy } from "../types";
+import { SurveyManagementStatus } from "../types";
 
 /**
  * Namespace for Localization utilities
@@ -31,31 +31,15 @@ namespace LocalizationUtils {
     })[status];
 
   /**
-   * Gets localized show options
+   * Gets localized device approval status
    *
    * @param status status
    */
-  export const getLocalizedShowOptions = (status: SurveyManagementStatus) =>
+  export const getLocalizedDeviceApprovalStatus = (status: DeviceApprovalStatus) =>
     ({
-      [SurveyManagementStatus.APPROVED]: strings.surveysScreen.filters.showReadyToPublish,
-      [SurveyManagementStatus.DRAFT]: strings.surveysScreen.filters.showDrafts,
-      [SurveyManagementStatus.PUBLISHED]: strings.surveysScreen.filters.showPublished,
-      [SurveyManagementStatus.SCHEDULED]: strings.surveysScreen.filters.showScheduled
+      [DeviceApprovalStatus.Pending]: strings.overviewScreen.deviceRequests.pendingStatus,
+      [DeviceApprovalStatus.Approved]: strings.overviewScreen.deviceRequests.approvedStatus
     })[status];
-
-  /**
-   * Gets localized sort by options
-   *
-   * @param sortBy sort by
-   */
-  export const getLocalizedSortByOptions = (sortBy: SurveySortBy) =>
-    ({
-      [SurveySortBy.NAME]: strings.surveysScreen.filters.sortByTitle,
-      [SurveySortBy.STATUS]: strings.surveysScreen.filters.sortByStatus,
-      [SurveySortBy.MODIFIED]: strings.surveysScreen.filters.sortByModifiedAt,
-      [SurveySortBy.CREATOR]: strings.surveysScreen.filters.sortByCreator,
-      [SurveySortBy.PUBLICATION_TIME]: strings.surveysScreen.filters.sortByPublicationDate
-    })[sortBy];
 }
 
 export default LocalizationUtils;

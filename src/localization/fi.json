@@ -31,7 +31,9 @@
     "overviewScreen": {
       "surveysNotFound": "Virhe ladattaessa kyselyitä",
       "deviceSurveysNotFound": "Virhe ladattaessa laitteiden kyselyitä",
-      "devicesNotFound": "Virhe ladattaessa laitteita"
+      "devicesNotFound": "Virhe ladattaessa laitteita",
+      "deviceRequestsNotFound": "Virhe ladattaessa laitepyyntöjä",
+      "deviceRequestUpdateError": "Virhe hyväksyttäessä laitetta"
     },
     "surveysScreen": {
       "createSurveyError": "Virhe luotaessa kyselyä",
@@ -45,7 +47,9 @@
       "surveyPagesNotFound": "Kyselysivuja ei löytynyt",
       "pageLayoutsNotFound": "Sivuasetteluja ei löytynyt",
       "pageLayoutNotFound": "Sivuasetteluja ei löytynyt",
-      "pageNotSaved": "Virhe tallennettaessa sivua"
+      "pageNotSaved": "Virhe tallennettaessa sivua",
+      "pageNotDeleted": "Virhe poistaessa sivua",
+      "pageNotCreated": "Virhe luotaessa sivua"
     },
     "previewScreen": {
       "surveyNotFound": "Kyselyä ei löytynyt",
@@ -76,6 +80,18 @@
         "status": "Tila",
         "description": "Lisätiedot",
         "location": "Sijainti",
+        "action": "Toiminto"
+      }
+    },
+    "deviceRequests": {
+      "actionButton": "Ota käyttöön",
+      "pendingStatus": "Odottaa",
+      "approvedStatus": "Hyväksytty",
+      "headings": {
+        "serialNumber": "Sarjanumero",
+        "status": "Tila",
+        "description": "Lisätiedot",
+        "createdAt": "Lisätty",
         "action": "Toiminto"
       }
     }
@@ -117,6 +133,8 @@
   },
   "editSurveysScreen": {
     "addNewPage": "Lisää uusi sivu",
+    "deletePage": "Poista",
+    "surveySaved": "Kysely tallennettu",
     "editing": "Luonnokset",
     "publish": "Julkaise",
     "published": "Julkaistu",
@@ -137,10 +155,22 @@
       "title": "Otsikko",
       "questionType": "Kyselyn tyyppi",
       "answerOptions": "Vastausvaihtoehdot",
-      "answerOptionPlaceholder": "Vaihtoehto",
+      "answerOptionPlaceholder": "Vaihtoehto {0}",
       "deleteAnswerOptionTitle": "Poista vastausvaihtoehto",
       "addOption": "Lisää vaihtoehto",
-      "confirmDeleteOption": "Haluatko varmasti poistaa tämän vaihtoehdon?"
+      "confirmDeleteOption": "Haluatko varmasti poistaa tämän vaihtoehdon?",
+      "infoText": "Leipäteksti",
+      "buttonVisibility": "Näytä painike",
+      "background": "Tausta",
+      "backgroundImages": {
+        "default": "Vihreä",
+        "image1": "kuva 1",
+        "image2": "kuva 2",
+        "image3": "kuva 3",
+        "image4": "kuva 4",
+        "image5": "kuva 5"
+      },
+      "pageSaved": "Sivu tallennettu"
     }
   },
   "layouts": {

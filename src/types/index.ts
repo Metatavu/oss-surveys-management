@@ -1,3 +1,5 @@
+import strings from "../localization/strings";
+
 /**
  * Error context type
  */
@@ -92,9 +94,57 @@ export enum LayoutType {
 }
 
 /**
+ * Enum for background colors and image paths
+ * TODO: add actual image paths once they are available
+ */
+export enum Background {
+  DEFAULT = "#00aa46",
+  IMAGE_1 = "image 1",
+  IMAGE_2 = "image 2",
+  IMAGE_3 = "image 3",
+  IMAGE_4 = "image 4",
+  IMAGE_5 = "image 5"
+}
+
+/**
+ * Gets translated background
+ *
+ * @param background navigation
+ */
+export const getTranslatedBackground = (background: Background): string =>
+  ({
+    [Background.DEFAULT]: strings.editSurveysScreen.editPagesPanel.backgroundImages.default,
+    [Background.IMAGE_1]: strings.editSurveysScreen.editPagesPanel.backgroundImages.image1,
+    [Background.IMAGE_2]: strings.editSurveysScreen.editPagesPanel.backgroundImages.image2,
+    [Background.IMAGE_3]: strings.editSurveysScreen.editPagesPanel.backgroundImages.image3,
+    [Background.IMAGE_4]: strings.editSurveysScreen.editPagesPanel.backgroundImages.image4,
+    [Background.IMAGE_5]: strings.editSurveysScreen.editPagesPanel.backgroundImages.image5
+  })[background];
+
+/**
  * Type describing available languages
  */
 export type Language = "fi" | "en";
+
+/**
+ * Type describing editable page elements
+ */
+export type EditablePageElement = {
+  type: PageElementType;
+  element: Element;
+  id: string;
+};
+
+/**
+ * Enum describing editable page element types
+ *
+ * Note: Currently these are the tag names of the elements that can contain layout variables and there will probably be more eventually.
+ */
+export enum PageElementType {
+  H1 = "h1",
+  P = "p",
+  DIV = "div"
+}
 
 /**
  * Enum for Survey Management status
@@ -104,15 +154,4 @@ export enum SurveyManagementStatus {
   APPROVED = "approved",
   SCHEDULED = "scheduled",
   DRAFT = "draft"
-}
-
-/**
- * Enum for Survey Sorting
- */
-export enum SurveySortBy {
-  NAME = "name",
-  STATUS = "status",
-  MODIFIED = "modified",
-  CREATOR = "creator",
-  PUBLICATION_TIME = "publication_time"
 }

@@ -31,7 +31,9 @@
     "overviewScreen": {
       "surveysNotFound": "Error while loading surveys",
       "deviceSurveysNotFound": "Error while loading device surveys",
-      "devicesNotFound": "Error while loading devices"
+      "devicesNotFound": "Error while loading devices",
+      "deviceRequestsNotFound": "Error while loading device requests",
+      "deviceRequestUpdateError": "Error while approving device request"
     },
     "surveysScreen": {
       "createSurveyError": "Error while creating a survey",
@@ -45,7 +47,9 @@
       "surveyPagesNotFound": "Survey pages not found",
       "pageLayoutsNotFound": "Page layouts not found",
       "pageLayoutNotFound": "Page layout not found",
-      "pageNotSaved": "Error when saving page"
+      "pageNotSaved": "Error when saving page",
+      "pageNotDeleted": "Error when deleting page",
+      "pageNotCreated": "Error when creating page"
     },
     "previewScreen": {
       "surveyNotFound": "Survey not found",
@@ -76,6 +80,18 @@
         "status": "Status",
         "description": "Description",
         "location": "Location",
+        "action": "Action"
+      }
+    },
+    "deviceRequests": {
+      "actionButton": "Approve",
+      "pendingStatus": "Pending",
+      "approvedStatus": "Approved",
+      "headings": {
+        "serialNumber": "Serial number",
+        "status": "Status",
+        "description": "Description",
+        "createdAt": "Added",
         "action": "Action"
       }
     }
@@ -117,6 +133,8 @@
   },
   "editSurveysScreen": {
     "addNewPage": "Add new page",
+    "deletePage": "Delete",
+    "surveySaved": "Survey saved",
     "editing": "Editing",
     "publish": "Publish",
     "published": "Published",
@@ -137,10 +155,22 @@
       "title": "Title",
       "questionType": "Question type",
       "answerOptions": "Answer options",
-      "answerOptionPlaceholder": "Answer option",
+      "answerOptionPlaceholder": "Answer option {0}",
       "deleteAnswerOptionTitle": "Delete answer option",
       "addOption": "Add an option",
-      "confirmDeleteOption": "Are you sure you want to delete this option?"
+      "confirmDeleteOption": "Are you sure you want to delete this option?",
+      "infoText": "Paragraph",
+      "buttonVisibility": "Show button",
+      "background": "Background",
+      "backgroundImages": {
+        "default": "Green",
+        "image1": "image 1",
+        "image2": "image 2",
+        "image3": "image 3",
+        "image4": "image 4",
+        "image5": "image 5"
+      },
+      "pageSaved": "Page saved"
     }
   },
   "layouts": {

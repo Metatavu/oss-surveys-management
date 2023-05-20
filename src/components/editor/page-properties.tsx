@@ -1,25 +1,29 @@
 import { errorAtom } from "../../atoms/error";
 import { layoutsAtom } from "../../atoms/layouts";
 import { pagesAtom } from "../../atoms/pages";
-import { Page, PageProperty, PagePropertyType } from "../../generated/client";
+import { Layout, Page, PageQuestionOption } from "../../generated/client";
 import { useApi } from "../../hooks/use-api";
 import strings from "../../localization/strings";
-import { LayoutType, QuestionType } from "../../types";
 import GenericDialog from "../generic/generic-dialog";
 import WithDebounce from "../generic/with-debounce";
-import { Close, Edit } from "@mui/icons-material";
-import AddCircleIcon from "@mui/icons-material/AddCircle";
+import { AddCircle, Edit, Close } from "@mui/icons-material";
 import {
   Box,
   Button,
-  IconButton,
+  FormControlLabel,
   InputAdornment,
-  MenuItem,
+  Switch,
   TextField,
+  IconButton,
   Typography
 } from "@mui/material";
 import { useAtom, useSetAtom } from "jotai";
-import { ChangeEvent, useEffect, useState } from "react";
+import { ChangeEvent, Fragment, useEffect, useState } from "react";
+import PageUtils from "../../utils/page-utils";
+import { EditablePageElement, PageElementType } from "../../types";
+import { EDITABLE_TEXT_PAGE_ELEMENTS } from "../../constants";
+import { toast } from "react-toastify";
+import { v4 as uuid } from "uuid";
 
 /**
  * Component properties
@@ -33,275 +37,315 @@ interface Props {
  * Renders page properties component
  */
 const PageProperties = ({ pageNumber, surveyId }: Props) => {
-  const [options, setOptions] = useState<string[]>([]);
-
   const [surveyPages, setSurveyPages] = useAtom(pagesAtom);
   const [pageLayouts] = useAtom(layoutsAtom);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
-  const [optionToDelete, setOptionToDelete] = useState<string | undefined>();
+  const [optionToDelete, _] = useState<string>();
   const { pagesApi } = useApi();
   const setError = useSetAtom(errorAtom);
+  const [pageToEdit, setPageToEdit] = useState<Page>();
+  const [elementsToEdit, setElementsToEdit] = useState<EditablePageElement[]>([]);
+  const [pageToEditLayout, setPageToEditLayout] = useState<Layout>();
 
   /**
-   * Set the question options state if contained within the page properties
+   * Initializes editable pages properties
    */
-  const getQuestionOptions = () => {
-    const optionsArrayString = surveyPages[pageNumber - 1].properties?.find(
-      (property) => property.key === PagePropertyType.Options
-    )?.value;
-
-    if (!optionsArrayString) {
-      setOptions([]);
-      return;
-    }
-    setOptions(JSON.parse(optionsArrayString));
-  };
-
   useEffect(() => {
-    getQuestionOptions();
+    const foundPage = surveyPages.find((page) => page.orderNumber === pageNumber);
+    const foundLayout = pageLayouts.find((layout) => layout.id === foundPage?.layoutId);
+    const elements = [];
+    for (const variable of foundLayout?.layoutVariables || []) {
+      if (!foundPage?.properties?.some((property) => property.key === variable.key)) {
+        foundPage?.properties?.push({ key: variable.key, value: "" });
+      }
+
+      if (!foundLayout) continue;
+
+      const elementToEdit = PageUtils.getPageTextElementTypeAndId(foundLayout.html, variable.key);
+      elements.push(elementToEdit);
+    }
+    setPageToEdit(foundPage);
+    setPageToEditLayout(foundLayout);
+    setElementsToEdit(elements);
   }, [pageNumber]);
 
   /**
-   * Renders text field with debounce
+   * Saves page
    *
-   * @param name name
-   * @param onChange onChange event handler
-   * @param value value
-   * @param placeholder placeholder
-   * @param endAdornment end adornment true/false
-   * @returns debounced text field
+   * @param page page
    */
-  const renderOptionsWithDebounceTextField = (
-    name: string,
-    onChange: (
-      event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-      previousOption?: string
-    ) => Promise<void>,
-    value: string,
-    placeholder: string,
-    endAdornment: boolean,
-    key: string
-  ) => (
-    <WithDebounce
-      name={name}
-      value={value}
-      onChange={onChange}
-      placeholder={placeholder}
-      optionKey={key}
-      component={(props) => (
-        <TextField
-          {...props}
-          key={key}
-          fullWidth
-          multiline
-          name={name}
-          placeholder={strings.editSurveysScreen.editPagesPanel.answerOptionPlaceholder}
-          InputProps={{
-            endAdornment: endAdornment && (
-              <InputAdornment position="end" className="on-hover">
-                <IconButton
-                  title={strings.editSurveysScreen.editPagesPanel.deleteAnswerOptionTitle}
-                  onClick={() => handleDeleteClick(value)}
-                >
-                  <Close fontSize="small" />
-                </IconButton>
-              </InputAdornment>
-            )
-          }}
-        />
-      )}
-    />
-  );
-
-  /**
-   * Handle question option change
-   *
-   * @param event Event
-   * @param id string
-   */
-  const handleQuestionOptionChange = async (
-    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-    previousOption: string
-  ) => {
-    const updatedOptions = options.map((option) => {
-      return option === previousOption ? event.target.value : option;
-    });
-
-    const updatedProperties: PageProperty[] = surveyPages[pageNumber - 1].properties?.some(
-      (property) => property.type === PagePropertyType.Options
-    )
-      ? surveyPages[pageNumber - 1].properties!.map((property) => {
-        return property.type === PagePropertyType.Options
-          ? { ...property, value: JSON.stringify(updatedOptions) }
-          : property;
-      })
-      : [
-        ...surveyPages[pageNumber - 1].properties!,
-        {
-          key: PagePropertyType.Options,
-          value: JSON.stringify(updatedOptions),
-          type: PagePropertyType.Options
-        }
-      ];
-
-    const updatesToPage: Page = {
-      ...surveyPages[pageNumber - 1],
-      properties: updatedProperties
-    };
-
+  const savePage = async (page: Page) => {
     try {
-      const updatedPage = await pagesApi.updateSurveyPage({
-        pageId: surveyPages[pageNumber - 1].id!,
-        surveyId: surveyId,
-        page: updatesToPage
-      });
-
-      const updatedSurveyPages = surveyPages.map((page) =>
-        page.id === updatedPage.id ? updatedPage : page
+      if (!page?.id) return;
+      setPageToEdit(
+        await pagesApi.updateSurveyPage({
+          surveyId: surveyId,
+          pageId: page.id,
+          page: page
+        })
       );
-
-      setSurveyPages(updatedSurveyPages);
-      setOptions(updatedOptions);
-    } catch (error) {
+      setSurveyPages(surveyPages.map((p) => (p.id !== page.id ? p : page)));
+      toast.success(strings.editSurveysScreen.editPagesPanel.pageSaved);
+    } catch (error: any) {
       setError(`${strings.errorHandling.editSurveysScreen.pageNotSaved}, ${error}`);
     }
   };
 
   /**
-   * Adds new question option to question options
+   * Render delete option dialog
    */
-  const addNewQuestionOption = () => setOptions([...options, ""]);
+  const renderDeleteOptionDialog = () => (
+    <GenericDialog
+      title={strings.editSurveysScreen.editPagesPanel.confirmDeleteOption}
+      open={deleteDialogOpen}
+      onCancel={() => setDeleteDialogOpen(false)}
+      onClose={() => setDeleteDialogOpen(false)}
+      onConfirm={() => null}
+      children={<div>{optionToDelete}</div>}
+      confirmButtonText={strings.generic.confirm}
+    />
+  );
 
   /**
-   * Removes the selected option from the list
+   * Gets text property label based on page element type
    */
-  const deleteOption = () => {
-    if (!optionToDelete) return;
-
-    const updatedList = options.filter((option) => option !== optionToDelete);
-
-    // TODO: Delete on backend
-    setOptions(updatedList);
-    setDeleteDialogOpen(false);
+  const getTextPropertyLabel = (type: PageElementType) => {
+    if (type === PageElementType.H1) {
+      return strings.editSurveysScreen.editPagesPanel.title;
+    }
+    if (type === PageElementType.P) {
+      return strings.editSurveysScreen.editPagesPanel.infoText;
+    }
   };
 
   /**
-   * Trigger delete confirm dialog and store option to be deleted state
+   * Handler for page property text change
+   *
+   * @param event event
    */
-  const handleDeleteClick = (option: string) => {
-    setDeleteDialogOpen(true);
-    setOptionToDelete(option);
+  const handleTextChange = async ({ target: { value, name } }: ChangeEvent<HTMLInputElement>) => {
+    if (!pageToEdit) return;
+
+    const foundProperty = pageToEdit?.properties?.find((p) => p.key === name);
+
+    if (!foundProperty) return;
+    const pageToUpdate = {
+      ...pageToEdit,
+      properties: pageToEdit.properties?.map((property) =>
+        property.key === name ? { ...property, value: value } : property
+      )
+    };
+
+    if (!pageToUpdate.id) return;
+    await savePage(pageToUpdate);
+  };
+
+  /**
+   * Handler for page next button visiblity change
+   *
+   * @param event event
+   */
+  const handleButtonVisiblitySwitch = async ({
+    target: { checked }
+  }: ChangeEvent<HTMLInputElement>) => {
+    if (!pageToEdit) return;
+    const pageToUpdate = {
+      ...pageToEdit,
+      nextButtonVisible: checked
+    };
+    await savePage(pageToUpdate);
+  };
+
+  /**
+   * Handler for question option text change
+   *
+   * @param option option
+   * @param value value
+   */
+  const handleOptionChange = async (option: PageQuestionOption, value: string) => {
+    if (!pageToEdit?.question) return;
+
+    const optionToUpdate = pageToEdit.question.options.find((opt) => opt === option);
+
+    if (!optionToUpdate) return;
+
+    const pageToUpdate: Page = {
+      ...pageToEdit,
+      question: {
+        ...pageToEdit.question,
+        options: [
+          ...pageToEdit.question.options.map((opt) =>
+            option === opt ? { ...option, questionOptionValue: value } : opt
+          )
+        ]
+      }
+    };
+
+    await savePage(pageToUpdate);
+  };
+
+  /**
+   * Handler for add new option button click
+   */
+  const handleNewOptionClick = async () => {
+    if (!pageToEdit?.question) return;
+
+    const orderNumber = pageToEdit.question.options.length + 1;
+    const pageToUpdate: Page = {
+      ...pageToEdit,
+      question: {
+        ...pageToEdit.question,
+        options: [
+          ...pageToEdit.question.options,
+          {
+            id: uuid(),
+            questionOptionValue: strings.formatString(
+              strings.editSurveysScreen.editPagesPanel.answerOptionPlaceholder,
+              orderNumber
+            ) as string,
+            orderNumber: orderNumber
+          }
+        ]
+      }
+    };
+
+    await savePage(pageToUpdate);
+  };
+
+  /**
+   * Handler for question delete click
+   *
+   * @param option option
+   */
+  const handleDeleteClick = async (option: PageQuestionOption) => {
+    if (!pageToEdit?.question) return;
+
+    const filteredOptions = pageToEdit.question.options.filter((opt) => opt !== option);
+
+    const pageToUpdate = {
+      ...pageToEdit,
+      question: {
+        ...pageToEdit.question,
+        options: filteredOptions.map((opt) =>
+          opt.orderNumber > option.orderNumber ? { ...opt, orderNumber: opt.orderNumber - 1 } : opt
+        )
+      }
+    };
+
+    await savePage(pageToUpdate);
+  };
+
+  /**
+   * Renders text property editor
+   *
+   * @param element element
+   */
+  const renderTextPropertyEditor = (element: EditablePageElement) => (
+    <Fragment key={element.id}>
+      <Typography variant="h6">{getTextPropertyLabel(element.type)}</Typography>
+      <WithDebounce
+        name={element.id}
+        value={pageToEdit?.properties?.find((property) => property.key === element.id)?.value ?? ""}
+        onChange={handleTextChange}
+        placeholder={getTextPropertyLabel(element.type) ?? ""}
+        component={(props) => (
+          <TextField
+            {...props}
+            fullWidth
+            multiline
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <Edit fontSize="small" color="primary" />
+                </InputAdornment>
+              )
+            }}
+          />
+        )}
+      />
+    </Fragment>
+  );
+
+  /**
+   * Renders pages question options
+   */
+  const renderOptions = () => {
+    if (!pageToEdit?.question) return;
+
+    return pageToEdit.question.options.map((option) => (
+      <WithDebounce
+        name={option.id}
+        value={option.questionOptionValue}
+        onChange={({ target: { value } }) => handleOptionChange(option, value)}
+        placeholder=""
+        optionKey={option.questionOptionValue}
+        component={(props) => (
+          <TextField
+            {...props}
+            fullWidth
+            multiline
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end" className="on-hover">
+                  <IconButton
+                    title={strings.editSurveysScreen.editPagesPanel.deleteAnswerOptionTitle}
+                    onClick={() => handleDeleteClick(option)}
+                  >
+                    <Close fontSize="small" />
+                  </IconButton>
+                </InputAdornment>
+              )
+            }}
+          />
+        )}
+      />
+    ));
+  };
+
+  /**
+   * Renders add new option button
+   */
+  const renderAddNewOption = () => {
+    if (!pageToEdit?.question) return;
+
+    return (
+      <Button startIcon={<AddCircle />} onClick={handleNewOptionClick}>
+        {strings.editSurveysScreen.editPagesPanel.addOption}
+      </Button>
+    );
   };
 
   return (
     <>
-      <GenericDialog
-        title={strings.editSurveysScreen.editPagesPanel.confirmDeleteOption}
-        open={deleteDialogOpen}
-        onCancel={() => setDeleteDialogOpen(false)}
-        onClose={() => setDeleteDialogOpen(false)}
-        onConfirm={deleteOption}
-        children={<div>{optionToDelete}</div>}
-        confirmButtonText={strings.generic.confirm}
-      />
+      {renderDeleteOptionDialog()}
       <Box p={2} sx={{ borderBottom: "1px solid #DADCDE" }}>
         <Typography variant="h6">
           {strings.formatString(strings.editSurveysScreen.editPagesPanel.page, `${pageNumber}`)}
         </Typography>
-        {/* TODO: Update with Debounce when backend ready, should this even change? */}
-        <TextField
-          fullWidth
-          multiline
-          placeholder={
-            strings.formatString(
-              strings.editSurveysScreen.editPagesPanel.page,
-              `${pageNumber}`
-            ) as string
-          }
-          value={surveyPages[pageNumber - 1].title}
-          InputProps={{
-            endAdornment: (
-              <InputAdornment position="end">
-                <Edit fontSize="small" color="primary" />
-              </InputAdornment>
-            )
-          }}
-        />
       </Box>
       <Box p={2} sx={{ borderBottom: "1px solid #DADCDE" }}>
-        <Typography variant="h6">{strings.editSurveysScreen.editPagesPanel.title}</Typography>
-        {/* TODO: Update with Debounce when backend ready */}
-        <TextField
-          fullWidth
-          multiline
-          placeholder={strings.editSurveysScreen.editPagesPanel.title}
-          InputProps={{
-            endAdornment: (
-              <InputAdornment position="end">
-                <Edit fontSize="small" color="primary" />
-              </InputAdornment>
-            )
-          }}
+        {elementsToEdit
+          .filter((element) => EDITABLE_TEXT_PAGE_ELEMENTS.includes(element.type))
+          .map(renderTextPropertyEditor)}
+      </Box>
+      <Box p={2} sx={{ borderBottom: "1px solid #DADCDE" }}>
+        <FormControlLabel
+          label={strings.editSurveysScreen.editPagesPanel.buttonVisibility}
+          control={
+            <Switch
+              checked={pageToEdit?.nextButtonVisible ?? false}
+              onChange={handleButtonVisiblitySwitch}
+            />
+          }
         />
       </Box>
-      {!!pageLayouts.find((layout) => layout.id === surveyPages[pageNumber - 1].layoutId) && (
-        <Box p={2}>
-          <Typography variant="h6">
-            {strings.editSurveysScreen.editPagesPanel.questionType}
-          </Typography>
-          {/* TODO: Update with Debounce when backend ready */}
-          <TextField
-            fullWidth
-            size="small"
-            select
-            // TODO: this should handle Multiple question types later
-            defaultValue={QuestionType.SINGLE}
-          >
-            <MenuItem key={QuestionType.SINGLE} value={QuestionType.SINGLE}>
-              {QuestionType.SINGLE}
-            </MenuItem>
-            {/* <MenuItem key={ QuestionType.MULTIPLE } value={ QuestionType.MULTIPLE }>
-{ QuestionType.MULTIPLE }
-</MenuItem> */}
-          </TextField>
+      {PageUtils.hasQuestionsPlaceholder(pageToEditLayout?.html) && (
+        <Box p={2} sx={{ borderBottom: "1px solid #DADCDE" }}>
+          <Typography variant="h6">{strings.editSurveysScreen.editPagesPanel.addOption}</Typography>
+          {renderOptions()}
+          {renderAddNewOption()}
         </Box>
       )}
-      {!!pageLayouts.find(
-        (layout) =>
-          layout.id === surveyPages[pageNumber - 1].layoutId && layout.name === LayoutType.QUESTION
-      ) &&
-        !!options.length && (
-          <Box p={2}>
-            <Typography variant="h6">
-              {strings.editSurveysScreen.editPagesPanel.answerOptions}
-            </Typography>
-            {options.map((option, i) =>
-              renderOptionsWithDebounceTextField(
-                "option",
-                (e) => handleQuestionOptionChange(e, option),
-                option,
-                "option",
-                true,
-                `${i}`
-              )
-            )}
-          </Box>
-        )}
-      {!!pageLayouts.find(
-        (layout) =>
-          layout.id === surveyPages[pageNumber - 1].layoutId && layout.name === LayoutType.QUESTION
-      ) && (
-          <Box p={2} sx={{ borderBottom: "1px solid #DADCDE" }}>
-            <Button
-              size="large"
-              variant="text"
-              startIcon={<AddCircleIcon />}
-              onClick={addNewQuestionOption}
-            >
-              {strings.editSurveysScreen.editPagesPanel.addOption}
-            </Button>
-          </Box>
-        )}
     </>
   );
 };

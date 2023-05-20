@@ -1,3 +1,4 @@
+import { toast } from "react-toastify";
 import { errorAtom } from "../../atoms/error";
 import { layoutsAtom } from "../../atoms/layouts";
 import { pagesAtom } from "../../atoms/pages";
@@ -7,13 +8,14 @@ import {
   EDITOR_SCREEN_PREVIEW_CONTAINER_HEIGHT,
   EDITOR_SCREEN_PREVIEW_CONTAINER_WIDTH
 } from "../../constants";
-import { Layout, Page, PagePropertyType } from "../../generated/client";
+import { Layout, Page, PageQuestionType } from "../../generated/client";
 import { useApi } from "../../hooks/use-api";
 import strings from "../../localization/strings";
-import questionRendererFactory from "../../question-renderer/question-renderer-factory";
 import theme from "../../styles/theme";
-import { EditorPanel, PanelProperties, QuestionType } from "../../types";
+import { EditorPanel, PanelProperties } from "../../types";
+import PageUtils from "../../utils/page-utils";
 import GenericDialog from "../generic/generic-dialog";
+import LoaderWrapper from "../generic/loader-wrapper";
 import ImageParagraphLayoutImage from "../images/svg/layout-thumbnails/image-paragraph";
 import InfoLayoutImage from "../images/svg/layout-thumbnails/info";
 import InfoImageLayoutImage from "../images/svg/layout-thumbnails/info-image";
@@ -24,7 +26,7 @@ import StatisticsLayoutImage from "../images/svg/layout-thumbnails/statistics";
 import Preview from "../preview/preview";
 import ImageButton from "./image-button";
 import NewPageButton from "./new-page-button";
-import { Box, CircularProgress, Stack, Typography, styled } from "@mui/material";
+import { Box, Stack, Typography, styled } from "@mui/material";
 import { useAtom, useSetAtom } from "jotai";
 import React, { useEffect, useState } from "react";
 import { v4 as uuid } from "uuid";
@@ -107,7 +109,7 @@ const Editor = ({ setPanelProperties, surveyId }: Props) => {
    */
   const getSurveyPages = async () => {
     const surveyPages = await pagesApi.listSurveyPages({ surveyId: surveyId });
-    setSurveyPages(surveyPages);
+    setSurveyPages([...surveyPages.sort((a, b) => a.orderNumber - b.orderNumber)]);
   };
 
   /**
@@ -118,34 +120,83 @@ const Editor = ({ setPanelProperties, surveyId }: Props) => {
     setPageLayouts(layouts);
   };
 
-  if (isLoading || !surveyPages.length || !pageLayouts.length) {
-    return (
-      <Stack flex={1} justifyContent="center" alignItems="center">
-        <CircularProgress />
-      </Stack>
-    );
-  }
-
   /**
    * Create a new page based on selected template
    *
    * @param templateType string
    */
   const createPage = async (templateType: string) => {
-    const layoutId = pageLayouts.find((layout) => layout.name === templateType)!.id!;
+    const foundLayout = pageLayouts.find((layout) => layout.name === templateType);
 
-    const newPage = await pagesApi.createSurveyPage({
-      surveyId: surveyId,
-      page: {
-        id: uuid(),
-        layoutId: layoutId,
-        title: templateType,
-        orderNumber: surveyPages.length + 1
+    if (!foundLayout?.id) return;
+    try {
+      setShowAddPage(false);
+      setIsLoading(true);
+      const newPage = await pagesApi.createSurveyPage({
+        surveyId: surveyId,
+        page: {
+          id: uuid(),
+          layoutId: foundLayout.id,
+          title: templateType,
+          orderNumber: surveyPages.length + 1,
+          nextButtonVisible: true,
+          question: templateType.includes("question")
+            ? {
+                type: PageQuestionType.SingleSelect,
+                options: [
+                  PageUtils.getDefaultQuestionOption(1),
+                  PageUtils.getDefaultQuestionOption(2)
+                ]
+              }
+            : undefined
+        }
+      });
+
+      setSurveyPages([...surveyPages, newPage]);
+    } catch (error: any) {
+      setError(`${strings.errorHandling.editSurveysScreen.pageNotCreated}, ${error}`);
+    }
+
+    setIsLoading(false);
+  };
+
+  /**
+   * Deletes page by page number
+   *
+   * @param pageNumber page number
+   */
+  const deletePage = async (pageNumber: number) => {
+    const foundPage = surveyPages.find((page) => page.orderNumber === pageNumber);
+
+    if (!foundPage?.id) return;
+    try {
+      setIsLoading(true);
+      await pagesApi.deleteSurveyPage({ surveyId: surveyId, pageId: foundPage.id });
+      const newSurveyPages = surveyPages.filter((page) => page.orderNumber !== pageNumber);
+      newSurveyPages.sort((a, b) => a.orderNumber - b.orderNumber);
+
+      const updatedPages: Page[] = [];
+      for (const page of newSurveyPages) {
+        if (!page?.id) continue;
+        if (page.orderNumber > pageNumber) {
+          updatedPages.push(
+            await pagesApi.updateSurveyPage({
+              surveyId: surveyId,
+              pageId: page.id,
+              page: { ...page, orderNumber: page.orderNumber - 1 }
+            })
+          );
+        } else {
+          updatedPages.push(page);
+        }
       }
-    });
 
-    setSurveyPages([...surveyPages, newPage]);
-    setShowAddPage(false);
+      setSurveyPages(updatedPages);
+      toast.success(strings.editSurveysScreen.editPagesPanel.pageSaved);
+    } catch (error: any) {
+      setError(`${strings.errorHandling.editSurveysScreen.pageNotDeleted}, ${error}`);
+    }
+    setIsLoading(false);
   };
 
   /**
@@ -204,10 +255,12 @@ const Editor = ({ setPanelProperties, surveyId }: Props) => {
    * @returns layout html
    */
   const getPageLayout = (page: Page) => {
-    return pageLayouts.find((layout) => layout.id === page.layoutId)!.html;
+    const foundPageLayout = pageLayouts.find((layout) => layout.id === page.layoutId);
+    if (!foundPageLayout) return;
+
+    return foundPageLayout;
   };
 
-  // TODO: This will need to be done for the preview screen?
   /**
    * Render page preview
    *
@@ -216,26 +269,31 @@ const Editor = ({ setPanelProperties, surveyId }: Props) => {
    */
   const renderPagePreview = (page: Page) => {
     const { properties } = page;
-    let htmlData = getPageLayout(page);
+    const nextButtonVisible = surveyPages.find(
+      (surveyPage) => surveyPage.id === page.id
+    )?.nextButtonVisible;
+    const pageLayout = getPageLayout(page);
 
-    const optionsProperty = properties?.find(
-      (property) => property.type === PagePropertyType.Options
-    );
-    if (optionsProperty) {
-      const questionRenderer = questionRendererFactory.getRenderer(QuestionType.SINGLE);
+    if (!pageLayout) return;
 
-      const questionHtml = questionRenderer.render(JSON.parse(optionsProperty.value));
-      const questionElement = new DOMParser().parseFromString(questionHtml, "text/html");
+    let htmlData = pageLayout.html;
+    const layoutVariables = pageLayout.layoutVariables;
+    const templateDom = new DOMParser().parseFromString(htmlData, "text/html");
 
-      const templateDom = new DOMParser().parseFromString(htmlData, "text/html");
-      const questionPlaceholder = templateDom.querySelector("div[data-component='question']");
+    if (!nextButtonVisible) {
+      const nextButton = templateDom.querySelector("button[data-component='next-button']");
+      nextButton?.remove();
+      htmlData = templateDom.body.innerHTML;
+    }
 
-      if (!questionPlaceholder) {
-        console.warn("Could not find question placeholder in template.");
-      } else {
-        questionPlaceholder?.replaceWith(questionElement.body);
-        htmlData = templateDom.body.innerHTML;
-      }
+    if (page.question) {
+      htmlData = PageUtils.handlePageQuestionsRendering(templateDom, page.question);
+    }
+
+    for (const variable of layoutVariables ?? []) {
+      const foundProperty = properties?.find((property) => property.key === variable.key);
+      if (!foundProperty) continue;
+      htmlData = PageUtils.handlePagePropertiesRendering(templateDom, variable, foundProperty);
     }
 
     return (
@@ -251,6 +309,7 @@ const Editor = ({ setPanelProperties, surveyId }: Props) => {
           setSelectedPage={() => setSelectedPageNumber(page.orderNumber)}
           selectedPage={selectedPageNumber}
           pageNumber={page.orderNumber}
+          deletePage={deletePage}
         />
       </PreviewContainer>
     );
@@ -265,9 +324,11 @@ const Editor = ({ setPanelProperties, surveyId }: Props) => {
         setSelectedPageNumber(undefined);
       }}
     >
-      {!!surveyPages.length && surveyPages.map(renderPagePreview)}
-      <NewPageButton onClick={() => setShowAddPage(true)} />
-      {renderAddNewPageDialog()}
+      <LoaderWrapper loading={isLoading}>
+        {!!surveyPages.length && surveyPages.map(renderPagePreview)}
+        <NewPageButton onClick={() => setShowAddPage(true)} />
+        {renderAddNewPageDialog()}
+      </LoaderWrapper>
     </EditorContainer>
   );
 };

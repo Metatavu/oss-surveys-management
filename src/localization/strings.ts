@@ -54,6 +54,8 @@ export interface Localized extends LocalizedStringsMethods {
       surveysNotFound: string;
       deviceSurveysNotFound: string;
       devicesNotFound: string;
+      deviceRequestsNotFound: string;
+      deviceRequestUpdateError: string;
     };
     surveysScreen: {
       createSurveyError: string;
@@ -68,6 +70,8 @@ export interface Localized extends LocalizedStringsMethods {
       pageLayoutsNotFound: string;
       pageLayoutNotFound: string;
       pageNotSaved: string;
+      pageNotDeleted: string;
+      pageNotCreated: string;
     };
     previewScreen: {
       surveyNotFound: string;
@@ -96,12 +100,23 @@ export interface Localized extends LocalizedStringsMethods {
     devices: {
       idleActionButton: string;
       oflineActionButton: string;
-      newActionButton: string;
       headings: {
         deviceName: string;
         status: string;
         description: string;
         location: string;
+        action: string;
+      };
+    };
+    deviceRequests: {
+      actionButton: string;
+      pendingStatus: string;
+      approvedStatus: string;
+      headings: {
+        serialNumber: string;
+        status: string;
+        description: string;
+        createdAt: string;
         action: string;
       };
     };
@@ -151,6 +166,8 @@ export interface Localized extends LocalizedStringsMethods {
    */
   editSurveysScreen: {
     addNewPage: string;
+    deletePage: string;
+    surveySaved: string;
     editing: string;
     publish: string;
     published: string;
@@ -175,6 +192,18 @@ export interface Localized extends LocalizedStringsMethods {
       deleteAnswerOptionTitle: string;
       addOption: string;
       confirmDeleteOption: string;
+      infoText: string;
+      buttonVisibility: string;
+      background: string;
+      backgroundImages: {
+        default: string;
+        image1: string;
+        image2: string;
+        image3: string;
+        image4: string;
+        image5: string;
+      };
+      pageSaved: string;
     };
   };
 

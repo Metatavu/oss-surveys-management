@@ -1,3 +1,4 @@
+import { toast } from "react-toastify";
 import { errorAtom } from "../../atoms/error";
 import { Survey } from "../../generated/client";
 import { useApi } from "../../hooks/use-api";
@@ -71,6 +72,7 @@ const EditSurveysScreen = () => {
         survey: editedSurvey
       });
       setSurvey(updatedSurvey);
+      toast.success(strings.editSurveysScreen.surveySaved);
     } catch (error: any) {
       setError(`${strings.errorHandling.editSurveysScreen.surveyNotSaved}, ${error}`);
     }

@@ -16,7 +16,7 @@ interface Props {
 /**
  * Overview screens Devices List component
  */
-const OverviewDevicesList = ({ devices, onClick, actionButtonText }: Props) => {
+const OverviewDevicesList = ({ devices, actionButtonText, onClick }: Props) => {
   const listHeadings = Object.values(strings.overviewScreen.devices.headings);
 
   /**

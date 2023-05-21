@@ -20,16 +20,16 @@ namespace SurveyUtils {
   ) => {
     if (!surveyId) return;
     const foundDeviceSurveys = deviceSurveys.filter(
-      (deviceSurvey) =>
-        deviceSurvey.surveyId === surveyId &&
-        DataValidation.validateValueIsNotUndefinedNorNull(deviceSurvey.publishStartTime)
+      (deviceSurvey) => deviceSurvey.surveyId === surveyId
     );
 
     if (!foundDeviceSurveys?.length) return;
 
     const earliestPublishStartTime = Math.min(
-      // rome-ignore lint/style/noNonNullAssertion: <DataValidation:validateValueIsNotUndefinedNorNull ensures that there are no nullish values but Rome doesn't recognize it.>
-      ...foundDeviceSurveys.map((deviceSurvey) => deviceSurvey.publishStartTime!.valueOf())
+      ...foundDeviceSurveys.map(
+        (deviceSurvey) =>
+          deviceSurvey.publishStartTime?.valueOf() ?? deviceSurvey.metadata?.createdAt.valueOf()
+      )
     );
 
     return DateTime.fromMillis(earliestPublishStartTime).toFormat("dd.MM.yyyy");

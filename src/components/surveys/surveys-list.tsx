@@ -67,7 +67,9 @@ const SurveysList = ({ surveys, deviceSurveys }: Props) => {
                   )}
                 />
                 <ListItemText
-                  secondary={SurveyUtils.getEarliestSurveyPublicationDate(deviceSurveys, survey.id)}
+                  secondary={
+                    SurveyUtils.getEarliestSurveyPublicationDate(deviceSurveys, survey.id) ?? "-"
+                  }
                 />
                 <ListItemText secondary={strings.generic.notImplemented} />
                 <ListItemText secondary={strings.generic.notImplemented} />

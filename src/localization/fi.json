@@ -6,7 +6,9 @@
     "back": "Takaisin",
     "confirm": "Vahvista",
     "cancel": "Peruuta",
-    "unnamed": "Nimetön"
+    "unnamed": "Nimetön",
+    "yes": "Kyllä",
+    "no": "Ei"
   },
   "navigation": {
     "overview": "Yhteenveto",
@@ -44,6 +46,7 @@
     "editSurveysScreen": {
       "surveyNotFound": "Kyselyä ei löytynyt",
       "surveyNotSaved": "Virhe tallennettaessa kyselyä",
+      "surveyNotPublished": "Virhe kysylyä julkaistaessa",
       "surveyPagesNotFound": "Kyselysivuja ei löytynyt",
       "pageLayoutsNotFound": "Sivuasetteluja ei löytynyt",
       "pageLayoutNotFound": "Sivuasetteluja ei löytynyt",
@@ -171,6 +174,32 @@
         "image5": "kuva 5"
       },
       "pageSaved": "Sivu tallennettu"
+    }
+  },
+  "publishSurveys": {
+    "surveyPublished": "Kysely julkaistu",
+    "leftPanel": {
+      "heading": "Valitse näytöt missä kysely aktivoidaan"
+    },
+    "rightPanel": {
+      "heading": "Julkaisu",
+      "description": "Kuvaus",
+      "devicesCount": "Näyttöjen lukumäärä",
+      "scheduling": "Ajastus",
+      "publishStartTime": "Aloitusaika",
+      "publishEndTime": "Kyselyn päättymisaika",
+      "publishButton": "Aktivoi kysely"
+    },
+    "headings": {
+      "device": "Näyttö",
+      "activeSurveys": "Aktiivisia kyselyjä",
+      "description": "Lisätiedot",
+      "status": "Tila"
+    },
+    "dialog": {
+      "title": "Vahvista kyselyn julkaiseminen",
+      "description": "Olet julkaisemassa kyselyä {0} laitteille: ",
+      "button": "Julkaise"
     }
   },
   "layouts": {

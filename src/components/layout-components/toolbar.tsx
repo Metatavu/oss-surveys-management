@@ -10,6 +10,8 @@ import {
   PlayArrowOutlined,
   PublishOutlined
 } from "@mui/icons-material";
+import { Survey, SurveyStatus } from "../../generated/client";
+import { SurveyScreenMode } from "../../types";
 
 /**
  * Styled toolbar container component
@@ -48,33 +50,48 @@ const ControlsContainer = styled(Stack, {
  * Component props
  */
 interface Props {
-  surveyName: string;
-  surveyId: string;
+  survey?: Survey;
+  mode: SurveyScreenMode;
+  setMode: (mode: SurveyScreenMode) => void;
 }
 
 /**
  * Renders toolbar component
  */
-const Toolbar = ({ surveyName, surveyId }: Props) => {
+const Toolbar = ({ survey, mode, setMode }: Props) => {
   const navigate = useNavigate();
+
+  if (!survey) return null;
 
   const renderTitle = () => (
     <Stack spacing={1} direction="row" alignItems="center" flex={1} justifyContent="center">
       <Typography>{strings.editSurveysScreen.editing}</Typography>
       <Typography>/</Typography>
       <Typography variant="h5" color={theme.palette.primary.main}>
-        {surveyName}
+        {survey.title}
       </Typography>
     </Stack>
   );
 
+  /**
+   * Toggles Survey screen mode
+   */
+  const toggleMode = () =>
+    mode === SurveyScreenMode.EDITOR
+      ? setMode(SurveyScreenMode.PUBLISH)
+      : setMode(SurveyScreenMode.EDITOR);
+
   const renderControls = () => (
     <>
       <Button
-        disabled
+        disabled={survey.status === SurveyStatus.Draft}
         color="primary"
         title={strings.generic.notImplemented}
         startIcon={<PublishOutlined />}
+        sx={{
+          backgroundColor: mode === SurveyScreenMode.PUBLISH ? "#c8c8c8" : ""
+        }}
+        onClick={toggleMode}
       >
         {strings.editSurveysScreen.publish}
       </Button>
@@ -90,7 +107,7 @@ const Toolbar = ({ surveyName, surveyId }: Props) => {
         color="primary"
         title={strings.generic.notImplemented}
         startIcon={<PlayArrowOutlined />}
-        onClick={() => navigate(`/preview/${surveyId}`)}
+        onClick={() => navigate(`/preview/${survey.id}`)}
       >
         {strings.editSurveysScreen.preview}
       </Button>

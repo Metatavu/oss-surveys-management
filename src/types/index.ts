@@ -77,7 +77,8 @@ export enum NavigationLinks {
  */
 export enum EditorPanel {
   SURVEY = "SURVEY",
-  PAGE = "PAGE"
+  PAGE = "PAGE",
+  PUBLISH = "PUBLISH"
 }
 
 /**
@@ -154,4 +155,10 @@ export enum SurveyManagementStatus {
   APPROVED = "approved",
   SCHEDULED = "scheduled",
   DRAFT = "draft"
+}
+
+/** Enum for survey screen mode */
+export enum SurveyScreenMode {
+  EDITOR,
+  PUBLISH
 }

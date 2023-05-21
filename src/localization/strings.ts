@@ -17,6 +17,8 @@ export interface Localized extends LocalizedStringsMethods {
     confirm: string;
     cancel: string;
     unnamed: string;
+    yes: string;
+    no: string;
   };
 
   /**
@@ -66,6 +68,7 @@ export interface Localized extends LocalizedStringsMethods {
     editSurveysScreen: {
       surveyNotFound: string;
       surveyNotSaved: string;
+      surveyNotPublished: string;
       surveyPagesNotFound: string;
       pageLayoutsNotFound: string;
       pageLayoutNotFound: string;
@@ -204,6 +207,36 @@ export interface Localized extends LocalizedStringsMethods {
         image5: string;
       };
       pageSaved: string;
+    };
+  };
+
+  /**
+   * Translations related to publishing a survey
+   */
+  publishSurveys: {
+    surveyPublished: string;
+    leftPanel: {
+      heading: string;
+    };
+    rightPanel: {
+      heading: string;
+      description: string;
+      devicesCount: string;
+      scheduling: string;
+      publishStartTime: string;
+      publishEndTime: string;
+      publishButton: string;
+    };
+    headings: {
+      device: string;
+      activeSurveys: string;
+      description: string;
+      status: string;
+    };
+    dialog: {
+      title: string;
+      description: string;
+      button: string;
     };
   };
 

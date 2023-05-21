@@ -8,12 +8,14 @@ import OverviewScreen from "./components/screens/overview-screen";
 import ScreensScreen from "./components/screens/devices-screen";
 import SurveysScreen from "./components/screens/surveys-screen";
 import theme from "./styles/theme";
-import EditSurveysScreen from "./components/screens/edit-surveys-screen";
 import PreviewScreen from "./components/screens/preview-screen";
 import { useAtomValue } from "jotai";
 import { languageAtom } from "./atoms/language";
 import { Flip, ToastContainer } from "react-toastify";
+import { LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterLuxon } from "@mui/x-date-pickers/AdapterLuxon";
 import "react-toastify/dist/ReactToastify.css";
+import EditorScreen from "./components/screens/editor-screen";
 
 const router = createBrowserRouter([
   {
@@ -29,7 +31,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/surveys/edit/:id",
-        element: <EditSurveysScreen />
+        element: <EditorScreen />
       },
       {
         path: "/screens",
@@ -64,8 +66,10 @@ const App = () => {
               transition={Flip}
               hideProgressBar
             />
-            <CssBaseline />
-            <RouterProvider router={router} />
+            <LocalizationProvider dateAdapter={AdapterLuxon}>
+              <CssBaseline />
+              <RouterProvider router={router} />
+            </LocalizationProvider>
           </ThemeProvider>
         </AuthenticationProvider>
       </ErrorHandler>

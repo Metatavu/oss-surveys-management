@@ -19,14 +19,15 @@ const Panel = styled(Paper, {
  */
 interface Props {
   children: ReactNode;
+  width?: number;
 }
 
 /**
  * Renders editor component
  */
-const PropertiesPanel: FC<Props> = ({ children }) => {
+const PropertiesPanel: FC<Props> = ({ children, width = 392 }) => {
   return (
-    <Panel elevation={0}>
+    <Panel elevation={0} sx={{ width: width }}>
       <Stack flex={1}>{children}</Stack>
     </Panel>
   );

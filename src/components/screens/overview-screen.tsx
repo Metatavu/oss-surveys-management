@@ -34,6 +34,7 @@ const OverviewScreen = () => {
   const [deviceSurveys, setDeviceSurveys] = useState<DeviceSurvey[]>([]);
   const [deviceRequests, setDeviceRequests] = useState<DeviceRequest[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [activeSurveys, setActiveSurveys] = useState<Survey[]>([]);
 
   /**
    * Gets Surveys
@@ -91,6 +92,16 @@ const OverviewScreen = () => {
   };
 
   /**
+   * Gets active surveys and sets them in state
+   */
+  useEffect(() => {
+    const activeSurveys = surveys.filter((survey) =>
+      deviceSurveys.some((deviceSurvey) => deviceSurvey.surveyId === survey.id)
+    );
+    setActiveSurveys(activeSurveys);
+  }, [surveys, deviceSurveys]);
+
+  /**
    * Handles device overview action button click
    * TODO: Add actual functionality once backend is ready
    *
@@ -139,7 +150,10 @@ const OverviewScreen = () => {
           <Tabs value={activeTab} onChange={(_, value) => setActiveTab(value)}>
             <Tab
               value={OverviewScreenTabs.ACTIVE}
-              label={strings.formatString(strings.overviewScreen.activeSurveysTab, surveys.length)}
+              label={strings.formatString(
+                strings.overviewScreen.activeSurveysTab,
+                activeSurveys.length
+              )}
             />
             <Tab
               value={OverviewScreenTabs.IDLE_DEVICES}
@@ -164,7 +178,7 @@ const OverviewScreen = () => {
             />
           </Tabs>
           <TabPanel value={activeTab} index={OverviewScreenTabs.ACTIVE}>
-            <OverviewSurveyList surveys={surveys} deviceSurveys={deviceSurveys} />
+            <OverviewSurveyList surveys={activeSurveys} deviceSurveys={deviceSurveys} />
           </TabPanel>
           <TabPanel value={activeTab} index={OverviewScreenTabs.IDLE_DEVICES}>
             <OverviewDevicesList

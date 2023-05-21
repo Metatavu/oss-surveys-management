@@ -88,51 +88,27 @@ namespace SurveyUtils {
    * @returns management status
    */
   export const getSurveyManagementStatus = (survey: Survey, deviceSurveys: DeviceSurvey[]) => {
-    const foundDeviceSurvey = deviceSurveys.find(
+    const foundDeviceSurveys = deviceSurveys.filter(
       (deviceSurvey) => deviceSurvey.surveyId === survey.id
     );
 
-    if (survey.status === SurveyStatus.Draft) {
-      return SurveyManagementStatus.DRAFT;
+    if (foundDeviceSurveys.length) {
+      if (
+        foundDeviceSurveys.some(
+          (deviceSurvey) => deviceSurvey.status === DeviceSurveyStatus.Published
+        )
+      )
+        return SurveyManagementStatus.PUBLISHED;
+      if (
+        foundDeviceSurveys.some(
+          (deviceSurvey) => deviceSurvey.status === DeviceSurveyStatus.Scheduled
+        )
+      )
+        return SurveyManagementStatus.SCHEDULED;
     }
-    if (
-      !getSurveyDeviceCount(deviceSurveys, survey.id) &&
-      survey.status === SurveyStatus.Approved
-    ) {
-      return SurveyManagementStatus.APPROVED;
-    }
-    if (
-      getSurveyDeviceCount(deviceSurveys, survey.id) === 1 &&
-      foundDeviceSurvey?.status === DeviceSurveyStatus.Scheduled
-    ) {
-      return SurveyManagementStatus.SCHEDULED;
-    }
+    if (survey.status === SurveyStatus.Approved) return SurveyManagementStatus.APPROVED;
 
-    return SurveyManagementStatus.PUBLISHED;
-  };
-
-  /**
-   * Sorts surveys by survey management status
-   *
-   * @param surveyA survey A
-   * @param surveyB survey B
-   * @param deviceSurveys device surveys
-   */
-  export const sortSurveysByManagementStatus = (
-    surveyA: Survey,
-    surveyB: Survey,
-    deviceSurveys: DeviceSurvey[]
-  ) => {
-    const surveyAManagementStatus = getSurveyManagementStatus(surveyA, deviceSurveys);
-    const surveyBManagementStatus = getSurveyManagementStatus(surveyB, deviceSurveys);
-    // NOTE: WORK IN PROGRESS
-    if (
-      surveyAManagementStatus === SurveyManagementStatus.PUBLISHED &&
-      surveyBManagementStatus !== SurveyManagementStatus.PUBLISHED
-    )
-      return -1;
-    if (surveyAManagementStatus < surveyBManagementStatus) return 1;
-    return 0;
+    return SurveyManagementStatus.DRAFT;
   };
 }
 

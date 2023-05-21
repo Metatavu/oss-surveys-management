@@ -6,16 +6,13 @@ import {
   Button,
   Paper,
   styled,
-  MenuItem
+  Tooltip
 } from "@mui/material";
 import strings from "../../localization/strings";
 import theme from "../../styles/theme";
 import { Search, AddCircle } from "@mui/icons-material";
-import { DeviceSurvey, Survey } from "../../generated/client";
+import { Survey } from "../../generated/client";
 import { useEffect, useState } from "react";
-import { SurveyManagementStatus, SurveySortBy } from "../../types";
-import LocalizationUtils from "../../utils/localization-utils";
-import SurveyUtils from "../../utils/survey-utils";
 
 /**
  * Styled filter container component
@@ -37,7 +34,6 @@ const FilterContainer = styled(Paper, {
  */
 interface Props {
   surveys: Survey[];
-  deviceSurveys: DeviceSurvey[];
   setFilteredSurveys: (surveys: Survey[]) => void;
   createSurvey: () => Promise<void>;
 }
@@ -45,7 +41,7 @@ interface Props {
 /**
  * Surveys Filters component
  */
-const SurveysFilters = ({ surveys, deviceSurveys, setFilteredSurveys, createSurvey }: Props) => {
+const SurveysFilters = ({ surveys, setFilteredSurveys, createSurvey }: Props) => {
   const [searchTerm, setSearchTerm] = useState<string>("");
 
   useEffect(() => {
@@ -56,7 +52,10 @@ const SurveysFilters = ({ surveys, deviceSurveys, setFilteredSurveys, createSurv
 
   useEffect(() => {
     setFilteredSurveys(
-      surveys.sort((a, b) => SurveyUtils.sortSurveysByManagementStatus(a, b, deviceSurveys))
+      surveys.sort(
+        (a, b) =>
+          (b.metadata?.modifiedAt?.valueOf() ?? 0) - (a.metadata?.modifiedAt?.valueOf() ?? 0)
+      )
     );
   }, [surveys]);
 
@@ -69,41 +68,36 @@ const SurveysFilters = ({ surveys, deviceSurveys, setFilteredSurveys, createSurv
     setSearchTerm(value);
 
   /**
-   * Handler for show filter change event
+   * Renders disabled text field with "not yet implemented" tooltip
+   * Filtering features are probably not implemented during MVP phase and therefore they'll be left as placeholders.
    *
-   * @param event event
+   * @param label label
    */
-  const handleShowFilterChange = ({ target: { value } }: React.ChangeEvent<HTMLInputElement>) => {
-    if (value === "SHOW_ALL") {
-      setFilteredSurveys(surveys);
-    } else {
-      setFilteredSurveys(
-        surveys.filter(
-          (survey) => SurveyUtils.getSurveyManagementStatus(survey, deviceSurveys) === value
-        )
-      );
-    }
-  };
-
-  /**
-   * Renders show options
-   */
-  const renderShowOptions = () =>
-    Object.values(SurveyManagementStatus).map((status) => (
-      <MenuItem key={status} value={status}>
-        {LocalizationUtils.getLocalizedShowOptions(status as SurveyManagementStatus)}
-      </MenuItem>
-    ));
-
-  /**
-   * Renders sort options
-   */
-  const renderSortOptions = () =>
-    Object.values(SurveySortBy).map((sortBy) => (
-      <MenuItem key={sortBy} value={sortBy}>
-        {LocalizationUtils.getLocalizedSortByOptions(sortBy)}
-      </MenuItem>
-    ));
+  const renderDisabledTextField = (label: string) => (
+    <Tooltip title={strings.generic.notImplemented} placement="top">
+      <TextField
+        sx={{ flex: 1 }}
+        label={label}
+        size="small"
+        disabled
+        select
+        InputLabelProps={{
+          sx: {
+            "&.MuiInputLabel-root": {
+              color: theme.palette.primary.main
+            }
+          }
+        }}
+        SelectProps={{
+          sx: {
+            "& .MuiInputBase-input": {
+              color: theme.palette.primary.main
+            }
+          }
+        }}
+      />
+    </Tooltip>
+  );
 
   return (
     <FilterContainer>
@@ -123,40 +117,9 @@ const SurveysFilters = ({ surveys, deviceSurveys, setFilteredSurveys, createSurv
             )
           }}
         />
-        <TextField
-          sx={{ flex: 1 }}
-          label={strings.surveysScreen.filters.show}
-          size="small"
-          select
-          defaultValue={"SHOW_ALL"}
-          onChange={handleShowFilterChange}
-          color="primary"
-          InputProps={{ color: "primary" }}
-          SelectProps={{
-            sx: {
-              "& .MuiInputBase-input": {
-                color: theme.palette.primary.main
-              }
-            }
-          }}
-        >
-          <MenuItem value={"SHOW_ALL"}>{strings.surveysScreen.filters.showAll}</MenuItem>
-          {renderShowOptions()}
-        </TextField>
-        <TextField
-          sx={{ flex: 1 }}
-          label={strings.surveysScreen.filters.sortBy}
-          size="small"
-          select
-        >
-          {renderSortOptions()}
-        </TextField>
-        <TextField
-          sx={{ flex: 1 }}
-          label={strings.surveysScreen.filters.category}
-          size="small"
-          disabled
-        />
+        {renderDisabledTextField(strings.surveysScreen.filters.show)}
+        {renderDisabledTextField(strings.surveysScreen.filters.sortBy)}
+        {renderDisabledTextField(strings.surveysScreen.filters.category)}
         <Box>
           <Button size="large" variant="contained" startIcon={<AddCircle />} onClick={createSurvey}>
             {strings.surveysScreen.createButton}

@@ -28,7 +28,7 @@ namespace SurveyUtils {
     const earliestPublishStartTime = Math.min(
       ...foundDeviceSurveys.map(
         (deviceSurvey) =>
-          deviceSurvey.publishStartTime?.valueOf() ?? deviceSurvey.metadata?.createdAt.valueOf()
+          deviceSurvey.publishStartTime?.valueOf() ?? deviceSurvey.metadata!.createdAt!.valueOf()
       )
     );
 

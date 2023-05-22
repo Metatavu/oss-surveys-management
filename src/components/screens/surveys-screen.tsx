@@ -52,7 +52,9 @@ const SurveysScreen = () => {
   };
 
   useEffect(() => {
-    getSurveys();
+    getSurveys().catch((error) =>
+      setError(`${strings.errorHandling.overviewScreen.surveysNotFound}, ${error}`)
+    );
     getDeviceSurveys().catch((error) =>
       setError(`${strings.errorHandling.surveysScreen.devicesNotFound}, ${error}`)
     );

@@ -87,6 +87,17 @@
       "actionButton": "Approve",
       "pendingStatus": "Pending",
       "approvedStatus": "Approved",
+      "dialog": {
+        "title": "Device approval",
+        "helperText": "Give device the desired information.",
+        "approve": "Approved",
+        "name": "Name",
+        "namePlaceholder": "Devices name",
+        "description": "Description",
+        "descriptionPlaceholder": "Devices description",
+        "location": "Location",
+        "locationPlaceholder": "Devices location"
+      },
       "headings": {
         "serialNumber": "Serial number",
         "status": "Status",

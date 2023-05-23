@@ -4,6 +4,8 @@ import strings from "../../localization/strings";
 import ListHeader from "../generic/list-header";
 import { DateTime } from "luxon";
 import LocalizationUtils from "../../utils/localization-utils";
+import { Fragment, useState } from "react";
+import DeviceApprovalDialog from "./device-approval-dialog";
 
 /**
  * Components properties
@@ -18,6 +20,8 @@ interface Props {
  * Overview screens Device Requests List component
  */
 const OverviewDeviceRequestsList = ({ deviceRequests, actionButtonText, onClick }: Props) => {
+  const [dialogOpen, setDialogOpen] = useState(false);
+
   const listHeadings = Object.values(strings.overviewScreen.deviceRequests.headings);
 
   /**
@@ -32,16 +36,10 @@ const OverviewDeviceRequestsList = ({ deviceRequests, actionButtonText, onClick 
   /**
    * Renders action button
    *
-   * @param deviceRequest device request
    * @param isApproved is device request approved
    */
-  const renderActionButton = (deviceRequest: DeviceRequest, isApproved: boolean) => (
-    <Button
-      fullWidth
-      variant="outlined"
-      disabled={isApproved}
-      onClick={() => onClick(deviceRequest)}
-    >
+  const renderActionButton = (isApproved: boolean) => (
+    <Button fullWidth variant="outlined" disabled={isApproved} onClick={() => setDialogOpen(true)}>
       {actionButtonText}
     </Button>
   );
@@ -53,20 +51,28 @@ const OverviewDeviceRequestsList = ({ deviceRequests, actionButtonText, onClick 
         const isApproved = deviceRequest.approvalStatus === DeviceApprovalStatus.Approved;
 
         return (
-          <ListItem key={deviceRequest.id}>
-            <ListItemText secondary={deviceRequest.serialNumber} />
-            <ListItemText
-              secondaryTypographyProps={{
-                color: isApproved ? "primary" : "error"
-              }}
-              secondary={LocalizationUtils.getLocalizedDeviceApprovalStatus(
-                deviceRequest.approvalStatus!
-              )}
+          <Fragment key={deviceRequest.id}>
+            <DeviceApprovalDialog
+              deviceRequest={deviceRequest}
+              open={dialogOpen}
+              onClose={() => setDialogOpen(false)}
+              onConfirm={onClick}
             />
-            <ListItemText secondary={strings.generic.notImplemented} />
-            <ListItemText secondary={getCreationDate(deviceRequest)} />
-            <ListItemText secondary={renderActionButton(deviceRequest, isApproved)} />
-          </ListItem>
+            <ListItem>
+              <ListItemText secondary={deviceRequest.serialNumber} />
+              <ListItemText
+                secondaryTypographyProps={{
+                  color: isApproved ? "primary" : "error"
+                }}
+                secondary={LocalizationUtils.getLocalizedDeviceApprovalStatus(
+                  deviceRequest.approvalStatus!
+                )}
+              />
+              <ListItemText secondary={deviceRequest.description} />
+              <ListItemText secondary={getCreationDate(deviceRequest)} />
+              <ListItemText secondary={renderActionButton(isApproved)} />
+            </ListItem>
+          </Fragment>
         );
       })}
     </List>

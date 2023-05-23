@@ -36,7 +36,10 @@
       "deviceRequestUpdateError": "Virhe hyväksyttäessä laitetta"
     },
     "surveysScreen": {
-      "createSurveyError": "Virhe luotaessa kyselyä"
+      "createSurveyError": "Virhe luotaessa kyselyä",
+      "surveysNotFound": "Virhe ladattaessa kyselyitä",
+      "deviceSurveysNotFound": "Virde ladattaessa laitteiden kyselyitä",
+      "devicesNotFound": "Virhe ladattaessa laitteita"
     },
     "editSurveysScreen": {
       "surveyNotFound": "Kyselyä ei löytynyt",
@@ -59,7 +62,7 @@
     "activeSurveysTab": "Aktiiviset kyselyt ({0})",
     "idleDevicesTab": "Näytöt ilman sisältöä ({0})",
     "offlineDevicesTab": "Sammuneet näytöt ({0})",
-    "newDevicesTab": "Uudet lisättävät näytö ({0})",
+    "newDevicesTab": "Uudet lisättävät näytöt ({0})",
     "activeSurveys": {
       "surveyTitle": "Kysely",
       "screens": "Näytöt",
@@ -94,13 +97,39 @@
     }
   },
   "surveysScreen": {
-    "show": "Näytä",
-    "sortBy": "Järjestä",
-    "category": "Kategoria",
-    "filter": "Suodata",
     "createButton": "Luo uusi kysely",
     "newSurvey": "Uusi kysely",
-    "findByName": "Hae nimellä"
+    "filters": {
+      "show": "Näytä",
+      "showAll": "Näytä kaikki",
+      "showDrafts": "Luonnokset",
+      "showReadyToPublish": "Valmiit julkaistavaksi",
+      "showScheduled": "Ajastetut",
+      "showPublished": "Julkaistut",
+      "sortBy": "Järjestä",
+      "sortByTitle": "Nimi",
+      "sortByStatus": "Tila",
+      "sortByPublicationDate": "Julkaisuaika",
+      "sortByCreator": "Tekijä",
+      "sortByModifiedAt": "Viimeksi muokattu",
+      "category": "Kategoria",
+      "filter": "Suodata",
+      "findByName": "Hae nimellä"
+    },
+    "headings": {
+      "surveyTitle": "Kysely",
+      "status": "Tila",
+      "publicationDate": "Julkaisuaika",
+      "category": "Kategoria",
+      "creator": "Tekijä",
+      "modifiedAt": "Muokattu"
+    },
+    "status": {
+      "draft": "Luonnos",
+      "readyToPublish": "Valmis julkaistavaksi",
+      "scheduled": "Ajastettu",
+      "published": "Julkaistu"
+    }
   },
   "editSurveysScreen": {
     "addNewPage": "Lisää uusi sivu",

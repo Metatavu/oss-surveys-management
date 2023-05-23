@@ -3,7 +3,7 @@ import { DeviceSurvey, Survey } from "../../generated/client";
 import strings from "../../localization/strings";
 import SurveyUtils from "../../utils/survey-utils";
 import { useNavigate } from "react-router-dom";
-import OverviewListHeader from "./overview-list-header";
+import ListHeader from "../generic/list-header";
 
 /**
  * Components properties
@@ -22,7 +22,7 @@ const OverviewSurveyList = ({ surveys, deviceSurveys }: Props) => {
 
   return (
     <List>
-      <OverviewListHeader headings={listHeadings} />
+      <ListHeader headings={listHeadings} />
       {surveys.map((survey) => (
         <ListItemButton key={survey.id} onClick={() => navigate(`/surveys/edit/${survey.id}`)}>
           <ListItemText secondary={survey.title} />

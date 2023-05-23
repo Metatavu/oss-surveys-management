@@ -1,7 +1,7 @@
 import { Button, List, ListItem, ListItemText } from "@mui/material";
 import { DeviceApprovalStatus, DeviceRequest } from "../../generated/client";
 import strings from "../../localization/strings";
-import OverviewListHeader from "./overview-list-header";
+import ListHeader from "../generic/list-header";
 import { DateTime } from "luxon";
 import LocalizationUtils from "../../utils/localization-utils";
 
@@ -48,7 +48,7 @@ const OverviewDeviceRequestsList = ({ deviceRequests, actionButtonText, onClick 
 
   return (
     <List>
-      <OverviewListHeader headings={listHeadings} />
+      <ListHeader headings={listHeadings} />
       {deviceRequests.map((deviceRequest) => {
         const isApproved = deviceRequest.approvalStatus === DeviceApprovalStatus.Approved;
 

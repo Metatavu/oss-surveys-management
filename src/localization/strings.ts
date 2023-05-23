@@ -59,6 +59,9 @@ export interface Localized extends LocalizedStringsMethods {
     };
     surveysScreen: {
       createSurveyError: string;
+      surveysNotFound: string;
+      deviceSurveysNotFound: string;
+      devicesNotFound: string;
     };
     editSurveysScreen: {
       surveyNotFound: string;
@@ -123,13 +126,39 @@ export interface Localized extends LocalizedStringsMethods {
    * Translations related to surveys screen
    */
   surveysScreen: {
-    show: string;
-    sortBy: string;
-    category: string;
-    filter: string;
     createButton: string;
     newSurvey: string;
-    findByName: string;
+    filters: {
+      show: string;
+      showAll: string;
+      showDrafts: string;
+      showReadyToPublish: string;
+      showScheduled: string;
+      showPublished: string;
+      sortBy: string;
+      sortByTitle: string;
+      sortByStatus: string;
+      sortByPublicationDate: string;
+      sortByCreator: string;
+      sortByModifiedAt: string;
+      category: string;
+      filter: string;
+      findByName: string;
+    };
+    headings: {
+      surveyTitle: string;
+      status: string;
+      publicationDate: string;
+      category: string;
+      creator: string;
+      modifiedAt: string;
+    };
+    status: {
+      draft: string;
+      readyToPublish: string;
+      scheduled: string;
+      published: string;
+    };
   };
 
   /**

@@ -36,7 +36,10 @@
       "deviceRequestUpdateError": "Error while approving device request"
     },
     "surveysScreen": {
-      "createSurveyError": "Error while creating a survey"
+      "createSurveyError": "Error while creating a survey",
+      "surveysNotFound": "Error while loading surveys",
+      "deviceSurveysNotFound": "Error while loading device surveys",
+      "devicesNotFound": "Error while loading devices"
     },
     "editSurveysScreen": {
       "surveyNotFound": "Survey not found",
@@ -94,13 +97,39 @@
     }
   },
   "surveysScreen": {
-    "show": "Show",
-    "sortBy": "Sort by",
-    "category": "Category",
-    "filter": "Filter by",
     "createButton": "Create new survey",
     "newSurvey": "New Survey",
-    "findByName": "Find by name"
+    "filters": {
+      "show": "Show",
+      "showAll": "Show all",
+      "showDrafts": "Drafts",
+      "showReadyToPublish": "Ready to publish",
+      "showScheduled": "Scheduled",
+      "showPublished": "Published",
+      "sortBy": "Sort by",
+      "sortByTitle": "Title",
+      "sortByStatus": "Status",
+      "sortByPublicationDate": "Publication date",
+      "sortByCreator": "Creator",
+      "sortByModifiedAt": "Last modified at",
+      "category": "Category",
+      "filter": "Filter by",
+      "findByName": "Find by name"
+    },
+    "headings": {
+      "surveyTitle": "Kysely",
+      "status": "Tila",
+      "publicationDate": "Julkaisuaika",
+      "category": "Kategoria",
+      "creator": "Tekijä",
+      "modifiedAt": "Muokattu"
+    },
+    "status": {
+      "draft": "Draft",
+      "readyToPublish": "Approved",
+      "scheduled": "Scheduled",
+      "published": "Published"
+    }
   },
   "editSurveysScreen": {
     "addNewPage": "Add new page",

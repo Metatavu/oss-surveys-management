@@ -145,3 +145,13 @@ export enum PageElementType {
   P = "p",
   DIV = "div"
 }
+
+/**
+ * Enum for Survey Management status
+ */
+export enum SurveyManagementStatus {
+  PUBLISHED = "published",
+  APPROVED = "approved",
+  SCHEDULED = "scheduled",
+  DRAFT = "draft"
+}

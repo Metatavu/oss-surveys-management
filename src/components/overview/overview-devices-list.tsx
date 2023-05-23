@@ -1,7 +1,7 @@
 import { Button, List, ListItem, ListItemText } from "@mui/material";
 import { Device, DeviceStatus } from "../../generated/client";
 import strings from "../../localization/strings";
-import OverviewListHeader from "./overview-list-header";
+import ListHeader from "../generic/list-header";
 import LocalizationUtils from "../../utils/localization-utils";
 
 /**
@@ -32,7 +32,7 @@ const OverviewDevicesList = ({ devices, actionButtonText, onClick }: Props) => {
 
   return (
     <List>
-      <OverviewListHeader headings={listHeadings} />
+      <ListHeader headings={listHeadings} />
       {devices.map((device) => (
         <ListItem key={device.id}>
           <ListItemText secondary={device.name ?? strings.generic.unnamed} />

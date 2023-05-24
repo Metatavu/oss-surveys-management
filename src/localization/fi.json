@@ -90,6 +90,17 @@
       "actionButton": "Ota käyttöön",
       "pendingStatus": "Odottaa",
       "approvedStatus": "Hyväksytty",
+      "dialog": {
+        "title": "Laitteen käyttöönotto",
+        "helperText": "Syötä laitteelle haluamasi tiedot.",
+        "approve": "Ota käyttöön",
+        "name": "Nimi",
+        "namePlaceholder": "Laitteen nimi",
+        "description": "Kuvaus",
+        "descriptionPlaceholder": "Laitteen kuvaus",
+        "location": "Sijainti",
+        "locationPlaceholder": "Laitteen sijainti"
+      },
       "headings": {
         "serialNumber": "Sarjanumero",
         "status": "Tila",

@@ -75,27 +75,7 @@ const SurveysFilters = ({ surveys, setFilteredSurveys, createSurvey }: Props) =>
    */
   const renderDisabledTextField = (label: string) => (
     <Tooltip title={strings.generic.notImplemented} placement="top">
-      <TextField
-        sx={{ flex: 1 }}
-        label={label}
-        size="small"
-        disabled
-        select
-        InputLabelProps={{
-          sx: {
-            "&.MuiInputLabel-root": {
-              color: theme.palette.primary.main
-            }
-          }
-        }}
-        SelectProps={{
-          sx: {
-            "& .MuiInputBase-input": {
-              color: theme.palette.primary.main
-            }
-          }
-        }}
-      />
+      <TextField sx={{ flex: 1 }} label={label} size="small" disabled select />
     </Tooltip>
   );
 

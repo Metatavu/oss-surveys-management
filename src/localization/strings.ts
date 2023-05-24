@@ -115,6 +115,17 @@ export interface Localized extends LocalizedStringsMethods {
       actionButton: string;
       pendingStatus: string;
       approvedStatus: string;
+      dialog: {
+        title: string;
+        helperText: string;
+        approve: string;
+        name: string;
+        namePlaceholder: string;
+        description: string;
+        descriptionPlaceholder: string;
+        location: string;
+        locationPlaceholder: string;
+      };
       headings: {
         serialNumber: string;
         status: string;

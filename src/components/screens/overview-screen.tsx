@@ -119,12 +119,15 @@ const OverviewScreen = () => {
 
     try {
       setIsLoading(true);
-      await deviceRequestsApi.updateDeviceRequest({
+      const updatedDeviceRequest = await deviceRequestsApi.updateDeviceRequest({
         requestId: deviceRequest.id,
         deviceRequest: { ...deviceRequest, approvalStatus: DeviceApprovalStatus.Approved }
       });
 
-      setDeviceRequests(deviceRequests.filter((request) => request.id !== deviceRequest.id));
+      setDeviceRequests([
+        ...deviceRequests.filter((request) => request.id !== deviceRequest.id),
+        updatedDeviceRequest
+      ]);
     } catch (error: any) {
       setError(`${strings.errorHandling.overviewScreen.deviceRequestUpdateError}, ${error}`);
     }

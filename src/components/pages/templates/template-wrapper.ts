@@ -25,7 +25,91 @@ const wrapTemplate = (bodyContent: string, pageNumber?: number) => `<!DOCTYPE ht
     <title>Document</title>
     <link rel="stylesheet" href="https://cdn.metatavu.io/fonts/sok/fonts/stylesheet.css"/>
   </head>
-  <body style="margin: 0;">
+  <style>
+    body {
+      margin: 0;
+    }
+
+    .page {
+      height: 100vh;
+      width: 100vw;
+      background-color: #00AA46;
+      color: #ffffff;
+      display: flex;
+      flex: 1;
+      flex-direction: column;
+      padding: 10%;
+      box-sizing: border-box;
+    }
+
+    .content {
+      display: flex;
+      flex: 1;
+      flex-direction: column;
+    }
+
+    h1 {
+      margin: 0;
+      padding: 0;
+      text-transform: uppercase;
+      font-family: SBonusDisplay-Black;
+    }
+
+    h1.sm {
+      font-size: 2rem;
+    }
+
+    h1.md {
+      font-size: 4rem;
+    }
+
+    h1.lg {
+      font-size: 6rem;
+    }
+
+    p {
+      font-family: SBonusDisplay-Regular;
+      font-size: 2rem;
+      line-height: 150%;
+
+    }
+
+    .options {
+      display: flex;
+      flex: 1;
+      flex-direction: column;
+      gap: 2rem;
+      margin-top: 10%;
+      justify-content: center;
+    }
+
+    .option {
+      width: 100%;
+      height: 80px;
+      font-size: 2rem;
+      font-family: 'SBonusText-Bold';
+      color: #fff;
+      background: transparent;
+      border: 4px solid #fff;,
+      transition: background-color 0.2s ease-in-out;
+    }
+
+    .next-button {
+      align-self: flex-end;
+      background-color: transparent;
+      border: none;
+      color: #ffffff;
+      height: 80px;
+      font-family: SBonusText-Bold;
+      font-size: 2rem;m
+      transition: background-color 0.2s ease-in-out;
+    }
+
+    .next-button:active, option:active {
+      background-color: rgba(0, 0, 0, 0.1);
+    }
+  </style>
+  <body>
     ${sanitizeHtml(bodyContent, sanitizeOptions)}
   </body>
   <script>

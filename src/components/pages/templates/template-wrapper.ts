@@ -71,7 +71,6 @@ const wrapTemplate = (bodyContent: string, pageNumber?: number) => `<!DOCTYPE ht
       font-family: SBonusDisplay-Regular;
       font-size: 2rem;
       line-height: 150%;
-
     }
 
     .options {

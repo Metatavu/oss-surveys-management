@@ -43,6 +43,7 @@ const PublishSurvey = ({ survey, devices, deviceSurveys, publishSurveys }: Props
 
     await publishSurveys(deviceSurveys);
   };
+
   return (
     <>
       <Stack direction="row" flex={1}>

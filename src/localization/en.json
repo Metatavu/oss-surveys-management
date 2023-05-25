@@ -6,7 +6,9 @@
     "back": "Back",
     "confirm": "Confirm",
     "cancel": "Cancel",
-    "unnamed": "Unnamed"
+    "unnamed": "Unnamed",
+    "yes": "Yes",
+    "no": "No"
   },
   "navigation": {
     "overview": "Overview",
@@ -44,6 +46,7 @@
     "editSurveysScreen": {
       "surveyNotFound": "Survey not found",
       "surveyNotSaved": "Error while saving survey",
+      "surveyNotPublished": "Error while publishing survey",
       "surveyPagesNotFound": "Survey pages not found",
       "pageLayoutsNotFound": "Page layouts not found",
       "pageLayoutNotFound": "Page layout not found",
@@ -182,6 +185,32 @@
         "image5": "image 5"
       },
       "pageSaved": "Page saved"
+    }
+  },
+  "publishSurveys": {
+    "surveyPublished": "Survey published",
+    "leftPanel": {
+      "heading": "Select devices to publish to"
+    },
+    "rightPanel": {
+      "heading": "Publish",
+      "description": "Description",
+      "devicesCount": "Amount of devices",
+      "scheduling": "Scheduling",
+      "publishStartTime": "Publication start",
+      "publishEndTime": "Publication end",
+      "publishButton": "Activate survey"
+    },
+    "headings": {
+      "device": "Device",
+      "activeSurveys": "Active surveys",
+      "description": "Description",
+      "status": "Status"
+    },
+    "dialog": {
+      "title": "Confirm survey publication",
+      "description": "You're publishing survey <em>{0}</em> for devices: ",
+      "button": "Publish"
     }
   },
   "layouts": {

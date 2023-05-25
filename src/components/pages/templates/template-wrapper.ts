@@ -4,9 +4,9 @@ import sanitizeHtml, { IOptions } from "sanitize-html";
  * Options for html sanitizer
  */
 const sanitizeOptions: IOptions = {
-  allowedTags: sanitizeHtml.defaults.allowedTags.concat(["button", "h1", "p"]),
+  allowedTags: sanitizeHtml.defaults.allowedTags.concat(["button", "h1", "p", "div"]),
   allowedAttributes: {
-    "*": ["style", "id"]
+    "*": ["style", "id", "class"]
   }
 };
 
@@ -28,7 +28,6 @@ const wrapTemplate = (bodyContent: string, pageNumber?: number) => `<!DOCTYPE ht
       body {
         margin: 0;
       }
-  
       .page {
         height: 100vh;
         width: 100vw;
@@ -40,38 +39,31 @@ const wrapTemplate = (bodyContent: string, pageNumber?: number) => `<!DOCTYPE ht
         padding: 10%;
         box-sizing: border-box;
       }
-  
       .content {
         display: flex;
         flex: 1;
         flex-direction: column;
       }
-  
       h1 {
         margin: 0;
         padding: 0;
         text-transform: uppercase;
         font-family: SBonusDisplay-Black;
       }
-  
       h1.sm {
         font-size: 2rem;
       }
-  
       h1.md {
         font-size: 4rem;
       }
-  
       h1.lg {
         font-size: 6rem;
       }
-  
       p {
         font-family: SBonusDisplay-Regular;
         font-size: 2rem;
         line-height: 150%;
       }
-  
       .options {
         display: flex;
         flex: 1;
@@ -80,7 +72,6 @@ const wrapTemplate = (bodyContent: string, pageNumber?: number) => `<!DOCTYPE ht
         margin-top: 10%;
         justify-content: center;
       }
-  
       .option {
         width: 100%;
         height: 80px;
@@ -88,10 +79,9 @@ const wrapTemplate = (bodyContent: string, pageNumber?: number) => `<!DOCTYPE ht
         font-family: 'SBonusText-Bold';
         color: #fff;
         background: transparent;
-        border: 4px solid #fff;,
+        border: 4px solid #fff;
         transition: background-color 0.2s ease-in-out;
       }
-  
       .next-button {
         align-self: flex-end;
         background-color: transparent;
@@ -99,10 +89,9 @@ const wrapTemplate = (bodyContent: string, pageNumber?: number) => `<!DOCTYPE ht
         color: #ffffff;
         height: 80px;
         font-family: SBonusText-Bold;
-        font-size: 2rem;m
+        font-size: 2rem;
         transition: background-color 0.2s ease-in-out;
       }
-  
       .next-button:active, option:active {
         background-color: rgba(0, 0, 0, 0.1);
       }

@@ -14,9 +14,7 @@
         "noUnusedVariables": "error"
       }
     },
-    "ignore": [
-      "./src/generated/"
-    ]
+    "ignore": ["/generated"]
   },
   "javascript": {
     "formatter": {
@@ -29,8 +27,6 @@
     "indentSize": 2,
     "indentStyle": "space",
     "formatWithErrors": false,
-    "ignore": [
-      "./src/generated/"
-    ]
+    "ignore": ["/generated"]
   }
 }

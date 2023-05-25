@@ -14,6 +14,9 @@ export interface Localized extends LocalizedStringsMethods {
     logout: string;
     notImplemented: string;
     back: string;
+    confirm: string;
+    cancel: string;
+    unnamed: string;
   };
 
   /**
@@ -24,6 +27,14 @@ export interface Localized extends LocalizedStringsMethods {
     surveys: string;
     screens: string;
     logo: string;
+  };
+
+  /**
+   * Translations related to localization
+   */
+  localization: {
+    en: string;
+    fi: string;
   };
 
   /**
@@ -39,11 +50,34 @@ export interface Localized extends LocalizedStringsMethods {
       url: string;
       errorMessage: string;
     };
+    overviewScreen: {
+      surveysNotFound: string;
+      deviceSurveysNotFound: string;
+      devicesNotFound: string;
+      deviceRequestsNotFound: string;
+      deviceRequestUpdateError: string;
+    };
     surveysScreen: {
       createSurveyError: string;
+      surveysNotFound: string;
+      deviceSurveysNotFound: string;
+      devicesNotFound: string;
     };
     editSurveysScreen: {
       surveyNotFound: string;
+      surveyNotSaved: string;
+      surveyPagesNotFound: string;
+      pageLayoutsNotFound: string;
+      pageLayoutNotFound: string;
+      pageNotSaved: string;
+      pageNotDeleted: string;
+      pageNotCreated: string;
+    };
+    previewScreen: {
+      surveyNotFound: string;
+      surveyPagesNotFound: string;
+      pageLayoutsNotFound: string;
+      previewNotFound: string;
     };
   };
 
@@ -51,26 +85,91 @@ export interface Localized extends LocalizedStringsMethods {
    * Translations related to overview screen
    */
   overviewScreen: {
-    surveyTitle: string;
-    screens: string;
-    publicationDate: string;
-    endTime: string;
-    mostPopular: string;
-    answers: string;
-    activeSurveys: string;
+    activeSurveysTab: string;
+    idleDevicesTab: string;
+    offlineDevicesTab: string;
+    newDevicesTab: string;
+    activeSurveys: {
+      surveyTitle: string;
+      screens: string;
+      publicationDate: string;
+      endTime: string;
+      mostPopular: string;
+      answers: string;
+    };
+    devices: {
+      idleActionButton: string;
+      oflineActionButton: string;
+      headings: {
+        deviceName: string;
+        status: string;
+        description: string;
+        location: string;
+        action: string;
+      };
+    };
+    deviceRequests: {
+      actionButton: string;
+      pendingStatus: string;
+      approvedStatus: string;
+      dialog: {
+        title: string;
+        helperText: string;
+        approve: string;
+        name: string;
+        namePlaceholder: string;
+        description: string;
+        descriptionPlaceholder: string;
+        location: string;
+        locationPlaceholder: string;
+      };
+      headings: {
+        serialNumber: string;
+        status: string;
+        description: string;
+        createdAt: string;
+        action: string;
+      };
+    };
   };
 
   /**
    * Translations related to surveys screen
    */
   surveysScreen: {
-    show: string;
-    sortBy: string;
-    category: string;
-    filter: string;
     createButton: string;
     newSurvey: string;
-    findByName: string;
+    filters: {
+      show: string;
+      showAll: string;
+      showDrafts: string;
+      showReadyToPublish: string;
+      showScheduled: string;
+      showPublished: string;
+      sortBy: string;
+      sortByTitle: string;
+      sortByStatus: string;
+      sortByPublicationDate: string;
+      sortByCreator: string;
+      sortByModifiedAt: string;
+      category: string;
+      filter: string;
+      findByName: string;
+    };
+    headings: {
+      surveyTitle: string;
+      status: string;
+      publicationDate: string;
+      category: string;
+      creator: string;
+      modifiedAt: string;
+    };
+    status: {
+      draft: string;
+      readyToPublish: string;
+      scheduled: string;
+      published: string;
+    };
   };
 
   /**
@@ -78,11 +177,77 @@ export interface Localized extends LocalizedStringsMethods {
    */
   editSurveysScreen: {
     addNewPage: string;
+    deletePage: string;
+    surveySaved: string;
     editing: string;
     publish: string;
     published: string;
     statistics: string;
     preview: string;
+    editSurveyPanel: {
+      name: string;
+      description: string;
+      category: string;
+      returnTimeout: string;
+      readyForPublish: string;
+    };
+    pages: {
+      noQuestion: string;
+    };
+    editPagesPanel: {
+      page: string;
+      title: string;
+      questionType: string;
+      answerOptions: string;
+      answerOptionPlaceholder: string;
+      deleteAnswerOptionTitle: string;
+      addOption: string;
+      confirmDeleteOption: string;
+      infoText: string;
+      buttonVisibility: string;
+      background: string;
+      backgroundImages: {
+        default: string;
+        image1: string;
+        image2: string;
+        image3: string;
+        image4: string;
+        image5: string;
+      };
+      pageSaved: string;
+    };
+  };
+
+  /**
+   * Translations related to page layouts
+   */
+  layouts: {
+    addNewPage: string;
+    title: string;
+    question: string;
+    info: string;
+    infoImage: string;
+    paragraphImage: string;
+    imageParagraph: string;
+    questionInfo: string;
+    statistics: string;
+  };
+
+  /**
+   * Translations related to devices
+   */
+  devices: {
+    status: {
+      online: string;
+      offline: string;
+    };
+  };
+
+  /**
+   * Translations related to preview screen
+   */
+  previewScreen: {
+    sharePreview: string;
   };
 }
 /**

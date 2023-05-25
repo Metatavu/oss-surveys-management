@@ -5,10 +5,15 @@ import ErrorHandler from "./components/contexts/error-handler";
 import BasicLayout from "./components/layouts/basic-layout";
 import AuthenticationProvider from "./components/providers/authentication-provider";
 import OverviewScreen from "./components/screens/overview-screen";
-import ScreensScreen from "./components/screens/screens-screen";
+import ScreensScreen from "./components/screens/devices-screen";
 import SurveysScreen from "./components/screens/surveys-screen";
 import theme from "./styles/theme";
 import EditSurveysScreen from "./components/screens/edit-surveys-screen";
+import PreviewScreen from "./components/screens/preview-screen";
+import { useAtomValue } from "jotai";
+import { languageAtom } from "./atoms/language";
+import { Flip, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const router = createBrowserRouter([
   {
@@ -23,7 +28,7 @@ const router = createBrowserRouter([
         element: <SurveysScreen />
       },
       {
-        path:"/surveys/edit/:id",
+        path: "/surveys/edit/:id",
         element: <EditSurveysScreen />
       },
       {
@@ -33,6 +38,10 @@ const router = createBrowserRouter([
       {
         path: "/",
         element: <Navigate to="/overview" />
+      },
+      {
+        path: "/preview/:id",
+        element: <PreviewScreen />
       }
     ]
   }
@@ -41,17 +50,27 @@ const router = createBrowserRouter([
 /**
  * Application componenet
  */
-const App = () => (
-  <div className="App">
-    <ErrorHandler>
-      <AuthenticationProvider>
-        <ThemeProvider theme={ responsiveFontSizes(theme) }>
-          <CssBaseline/>
-            <RouterProvider router={router}/>
-        </ThemeProvider>
-      </AuthenticationProvider>
-    </ErrorHandler>
-  </div>
-);
+const App = () => {
+  useAtomValue(languageAtom);
+
+  return (
+    <div className="App">
+      <ErrorHandler>
+        <AuthenticationProvider>
+          <ThemeProvider theme={responsiveFontSizes(theme)}>
+            <ToastContainer
+              position="bottom-right"
+              autoClose={2000}
+              transition={Flip}
+              hideProgressBar
+            />
+            <CssBaseline />
+            <RouterProvider router={router} />
+          </ThemeProvider>
+        </AuthenticationProvider>
+      </ErrorHandler>
+    </div>
+  );
+};
 
 export default App;

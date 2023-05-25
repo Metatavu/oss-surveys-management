@@ -14,7 +14,7 @@ interface Props {
 /**
  * Styled navigation button
  */
-const NavigationButton = styled(Button, {
+export const NavigationButton = styled(Button, {
   label: "navigation-button"
 })(({ theme }) => ({
   color: theme.palette.primary.dark,
@@ -38,11 +38,9 @@ const NavigationButton = styled(Button, {
 const NavButton: FC<Props> = ({ title, selected, to }) => {
   return (
     <Link to={to}>
-      <NavigationButton className={selected ? "selected" : ""}>
-        {title}
-      </NavigationButton>
+      <NavigationButton className={selected ? "selected" : ""}>{title}</NavigationButton>
     </Link>
-  )
-}
+  );
+};
 
 export default NavButton;

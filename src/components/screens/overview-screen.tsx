@@ -1,74 +1,212 @@
-import { List, ListItem, Tab, Tabs, ListItemText, Box, Paper } from "@mui/material";
-import { useState } from "react";
+import { errorAtom } from "../../atoms/error";
+import {
+  Device,
+  DeviceApprovalStatus,
+  DeviceRequest,
+  DeviceStatus,
+  DeviceSurvey,
+  Survey
+} from "../../generated/client";
+import { useApi } from "../../hooks/use-api";
 import strings from "../../localization/strings";
-import { SurveyScreens } from "../../types";
-import { mockData } from "./surveys-mock-data";
-import TabPanel from "../surveys/TabPanel";
+import { OverviewScreenTabs } from "../../types";
+import TabPanel from "../overview/tab-panel";
+import { Box, Paper, Tab, Tabs } from "@mui/material";
+import { useAtomValue, useSetAtom } from "jotai";
+import { useEffect, useState } from "react";
+import DeviceUtils from "../../utils/device-utils";
+import OverviewSurveyList from "../overview/overview-surveys-list";
+import OverviewDevicesList from "../overview/overview-devices-list";
+import { languageAtom } from "../../atoms/language";
+import LoaderWrapper from "../generic/loader-wrapper";
+import OverviewDeviceRequestsList from "../overview/overview-device-requests-list";
 
 /**
  *  Renders overview screen
  */
 const OverviewScreen = () => {
-  const [ activeTab, setActiveTab ] = useState(SurveyScreens.ACTIVE);
-
-  // TODO: Fetch surveys data from backend when available
-
-  /**
-   * Render survey list headings
-   */
-  const renderSurveyListHeadings = () => (
-    <ListItem>
-      <ListItemText primary={ strings.overviewScreen.surveyTitle }/>
-      <ListItemText primary={ strings.overviewScreen.screens } />
-      <ListItemText primary={ strings.overviewScreen.publicationDate } />
-      <ListItemText primary={ strings.overviewScreen.endTime }/>
-      <ListItemText primary={ strings.overviewScreen.mostPopular } />
-      <ListItemText primary={ strings.overviewScreen.answers } />
-    </ListItem>
-  );
+  useAtomValue(languageAtom);
+  const [activeTab, setActiveTab] = useState(OverviewScreenTabs.ACTIVE);
+  const { surveysApi, deviceSurveysApi, devicesApi, deviceRequestsApi } = useApi();
+  const setError = useSetAtom(errorAtom);
+  const [surveys, setSurveys] = useState<Survey[]>([]);
+  const [devices, setDevices] = useState<Device[]>([]);
+  const [deviceSurveys, setDeviceSurveys] = useState<DeviceSurvey[]>([]);
+  const [deviceRequests, setDeviceRequests] = useState<DeviceRequest[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [activeSurveys, setActiveSurveys] = useState<Survey[]>([]);
 
   /**
-   * Renders list of surveys
+   * Gets Surveys
    */
-  const renderSurveysList = () => {
-    return (
-      <List>
-        { renderSurveyListHeadings() }
-        {mockData.map(survey => (
-          <ListItem key={ survey.id }>
-            <ListItemText secondary={ survey.title } />
-            <ListItemText secondary={ survey.screens } />
-            <ListItemText secondary={ survey.startTime.toFormat("dd.MM.yyyy") } />
-            <ListItemText secondary={ survey.endTime.toFormat("dd.MM.yyyy") } />
-            <ListItemText secondary={ survey.topScreen } />
-            <ListItemText secondary={ survey.answers } />
-          </ListItem>
-        ))}
-      </List>
-    )
+  const getSurveys = async () => {
+    try {
+      const surveys = await surveysApi.listSurveys({});
+      setSurveys(surveys);
+    } catch (error: any) {
+      setError(`${strings.errorHandling.overviewScreen.surveysNotFound}, ${error}`);
+    }
   };
 
+  /**
+   * Gets Devices
+   */
+  const getDevices = async () => {
+    const devices = await devicesApi.listDevices({});
+    setDevices(devices);
+
+    for (const device of devices) {
+      if (!device.id) continue;
+      await getDeviceSurveysByDevice(device.id);
+    }
+  };
+
+  /**
+   * Gets Device Surveys for a specific device
+   *
+   * Device Surveys define what surveys are assigned to what devices.
+   *
+   * @param deviceId device id
+   */
+  const getDeviceSurveysByDevice = async (deviceId: string) => {
+    try {
+      const deviceSurveys = await deviceSurveysApi.listDeviceSurveys({ deviceId: deviceId });
+      setDeviceSurveys([...deviceSurveys, ...deviceSurveys]);
+    } catch (error: any) {
+      setError(`${strings.errorHandling.overviewScreen.deviceSurveysNotFound}, ${error}`);
+    }
+  };
+
+  /**
+   * Gets Device Requests
+   *
+   * Device Requests are Devices that are yet to be approved into the system.
+   */
+  const getDeviceRequests = async () => {
+    try {
+      const deviceRequests = await deviceRequestsApi.listDeviceRequests({});
+      setDeviceRequests(deviceRequests);
+    } catch (error: any) {
+      setError(`${strings.errorHandling.overviewScreen.deviceRequestsNotFound}, ${error}`);
+    }
+  };
+
+  /**
+   * Gets active surveys and sets them in state
+   */
+  useEffect(() => {
+    const activeSurveys = surveys.filter((survey) =>
+      deviceSurveys.some((deviceSurvey) => deviceSurvey.surveyId === survey.id)
+    );
+    setActiveSurveys(activeSurveys);
+  }, [surveys, deviceSurveys]);
+
+  /**
+   * Handles device overview action button click
+   * TODO: Add actual functionality once backend is ready
+   *
+   * @param _ device
+   */
+  const handleActionButtonClick = async (_: Device) => alert(strings.generic.notImplemented);
+
+  /**
+   * Handles device request approve button click
+   *
+   * @param deviceRequest device request
+   */
+  const handleApproveDevice = async (deviceRequest: DeviceRequest) => {
+    if (!deviceRequest?.id) return;
+
+    try {
+      setIsLoading(true);
+      const updatedDeviceRequest = await deviceRequestsApi.updateDeviceRequest({
+        requestId: deviceRequest.id,
+        deviceRequest: { ...deviceRequest, approvalStatus: DeviceApprovalStatus.Approved }
+      });
+
+      setDeviceRequests([
+        ...deviceRequests.filter((request) => request.id !== deviceRequest.id),
+        updatedDeviceRequest
+      ]);
+    } catch (error: any) {
+      setError(`${strings.errorHandling.overviewScreen.deviceRequestUpdateError}, ${error}`);
+    }
+    setIsLoading(false);
+  };
+
+  useEffect(() => {
+    setIsLoading(true);
+    getSurveys();
+    getDevices().catch((error) =>
+      setError(`${strings.errorHandling.overviewScreen.devicesNotFound}, ${error}`)
+    );
+    getDeviceRequests().catch((error) =>
+      setError(`${strings.errorHandling.overviewScreen.deviceRequestsNotFound}, ${error}`)
+    );
+    setIsLoading(false);
+  }, []);
+
   return (
-    <Box p={4}>
-      <Paper>
-        <Tabs value={ activeTab } onChange={ (_, value) => setActiveTab(value) } >
-          <Tab
-            value={ SurveyScreens.ACTIVE }
-            label={ strings.formatString(strings.overviewScreen.activeSurveys, `(${mockData.length})`) }
-          />
-          <Tab
-            value={ SurveyScreens.NOT_IMPLEMENTED }
-            label={ strings.generic.notImplemented }
-          />
-        </Tabs>
-        <TabPanel value={ activeTab } index={ SurveyScreens.ACTIVE } >
-          { renderSurveysList() }
-        </TabPanel>
-        <TabPanel value={ activeTab } index={ SurveyScreens.NOT_IMPLEMENTED } >
-          { strings.generic.notImplemented }
-        </TabPanel>
-      </Paper>
-    </Box>
+    <LoaderWrapper loading={isLoading}>
+      <Box p={4}>
+        <Paper>
+          <Tabs value={activeTab} onChange={(_, value) => setActiveTab(value)}>
+            <Tab
+              value={OverviewScreenTabs.ACTIVE}
+              label={strings.formatString(
+                strings.overviewScreen.activeSurveysTab,
+                activeSurveys.length
+              )}
+            />
+            <Tab
+              value={OverviewScreenTabs.IDLE_DEVICES}
+              label={strings.formatString(
+                strings.overviewScreen.idleDevicesTab,
+                DeviceUtils.getDevicesWithoutSurveys(devices, deviceSurveys).length
+              )}
+            />
+            <Tab
+              value={OverviewScreenTabs.OFFLINE_DEVICES}
+              label={strings.formatString(
+                strings.overviewScreen.offlineDevicesTab,
+                DeviceUtils.getDevicesByStatus(devices, DeviceStatus.Offline).length
+              )}
+            />
+            <Tab
+              value={OverviewScreenTabs.NEW_DEVICES}
+              label={strings.formatString(
+                strings.overviewScreen.newDevicesTab,
+                deviceRequests.length
+              )}
+            />
+          </Tabs>
+          <TabPanel value={activeTab} index={OverviewScreenTabs.ACTIVE}>
+            <OverviewSurveyList surveys={activeSurveys} deviceSurveys={deviceSurveys} />
+          </TabPanel>
+          <TabPanel value={activeTab} index={OverviewScreenTabs.IDLE_DEVICES}>
+            <OverviewDevicesList
+              devices={DeviceUtils.getDevicesWithoutSurveys(devices, deviceSurveys)}
+              actionButtonText={strings.overviewScreen.devices.idleActionButton}
+              onClick={handleActionButtonClick}
+            />
+          </TabPanel>
+          <TabPanel value={activeTab} index={OverviewScreenTabs.OFFLINE_DEVICES}>
+            <OverviewDevicesList
+              devices={DeviceUtils.getDevicesByStatus(devices, DeviceStatus.Offline)}
+              actionButtonText={strings.overviewScreen.devices.oflineActionButton}
+              onClick={handleActionButtonClick}
+            />
+          </TabPanel>
+          <TabPanel value={activeTab} index={OverviewScreenTabs.NEW_DEVICES}>
+            <OverviewDeviceRequestsList
+              deviceRequests={deviceRequests}
+              actionButtonText={strings.overviewScreen.deviceRequests.actionButton}
+              onClick={handleApproveDevice}
+            />
+          </TabPanel>
+        </Paper>
+      </Box>
+    </LoaderWrapper>
   );
 };
 

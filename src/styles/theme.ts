@@ -3,7 +3,7 @@ import { createTheme } from "@mui/material";
 /**
  * Values from default theme to use in custom theme
  */
-const { breakpoints, spacing } = createTheme();
+const { spacing } = createTheme();
 
 /**
  * Custom theme for Material UI
@@ -14,37 +14,37 @@ export default createTheme({
     primary: {
       main: "#00aa46",
       light: "#46dc78",
-      dark: "#007841",
+      dark: "#007841"
     },
     secondary: {
-      main: "#006e87",
+      main: "#006e87"
     },
     error: {
-      main: "#b70000",
+      main: "#b70000"
     },
     warning: {
-      main: "#ffa200",
+      main: "#ffa200"
     },
     success: {
       main: "#00aa46",
       dark: "#007841",
-      light: "#46dc78",
+      light: "#46dc78"
     },
     divider: "#dadcde",
     background: {
-      default: "#eff0f1",
+      default: "#eff0f1"
     },
     text: {
       primary: "#4b5055",
       secondary: "#4B5055",
-      disabled: "#7d8287",
+      disabled: "#7d8287"
     },
     info: {
-      main: "#006e87",
-    },
+      main: "#006e87"
+    }
   },
   shape: {
-    borderRadius: 4,
+    borderRadius: 4
   },
   typography: {
     fontFamily: "SBonusText-Regular",
@@ -56,9 +56,13 @@ export default createTheme({
     },
     h3: {},
     h4: {},
-    h5: {},
+    h5: {
+      fontFamily: "SBonusText-Bold",
+      fontSize: 18
+    },
     h6: {
-      fontFamily: "SBonusText-Bold"
+      fontFamily: "SBonusText-Bold",
+      fontSize: 16
     },
     button: {
       fontFamily: "SBonusText-Bold",
@@ -92,12 +96,12 @@ export default createTheme({
         },
         colorInherit: {
           backgroundColor: "#fff"
-        },
-      },
+        }
+      }
     },
     MuiSwitch: {
       defaultProps: {
-        size: "small",
+        size: "small"
       },
       styleOverrides: {
         root: {
@@ -114,8 +118,8 @@ export default createTheme({
             "& + $track": {
               opacity: 1,
               border: "none"
-            },
-          },
+            }
+          }
         },
         thumb: {
           width: 24,
@@ -126,9 +130,10 @@ export default createTheme({
           border: "1px solid #bdbdbd",
           backgroundColor: "#fafafa",
           opacity: 1,
-          transition: "background-color 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,border 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms"
-        },
-      },
+          transition:
+            "background-color 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,border 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms"
+        }
+      }
     },
     MuiTab: {
       styleOverrides: {
@@ -139,7 +144,7 @@ export default createTheme({
     },
     MuiList: {
       defaultProps: {
-        dense: true,
+        dense: true
       }
     },
     MuiListItem: {
@@ -161,7 +166,7 @@ export default createTheme({
     },
     MuiMenuItem: {
       defaultProps: {
-        dense: true,
+        dense: true
       }
     },
     MuiTable: {
@@ -171,7 +176,7 @@ export default createTheme({
     },
     MuiButton: {
       defaultProps: {
-        size: "small"
+        disableElevation: true
       }
     },
     MuiButtonGroup: {
@@ -222,8 +227,33 @@ export default createTheme({
     },
     MuiTextField: {
       defaultProps: {
+        variant: "standard",
         margin: "dense",
-        size: "small",
+        size: "small"
+      }
+    },
+    MuiInput: {
+      styleOverrides: {
+        root: {
+          "&:before": {
+            borderBottom: "1px solid rgba(0,0,0,0)"
+          },
+          "&:hover": {
+            "& .MuiInputAdornment-root.on-hover": {
+              opacity: 1
+            }
+          }
+        }
+      }
+    },
+    MuiInputAdornment: {
+      styleOverrides: {
+        root: {
+          "&.on-hover": {
+            transition: "opacity 0.2s ease-out",
+            opacity: 0
+          }
+        }
       }
     },
     MuiTooltip: {
@@ -231,5 +261,31 @@ export default createTheme({
         arrow: true
       }
     },
-  },
+    MuiDialogTitle: {
+      styleOverrides: {
+        root: {
+          display: "flex",
+          justifyContent: "space-between",
+          borderBottom: "1px solid #DADCDE"
+        }
+      }
+    },
+    MuiDialogContent: {
+      styleOverrides: {
+        root: {
+          display: "flex",
+          flexDirection: "column",
+          padding: 0
+        }
+      }
+    },
+    MuiDialogActions: {
+      styleOverrides: {
+        root: {
+          borderTop: "1px solid #DADCDE",
+          gap: spacing(2)
+        }
+      }
+    }
+  }
 });

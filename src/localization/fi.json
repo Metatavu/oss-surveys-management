@@ -151,6 +151,7 @@
     "surveySaved": "Kysely tallennettu",
     "editing": "Luonnokset",
     "publish": "Julkaise",
+    "editor": "Editori",
     "published": "Julkaistu",
     "statistics": "Tilastot",
     "preview": "Esikatselu",
@@ -186,6 +187,14 @@
       },
       "pageSaved": "Sivu tallennettu"
     }
+  },
+  "surveyStatistics": {
+    "surveyStatistics": "Tilastot",
+    "chooseStatisticsSource": "Valitse koosteen lähde",
+    "answerCount": "Vastauksia yhteensä",
+    "mostAttainableTime": "Saavutettavin ajankohta",
+    "mostPopularAnswer": "Suosituin vastaus",
+    "mostEfficientScreen": "Tehokkain näyttö"
   },
   "publishSurveys": {
     "surveyPublished": "Kysely julkaistu",

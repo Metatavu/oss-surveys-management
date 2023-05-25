@@ -160,5 +160,6 @@ export enum SurveyManagementStatus {
 /** Enum for survey screen mode */
 export enum SurveyScreenMode {
   EDITOR,
-  PUBLISH
+  PUBLISH,
+  STATISTICS
 }

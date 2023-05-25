@@ -184,6 +184,7 @@ export interface Localized extends LocalizedStringsMethods {
     surveySaved: string;
     editing: string;
     publish: string;
+    editor: string;
     published: string;
     statistics: string;
     preview: string;
@@ -219,6 +220,18 @@ export interface Localized extends LocalizedStringsMethods {
       };
       pageSaved: string;
     };
+  };
+
+  /**
+   * Translations related to survey statistics
+   */
+  surveyStatistics: {
+    surveyStatistics: string;
+    chooseStatisticsSource: string;
+    answerCount: string;
+    mostAttainableTime: string;
+    mostPopularAnswer: string;
+    mostEfficientScreen: string;
   };
 
   /**

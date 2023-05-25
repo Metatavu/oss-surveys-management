@@ -1,15 +1,16 @@
-import { SurveyScreenMode } from "../../types";
-import Toolbar from "../layout-components/toolbar";
-import { useEffect, useState } from "react";
-import { useSetAtom } from "jotai";
-import { useNavigate, useParams } from "react-router-dom";
 import { errorAtom } from "../../atoms/error";
-import { Survey, Device, DeviceSurvey } from "../../generated/client";
+import { Device, DeviceSurvey, Survey } from "../../generated/client";
 import { useApi } from "../../hooks/use-api";
 import strings from "../../localization/strings";
-import LoaderWrapper from "../generic/loader-wrapper";
+import { SurveyScreenMode } from "../../types";
 import EditSurvey from "../editor/edit-survey";
 import PublishSurvey from "../editor/publish-survey";
+import LoaderWrapper from "../generic/loader-wrapper";
+import Toolbar from "../layout-components/toolbar";
+import SurveyStatistics from "../statistics/survey-statistics";
+import { useSetAtom } from "jotai";
+import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 
 /**
@@ -109,24 +110,39 @@ const EditorScreen = () => {
       }
       toast.success(strings.publishSurveys.surveyPublished);
       navigate("/overview");
-    } catch (error: any) {}
+    } catch (error: any) {
+      setError(`${strings.errorHandling.editSurveysScreen.surveyNotPublished}, ${error}`);
+    }
     setIsLoading(false);
   };
 
   /**
    * Renders screen content according to mode
    */
-  const renderContent = () =>
-    mode === SurveyScreenMode.EDITOR ? (
-      <EditSurvey survey={survey!} saveSurvey={saveSurvey} />
-    ) : (
-      <PublishSurvey
-        survey={survey!}
-        devices={devices}
-        deviceSurveys={deviceSurveys}
-        publishSurveys={publishSurveys}
-      />
-    );
+  const renderContent = () => {
+    if (!survey) {
+      return null;
+    }
+
+    if (mode === SurveyScreenMode.EDITOR) {
+      return <EditSurvey survey={survey!} saveSurvey={saveSurvey} />;
+    }
+
+    if (mode === SurveyScreenMode.PUBLISH) {
+      return (
+        <PublishSurvey
+          survey={survey}
+          devices={devices}
+          deviceSurveys={deviceSurveys}
+          publishSurveys={publishSurveys}
+        />
+      );
+    }
+
+    if (mode === SurveyScreenMode.STATISTICS) {
+      return <SurveyStatistics survey={survey} devices={devices} deviceSurveys={deviceSurveys} />;
+    };
+  }
 
   return (
     <>

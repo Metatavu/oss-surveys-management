@@ -1,21 +1,21 @@
-import { CssBaseline, responsiveFontSizes } from "@mui/material";
-import ThemeProvider from "@mui/material/styles/ThemeProvider";
-import { createBrowserRouter, Navigate, RouterProvider } from "react-router-dom";
+import { languageAtom } from "./atoms/language";
 import ErrorHandler from "./components/contexts/error-handler";
 import BasicLayout from "./components/layouts/basic-layout";
 import AuthenticationProvider from "./components/providers/authentication-provider";
-import OverviewScreen from "./components/screens/overview-screen";
 import ScreensScreen from "./components/screens/devices-screen";
+import EditorScreen from "./components/screens/editor-screen";
+import OverviewScreen from "./components/screens/overview-screen";
+import PreviewScreen from "./components/screens/preview-screen";
 import SurveysScreen from "./components/screens/surveys-screen";
 import theme from "./styles/theme";
-import PreviewScreen from "./components/screens/preview-screen";
-import { useAtomValue } from "jotai";
-import { languageAtom } from "./atoms/language";
-import { Flip, ToastContainer } from "react-toastify";
+import { CssBaseline, responsiveFontSizes } from "@mui/material";
+import ThemeProvider from "@mui/material/styles/ThemeProvider";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterLuxon } from "@mui/x-date-pickers/AdapterLuxon";
+import { useAtomValue } from "jotai";
+import { Navigate, RouterProvider, createBrowserRouter } from "react-router-dom";
+import { Flip, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import EditorScreen from "./components/screens/editor-screen";
 
 const router = createBrowserRouter([
   {

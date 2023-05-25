@@ -1,17 +1,17 @@
-import styled from "@emotion/styled";
-import { Box, Button, IconButton, Paper, Stack, Typography } from "@mui/material";
-import theme from "../../styles/theme";
+import { Survey, SurveyStatus } from "../../generated/client";
 import strings from "../../localization/strings";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import { useNavigate } from "react-router-dom";
+import theme from "../../styles/theme";
+import { SurveyScreenMode } from "../../types";
+import styled from "@emotion/styled";
 import {
   BarChartOutlined,
   MoreHoriz,
   PlayArrowOutlined,
   PublishOutlined
 } from "@mui/icons-material";
-import { Survey, SurveyStatus } from "../../generated/client";
-import { SurveyScreenMode } from "../../types";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import { Box, Button, IconButton, Paper, Stack, Typography } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 /**
  * Styled toolbar container component
@@ -73,14 +73,6 @@ const Toolbar = ({ survey, mode, setMode }: Props) => {
     </Stack>
   );
 
-  /**
-   * Toggles Survey screen mode
-   */
-  const toggleMode = () =>
-    mode === SurveyScreenMode.EDITOR
-      ? setMode(SurveyScreenMode.PUBLISH)
-      : setMode(SurveyScreenMode.EDITOR);
-
   const renderControls = () => (
     <>
       <Button
@@ -91,15 +83,16 @@ const Toolbar = ({ survey, mode, setMode }: Props) => {
         sx={{
           backgroundColor: mode === SurveyScreenMode.PUBLISH ? "#c8c8c8" : ""
         }}
-        onClick={toggleMode}
+        onClick={() => setMode(mode === SurveyScreenMode.EDITOR ? SurveyScreenMode.PUBLISH : SurveyScreenMode.EDITOR)}
       >
-        {strings.editSurveysScreen.publish}
+        {mode === SurveyScreenMode.EDITOR ? strings.editSurveysScreen.publish : strings.editSurveysScreen.editor}
       </Button>
       <Button
-        disabled
+        disabled={survey.status === SurveyStatus.Draft}
         color="primary"
-        title={strings.generic.notImplemented}
+        title={strings.surveyStatistics.surveyStatistics}
         startIcon={<BarChartOutlined />}
+        onClick={() => setMode(SurveyScreenMode.STATISTICS)}
       >
         {strings.editSurveysScreen.statistics}
       </Button>

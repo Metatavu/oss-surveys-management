@@ -51,17 +51,17 @@ const wrapTemplate = (bodyContent: string, pageNumber?: number) => `<!DOCTYPE ht
         font-family: SBonusDisplay-Black;
       }
       h1.sm {
-        font-size: 2rem;
+        font-size: 4rem;
       }
       h1.md {
-        font-size: 4rem;
+        font-size: 5rem;
       }
       h1.lg {
         font-size: 6rem;
       }
       p {
         font-family: SBonusDisplay-Regular;
-        font-size: 2rem;
+        font-size: 4rem;
         line-height: 150%;
       }
       .options {
@@ -74,8 +74,8 @@ const wrapTemplate = (bodyContent: string, pageNumber?: number) => `<!DOCTYPE ht
       }
       .option {
         width: 100%;
-        height: 80px;
-        font-size: 2rem;
+        padding: "30px 20px;
+        font-size: 2.5rem;
         font-family: 'SBonusText-Bold';
         color: #fff;
         background: transparent;
@@ -91,7 +91,7 @@ const wrapTemplate = (bodyContent: string, pageNumber?: number) => `<!DOCTYPE ht
         color: #ffffff;
         height: 80px;
         font-family: SBonusText-Bold;
-        font-size: 2rem;
+        font-size: 2.5rem;
         transition: background-color 0.2s ease-in-out;
       }
       .next-button:active, option:active {

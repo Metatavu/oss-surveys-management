@@ -1,14 +1,14 @@
-import { useEffect, useState } from "react";
-import wrapTemplate from "../pages/templates/template-wrapper";
-import { parseHtmlToDom } from "../../utils/preview-utils";
-import { IframeClickEvent } from "../../types";
-import { IconButton, Menu, MenuItem, Stack, Typography, styled } from "@mui/material";
-import { Add, MoreHoriz } from "@mui/icons-material";
-import strings from "../../localization/strings";
 import { Page, PageQuestionType } from "../../generated/client";
+import strings from "../../localization/strings";
+import { IframeClickEvent } from "../../types";
 import PageUtils from "../../utils/page-utils";
-import { IconContainer } from "../editor/new-page-button";
+import { parseHtmlToDom } from "../../utils/preview-utils";
 import AddQuestionDialog from "../editor/add-question-dialog";
+import { IconContainer } from "../editor/new-page-button";
+import wrapTemplate from "../pages/templates/template-wrapper";
+import { Add, MoreHoriz } from "@mui/icons-material";
+import { IconButton, Menu, MenuItem, Stack, Typography, styled } from "@mui/material";
+import { useEffect, useState } from "react";
 
 /**
  * Add Question Container props
@@ -60,6 +60,22 @@ interface Props {
   deletePage?: (pageNumber: number) => Promise<void>;
   addQuestion?: (questionType: PageQuestionType, pageId: string) => Promise<void>;
 }
+
+/**
+ * Styled navigation button
+ */
+export const MenuButton = styled(IconButton, {
+  label: "menu-button"
+})(({ theme }) => ({
+  width: 100,
+  height: 100,
+  position: "absolute",
+  top: theme.spacing(2),
+  right: theme.spacing(5),
+  zIndex: 100000,
+  padding: 0,
+  margin: 0
+}));
 
 /**
  * Renders preview component
@@ -122,12 +138,9 @@ const Preview = ({
   return (
     <div style={{ scale: `${scale}`, position: "relative" }}>
       {!previewPage && (
-        <IconButton
-          onClick={handlePageMenuClick}
-          sx={{ position: "absolute", top: 0, right: 0, padding: 0, margin: 0 }}
-        >
-          <MoreHoriz sx={{ width: `${30 / scale}px`, height: `${30 / scale}px`, color: "#fff" }} />
-        </IconButton>
+        <MenuButton onClick={handlePageMenuClick}>
+          <MoreHoriz sx={{ width: "6rem", height: "6rem", color: "#ffffff" }} />
+        </MenuButton>
       )}
       <iframe
         srcDoc={wrapTemplate(parseHtmlToDom(htmlString).outerHTML, page?.orderNumber)}

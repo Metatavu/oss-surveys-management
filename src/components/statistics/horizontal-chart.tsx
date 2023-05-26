@@ -8,7 +8,7 @@ interface Props {
 }
 
 /**
- * Render generic tiny bar chart
+ * Render horizontal bar chart
  */
 const HorizontalChart = ({ data }: Props) => {
   return (

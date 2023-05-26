@@ -53,6 +53,7 @@ const SurveyProperties = ({ survey, onSaveSurvey }: Props) => {
         <TextField
           {...props}
           fullWidth
+          multiline
           InputProps={{
             endAdornment: endAdornment && (
               <InputAdornment position="end">
@@ -92,6 +93,7 @@ const SurveyProperties = ({ survey, onSaveSurvey }: Props) => {
       component={(props) => (
         <TextField
           {...props}
+          multiline
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">

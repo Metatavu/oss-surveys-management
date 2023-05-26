@@ -28,8 +28,7 @@ import ImageButton from "./image-button";
 import NewPageButton from "./new-page-button";
 import { Box, Stack, Typography, styled } from "@mui/material";
 import { useAtom, useSetAtom } from "jotai";
-import React, { useEffect, useState } from "react";
-import { v4 as uuid } from "uuid";
+import { useEffect, useState } from "react";
 
 /**
  * Component properties
@@ -135,20 +134,11 @@ const Editor = ({ setPanelProperties, surveyId }: Props) => {
       const newPage = await pagesApi.createSurveyPage({
         surveyId: surveyId,
         page: {
-          id: uuid(),
           layoutId: foundLayout.id,
           title: templateType,
           orderNumber: surveyPages.length + 1,
           nextButtonVisible: true,
-          question: templateType.includes("question")
-            ? {
-                type: PageQuestionType.SingleSelect,
-                options: [
-                  PageUtils.getDefaultQuestionOption(1),
-                  PageUtils.getDefaultQuestionOption(2)
-                ]
-              }
-            : undefined
+          question: undefined
         }
       });
 
@@ -195,6 +185,39 @@ const Editor = ({ setPanelProperties, surveyId }: Props) => {
       toast.success(strings.editSurveysScreen.editPagesPanel.pageSaved);
     } catch (error: any) {
       setError(`${strings.errorHandling.editSurveysScreen.pageNotDeleted}, ${error}`);
+    }
+    setIsLoading(false);
+  };
+
+  /**
+   * Adds a question to the page
+   *
+   * @param questionType question type
+   * @param pageId page id
+   */
+  const addQuestion = async (questionType: PageQuestionType, pageId: string) => {
+    setIsLoading(true);
+    const foundPage = surveyPages.find((page) => page.id === pageId);
+
+    if (!foundPage?.id) return;
+
+    try {
+      const updatedPage = await pagesApi.updateSurveyPage({
+        surveyId: surveyId,
+        pageId: foundPage.id,
+        page: {
+          ...foundPage,
+          question: {
+            type: questionType,
+            options: [PageUtils.getDefaultQuestionOption(1), PageUtils.getDefaultQuestionOption(2)]
+          }
+        }
+      });
+
+      setSurveyPages(surveyPages.map((page) => (page.id === updatedPage.id ? updatedPage : page)));
+      toast.success(strings.editSurveysScreen.addQuestion.questionAdded);
+    } catch (error: any) {
+      setError(`${strings.errorHandling.editSurveysScreen.questionNotAdded}, ${error}`);
     }
     setIsLoading(false);
   };
@@ -308,8 +331,9 @@ const Editor = ({ setPanelProperties, surveyId }: Props) => {
           }
           setSelectedPage={() => setSelectedPageNumber(page.orderNumber)}
           selectedPage={selectedPageNumber}
-          pageNumber={page.orderNumber}
+          page={page}
           deletePage={deletePage}
+          addQuestion={addQuestion}
         />
       </PreviewContainer>
     );

@@ -1,4 +1,4 @@
-import { Box, List, ListItem, ListItemText, Paper, Stack } from "@mui/material";
+import { List, ListItem, ListItemText, Paper, Stack } from "@mui/material";
 import { Device, DeviceStatus, DeviceSurvey } from "../../generated/client";
 import strings from "../../localization/strings";
 import theme from "../../styles/theme";

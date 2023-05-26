@@ -7,7 +7,6 @@ import {
 } from "../generated/client";
 import { PageElementType } from "../types";
 import strings from "../localization/strings";
-import { v4 as uuid } from "uuid";
 import { QUESTION_PLACEHOLDER_DATA_COMPONENT } from "../constants";
 
 /**
@@ -118,7 +117,6 @@ namespace PageUtils {
    * @returns page question option
    */
   export const getDefaultQuestionOption = (orderNumber: number) => ({
-    id: uuid(),
     orderNumber: orderNumber,
     questionOptionValue: strings
       .formatString(strings.editSurveysScreen.editPagesPanel.answerOptionPlaceholder, orderNumber)

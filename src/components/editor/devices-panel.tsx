@@ -32,6 +32,7 @@ const DevicesPanel = ({ devices, selectedDevices, setSelectedDevices }: Props) =
       setSelectedDevices(selectedDevices.filter((device) => device.id !== foundDevice.id));
     }
   };
+
   /**
    * Renders device
    */

@@ -52,7 +52,8 @@
       "pageLayoutNotFound": "Page layout not found",
       "pageNotSaved": "Error when saving page",
       "pageNotDeleted": "Error when deleting page",
-      "pageNotCreated": "Error when creating page"
+      "pageNotCreated": "Error when creating page",
+      "questionNotAdded": "Error when adding page"
     },
     "previewScreen": {
       "surveyNotFound": "Survey not found",
@@ -146,6 +147,18 @@
     }
   },
   "editSurveysScreen": {
+    "addQuestion": {
+      "dialog": {
+        "title": "Add question",
+        "description": "Choose what type of question you want to add to the page.",
+        "singleSelect": "Single select",
+        "multiSelect": "Multi select",
+        "freeText": "Free text",
+        "addQuestion": "Add question"
+      },
+      "helperText": "Choose question",
+      "questionAdded": "Question added"
+    },
     "addNewPage": "Add new page",
     "deletePage": "Delete",
     "surveySaved": "Survey saved",

@@ -83,7 +83,6 @@ const wrapTemplate = (bodyContent: string, pageNumber?: number) => `<!DOCTYPE ht
         transition: background-color 0.2s ease-in-out;
       }
       .next-button {
-        align-self: flex-end;
         background-color: transparent;
         border: none;
         color: #ffffff;

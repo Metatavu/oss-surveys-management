@@ -48,6 +48,8 @@ const OverviewDeviceRequestsList = ({ deviceRequests, actionButtonText, onClick 
     <List>
       <ListHeader headings={listHeadings} />
       {deviceRequests.map((deviceRequest) => {
+        if (!deviceRequest.approvalStatus) return;
+
         const isApproved = deviceRequest.approvalStatus === DeviceApprovalStatus.Approved;
 
         return (
@@ -65,7 +67,7 @@ const OverviewDeviceRequestsList = ({ deviceRequests, actionButtonText, onClick 
                   color: isApproved ? "primary" : "error"
                 }}
                 secondary={LocalizationUtils.getLocalizedDeviceApprovalStatus(
-                  deviceRequest.approvalStatus!
+                  deviceRequest.approvalStatus
                 )}
               />
               <ListItemText secondary={deviceRequest.description} />

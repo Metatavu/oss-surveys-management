@@ -26,10 +26,14 @@ namespace SurveyUtils {
     if (!foundDeviceSurveys?.length) return;
 
     const earliestPublishStartTime = Math.min(
-      ...foundDeviceSurveys.map(
-        (deviceSurvey) =>
-          deviceSurvey.publishStartTime?.valueOf() ?? deviceSurvey.metadata!.createdAt!.valueOf()
-      )
+      ...foundDeviceSurveys
+        .filter((deviceSurvey) =>
+          DataValidation.validateValueIsNotUndefinedNorNull(deviceSurvey.metadata?.createdAt)
+        )
+        .map(
+          (deviceSurvey) =>
+            deviceSurvey.publishStartTime?.valueOf() ?? deviceSurvey.metadata!.createdAt!.valueOf()
+        )
     );
 
     return DateTime.fromMillis(earliestPublishStartTime).toFormat("dd.MM.yyyy");

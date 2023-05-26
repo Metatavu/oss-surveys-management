@@ -1,7 +1,7 @@
-import { FormControlLabel, Radio, RadioGroup, Stack, Tooltip, Typography } from "@mui/material";
 import { PageQuestionType } from "../../generated/client";
 import strings from "../../localization/strings";
 import GenericDialog from "../generic/generic-dialog";
+import { FormControlLabel, Radio, RadioGroup, Stack, Tooltip, Typography } from "@mui/material";
 import { useState } from "react";
 
 /**
@@ -30,7 +30,7 @@ const AddQuestionDialog = ({ open, pageId, onClose, onAddQuestion }: Props) => {
    */
   const handleAddQuestion = async () => {
     if (!pageId) return;
-    onAddQuestion(selectedQuestionType, pageId);
+    await onAddQuestion(selectedQuestionType, pageId);
   };
 
   /**

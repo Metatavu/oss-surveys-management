@@ -22,7 +22,6 @@ const StatisticDevices = ({ devices, selectedDevices, setSelectedDevices }: Prop
    * @param event event
    */
   const handleCheckboxChange = ({ target: { checked, name } }: ChangeEvent<HTMLInputElement>) => {
-    console.log(devices)
     const foundDevice = devices.find((device) => device.id === name);
 
     if (!foundDevice?.id) return;

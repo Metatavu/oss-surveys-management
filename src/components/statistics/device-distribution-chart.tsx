@@ -23,7 +23,6 @@ const DeviceDistributionChart = ({ data, devices }: Props) => {
     });
   }
 
-  console.log(constructedData)
   return (
     <BarChart
       width={1400}

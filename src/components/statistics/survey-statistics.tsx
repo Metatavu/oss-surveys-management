@@ -1,14 +1,14 @@
+import { pagesAtom } from "../../atoms/pages";
 import { Device, DeviceSurvey, DeviceSurveyStatistics, Survey } from "../../generated/client";
-import DevicesPanel from "../editor/devices-panel";
-import PropertiesPanel from "../editor/properties-panel";
-import StatisticsInfo from "./statistics-info";
-import { Stack } from "@mui/material";
-import { useEffect, useState } from "react";
-import StatisticPage from "./statistic-page";
 import { useApi } from "../../hooks/use-api";
 import strings from "../../localization/strings";
-import { useSetAtom } from "jotai";
-import { errorAtom } from "../../atoms/error";
+import PropertiesPanel from "../editor/properties-panel";
+import StatisticDevices from "./statistic-devices";
+import StatisticPage from "./statistic-page";
+import StatisticsInfo from "./statistics-info";
+import { Stack, Typography } from "@mui/material";
+import { useAtom } from "jotai";
+import { useEffect, useState } from "react";
 
 /**
  * Components properties
@@ -24,9 +24,9 @@ interface Props {
  */
 const SurveyStatistics = ({ devices, deviceSurveys, survey }: Props) => {
   const { deviceSurveysApi } = useApi();
-  const setError = useSetAtom(errorAtom);
   const [selectedDevices, setSelectedDevices] = useState<Device[]>([]);
   const [surveyStatistics, setSurveyStatistics] = useState<DeviceSurveyStatistics[]>([]);
+  const [surveyPages] = useAtom(pagesAtom);
 
   /**
    * Gets Device survey statistics
@@ -34,36 +34,98 @@ const SurveyStatistics = ({ devices, deviceSurveys, survey }: Props) => {
   const getDeviceSurveysStatistics = async () => {
     try {
       for (const device of devices) {
-        if (!device.id || !survey.id) continue;
-        const deviceSurveyStatistics = await deviceSurveysApi.getDeviceSurveyStatistics({ deviceId: device.id, deviceSurveyId: survey.id }) ?? [];
-        console.log(deviceSurveyStatistics);
+        if (!(device.id && survey.id && deviceSurveys)) continue;
+        const deviceSurveyStatistics = await deviceSurveysApi.getDeviceSurveyStatistics({ deviceId: device.id, deviceSurveyId: deviceSurveys[0].id! });
         setSurveyStatistics([...surveyStatistics, deviceSurveyStatistics]);
-        console.log("surveys statistic length", surveyStatistics.length);
       }
     } catch (error: any) {
-      setError(`${strings.errorHandling.overviewScreen.deviceSurveysNotFound}, ${error}`);
+      console.error(error);
+      setSurveyStatistics([]);
     }
   };
 
   useEffect(() => {
     getDeviceSurveysStatistics();
-  }, [survey]);
+  }, [survey, devices]);
+
+  /**
+ * Get most popular display
+ */
+  const getMostPopularDisplay = () => {
+    const mostPopularDisplay = surveyStatistics?.sort((a, b) => {
+      return b.totalAnswerCount - a.totalAnswerCount;
+    })[0];
+
+    const displayName = mostPopularDisplay && devices.find(device => device.id === mostPopularDisplay.deviceId)?.name;
+    return displayName ?? strings.generic.unnamed;
+  };
+
+  /**
+   * Get overall answer count
+   */
+  const overallAnswerCount = () => {
+    let count = 0;
+    surveyStatistics.forEach(statistic => {
+      count += statistic.totalAnswerCount;
+    });
+    return count;
+  };
+
+  /**
+   * Renders no content text if there is no statistics
+   * 
+   * @returns no content block
+   */
+  const renderNoContent = () => {
+    if (surveyStatistics.length === 0) {
+      return (
+        <Stack flex={1} p={2} alignSelf="center" alignItems="center">
+          <Typography variant="h6">
+            {strings.surveyStatistics.noStatistics}
+          </Typography>
+        </Stack>
+      );
+    }
+  };
 
   return (
     <>
       <Stack direction="row" flex={1}>
         <PropertiesPanel width={250}>
-          <DevicesPanel
+          <StatisticDevices
             devices={devices}
             selectedDevices={selectedDevices}
             setSelectedDevices={setSelectedDevices}
           />
         </PropertiesPanel>
-        <StatisticPage devices={selectedDevices} deviceSurveys={deviceSurveys} />
+        <Stack direction={"column"} marginBottom={2} >
+          {surveyStatistics.length > 0 ?
+            surveyStatistics[0].questions.map(question =>
+              <StatisticPage
+                key={question.pageId}
+                devices={selectedDevices}
+                deviceSurveys={deviceSurveys}
+                surveyStatistics={surveyStatistics}
+                overallAnswerCount={overallAnswerCount()}
+                question={question}
+                pageTitle={question.pageTitle}
+              />
+            )
+            :
+            renderNoContent()}
+        </Stack>
         <PropertiesPanel width={250}>
-          <StatisticsInfo survey={survey} surveyStatistics={surveyStatistics} />
+          <StatisticsInfo
+            survey={survey}
+            surveyStatistics={surveyStatistics}
+            mostPopularDisplay={getMostPopularDisplay()}
+            overallAnswerCount={overallAnswerCount()}
+            surveyPages={surveyPages}
+          />
         </PropertiesPanel>
       </Stack>
+
+
     </>
   );
 };

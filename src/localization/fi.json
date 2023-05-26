@@ -194,7 +194,13 @@
     "answerCount": "Vastauksia yhteensä",
     "mostAttainableTime": "Saavutettavin ajankohta",
     "mostPopularAnswer": "Suosituin vastaus",
-    "mostEfficientScreen": "Tehokkain näyttö"
+    "mostEfficientScreen": "Tehokkain näyttö",
+    "noStatistics": "Tällä kyselyllä ei vielä ole tilastoja",
+    "answersPerDisplay": "Näyttökohtaiset vastausmäärät",
+    "answersDistribution": "Vastauksien jakautuminen",
+    "answers": "Vastauksia",
+    "mostPopularDays": "Vilkkaimmat päivät",
+    "mostPopularHours": "Vilkkaimmat tunnit"
   },
   "publishSurveys": {
     "surveyPublished": "Kysely julkaistu",

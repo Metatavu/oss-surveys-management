@@ -194,7 +194,13 @@
     "answerCount": "Answer count",
     "mostAttainableTime": "Most attainable time",
     "mostPopularAnswer": "Most popular answer",
-    "mostEfficientScreen": "Most efficient screen"
+    "mostEfficientScreen": "Most efficient screen",
+    "noStatistics": "No statistics available",
+    "answersPerDisplay": "Answers per display",
+    "answersDistribution": "Answers distribution",
+    "answers": "Answers",
+    "mostPopularDays": "Most popular days",
+    "mostPopularHours": "Most popular hours"
   },
   "publishSurveys": {
     "surveyPublished": "Survey published",

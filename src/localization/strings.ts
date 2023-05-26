@@ -232,6 +232,12 @@ export interface Localized extends LocalizedStringsMethods {
     mostAttainableTime: string;
     mostPopularAnswer: string;
     mostEfficientScreen: string;
+    noStatistics: string;
+    answersPerDisplay: string;
+    answersDistribution: string;
+    answers: string;
+    mostPopularDays: string;
+    mostPopularHours: string;
   };
 
   /**

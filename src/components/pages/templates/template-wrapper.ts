@@ -89,7 +89,7 @@ const wrapTemplate = (bodyContent: string, pageNumber?: number) => `<!DOCTYPE ht
         color: #ffffff;
         height: 80px;
         font-family: SBonusText-Bold;
-        font-size: 2rem;
+        font-size: 2.5rem;
         transition: background-color 0.2s ease-in-out;
       }
       .next-button:active, option:active {

@@ -23,12 +23,12 @@ import ParagraphImageLayoutImage from "../images/svg/layout-thumbnails/paragraph
 import QuestionLayoutImage from "../images/svg/layout-thumbnails/question";
 import QuestionParagraphLayoutImage from "../images/svg/layout-thumbnails/question-paragraph";
 import StatisticsLayoutImage from "../images/svg/layout-thumbnails/statistics";
-import Preview from "../preview/preview";
 import ImageButton from "./image-button";
 import NewPageButton from "./new-page-button";
 import { Box, Stack, Typography, styled } from "@mui/material";
 import { useAtom, useSetAtom } from "jotai";
 import { useEffect, useState } from "react";
+import EditorPreview from "./editor-preview";
 
 /**
  * Component properties
@@ -84,7 +84,7 @@ const Editor = ({ setPanelProperties, surveyId }: Props) => {
   const setError = useSetAtom(errorAtom);
   const [surveyPages, setSurveyPages] = useAtom(pagesAtom);
   const [pageLayouts, setPageLayouts] = useAtom(layoutsAtom);
-  const [selectedPageNumber, setSelectedPageNumber] = useState<number>();
+  const [selectedPage, setSelectedPage] = useState<Page>();
   const [isLoading, setIsLoading] = useState(false);
 
   const { pagesApi, layoutsApi } = useApi();
@@ -138,7 +138,13 @@ const Editor = ({ setPanelProperties, surveyId }: Props) => {
           title: templateType,
           orderNumber: surveyPages.length + 1,
           nextButtonVisible: true,
-          question: undefined
+          question: undefined,
+          properties: foundLayout.layoutVariables?.map((variable) => ({
+            key: variable.key,
+            value: PageUtils.getTextPropertyLabel(
+              PageUtils.getPageTextElementTypeAndId(foundLayout.html, variable.key).type
+            )
+          }))
         }
       });
 
@@ -153,22 +159,22 @@ const Editor = ({ setPanelProperties, surveyId }: Props) => {
   /**
    * Deletes page by page number
    *
-   * @param pageNumber page number
+   * @param pageId page id
    */
-  const deletePage = async (pageNumber: number) => {
-    const foundPage = surveyPages.find((page) => page.orderNumber === pageNumber);
+  const deletePage = async (pageId?: string) => {
+    const foundPage = surveyPages.find((page) => page.id === pageId);
 
     if (!foundPage?.id) return;
     try {
       setIsLoading(true);
       await pagesApi.deleteSurveyPage({ surveyId: surveyId, pageId: foundPage.id });
-      const newSurveyPages = surveyPages.filter((page) => page.orderNumber !== pageNumber);
+      const newSurveyPages = surveyPages.filter((page) => page.id !== pageId);
       newSurveyPages.sort((a, b) => a.orderNumber - b.orderNumber);
 
       const updatedPages: Page[] = [];
       for (const page of newSurveyPages) {
         if (!page?.id) continue;
-        if (page.orderNumber > pageNumber) {
+        if (page.orderNumber > foundPage.orderNumber) {
           updatedPages.push(
             await pagesApi.updateSurveyPage({
               surveyId: surveyId,
@@ -298,6 +304,7 @@ const Editor = ({ setPanelProperties, surveyId }: Props) => {
     const pageLayout = getPageLayout(page);
 
     if (!pageLayout) return;
+    if (!page.id) return;
 
     let htmlData = pageLayout.html;
     const layoutVariables = pageLayout.layoutVariables;
@@ -321,7 +328,7 @@ const Editor = ({ setPanelProperties, surveyId }: Props) => {
 
     return (
       <PreviewContainer key={page.id}>
-        <Preview
+        <EditorPreview
           htmlString={htmlData || strings.errorHandling.editSurveysScreen.pageLayoutsNotFound}
           width={DEVICE_WIDTH}
           height={DEVICE_HEIGHT}
@@ -329,8 +336,8 @@ const Editor = ({ setPanelProperties, surveyId }: Props) => {
           onPanelPropertiesChange={() =>
             setPanelProperties({ panelType: EditorPanel.PAGE, pageNumber: page.orderNumber })
           }
-          setSelectedPage={() => setSelectedPageNumber(page.orderNumber)}
-          selectedPage={selectedPageNumber}
+          setSelectedPage={() => setSelectedPage(surveyPages.find((p) => p.id === page.id))}
+          selectedPage={selectedPage}
           page={page}
           deletePage={deletePage}
           addQuestion={addQuestion}
@@ -345,7 +352,7 @@ const Editor = ({ setPanelProperties, surveyId }: Props) => {
       gap={2}
       onClick={() => {
         setPanelProperties({ panelType: EditorPanel.SURVEY });
-        setSelectedPageNumber(undefined);
+        setSelectedPage(undefined);
       }}
     >
       <LoaderWrapper loading={isLoading}>

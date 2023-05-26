@@ -5,7 +5,6 @@ import { Layout, Page, PageQuestionOption } from "../../generated/client";
 import { useApi } from "../../hooks/use-api";
 import strings from "../../localization/strings";
 import GenericDialog from "../generic/generic-dialog";
-import WithDebounce from "../generic/with-debounce";
 import { AddCircle, Edit, Close } from "@mui/icons-material";
 import {
   Box,
@@ -18,12 +17,11 @@ import {
   Typography
 } from "@mui/material";
 import { useAtom, useSetAtom } from "jotai";
-import { ChangeEvent, Fragment, useEffect, useState } from "react";
+import { ChangeEvent, FocusEvent, Fragment, useEffect, useState } from "react";
 import PageUtils from "../../utils/page-utils";
-import { EditablePageElement, PageElementType } from "../../types";
+import { EditablePageElement } from "../../types";
 import { EDITABLE_TEXT_PAGE_ELEMENTS } from "../../constants";
 import { toast } from "react-toastify";
-import { v4 as uuid } from "uuid";
 
 /**
  * Component properties
@@ -107,28 +105,16 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
   );
 
   /**
-   * Gets text property label based on page element type
-   */
-  const getTextPropertyLabel = (type: PageElementType) => {
-    if (type === PageElementType.H1) {
-      return strings.editSurveysScreen.editPagesPanel.title;
-    }
-    if (type === PageElementType.P) {
-      return strings.editSurveysScreen.editPagesPanel.infoText;
-    }
-  };
-
-  /**
    * Handler for page property text change
    *
    * @param event event
    */
-  const handleTextChange = async ({ target: { value, name } }: ChangeEvent<HTMLInputElement>) => {
+  const handleTextChange = async ({ target: { value, name } }: FocusEvent<HTMLInputElement>) => {
     if (!pageToEdit) return;
 
     const foundProperty = pageToEdit?.properties?.find((p) => p.key === name);
 
-    if (!foundProperty) return;
+    if (!foundProperty || foundProperty.value === value) return;
     const pageToUpdate = {
       ...pageToEdit,
       properties: pageToEdit.properties?.map((property) =>
@@ -159,23 +145,22 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
   /**
    * Handler for question option text change
    *
-   * @param option option
-   * @param value value
+   * @param event event
    */
-  const handleOptionChange = async (option: PageQuestionOption, value: string) => {
+  const handleOptionChange = async ({ target: { value, name } }: FocusEvent<HTMLInputElement>) => {
     if (!pageToEdit?.question) return;
 
-    const optionToUpdate = pageToEdit.question.options.find((opt) => opt === option);
+    const optionToUpdate = pageToEdit.question.options.find((option) => option.id === name);
 
-    if (!optionToUpdate) return;
+    if (!optionToUpdate || optionToUpdate.questionOptionValue === value) return;
 
     const pageToUpdate: Page = {
       ...pageToEdit,
       question: {
         ...pageToEdit.question,
         options: [
-          ...pageToEdit.question.options.map((opt) =>
-            option === opt ? { ...option, questionOptionValue: value } : opt
+          ...pageToEdit.question.options.map((option) =>
+            option.id === name ? { ...option, questionOptionValue: value } : option
           )
         ]
       }
@@ -198,7 +183,6 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
         options: [
           ...pageToEdit.question.options,
           {
-            id: uuid(),
             questionOptionValue: strings.formatString(
               strings.editSurveysScreen.editPagesPanel.answerOptionPlaceholder,
               orderNumber
@@ -242,26 +226,23 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
    */
   const renderTextPropertyEditor = (element: EditablePageElement) => (
     <Fragment key={element.id}>
-      <Typography variant="h6">{getTextPropertyLabel(element.type)}</Typography>
-      <WithDebounce
+      <Typography variant="h6">{PageUtils.getTextPropertyLabel(element.type)}</Typography>
+      <TextField
         name={element.id}
-        value={pageToEdit?.properties?.find((property) => property.key === element.id)?.value ?? ""}
-        onChange={handleTextChange}
-        placeholder={getTextPropertyLabel(element.type) ?? ""}
-        component={(props) => (
-          <TextField
-            {...props}
-            fullWidth
-            multiline
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <Edit fontSize="small" color="primary" />
-                </InputAdornment>
-              )
-            }}
-          />
-        )}
+        defaultValue={
+          pageToEdit?.properties?.find((property) => property.key === element.id)?.value ?? ""
+        }
+        placeholder={PageUtils.getTextPropertyLabel(element.type) ?? ""}
+        fullWidth
+        multiline
+        onBlur={handleTextChange}
+        InputProps={{
+          endAdornment: (
+            <InputAdornment position="end">
+              <Edit fontSize="small" color="primary" />
+            </InputAdornment>
+          )
+        }}
       />
     </Fragment>
   );
@@ -273,31 +254,24 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
     if (!pageToEdit?.question) return;
 
     return pageToEdit.question.options.map((option) => (
-      <WithDebounce
+      <TextField
+        key={option.id}
         name={option.id}
-        value={option.questionOptionValue}
-        onChange={({ target: { value } }) => handleOptionChange(option, value)}
-        placeholder=""
-        optionKey={option.questionOptionValue}
-        component={(props) => (
-          <TextField
-            {...props}
-            fullWidth
-            multiline
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end" className="on-hover">
-                  <IconButton
-                    title={strings.editSurveysScreen.editPagesPanel.deleteAnswerOptionTitle}
-                    onClick={() => handleDeleteClick(option)}
-                  >
-                    <Close fontSize="small" />
-                  </IconButton>
-                </InputAdornment>
-              )
-            }}
-          />
-        )}
+        defaultValue={option.questionOptionValue}
+        onBlur={handleOptionChange}
+        fullWidth
+        InputProps={{
+          endAdornment: (
+            <InputAdornment position="end" className="on-hover">
+              <IconButton
+                title={strings.editSurveysScreen.editPagesPanel.deleteAnswerOptionTitle}
+                onClick={() => handleDeleteClick(option)}
+              >
+                <Close fontSize="small" />
+              </IconButton>
+            </InputAdornment>
+          )
+        }}
       />
     ));
   };

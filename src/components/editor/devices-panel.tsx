@@ -41,6 +41,7 @@ const DevicesPanel = ({ devices, selectedDevices, setSelectedDevices }: Props) =
 
     return (
       <FormControlLabel
+        key={device.id}
         label={device.name ?? strings.generic.unnamed}
         name={device.id}
         defaultChecked={isSelected}

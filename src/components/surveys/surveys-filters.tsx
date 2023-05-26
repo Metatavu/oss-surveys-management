@@ -75,7 +75,7 @@ const SurveysFilters = ({ surveys, setFilteredSurveys, createSurvey }: Props) =>
    */
   const renderDisabledTextField = (label: string) => (
     <Tooltip title={strings.generic.notImplemented} placement="top">
-      <TextField sx={{ flex: 1 }} label={label} size="small" disabled select />
+      <TextField sx={{ flex: 1 }} label={label} size="small" disabled />
     </Tooltip>
   );
 

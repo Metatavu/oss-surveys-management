@@ -9,8 +9,7 @@ import {
 } from "@mui/material";
 import strings from "../../localization/strings";
 import { Survey, SurveyStatus } from "../../generated/client";
-import { ChangeEvent } from "react";
-import WithDebounce from "../generic/with-debounce";
+import { ChangeEvent, FocusEvent } from "react";
 import TimerOutlinedIcon from "@mui/icons-material/TimerOutlined";
 import { Edit } from "@mui/icons-material";
 import theme from "../../styles/theme";
@@ -20,90 +19,13 @@ import theme from "../../styles/theme";
  */
 interface Props {
   survey: Survey;
-  onSaveSurvey: (event: ChangeEvent<HTMLInputElement>) => Promise<void>;
+  onSaveSurvey: (event: FocusEvent<HTMLInputElement>) => Promise<void>;
 }
 
 /**
  * Survey Properties component
  */
 const SurveyProperties = ({ survey, onSaveSurvey }: Props) => {
-  /**
-   * Renders text field with debounce
-   *
-   * @param name name
-   * @param onChange onChange event handler
-   * @param value value
-   * @param placeholder placeholder
-   * @param endAdornment end adornment true/false
-   * @returns debounced text field
-   */
-  const renderWithDebounceTextField = (
-    name: string,
-    onChange: (event: ChangeEvent<HTMLInputElement>) => Promise<void>,
-    value: string,
-    placeholder: string,
-    endAdornment: boolean
-  ) => (
-    <WithDebounce
-      name={name}
-      value={value}
-      onChange={onChange}
-      placeholder={placeholder}
-      component={(props) => (
-        <TextField
-          {...props}
-          fullWidth
-          InputProps={{
-            endAdornment: endAdornment && (
-              <InputAdornment position="end">
-                <Edit fontSize="small" color="primary" />
-              </InputAdornment>
-            )
-          }}
-        />
-      )}
-    />
-  );
-
-  /**
-   * Renders number field with debounce
-   *
-   * @param name name
-   * @param onChange onChange event handler
-   * @param value value
-   * @param placeholder placeholder
-   * @returns debounced number field
-   */
-  const renderWithDebounceNumberField = (
-    name: string,
-    onChange: (event: ChangeEvent<HTMLInputElement>) => Promise<void>,
-    value: number,
-    placeholder: string,
-    type: string,
-    fullWidth: boolean
-  ) => (
-    <WithDebounce
-      name={name}
-      value={value}
-      onChange={onChange}
-      placeholder={placeholder}
-      type={type}
-      fullWidth={fullWidth}
-      component={(props) => (
-        <TextField
-          {...props}
-          InputProps={{
-            startAdornment: (
-              <InputAdornment position="start">
-                <TimerOutlinedIcon htmlColor={theme.palette.primary.main} />
-              </InputAdornment>
-            )
-          }}
-        />
-      )}
-    />
-  );
-
   /**
    * Switch event handler
    *
@@ -115,45 +37,66 @@ const SurveyProperties = ({ survey, onSaveSurvey }: Props) => {
         name: "status",
         value: checked ? SurveyStatus.Approved : SurveyStatus.Draft
       }
-    } as ChangeEvent<HTMLInputElement>);
+    } as FocusEvent<HTMLInputElement>);
   };
 
   return (
     <>
       <Box p={2} sx={{ borderBottom: "1px solid #DADCDE" }}>
         <Typography variant="h6">{strings.editSurveysScreen.editSurveyPanel.name}</Typography>
-        {renderWithDebounceTextField(
-          "title",
-          onSaveSurvey,
-          survey.title,
-          strings.editSurveysScreen.editSurveyPanel.name,
-          true
-        )}
+        <TextField
+          fullWidth
+          name="title"
+          defaultValue={survey.title}
+          placeholder={strings.editSurveysScreen.editSurveyPanel.name}
+          onBlur={onSaveSurvey}
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <Edit fontSize="small" color="primary" />
+              </InputAdornment>
+            )
+          }}
+        />
       </Box>
       <Box p={2} sx={{ borderBottom: "1px solid #DADCDE" }}>
         <Typography variant="h6">
           {strings.editSurveysScreen.editSurveyPanel.description}
         </Typography>
-        {renderWithDebounceTextField(
-          "description",
-          onSaveSurvey,
-          survey.description ? survey.description : "",
-          strings.editSurveysScreen.editSurveyPanel.description,
-          true
-        )}
+        <TextField
+          fullWidth
+          name="description"
+          defaultValue={survey.description}
+          placeholder={strings.editSurveysScreen.editSurveyPanel.description}
+          onBlur={onSaveSurvey}
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <Edit fontSize="small" color="primary" />
+              </InputAdornment>
+            )
+          }}
+        />
       </Box>
       <Box p={2} sx={{ borderBottom: "1px solid #DADCDE" }}>
         <Typography variant="h6">
           {strings.editSurveysScreen.editSurveyPanel.returnTimeout}
         </Typography>
-        {renderWithDebounceNumberField(
-          "timeout",
-          onSaveSurvey,
-          survey.timeout ? Number(survey.timeout) : 60,
-          strings.editSurveysScreen.editSurveyPanel.returnTimeout,
-          "number",
-          true
-        )}
+        <TextField
+          fullWidth
+          name="timeout"
+          defaultValue={survey.timeout}
+          type="number"
+          placeholder={strings.editSurveysScreen.editSurveyPanel.returnTimeout}
+          onBlur={onSaveSurvey}
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <TimerOutlinedIcon htmlColor={theme.palette.primary.main} />
+              </InputAdornment>
+            )
+          }}
+        />
       </Box>
       <Box p={2} sx={{ borderBottom: "1px solid #DADCDE" }}>
         <FormGroup>

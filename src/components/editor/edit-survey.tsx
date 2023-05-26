@@ -8,7 +8,7 @@ import PropertiesPanel from "./properties-panel";
 import SurveyProperties from "./survey-properties";
 import { Stack } from "@mui/material";
 import { useSetAtom } from "jotai";
-import { ChangeEvent, useState } from "react";
+import { FocusEvent, useState } from "react";
 
 /**
  * Components properties
@@ -32,8 +32,8 @@ const EditSurvey = ({ survey, saveSurvey }: Props) => {
    *
    * @param event event
    */
-  const onSaveSurvey = async ({ target: { value, name } }: ChangeEvent<HTMLInputElement>) => {
-    if (!survey.id) return;
+  const onSaveSurvey = async ({ target: { value, name } }: FocusEvent<HTMLInputElement>) => {
+    if (!survey.id || survey[name as keyof typeof survey] === value) return;
 
     try {
       const editedSurvey = {

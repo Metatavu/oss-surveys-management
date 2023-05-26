@@ -15,7 +15,7 @@ interface Props {
 const DeviceDistributionChart = ({ data, devices }: Props) => {
   let constructedData: any[] | undefined = [];
   if (devices) {
-    devices.map(device => {
+    devices.forEach(device => {
       constructedData?.push({
         deviceName: device.name,
         answerCount: data.find(stat => stat.deviceId === device.id)?.totalAnswerCount

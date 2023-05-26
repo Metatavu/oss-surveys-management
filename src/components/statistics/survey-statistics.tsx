@@ -34,19 +34,16 @@ const SurveyStatistics = ({ devices, deviceSurveys, survey }: Props) => {
   const [surveyPages] = useAtom(pagesAtom);
   const [pageLayouts] = useAtom(layoutsAtom);
 
-  const renderStatisticPage = (question: DeviceSurveyQuestionStatistics) => (
-    <StatisticPage
-      key={question.pageId}
-      question={question}
-      pageTitle={getQuestionTitle(question.pageId)}
-    />);
-
-
-
+  /**
+   * Return question title
+   * 
+   * @param pageId page id
+   * @returns question title
+   */
   const getQuestionTitle = (pageId: string) => {
-    const foundPage = surveyPages.find(x => x.id === pageId);
+    const foundPage = surveyPages.find(page => page.id === pageId);
     if (!foundPage?.id) return "";
-    const foundLayout = pageLayouts.find(x => x.id === foundPage?.layoutId);
+    const foundLayout = pageLayouts.find(layout => layout.id === foundPage?.layoutId);
     if (!foundLayout) return "";
     const elements: EditablePageElement[] = [];
     for (const variable of foundLayout?.layoutVariables ?? []) {
@@ -57,7 +54,7 @@ const SurveyStatistics = ({ devices, deviceSurveys, survey }: Props) => {
       elements.push(elementToEdit);
     }
 
-    return (foundPage.properties ?? []).find(y => y.key === elements.find(x => x.type === PageElementType.H1)?.id)?.value ?? "";
+    return (foundPage.properties ?? []).find(property => property.key === elements.find(element => element.type === PageElementType.H1)?.id)?.value ?? "";
 
   }
 
@@ -78,7 +75,7 @@ const SurveyStatistics = ({ devices, deviceSurveys, survey }: Props) => {
   };
 
   useEffect(() => {
-    getDeviceSurveysStatistics();
+    getDeviceSurveysStatistics().catch(error => console.error(error));
   }, [survey, devices]);
 
   /**
@@ -144,6 +141,20 @@ const SurveyStatistics = ({ devices, deviceSurveys, survey }: Props) => {
       );
     }
   };
+
+  /**
+   * Render statistic page
+   * 
+   * @param question question
+   * @returns statistic page
+   */
+  const renderStatisticPage = (question: DeviceSurveyQuestionStatistics) => (
+    <StatisticPage
+      key={question.pageId}
+      question={question}
+      pageTitle={getQuestionTitle(question.pageId)}
+    />
+  );
 
   return (
     <>

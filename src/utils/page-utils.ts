@@ -7,7 +7,11 @@ import {
 } from "../generated/client";
 import { Background, EditablePageElement, PageElementType } from "../types";
 import strings from "../localization/strings";
-import { PAGE_BACKGROUNDS, QUESTION_PLACEHOLDER_DATA_COMPONENT } from "../constants";
+import {
+  IMAGE_PLACEHOLDER_DATA_COMPONENT,
+  PAGE_BACKGROUNDS,
+  QUESTION_PLACEHOLDER_DATA_COMPONENT
+} from "../constants";
 import config from "../app/config";
 
 /**
@@ -50,6 +54,27 @@ namespace PageUtils {
       const dataComponentAttribute = element.attributes.getNamedItem("data-component")?.nodeValue;
 
       hasQuestionsPlaceholder = dataComponentAttribute === QUESTION_PLACEHOLDER_DATA_COMPONENT;
+    }
+
+    return hasQuestionsPlaceholder;
+  };
+
+  /**
+   * Checks if page has image placeholder
+   *
+   * @param layoutHtml layout html
+   * @returns true if page has image placeholder
+   */
+  export const hasImagePlaceholder = (layoutHtml?: string): boolean => {
+    if (!layoutHtml) return false;
+    const body = new DOMParser().parseFromString(layoutHtml, "text/html").body;
+    const imgElements = body.getElementsByTagName("img");
+    let hasQuestionsPlaceholder = false;
+
+    for (const element of imgElements) {
+      const dataComponentAttribute = element.attributes.getNamedItem("data-component")?.nodeValue;
+
+      hasQuestionsPlaceholder = dataComponentAttribute === IMAGE_PLACEHOLDER_DATA_COMPONENT;
     }
 
     return hasQuestionsPlaceholder;
@@ -100,7 +125,7 @@ namespace PageUtils {
             break;
           }
           case PageElementType.P: {
-            const textRenderer = componentRendererFactory.getTextRenderer();
+            const textRenderer = componentRendererFactory.getParagraphRenderer();
             const textHtml = textRenderer.render(property.value);
             const textElement = new DOMParser().parseFromString(textHtml, "text/html");
             targetElement?.replaceWith(textElement.body);
@@ -116,6 +141,13 @@ namespace PageUtils {
               "background-image",
               `url('${config.imageBaseUrl + property.value}')`
             );
+            htmlData = document.body.innerHTML;
+            break;
+          }
+          case PageElementType.IMG: {
+            (targetElement as HTMLImageElement).src = config.imageBaseUrl + property.value;
+            targetElement.style.setProperty("height", "50%");
+            targetElement.style.setProperty("width", "auto");
             htmlData = document.body.innerHTML;
             break;
           }
@@ -174,7 +206,23 @@ namespace PageUtils {
       (property) => property.key === foundBackgroundElement.id
     );
     if (!foundBackgroundProperty?.value) return defaultBackground.value;
+
     return foundBackgroundProperty.value;
+  };
+
+  /**
+   * Returns page image
+   */
+  export const getPageImage = (elements: EditablePageElement[], properties?: PageProperty[]) => {
+    if (!elements?.length) return;
+    const foundImageElement = elements.find((element) => element.type === PageElementType.IMG);
+    if (!foundImageElement) return;
+    const foundImageProperty = properties?.find(
+      (property) => property.key === foundImageElement.id
+    );
+    if (!foundImageProperty?.value) return;
+
+    return foundImageProperty.value;
   };
 }
 

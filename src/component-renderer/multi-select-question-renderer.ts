@@ -1,15 +1,14 @@
-import { AbstractQuestionRenderer } from "../utils/question-utils";
+import { AbstractRenderer } from "./abstract-renderer";
 
 /**
- * Class for MultiSelectTextQuestionRenderer
+ * Multi Select Question Renderer
  */
-export class MultiSelectTextQuestionRenderer extends AbstractQuestionRenderer {
+export class MultiSelectQuestionRenderer extends AbstractRenderer {
   /**
-   * Convert multi question type option into html checkboxes
+   * Renders an HTML div element with given value as its text.
    *
-   * @param option option
+   * @param value display text
    * @returns html string
    */
-  public render = (option: string): string => `
-  <div class="multi-option">${option}</div>`;
+  public render = (value: string): string => `<div class="multi-option">${value}</div>`;
 }

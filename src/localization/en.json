@@ -189,6 +189,11 @@
       "infoText": "Paragraph",
       "buttonVisibility": "Show button",
       "background": "Background",
+      "image": "Image",
+      "images": {
+        "noImage": "No image",
+        "image1": "Lake scenery"
+      },
       "backgroundImages": {
         "default": "Green",
         "image1": "Lake scenery"

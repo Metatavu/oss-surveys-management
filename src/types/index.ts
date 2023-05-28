@@ -123,7 +123,8 @@ export type EditablePageElement = {
 export enum PageElementType {
   H1 = "h1",
   P = "p",
-  DIV = "div"
+  DIV = "div",
+  IMG = "img"
 }
 
 /**

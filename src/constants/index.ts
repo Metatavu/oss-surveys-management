@@ -12,7 +12,10 @@ export const EDITABLE_TEXT_PAGE_ELEMENTS = [PageElementType.H1, PageElementType.
 
 export const QUESTION_PLACEHOLDER_DATA_COMPONENT = "question";
 
-export const PAGE_BACKGROUNDS = [
-  { key: Background.DEFAULT, value: "DEFAULT" },
+export const IMAGE_PLACEHOLDER_DATA_COMPONENT = "image";
+
+export const PAGE_IMAGES = [
   { key: Background.IMAGE_1, value: "/AO_suursavo_matkasivarrella_1080x1920.jpg" }
 ];
+
+export const PAGE_BACKGROUNDS = [{ key: Background.DEFAULT, value: "DEFAULT" }].concat(PAGE_IMAGES);

@@ -189,6 +189,11 @@
       "infoText": "Leipäteksti",
       "buttonVisibility": "Näytä painike",
       "background": "Tausta",
+      "image": "Kuva",
+      "images": {
+        "noImage": "Ei kuvaa",
+        "image1": "Järvimaisema"
+      },
       "backgroundImages": {
         "default": "Vihreä",
         "image1": "Järvimaisema"

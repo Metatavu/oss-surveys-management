@@ -10,10 +10,11 @@ const sanitizeOptions: IOptions = {
     "p",
     "div",
     "label",
-    "input"
+    "input",
+    "img"
   ]),
   allowedAttributes: {
-    "*": ["style", "id", "class"]
+    "*": ["style", "id", "class", "src"]
   }
 };
 
@@ -79,6 +80,13 @@ const wrapTemplate = (bodyContent: string, pageId?: string) => `<!DOCTYPE html>
         gap: 2rem;
         margin-top: 10%;
         justify-content: center;
+      }
+      .img-wrapper {
+        display: flex;
+        flex: 1;
+        justify-content: center;
+        margin-top: 10%;
+        width: 100%;
       }
       .option {
         width: 100%;

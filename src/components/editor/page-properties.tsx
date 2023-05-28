@@ -21,7 +21,7 @@ import { useAtom, useSetAtom } from "jotai";
 import { ChangeEvent, FocusEvent, Fragment, useEffect, useState } from "react";
 import PageUtils from "../../utils/page-utils";
 import { EditablePageElement, PageElementType } from "../../types";
-import { EDITABLE_TEXT_PAGE_ELEMENTS, PAGE_BACKGROUNDS } from "../../constants";
+import { EDITABLE_TEXT_PAGE_ELEMENTS, PAGE_BACKGROUNDS, PAGE_IMAGES } from "../../constants";
 import { toast } from "react-toastify";
 import LocalizationUtils from "../../utils/localization-utils";
 
@@ -252,6 +252,31 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
   };
 
   /**
+   * Handler for image change event
+   */
+  const handleImageChange = async ({ target: { value } }: ChangeEvent<HTMLInputElement>) => {
+    if (!pageToEdit?.id) return;
+
+    const imageProperty = elementsToEdit.find((element) => element.type === PageElementType.IMG);
+
+    if (!imageProperty?.id) return;
+
+    const updatedProperty: PageProperty = {
+      key: imageProperty?.id,
+      value: !value ? "" : value
+    };
+
+    const pageToUpdate = {
+      ...pageToEdit,
+      properties: pageToEdit.properties?.map((property) =>
+        property.key === imageProperty?.id ? updatedProperty : property
+      )
+    };
+
+    await savePage(pageToUpdate);
+  };
+
+  /**
    * Renders text property editor
    *
    * @param element element
@@ -326,12 +351,40 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
    */
   const renderBackgroundChange = () => {
     if (!pageToEdit?.properties) return;
-    const defaultValue = PageUtils.getPageBackground(elementsToEdit, pageToEdit.properties);
+
     return (
-      <TextField fullWidth select onChange={handleBackgroundChange} value={defaultValue}>
+      <TextField
+        fullWidth
+        select
+        onChange={handleBackgroundChange}
+        value={PageUtils.getPageBackground(elementsToEdit, pageToEdit.properties)}
+      >
         {PAGE_BACKGROUNDS.map((background) => (
           <MenuItem key={background.key} value={background.value}>
             {LocalizationUtils.getTranslatedBackground(background.key)}
+          </MenuItem>
+        ))}
+      </TextField>
+    );
+  };
+
+  /**
+   * Renders image change
+   */
+  const renderImageChange = () => {
+    if (!pageToEdit?.properties) return;
+
+    return (
+      <TextField
+        fullWidth
+        select
+        onChange={handleImageChange}
+        defaultValue={PageUtils.getPageImage(elementsToEdit, pageToEdit?.properties)}
+      >
+        <MenuItem value="">{strings.editSurveysScreen.editPagesPanel.images.noImage}</MenuItem>
+        {PAGE_IMAGES.map((image) => (
+          <MenuItem key={image.key} value={image.value}>
+            {LocalizationUtils.getTranslatedBackground(image.key)}
           </MenuItem>
         ))}
       </TextField>
@@ -369,8 +422,14 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
           {renderAddNewOption()}
         </Box>
       )}
+      {PageUtils.hasImagePlaceholder(pageToEditLayout?.html) && (
+        <Box p={2} sx={{ borderBottom: "1px solid #DADCDE" }}>
+          <Typography variant="h6">{strings.editSurveysScreen.editPagesPanel.image}</Typography>
+          {renderImageChange()}
+        </Box>
+      )}
       <Box p={2} sx={{ borderBottom: "1px solid #DADCDE" }}>
-        <Typography variant="h6">Tausta</Typography>
+        <Typography variant="h6">{strings.editSurveysScreen.editPagesPanel.background}</Typography>
         {renderBackgroundChange()}
       </Box>
     </>

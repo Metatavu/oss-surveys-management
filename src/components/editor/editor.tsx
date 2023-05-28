@@ -29,6 +29,7 @@ import { Box, Stack, Typography, styled } from "@mui/material";
 import { useAtom, useSetAtom } from "jotai";
 import { useEffect, useState } from "react";
 import EditorPreview from "./editor-preview";
+import LocalizationUtils from "../../utils/localization-utils";
 
 /**
  * Component properties
@@ -254,7 +255,7 @@ const Editor = ({ setPanelProperties, surveyId }: Props) => {
     pageLayouts.map((layout) => (
       <ImageButton
         key={layout.id}
-        title={layout.name}
+        title={LocalizationUtils.getTranslatedLayoutName(layout.name)}
         image={getLayoutThumbnail(layout)}
         onClick={() => createPage(layout.name)}
         selected={false}

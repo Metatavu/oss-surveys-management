@@ -232,11 +232,9 @@
     "title": "Valitse sivun rakenne alla olevista vaihtoehdoista",
     "question": "Kysymys",
     "info": "Info",
-    "infoImage": "Kuva",
-    "paragraphImage": "Info + kuva",
+    "image": "Kuva",
     "imageParagraph": "Kuva + info",
-    "questionInfo": "Kysymys + info",
-    "statistics": "Tilastot"
+    "questionInfo": "Kysymys + info"
   },
   "previewScreen": {
     "sharePreview": "Jaa esikatselu"

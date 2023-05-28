@@ -232,11 +232,9 @@
     "title": "Select page layout",
     "question": "Question",
     "info": "Info",
-    "infoImage": "Image",
-    "paragraphImage": "Info + image",
+    "image": "Image",
     "imageParagraph": "Image + info",
-    "questionInfo": "Question + info",
-    "statistics": "Statistics"
+    "questionInfo": "Question + info"
   },
   "previewScreen": {
     "sharePreview": "Share preview"

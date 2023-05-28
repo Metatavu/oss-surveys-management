@@ -273,11 +273,9 @@ export interface Localized extends LocalizedStringsMethods {
     title: string;
     question: string;
     info: string;
-    infoImage: string;
-    paragraphImage: string;
+    image: string;
     imageParagraph: string;
     questionInfo: string;
-    statistics: string;
   };
 
   /**

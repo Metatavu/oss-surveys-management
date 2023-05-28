@@ -51,6 +51,20 @@ namespace LocalizationUtils {
       [Background.DEFAULT]: strings.editSurveysScreen.editPagesPanel.backgroundImages.default,
       [Background.IMAGE_1]: strings.editSurveysScreen.editPagesPanel.backgroundImages.image1
     })[background];
+
+  /**
+   * Gets translated layout name
+   *
+   * @param layoutName layout name
+   */
+  export const getTranslatedLayoutName = (layoutName: string) =>
+    ({
+      question: strings.layouts.question,
+      info: strings.layouts.info,
+      image: strings.layouts.image,
+      "question + info": strings.layouts.questionInfo,
+      "image + info": strings.layouts.imageParagraph
+    })[layoutName];
 }
 
 export default LocalizationUtils;

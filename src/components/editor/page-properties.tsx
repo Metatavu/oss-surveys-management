@@ -1,7 +1,7 @@
 import { errorAtom } from "../../atoms/error";
 import { layoutsAtom } from "../../atoms/layouts";
 import { pagesAtom } from "../../atoms/pages";
-import { Layout, Page, PageQuestionOption } from "../../generated/client";
+import { Layout, Page, PageProperty, PageQuestionOption } from "../../generated/client";
 import { useApi } from "../../hooks/use-api";
 import strings from "../../localization/strings";
 import GenericDialog from "../generic/generic-dialog";
@@ -14,14 +14,16 @@ import {
   Switch,
   TextField,
   IconButton,
-  Typography
+  Typography,
+  MenuItem
 } from "@mui/material";
 import { useAtom, useSetAtom } from "jotai";
 import { ChangeEvent, FocusEvent, Fragment, useEffect, useState } from "react";
 import PageUtils from "../../utils/page-utils";
-import { EditablePageElement } from "../../types";
-import { EDITABLE_TEXT_PAGE_ELEMENTS } from "../../constants";
+import { EditablePageElement, PageElementType } from "../../types";
+import { EDITABLE_TEXT_PAGE_ELEMENTS, PAGE_BACKGROUNDS } from "../../constants";
 import { toast } from "react-toastify";
+import LocalizationUtils from "../../utils/localization-utils";
 
 /**
  * Component properties
@@ -62,6 +64,7 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
       const elementToEdit = PageUtils.getPageTextElementTypeAndId(foundLayout.html, variable.key);
       elements.push(elementToEdit);
     }
+
     setPageToEdit(foundPage);
     setPageToEditLayout(foundLayout);
     setElementsToEdit(elements);
@@ -220,6 +223,35 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
   };
 
   /**
+   * Handler for background change event
+   *
+   * @param event event
+   */
+  const handleBackgroundChange = async ({ target: { value } }: ChangeEvent<HTMLInputElement>) => {
+    if (!pageToEdit?.id) return;
+
+    const backgroundProperty = elementsToEdit.find(
+      (element) => element.type === PageElementType.DIV
+    );
+
+    if (!backgroundProperty?.id) return;
+
+    const updatedProperty: PageProperty = {
+      key: backgroundProperty?.id,
+      value: value === "DEFAULT" ? "" : value
+    };
+
+    const pageToUpdate = {
+      ...pageToEdit,
+      properties: pageToEdit.properties?.map((property) =>
+        property.key === backgroundProperty?.id ? updatedProperty : property
+      )
+    };
+
+    await savePage(pageToUpdate);
+  };
+
+  /**
    * Renders text property editor
    *
    * @param element element
@@ -289,6 +321,23 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
     );
   };
 
+  /**
+   * Renders background change
+   */
+  const renderBackgroundChange = () => {
+    if (!pageToEdit?.properties) return;
+    const defaultValue = PageUtils.getPageBackground(elementsToEdit, pageToEdit.properties);
+    return (
+      <TextField fullWidth select onChange={handleBackgroundChange} value={defaultValue}>
+        {PAGE_BACKGROUNDS.map((background) => (
+          <MenuItem key={background.key} value={background.value}>
+            {LocalizationUtils.getTranslatedBackground(background.key)}
+          </MenuItem>
+        ))}
+      </TextField>
+    );
+  };
+
   return (
     <>
       {renderDeleteOptionDialog()}
@@ -320,6 +369,10 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
           {renderAddNewOption()}
         </Box>
       )}
+      <Box p={2} sx={{ borderBottom: "1px solid #DADCDE" }}>
+        <Typography variant="h6">Tausta</Typography>
+        {renderBackgroundChange()}
+      </Box>
     </>
   );
 };

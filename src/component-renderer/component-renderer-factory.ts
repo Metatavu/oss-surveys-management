@@ -30,18 +30,14 @@ class ComponentRendererFactory {
    *
    * @returns Title renderer
    */
-  public getTitleRenderer = () => {
-    return new PageTitleRenderer();
-  };
+  public getTitleRenderer = () => new PageTitleRenderer();
 
   /**
    * Get text renderer
    *
    * @returns Text renderer
    */
-  public getTextRenderer = () => {
-    return new TextRenderer();
-  };
+  public getTextRenderer = () => new TextRenderer();
 }
 
 const questionRendererFactory = new ComponentRendererFactory();

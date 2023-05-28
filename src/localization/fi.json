@@ -191,11 +191,7 @@
       "background": "Tausta",
       "backgroundImages": {
         "default": "Vihreä",
-        "image1": "kuva 1",
-        "image2": "kuva 2",
-        "image3": "kuva 3",
-        "image4": "kuva 4",
-        "image5": "kuva 5"
+        "image1": "Järvimaisema"
       },
       "pageSaved": "Sivu tallennettu"
     }

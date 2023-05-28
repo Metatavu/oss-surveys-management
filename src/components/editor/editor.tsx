@@ -322,7 +322,7 @@ const Editor = ({ setPanelProperties, surveyId }: Props) => {
 
     for (const variable of layoutVariables ?? []) {
       const foundProperty = properties?.find((property) => property.key === variable.key);
-      if (!foundProperty) continue;
+      if (!foundProperty?.value) continue;
       htmlData = PageUtils.handlePagePropertiesRendering(templateDom, variable, foundProperty);
     }
 

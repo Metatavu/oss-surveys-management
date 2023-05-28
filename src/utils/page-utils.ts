@@ -5,9 +5,10 @@ import {
   PageProperty,
   PageQuestion
 } from "../generated/client";
-import { PageElementType } from "../types";
+import { Background, EditablePageElement, PageElementType } from "../types";
 import strings from "../localization/strings";
-import { QUESTION_PLACEHOLDER_DATA_COMPONENT } from "../constants";
+import { PAGE_BACKGROUNDS, QUESTION_PLACEHOLDER_DATA_COMPONENT } from "../constants";
+import config from "../app/config";
 
 /**
  * Namespace for Page utilities
@@ -83,9 +84,12 @@ namespace PageUtils {
     property: PageProperty
   ) => {
     let htmlData = document.body.outerHTML;
+    const targetElement = document.getElementById(variable.key);
+
+    if (!targetElement) return htmlData;
+
     switch (variable.type) {
       case LayoutVariableType.Text: {
-        const targetElement = document.getElementById(variable.key);
         switch (targetElement?.tagName.toLocaleLowerCase()) {
           case PageElementType.H1: {
             const titleRenderer = componentRendererFactory.getTitleRenderer();
@@ -100,6 +104,18 @@ namespace PageUtils {
             const textHtml = textRenderer.render(property.value);
             const textElement = new DOMParser().parseFromString(textHtml, "text/html");
             targetElement?.replaceWith(textElement.body);
+            htmlData = document.body.innerHTML;
+            break;
+          }
+        }
+      }
+      case LayoutVariableType.ImageUrl: {
+        switch (targetElement?.tagName.toLocaleLowerCase()) {
+          case PageElementType.DIV: {
+            targetElement.style.setProperty(
+              "background-image",
+              `url('${config.imageBaseUrl + property.value}')`
+            );
             htmlData = document.body.innerHTML;
             break;
           }
@@ -135,6 +151,30 @@ namespace PageUtils {
     }
 
     return "";
+  };
+
+  /**
+   * Returns pages background
+   *
+   * @param elements elements
+   * @param properties properties
+   */
+  export const getPageBackground = (
+    elements: EditablePageElement[],
+    properties?: PageProperty[]
+  ) => {
+    const defaultBackground = PAGE_BACKGROUNDS.find(
+      (background) => background.key === Background.DEFAULT
+    );
+    if (!defaultBackground) return;
+    if (!elements?.length) return defaultBackground.value;
+    const foundBackgroundElement = elements.find((element) => element.type === PageElementType.DIV);
+    if (!foundBackgroundElement) return defaultBackground.value;
+    const foundBackgroundProperty = properties?.find(
+      (property) => property.key === foundBackgroundElement.id
+    );
+    if (!foundBackgroundProperty?.value) return defaultBackground.value;
+    return foundBackgroundProperty.value;
   };
 }
 

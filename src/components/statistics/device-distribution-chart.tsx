@@ -27,7 +27,7 @@ const DeviceDistributionChart = ({ data, devices }: Props) => {
 
   const constructSourcesString = () => {
     let sourcesString = strings.surveyStatistics.statisticsSource;
-    devices.map((device) => (sourcesString += `${device.name}/ `));
+    devices.forEach((device) => (sourcesString += `${device.name}/ `));
     return <Typography>{sourcesString}</Typography>;
   };
 

@@ -317,6 +317,7 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
         defaultValue={option.questionOptionValue}
         onBlur={handleOptionChange}
         fullWidth
+        multiline
         InputProps={{
           endAdornment: (
             <InputAdornment position="end" className="on-hover">

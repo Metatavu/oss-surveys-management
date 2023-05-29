@@ -232,6 +232,7 @@ export interface Localized extends LocalizedStringsMethods {
         image1: string;
       };
       pageSaved: string;
+      previewTitle: string;
     };
   };
 

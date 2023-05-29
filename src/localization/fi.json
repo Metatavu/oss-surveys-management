@@ -198,7 +198,8 @@
         "default": "Vihreä",
         "image1": "Järvimaisema"
       },
-      "pageSaved": "Sivu tallennettu"
+      "pageSaved": "Sivu tallennettu",
+      "previewTitle": "Klikkaa muokataksesi sivua"
     }
   },
   "publishSurveys": {

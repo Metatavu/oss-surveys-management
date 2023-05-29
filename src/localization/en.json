@@ -198,7 +198,8 @@
         "default": "Green",
         "image1": "Lake scenery"
       },
-      "pageSaved": "Page saved"
+      "pageSaved": "Page saved",
+      "previewTitle": "Click page to edit"
     }
   },
   "publishSurveys": {

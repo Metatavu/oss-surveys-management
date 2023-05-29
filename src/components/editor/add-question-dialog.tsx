@@ -2,7 +2,7 @@ import { FormControlLabel, Radio, RadioGroup, Stack, Tooltip, Typography } from 
 import { PageQuestionType } from "../../generated/client";
 import strings from "../../localization/strings";
 import GenericDialog from "../generic/generic-dialog";
-import { useState } from "react";
+import { useState, ChangeEvent } from "react";
 
 /**
  * Components properties
@@ -30,7 +30,7 @@ const AddQuestionDialog = ({ open, pageId, onClose, onAddQuestion }: Props) => {
    */
   const handleAddQuestion = async () => {
     if (!pageId) return;
-    onAddQuestion(selectedQuestionType, pageId);
+    await onAddQuestion(selectedQuestionType, pageId);
   };
 
   /**
@@ -38,7 +38,7 @@ const AddQuestionDialog = ({ open, pageId, onClose, onAddQuestion }: Props) => {
    *
    * @param event event
    */
-  const handleQuestionTypeChange = ({ target: { value } }: React.ChangeEvent<HTMLInputElement>) =>
+  const handleQuestionTypeChange = ({ target: { value } }: ChangeEvent<HTMLInputElement>) =>
     setSelectedQuestionType(value as PageQuestionType);
 
   return (

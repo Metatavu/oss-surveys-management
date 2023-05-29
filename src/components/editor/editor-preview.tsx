@@ -4,7 +4,7 @@ import { Add, MoreHoriz } from "@mui/icons-material";
 import wrapTemplate from "../pages/templates/template-wrapper";
 import { parseHtmlToDom } from "../../utils/preview-utils";
 import PageUtils from "../../utils/page-utils";
-import { useEffect, useState } from "react";
+import { useEffect, useState, MouseEvent } from "react";
 import { IconContainer } from "./new-page-button";
 import strings from "../../localization/strings";
 import AddQuestionDialog from "./add-question-dialog";
@@ -95,25 +95,25 @@ const EditorPreview = ({
   const [pageMenuOpen, setPageMenuOpen] = useState(false);
   const [addQuestionDialogOpen, setAddQuestionDialogOpen] = useState(false);
 
-  if (!page.id) return null;
-
   /**
-   * Set up event listener to recieve post message from iframe
+   * Set up event listener to recieve custom events from iframe
    */
   useEffect(() => {
     // TODO: In the future when we need more event handlers within the iframe we can use a switch statement to replace the handlePostMessageEventListener.
     // This can direct us to the appropriate event listener based upon the type of the Event e.g. IframeClickEvent, IframeButtonClickEvent etc.
-    window.addEventListener(`message-${page?.id}`, handlePostMessageEventListener);
+    window.addEventListener(`message-${page?.id}`, handleCustomEventListener);
 
-    return () => window.removeEventListener(`message-${page?.id}`, handlePostMessageEventListener);
+    return () => window.removeEventListener(`message-${page?.id}`, handleCustomEventListener);
   }, []);
+
+  if (!page.id) return null;
 
   /**
    * Handles post messsage event from iframe
    *
    * @param event message event
    */
-  const handlePostMessageEventListener = (event: any) => {
+  const handleCustomEventListener = (event: any) => {
     const typedEvent = event as IframeClickEvent;
 
     onPanelPropertiesChange();
@@ -125,7 +125,7 @@ const EditorPreview = ({
    *
    * @param event event
    */
-  const handlePageMenuClick = ({ target }: React.MouseEvent<HTMLButtonElement>) => {
+  const handlePageMenuClick = ({ target }: MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(target as HTMLElement);
     setPageMenuOpen(!pageMenuOpen);
   };

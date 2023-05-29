@@ -11,6 +11,22 @@ import AddQuestionDialog from "./add-question-dialog";
 import { IframeClickEvent } from "../../types";
 
 /**
+ * Styled navigation button
+ */
+export const MenuButton = styled(IconButton, {
+  label: "menu-button"
+})(({ theme }) => ({
+  width: 100,
+  height: 100,
+  position: "absolute",
+  top: theme.spacing(2),
+  right: theme.spacing(5),
+  zIndex: 100000,
+  padding: 0,
+  margin: 0
+}));
+
+/**
  * Add Question Container props
  */
 interface AddQuestionContainerProps {
@@ -116,19 +132,16 @@ const EditorPreview = ({
 
   return (
     <div style={{ scale: `${scale}`, position: "relative" }}>
-      <IconButton
-        onClick={handlePageMenuClick}
-        sx={{ position: "absolute", top: 0, right: 0, padding: 0, margin: 0 }}
-      >
-        <MoreHoriz sx={{ width: `${30 / scale}px`, height: `${30 / scale}px`, color: "#fff" }} />
-      </IconButton>
+      <MenuButton onClick={handlePageMenuClick}>
+        <MoreHoriz sx={{ width: "6rem", height: "6rem", color: "#ffffff" }} />
+      </MenuButton>
       <iframe
         srcDoc={wrapTemplate(parseHtmlToDom(htmlString).outerHTML, page.id)}
         title="preview"
         width={width}
         height={height}
         seamless
-        style={{ border: selectedPage?.id === page.id ? "20px solid #46dc78" : "none" }}
+        style={{ border: selectedPage === page ? "4px solid #46dc78" : "none" }}
       />
       {PageUtils.hasQuestionsPlaceholder(htmlString) && !page.question && (
         <>

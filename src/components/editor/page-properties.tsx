@@ -404,6 +404,13 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
           .filter((element) => EDITABLE_TEXT_PAGE_ELEMENTS.includes(element.type))
           .map(renderTextPropertyEditor)}
       </Box>
+      {PageUtils.hasQuestionsPlaceholder(pageToEditLayout?.html) && (
+        <Box p={2} sx={{ borderBottom: "1px solid #DADCDE" }}>
+          <Typography variant="h6">{strings.editSurveysScreen.editPagesPanel.addOption}</Typography>
+          {renderOptions()}
+          {renderAddNewOption()}
+        </Box>
+      )}
       <Box p={2} sx={{ borderBottom: "1px solid #DADCDE" }}>
         <FormControlLabel
           label={strings.editSurveysScreen.editPagesPanel.buttonVisibility}
@@ -415,13 +422,6 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
           }
         />
       </Box>
-      {PageUtils.hasQuestionsPlaceholder(pageToEditLayout?.html) && (
-        <Box p={2} sx={{ borderBottom: "1px solid #DADCDE" }}>
-          <Typography variant="h6">{strings.editSurveysScreen.editPagesPanel.addOption}</Typography>
-          {renderOptions()}
-          {renderAddNewOption()}
-        </Box>
-      )}
       {PageUtils.hasImagePlaceholder(pageToEditLayout?.html) && (
         <Box p={2} sx={{ borderBottom: "1px solid #DADCDE" }}>
           <Typography variant="h6">{strings.editSurveysScreen.editPagesPanel.image}</Typography>

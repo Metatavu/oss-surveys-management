@@ -47,6 +47,7 @@ const SurveyProperties = ({ survey, onSaveSurvey }: Props) => {
         <TextField
           fullWidth
           name="title"
+          multiline
           defaultValue={survey.title}
           placeholder={strings.editSurveysScreen.editSurveyPanel.name}
           onBlur={onSaveSurvey}
@@ -65,6 +66,7 @@ const SurveyProperties = ({ survey, onSaveSurvey }: Props) => {
         </Typography>
         <TextField
           fullWidth
+          multiline
           name="description"
           defaultValue={survey.description}
           placeholder={strings.editSurveysScreen.editSurveyPanel.description}
@@ -85,6 +87,7 @@ const SurveyProperties = ({ survey, onSaveSurvey }: Props) => {
         <TextField
           fullWidth
           name="timeout"
+          multiline
           defaultValue={survey.timeout}
           type="number"
           placeholder={strings.editSurveysScreen.editSurveyPanel.returnTimeout}

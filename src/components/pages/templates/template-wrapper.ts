@@ -65,7 +65,7 @@ const wrapTemplate = (bodyContent: string, pageId?: string) => `<!DOCTYPE html>
         font-size: 5rem;
       }
       h1.lg {
-        font-size: 10rem;
+        font-size: 6rem;
       }
       p {
         font-family: SBonusDisplay-Regular;
@@ -82,7 +82,7 @@ const wrapTemplate = (bodyContent: string, pageId?: string) => `<!DOCTYPE html>
       }
       .option {
         width: 100%;
-        padding: "30px 20px;
+        padding: "30px 20px";
         font-size: 2.5rem;
         font-family: 'SBonusText-Bold';
         color: #fff;

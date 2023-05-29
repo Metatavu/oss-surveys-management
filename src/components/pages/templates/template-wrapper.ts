@@ -74,7 +74,7 @@ const wrapTemplate = (bodyContent: string, pageNumber?: number) => `<!DOCTYPE ht
       }
       .option {
         width: 100%;
-        padding: "30px 20px;
+        padding: 30px 20px;
         font-size: 2.5rem;
         font-family: 'SBonusText-Bold';
         color: #fff;

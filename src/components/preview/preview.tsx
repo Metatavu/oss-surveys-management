@@ -10,6 +10,7 @@ interface Props {
   height: number;
   scale: number;
 }
+
 /**
  * Renders preview component
  *
@@ -17,7 +18,7 @@ interface Props {
  */
 const Preview = ({ htmlString, width, height, scale }: Props) => {
   return (
-    <div style={{ scale: `${scale}` }}>
+    <div style={{ scale: `${scale}`, position: "relative" }}>
       <iframe
         srcDoc={wrapTemplate(parseHtmlToDom(htmlString).outerHTML)}
         title="preview"

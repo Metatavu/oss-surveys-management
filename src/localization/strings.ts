@@ -251,6 +251,7 @@ export interface Localized extends LocalizedStringsMethods {
     answers: string;
     mostPopularDays: string;
     mostPopularHours: string;
+    statisticsSource: string;
   };
 
   /**

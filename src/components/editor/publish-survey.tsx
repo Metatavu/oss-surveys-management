@@ -1,10 +1,10 @@
-import { Stack } from "@mui/material";
 import { Device, DeviceSurvey, DeviceSurveyStatus, Survey } from "../../generated/client";
-import PropertiesPanel from "./properties-panel";
-import { useState } from "react";
-import PublishDeviceInfo from "./publish-device-info";
 import DevicesPanel from "./devices-panel";
+import PropertiesPanel from "./properties-panel";
+import PublishDeviceInfo from "./publish-device-info";
 import PublishProperties from "./publish-properties";
+import { Stack } from "@mui/material";
+import { useState } from "react";
 
 /**
  * Components properties

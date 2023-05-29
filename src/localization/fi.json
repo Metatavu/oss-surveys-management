@@ -213,7 +213,8 @@
     "answersDistribution": "Vastauksien jakautuminen",
     "answers": "Vastauksia",
     "mostPopularDays": "Vilkkaimmat päivät",
-    "mostPopularHours": "Vilkkaimmat tunnit"
+    "mostPopularHours": "Vilkkaimmat tunnit",
+    "statisticsSource": "Lähde: "
   },
   "publishSurveys": {
     "surveyPublished": "Kysely julkaistu",

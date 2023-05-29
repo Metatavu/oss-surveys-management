@@ -40,9 +40,10 @@ const StatisticDevices = ({ devices, selectedDevices, setSelectedDevices }: Prop
 
     return (
       <FormControlLabel
+        key={device.id}
         label={device.name ?? strings.generic.unnamed}
         name={device.id}
-        defaultChecked={isSelected}
+        checked={isSelected}
         control={<Checkbox onChange={handleCheckboxChange} />}
       />
     );

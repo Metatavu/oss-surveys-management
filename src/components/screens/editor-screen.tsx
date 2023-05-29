@@ -60,8 +60,8 @@ const EditorScreen = () => {
    */
   const getDeviceSurveysByDevice = async (deviceId: string) => {
     try {
-      const deviceSurveys = await deviceSurveysApi.listDeviceSurveys({ deviceId: deviceId });
-      setDeviceSurveys([...deviceSurveys, ...deviceSurveys]);
+      const foundDeviceSurveys = await deviceSurveysApi.listDeviceSurveys({ deviceId: deviceId });
+      setDeviceSurveys([...deviceSurveys, ...foundDeviceSurveys]);
     } catch (error: any) {
       setError(`${strings.errorHandling.overviewScreen.deviceSurveysNotFound}, ${error}`);
     }
@@ -141,8 +141,8 @@ const EditorScreen = () => {
 
     if (mode === SurveyScreenMode.STATISTICS) {
       return <SurveyStatistics survey={survey} devices={devices} deviceSurveys={deviceSurveys} />;
-    };
-  }
+    }
+  };
 
   return (
     <>

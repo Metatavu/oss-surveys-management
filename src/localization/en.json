@@ -213,7 +213,8 @@
     "answersDistribution": "Answers distribution",
     "answers": "Answers",
     "mostPopularDays": "Most popular days",
-    "mostPopularHours": "Most popular hours"
+    "mostPopularHours": "Most popular hours",
+    "statisticsSource": "Source: "
   },
   "publishSurveys": {
     "surveyPublished": "Survey published",

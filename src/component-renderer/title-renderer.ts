@@ -10,5 +10,5 @@ export class PageTitleRenderer extends AbstractQuestionRenderer {
    * @param title title
    * @returns html string
    */
-  public render = (title: string): string => `<h1 class="lg">${title}</h1>`;
+  public render = (title: string): string => `<h1 class="md">${title}</h1>`;
 }

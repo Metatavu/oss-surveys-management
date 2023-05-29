@@ -255,7 +255,7 @@ const Editor = ({ setPanelProperties, surveyId }: Props) => {
     pageLayouts.map((layout) => (
       <ImageButton
         key={layout.id}
-        title={LocalizationUtils.getTranslatedLayoutName(layout.name)}
+        title={LocalizationUtils.getTranslatedLayoutName(layout.name) ?? strings.generic.unnamed}
         image={getLayoutThumbnail(layout)}
         onClick={() => createPage(layout.name)}
         selected={false}

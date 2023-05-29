@@ -11,8 +11,8 @@ export class MultiSelectTextQuestionRenderer extends AbstractQuestionRenderer {
    * @returns html string
    */
   public render = (option: string): string =>
-    `<div class="options">
-    <label style="font-size: 2rem; font-family: 'SBonusText-Bold'; color: #fff;" for="multi-${option}">${option}</label>
-    <input id="multi-${option}" type="checkbox">
+    `<div class="option">
+      <label style="font-size: 2rem; font-family: 'SBonusText-Bold'; color: #fff;" for="multi-${option}">${option}</label>
+      <input id="multi-${option}" type="checkbox">
     </div>`;
 }

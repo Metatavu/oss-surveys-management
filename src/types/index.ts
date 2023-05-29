@@ -48,7 +48,7 @@ export enum QuestionType {
 export interface IframeClickEvent extends Event {
   detail: {
     eventType: "iframeclick";
-    pageNumber: number;
+    pageId: string;
   };
 }
 

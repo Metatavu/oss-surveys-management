@@ -52,7 +52,8 @@
       "pageLayoutNotFound": "Sivuasetteluja ei löytynyt",
       "pageNotSaved": "Virhe tallennettaessa sivua",
       "pageNotDeleted": "Virhe poistaessa sivua",
-      "pageNotCreated": "Virhe luotaessa sivua"
+      "pageNotCreated": "Virhe luotaessa sivua",
+      "questionNotAdded": "Virhe lisättäessä kyselyä"
     },
     "previewScreen": {
       "surveyNotFound": "Kyselyä ei löytynyt",
@@ -146,6 +147,18 @@
     }
   },
   "editSurveysScreen": {
+    "addQuestion": {
+      "dialog": {
+        "title": "Lisää kysely",
+        "description": "Valitse minkälaisen kyselyn haluat lisätä sivulle.",
+        "singleSelect": "Valinta",
+        "multiSelect": "Monivalinta",
+        "freeText": "Vapaa teksti",
+        "addQuestion": "Lisää kysely"
+      },
+      "helperText": "Valitse kysely",
+      "questionAdded": "Kysely lisätty"
+    },
     "addNewPage": "Lisää uusi sivu",
     "deletePage": "Poista",
     "surveySaved": "Kysely tallennettu",
@@ -184,7 +197,8 @@
         "image4": "kuva 4",
         "image5": "kuva 5"
       },
-      "pageSaved": "Sivu tallennettu"
+      "pageSaved": "Sivu tallennettu",
+      "previewTitle": "Klikkaa muokataksesi sivua"
     }
   },
   "publishSurveys": {

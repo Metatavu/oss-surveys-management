@@ -7,7 +7,6 @@ import {
 } from "../generated/client";
 import { PageElementType } from "../types";
 import strings from "../localization/strings";
-import { v4 as uuid } from "uuid";
 import { QUESTION_PLACEHOLDER_DATA_COMPONENT } from "../constants";
 
 /**
@@ -118,12 +117,25 @@ namespace PageUtils {
    * @returns page question option
    */
   export const getDefaultQuestionOption = (orderNumber: number) => ({
-    id: uuid(),
     orderNumber: orderNumber,
     questionOptionValue: strings
       .formatString(strings.editSurveysScreen.editPagesPanel.answerOptionPlaceholder, orderNumber)
       .toString()
   });
+
+  /**
+   * Gets text property label based on page element type
+   */
+  export const getTextPropertyLabel = (type: PageElementType) => {
+    if (type === PageElementType.H1) {
+      return strings.editSurveysScreen.editPagesPanel.title;
+    }
+    if (type === PageElementType.P) {
+      return strings.editSurveysScreen.editPagesPanel.infoText;
+    }
+
+    return "";
+  };
 }
 
 export default PageUtils;

@@ -7,15 +7,15 @@ import strings from "../../localization/strings";
  */
 const Root = styled(Button, {
   label: "new-page-button"
-})(({ theme }) => ({
-  borderWidth: 1,
+})<{ scale?: number }>(({ theme, scale = 1 }) => ({
+  borderWidth: 1 / scale,
   borderStyle: "dashed",
   borderColor: theme.palette.primary.main,
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
-  width: 280,
-  height: 497,
+  width: 280 / scale,
+  height: 497 / scale,
   "&:hover": {
     borderStyle: "solid",
     color: theme.palette.primary.dark
@@ -23,22 +23,24 @@ const Root = styled(Button, {
 }));
 
 /**
- * Styled new page button root component
+ * Styled icon container component
  */
-const IconContainer = styled(Box, {
+export const IconContainer = styled(Box, {
   label: "icon-container"
-})(({ theme }) => ({
-  borderWidth: 1,
-  borderStyle: "dashed",
-  borderColor: theme.palette.primary.main,
-  borderRadius: 100,
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
-  height: 100,
-  width: 100,
-  position: "relative"
-}));
+})<{ scale?: number; borderColor?: string }>(
+  ({ theme, scale = 1, borderColor = theme.palette.primary.main }) => ({
+    borderWidth: 1 / scale,
+    borderStyle: "dashed",
+    borderColor: borderColor,
+    borderRadius: 100 / scale,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    height: 100 / scale,
+    width: 100 / scale,
+    position: "relative"
+  })
+);
 
 /**
  * Component props

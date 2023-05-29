@@ -75,6 +75,7 @@ export interface Localized extends LocalizedStringsMethods {
       pageNotSaved: string;
       pageNotDeleted: string;
       pageNotCreated: string;
+      questionNotAdded: string;
     };
     previewScreen: {
       surveyNotFound: string;
@@ -179,6 +180,18 @@ export interface Localized extends LocalizedStringsMethods {
    * Translations related to surveys screen
    */
   editSurveysScreen: {
+    addQuestion: {
+      dialog: {
+        title: string;
+        description: string;
+        singleSelect: string;
+        multiSelect: string;
+        freeText: string;
+        addQuestion: string;
+      };
+      helperText: string;
+      questionAdded: string;
+    };
     addNewPage: string;
     deletePage: string;
     surveySaved: string;
@@ -218,6 +231,7 @@ export interface Localized extends LocalizedStringsMethods {
         image5: string;
       };
       pageSaved: string;
+      previewTitle: string;
     };
   };
 

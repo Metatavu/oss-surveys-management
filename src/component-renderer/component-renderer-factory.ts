@@ -1,4 +1,5 @@
 import { PageQuestionType } from "../generated/client";
+import { MultiSelectTextQuestionRenderer } from "./multi-select-question-renderer";
 import { SingleSelectTextQuestionRenderer } from "./single-question-renderer";
 import { TextRenderer } from "./text-renderer";
 import { PageTitleRenderer } from "./title-renderer";
@@ -17,6 +18,8 @@ class ComponentRendererFactory {
     switch (questionType) {
       case PageQuestionType.SingleSelect:
         return new SingleSelectTextQuestionRenderer();
+      case PageQuestionType.MultiSelect:
+        return new MultiSelectTextQuestionRenderer();
       default:
         throw new Error(`Could not find renderer for ${questionType}`);
     }

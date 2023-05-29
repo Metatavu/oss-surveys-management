@@ -122,6 +122,20 @@ namespace PageUtils {
       .formatString(strings.editSurveysScreen.editPagesPanel.answerOptionPlaceholder, orderNumber)
       .toString()
   });
+
+  /**
+   * Gets text property label based on page element type
+   */
+  export const getTextPropertyLabel = (type: PageElementType) => {
+    if (type === PageElementType.H1) {
+      return strings.editSurveysScreen.editPagesPanel.title;
+    }
+    if (type === PageElementType.P) {
+      return strings.editSurveysScreen.editPagesPanel.infoText;
+    }
+
+    return "";
+  };
 }
 
 export default PageUtils;

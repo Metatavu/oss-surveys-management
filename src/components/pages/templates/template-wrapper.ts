@@ -4,7 +4,14 @@ import sanitizeHtml, { IOptions } from "sanitize-html";
  * Options for html sanitizer
  */
 const sanitizeOptions: IOptions = {
-  allowedTags: sanitizeHtml.defaults.allowedTags.concat(["button", "h1", "p", "div"]),
+  allowedTags: sanitizeHtml.defaults.allowedTags.concat([
+    "button",
+    "h1",
+    "p",
+    "div",
+    "label",
+    "input"
+  ]),
   allowedAttributes: {
     "*": ["style", "id", "class"]
   }
@@ -14,9 +21,10 @@ const sanitizeOptions: IOptions = {
  * Wrap and sanitize template HTML body content
  *
  * @param bodyContent
+ * @param pageId page id
  * @returns HTML string
  */
-const wrapTemplate = (bodyContent: string, pageNumber?: number) => `<!DOCTYPE html>
+const wrapTemplate = (bodyContent: string, pageId?: string) => `<!DOCTYPE html>
   <html lang="en">
   <head>
     <meta charset="UTF-8">
@@ -82,9 +90,6 @@ const wrapTemplate = (bodyContent: string, pageNumber?: number) => `<!DOCTYPE ht
         border: 4px solid #fff;
         transition: background-color 0.2s ease-in-out;
       }
-      label {
-        font-size: 2rem;
-      }
       .next-button {
         background-color: transparent;
         border: none;
@@ -97,6 +102,17 @@ const wrapTemplate = (bodyContent: string, pageNumber?: number) => `<!DOCTYPE ht
       .next-button:active, option:active {
         background-color: rgba(0, 0, 0, 0.1);
       }
+      .multi-option {
+        width: 100%;
+        height: 80px;
+        font-size: 3rem;
+        font-family: 'SBonusText-Bold';
+        text-align: center;
+        margin-bottom: 2rem;
+        color: #fff;
+        background: transparent;
+        border: 4px solid #fff;
+      }
     </style>
   </head>
   <body>
@@ -106,16 +122,16 @@ const wrapTemplate = (bodyContent: string, pageNumber?: number) => `<!DOCTYPE ht
     document.addEventListener("click", () =>
       window.parent.dispatchEvent(
         new CustomEvent(
-          "message-${pageNumber}",
+          "message-${pageId}",
           {
             detail: {
               eventType: "iframeclick",
-              pageNumber: ${pageNumber}
+              pageId: "${pageId}"
             }
           }
         )
       )
-    )
+    );
   </script>
   </html>`;
 

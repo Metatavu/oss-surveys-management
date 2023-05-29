@@ -14,6 +14,8 @@ interface Props {
 
 /**
  * Statistic page component
+ *
+ * @param props component properties
  */
 const StatisticPage = ({ question, pageTitle }: Props) => {
   return (
@@ -24,13 +26,11 @@ const StatisticPage = ({ question, pageTitle }: Props) => {
         </Typography>
         <Divider />
         <Stack padding={2}>
-          <Typography variant="h6">
-            {strings.surveyStatistics.answersDistribution}
-          </Typography>
+          <Typography variant="h6">{strings.surveyStatistics.answersDistribution}</Typography>
           <AnswersDistributionChart data={question.options} />
         </Stack>
-      </Paper >
-    </Stack >
+      </Paper>
+    </Stack>
   );
 };
 

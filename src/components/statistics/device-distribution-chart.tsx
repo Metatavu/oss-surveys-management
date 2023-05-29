@@ -13,9 +13,11 @@ interface Props {
 
 /**
  * Render vertical bar chart
+ *
+ * @param props component properties
  */
 const DeviceDistributionChart = ({ data, devices }: Props) => {
-  let constructedData: any[] | undefined = [];
+  let constructedData: any[] = [];
   if (devices) {
     devices.forEach((device) => {
       constructedData?.push({
@@ -28,6 +30,7 @@ const DeviceDistributionChart = ({ data, devices }: Props) => {
   const constructSourcesString = () => {
     let sourcesString = strings.surveyStatistics.statisticsSource;
     devices.forEach((device) => (sourcesString += `${device.name}/ `));
+
     return <Typography>{sourcesString}</Typography>;
   };
 

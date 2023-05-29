@@ -1,9 +1,6 @@
 import { Survey } from "../../generated/client";
 import strings from "../../localization/strings";
-import {
-  Box,
-  Typography
-} from "@mui/material";
+import { Box, Typography } from "@mui/material";
 
 /**
  * Components properties
@@ -15,12 +12,10 @@ interface Props {
 
 /**
  * Survey Properties component
+ *
+ * @param props component properties
  */
 const StatisticsInfo = ({ survey, overallAnswerCount }: Props) => {
-  /**
-   * Get most popular answer
-   */
-
   return (
     <>
       <Box p={2} sx={{ borderBottom: "1px solid #DADCDE" }}>
@@ -34,9 +29,7 @@ const StatisticsInfo = ({ survey, overallAnswerCount }: Props) => {
         {survey.description}
       </Box>
       <Box p={2} sx={{ borderBottom: "1px solid #DADCDE" }}>
-        <Typography variant="h6">
-          {strings.surveyStatistics.answerCount}
-        </Typography>
+        <Typography variant="h6">{strings.surveyStatistics.answerCount}</Typography>
         <Typography variant="h4" fontWeight="bold" color="#00aa46">
           {overallAnswerCount}
         </Typography>

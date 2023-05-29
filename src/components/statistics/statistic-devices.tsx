@@ -14,6 +14,8 @@ interface Props {
 
 /**
  * Statistic devices panel component
+ *
+ * @param props component properties
  */
 const StatisticDevices = ({ devices, selectedDevices, setSelectedDevices }: Props) => {
   /**
@@ -32,8 +34,11 @@ const StatisticDevices = ({ devices, selectedDevices, setSelectedDevices }: Prop
       setSelectedDevices(selectedDevices.filter((device) => device.id !== foundDevice.id));
     }
   };
+
   /**
    * Renders device
+   *
+   * @param device device
    */
   const renderDevice = (device: Device) => {
     const isSelected = !!selectedDevices.find((dev) => dev.id === device.id);

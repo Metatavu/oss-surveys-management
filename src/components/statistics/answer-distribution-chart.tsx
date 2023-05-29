@@ -18,7 +18,7 @@ const AnswersDistributionChart = ({ data }: Props) => {
   return (
     <Box style={{ height: height, width: "100%" }}>
       <ResponsiveContainer width="100%" height={height}>
-        <BarChart width={1400} height={300} data={data} layout="vertical" margin={{ right: 50 }}>
+        <BarChart data={data} layout="vertical" margin={{ right: 50 }}>
           <XAxis type="number" />
           <YAxis type="category" dataKey="questionOptionValue" />
           <Tooltip />

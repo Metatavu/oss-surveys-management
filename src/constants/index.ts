@@ -11,3 +11,9 @@ export const DEVICE_HEIGHT = 1920;
 export const EDITABLE_TEXT_PAGE_ELEMENTS = [PageElementType.H1, PageElementType.P];
 
 export const QUESTION_PLACEHOLDER_DATA_COMPONENT = "question";
+
+export const START_HOUR = 6;
+
+export const END_HOUR = 21;
+
+export const HOUR_GROUPING = 3;

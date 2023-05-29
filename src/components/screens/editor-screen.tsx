@@ -125,7 +125,7 @@ const EditorScreen = () => {
     }
 
     if (mode === SurveyScreenMode.EDITOR) {
-      return <EditSurvey survey={survey!} saveSurvey={saveSurvey} />;
+      return <EditSurvey survey={survey} saveSurvey={saveSurvey} />;
     }
 
     if (mode === SurveyScreenMode.PUBLISH) {

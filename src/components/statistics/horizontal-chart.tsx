@@ -10,6 +10,8 @@ interface Props {
 
 /**
  * Render horizontal bar chart
+ *
+ * @param props component properties
  */
 const HorizontalChart = ({ data }: Props) => {
   return (
@@ -17,8 +19,6 @@ const HorizontalChart = ({ data }: Props) => {
       {/* TODO: Width should be responsive, 100% not currently working */}
       <ResponsiveContainer width="100%" height={250} minWidth={350}>
         <BarChart
-          width={600}
-          height={300}
           data={data}
           layout="horizontal"
           margin={{ top: 5, right: 30, left: 20, bottom: 5 }}

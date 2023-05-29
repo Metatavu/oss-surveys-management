@@ -1,6 +1,7 @@
 import { errorAtom } from "../../atoms/error";
 import { layoutsAtom } from "../../atoms/layouts";
 import { pagesAtom } from "../../atoms/pages";
+import { END_HOUR, HOUR_GROUPING, START_HOUR } from "../../constants";
 import {
   Device,
   DeviceSurvey,
@@ -33,6 +34,8 @@ interface Props {
 
 /**
  * Survey statistics component
+ *
+ * @param props component properties
  */
 const SurveyStatistics = ({ devices, deviceSurveys, survey }: Props) => {
   const { deviceSurveysApi } = useApi();
@@ -53,10 +56,9 @@ const SurveyStatistics = ({ devices, deviceSurveys, survey }: Props) => {
     if (!foundPage?.id) return "";
     const foundLayout = pageLayouts.find((layout) => layout.id === foundPage?.layoutId);
     if (!foundLayout) return "";
+
     const elements: EditablePageElement[] = [];
     for (const variable of foundLayout?.layoutVariables ?? []) {
-      if (!foundLayout) continue;
-
       const elementToEdit = PageUtils.getPageTextElementTypeAndId(foundLayout.html, variable.key);
       elements.push(elementToEdit);
     }
@@ -103,6 +105,7 @@ const SurveyStatistics = ({ devices, deviceSurveys, survey }: Props) => {
     surveyStatistics.forEach((statistic) => {
       count += statistic.totalAnswerCount;
     });
+
     return count;
   };
 
@@ -126,17 +129,17 @@ const SurveyStatistics = ({ devices, deviceSurveys, survey }: Props) => {
    * Get hourly average answer count chart data
    */
   const getHourlyAverageAnswerCount = () => {
-    let now = DateTime.now().set({ hour: 6 });
+    let now = DateTime.now().set({ hour: START_HOUR });
     const hourlyChartData = [];
-    while (now.hour < 21) {
+    while (now.hour < END_HOUR) {
       let average = 0;
 
-      for (let hourIndex = 0; hourIndex < 3; hourIndex++) {
+      for (let hourIndex = 0; hourIndex < HOUR_GROUPING; hourIndex++) {
         average += surveyStatistics[0].averages.hourly[now.toUTC().hour + hourIndex];
       }
 
-      hourlyChartData.push({ label: `${now.hour} - ${now.hour + 3}`, value: average });
-      now = now.plus({ hours: 3 });
+      hourlyChartData.push({ label: `${now.hour} - ${now.hour + HOUR_GROUPING}`, value: average });
+      now = now.plus({ hours: HOUR_GROUPING });
     }
 
     return hourlyChartData;

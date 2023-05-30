@@ -1,7 +1,17 @@
 import Header from "../layout-components/header";
-import { Stack } from "@mui/material";
+import { Stack, styled } from "@mui/material";
 import { Outlet, useMatch } from "react-router-dom";
 import { NavigationLinks } from "../../types";
+
+/**
+ * Styled image button
+ */
+const Root = styled(Stack, {
+  label: "layout-root"
+})(() => ({
+  flex: 1,
+  overflow: "hidden"
+}));
 
 /**
  * Basic layout component
@@ -18,9 +28,9 @@ const BasicLayout = () => {
     <>
       {/* TODO: Is there a better way to do this? */}
       {!isPreviewPath && <Header />}
-      <Stack flex={1}>
+      <Root>
         <Outlet />
-      </Stack>
+      </Root>
     </>
   );
 };

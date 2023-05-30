@@ -50,7 +50,8 @@ const EditorContainer = styled(Stack, {
   display: "flex",
   flexWrap: "wrap",
   flex: 1,
-  flexDirection: "row"
+  flexDirection: "row",
+  overflowY: "auto"
 }));
 
 /**

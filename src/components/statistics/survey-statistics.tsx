@@ -108,8 +108,6 @@ const SurveyStatistics = ({ devices, survey }: Props) => {
       for (let weekDayIndex = 0; weekDayIndex < weekDaysLength; weekDayIndex++) {
         weekDayAverages[weekDayIndex] += surveyStatistic.averages.weekDays[weekDayIndex];
       }
-
-      weekDayAverages;
     }
 
     const dailyChartdata = [

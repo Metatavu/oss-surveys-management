@@ -29,33 +29,31 @@ const OverallStatisticsCharts = ({
   dailyChartData
 }: Props) => {
   return (
-    <Stack flex={1} p={theme.spacing(4)}>
-      <Paper>
-        <Stack direction="row" padding={2}>
-          <Stack marginRight={6}>
-            <Typography variant="h6">{strings.surveyStatistics.answers}</Typography>
-            <Typography variant="h4" fontWeight="bold" color="#00aa46">
-              {overallAnswerCount}
-            </Typography>
-          </Stack>
-          <Divider orientation="vertical" flexItem />
-          <Stack padding={2}>
-            <Typography variant="h6">{strings.surveyStatistics.mostPopularDays}</Typography>
-            <HorizontalChart data={dailyChartData} />
-          </Stack>
-          <Divider orientation="vertical" flexItem />
-          <Stack padding={2}>
-            <Typography variant="h6">{strings.surveyStatistics.mostPopularHours}</Typography>
-            <HorizontalChart data={hourlyChartData} />
-          </Stack>
+    <Paper>
+      <Stack direction="row">
+        <Stack p={2}>
+          <Typography variant="h6">{strings.surveyStatistics.answers}</Typography>
+          <Typography variant="h4" fontWeight="bold" color="#00aa46">
+            {overallAnswerCount}
+          </Typography>
         </Stack>
-        <Divider />
-        <Stack padding={2}>
-          <Typography variant="h6">{strings.surveyStatistics.answersPerDisplay}</Typography>
-          <DeviceDistributionChart data={surveyStatistics} devices={devices} />
+        <Divider orientation="vertical" flexItem />
+        <Stack p={2} flex={1}>
+          <Typography variant="h6">{strings.surveyStatistics.mostPopularDays}</Typography>
+          <HorizontalChart data={dailyChartData} />
         </Stack>
-      </Paper>
-    </Stack>
+        <Divider orientation="vertical" flexItem />
+        <Stack p={2} flex={1}>
+          <Typography variant="h6">{strings.surveyStatistics.mostPopularHours}</Typography>
+          <HorizontalChart data={hourlyChartData} />
+        </Stack>
+      </Stack>
+      <Divider />
+      <Stack p={2}>
+        <Typography variant="h6">{strings.surveyStatistics.answersPerDisplay}</Typography>
+        <DeviceDistributionChart data={surveyStatistics} devices={devices} />
+      </Stack>
+    </Paper>
   );
 };
 

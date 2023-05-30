@@ -12,7 +12,7 @@ import OverallStatisticsCharts from "./overall-statistics-charts";
 import StatisticDevices from "./statistic-devices";
 import StatisticPage from "./statistic-page";
 import StatisticsInfo from "./statistics-info";
-import { Stack, Typography } from "@mui/material";
+import { Stack, Typography, styled } from "@mui/material";
 import { useAtom, useSetAtom } from "jotai";
 import { DateTime } from "luxon";
 import { useEffect, useState } from "react";
@@ -24,6 +24,19 @@ interface Props {
   survey: Survey;
   devices: Device[];
 }
+
+/**
+ * Styled scrollable content
+ */
+const Content = styled(Stack, {
+  label: "statistic-scrollable-content"
+})(({ theme }) => ({
+  padding: theme.spacing(3),
+  flexDirection: "column",
+  width: "100%",
+  marginBottom: theme.spacing(2),
+  overflowY: "auto"
+}));
 
 /**
  * Survey statistics component
@@ -220,15 +233,15 @@ const SurveyStatistics = ({ devices, survey }: Props) => {
 
   return (
     <>
-      <Stack direction="row" flex={1}>
-        <PropertiesPanel width={250}>
+      <Stack direction="row" flex={1} overflow="hidden">
+        <PropertiesPanel width={400}>
           <StatisticDevices
             devices={devices}
             selectedDevices={selectedDevices}
             setSelectedDevices={setSelectedDevices}
           />
         </PropertiesPanel>
-        <Stack width="100%" direction={"column"} marginBottom={2}>
+        <Content gap={2}>
           {surveyStatistics.length > 0 && (
             <OverallStatisticsCharts
               devices={devices}
@@ -239,8 +252,8 @@ const SurveyStatistics = ({ devices, survey }: Props) => {
             />
           )}
           {renderStatisticPages()}
-        </Stack>
-        <PropertiesPanel width={250}>
+        </Content>
+        <PropertiesPanel width={450}>
           <StatisticsInfo survey={survey} overallAnswerCount={overallAnswerCount()} />
         </PropertiesPanel>
       </Stack>

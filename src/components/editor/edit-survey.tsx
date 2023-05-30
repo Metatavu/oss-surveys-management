@@ -26,7 +26,7 @@ interface RootProps {
 }
 
 /**
- * Styled image button
+ * Styled root component
  */
 const Root = styled(Stack, {
   label: "editor-root"

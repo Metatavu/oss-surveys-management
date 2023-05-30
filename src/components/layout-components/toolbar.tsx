@@ -97,6 +97,7 @@ const Toolbar = ({ survey, mode, setMode }: Props) => {
         {strings.editSurveysScreen.statistics}
       </Button>
       <Button
+        disabled
         color="primary"
         title={strings.generic.notImplemented}
         startIcon={<PlayArrowOutlined />}

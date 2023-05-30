@@ -1,7 +1,7 @@
+import { Typography } from "@mui/material";
+import { Bar, BarChart, LabelList, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import { Device, DeviceSurveyStatistics } from "../../generated/client";
 import strings from "../../localization/strings";
-import { Box, Typography } from "@mui/material";
-import { Bar, BarChart, LabelList, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 
 /**
  * Component properties
@@ -37,20 +37,20 @@ const DeviceDistributionChart = ({ data, devices }: Props) => {
   const height = constructedData.length * 25 + 50;
 
   return (
-    <Box style={{ height: height, width: "100%", marginBottom: 50 }}>
-      <ResponsiveContainer width="100%" height={height}>
+    <>
+      <ResponsiveContainer height={height}>
         <BarChart data={constructedData} layout="vertical" margin={{ right: 50 }}>
-          <XAxis type="number" />
-          <YAxis type="category" dataKey="deviceName" hide />
+          <XAxis type="number" fontFamily="SBonusText-Medium" />
+          <YAxis type="category" dataKey="deviceName" width={0} fontFamily="SBonusText-Medium" />
           <Tooltip />
           <Bar dataKey="answerCount" fill="#00aa46">
-            <LabelList dataKey="answerCount" position="right" fill="#000" />
-            <LabelList dataKey="deviceName" position="insideBottomLeft" fill="#fff" />
+            <LabelList dataKey="deviceName" position="insideLeft" fill="#fff" fontFamily="SBonusText-Bold" />
+            <LabelList dataKey="answerCount" position="right" fontFamily="SBonusText-Medium" />
           </Bar>
         </BarChart>
       </ResponsiveContainer>
       {constructSourcesString()}
-    </Box>
+    </>
   );
 };
 

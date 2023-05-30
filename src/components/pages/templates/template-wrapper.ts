@@ -90,7 +90,8 @@ const wrapTemplate = (bodyContent: string, pageId?: string) => `<!DOCTYPE html>
       }
       .option {
         width: 100%;
-        padding: "30px 20px";
+        padding: 30px 20px;
+        margin-bottom: 2rem;
         font-size: 2.5rem;
         font-family: 'SBonusText-Bold';
         text-align: center;

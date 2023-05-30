@@ -10,6 +10,5 @@ export class SingleSelectQuestionRenderer extends AbstractRenderer {
    * @param value display text
    * @returns html string
    */
-  public render = (value: string): string =>
-    `<button class="option" style="margin-bottom: 3rem;">${value}</button>`;
+  public render = (value: string): string => `<button class="option">${value}</button>`;
 }

@@ -171,3 +171,19 @@ export enum SurveyScreenMode {
 export type StatisticsGroupedBySurvey = {
   [key: string]: DeviceSurveyStatistics[];
 };
+
+/**
+ * Interface for SurveyQuestionStatistics
+ */
+export interface SurveyQuestionStatistics {
+  pageId: string;
+  options: SurveyQuestionOptionStatistics[];
+}
+
+/**
+ * Interface for SurveyQuestionOptionStatistics
+ */
+export interface SurveyQuestionOptionStatistics {
+  answerCount: number;
+  questionOptionValue: string;
+}

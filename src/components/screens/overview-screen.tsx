@@ -40,19 +40,9 @@ const OverviewScreen = () => {
   const [groupedStatistics, setGroupedStatistics] = useState<StatisticsGroupedBySurvey>({});
 
   /**
-   * Gets Surveys
-   */
-  const getSurveys = async () => {
-    try {
-      const surveys = await surveysApi.listSurveys({});
-      setSurveys(surveys);
-    } catch (error: any) {
-      setError(`${strings.errorHandling.overviewScreen.surveysNotFound}, ${error}`);
-    }
-  }; /**
    * Gets Devices
    */
-  const getDevices = async () => {
+  const loadDevices = async () => {
     const devices = await devicesApi.listDevices({});
     const foundDeviceSurveys = await Promise.allSettled(
       devices.map((device) => {
@@ -61,6 +51,7 @@ const OverviewScreen = () => {
         return deviceSurveysApi.listDeviceSurveys({ deviceId: device.id });
       })
     );
+
     const resolvedDeviceSurveys = foundDeviceSurveys.reduce<DeviceSurvey[]>(
       (allDeviceSurveys, deviceSurveys) => {
         if (deviceSurveys.status === "fulfilled") {
@@ -71,16 +62,18 @@ const OverviewScreen = () => {
       },
       []
     );
+
     const foundStatistics = await Promise.allSettled(
       resolvedDeviceSurveys.map((deviceSurvey) => {
         if (!deviceSurvey.id) return Promise.reject();
 
         return deviceSurveysApi.getDeviceSurveyStatistics({
           deviceId: deviceSurvey.deviceId,
-          deviceSurveyId: deviceSurvey.id
+          surveyId: deviceSurvey.surveyId!
         });
       })
     );
+
     const resolvedStatistics = foundStatistics.reduce<DeviceSurveyStatistics[]>(
       (allStatistics, statistics) => {
         if (statistics.status === "fulfilled") {
@@ -91,25 +84,12 @@ const OverviewScreen = () => {
       },
       []
     );
+
     const grouped = SurveyUtils.groupStatisticsBySurvey(resolvedStatistics);
 
     setGroupedStatistics(grouped);
     setDevices(devices);
     setDeviceSurveys(resolvedDeviceSurveys);
-  };
-
-  /**
-   * Gets Device Requests
-   *
-   * Device Requests are Devices that are yet to be approved into the system.
-   */
-  const getDeviceRequests = async () => {
-    try {
-      const deviceRequests = await deviceRequestsApi.listDeviceRequests({});
-      setDeviceRequests(deviceRequests);
-    } catch (error: any) {
-      setError(`${strings.errorHandling.overviewScreen.deviceRequestsNotFound}, ${error}`);
-    }
   };
 
   /**
@@ -155,15 +135,18 @@ const OverviewScreen = () => {
     setIsLoading(false);
   };
 
+  /**
+   * Load all data for screen
+   */
+  const loadData = async () => {
+    setSurveys(await surveysApi.listSurveys());
+    await loadDevices();
+    setDeviceRequests(await deviceRequestsApi.listDeviceRequests());
+  };
+
   useEffect(() => {
     setIsLoading(true);
-    getSurveys();
-    getDevices().catch((error) =>
-      setError(`${strings.errorHandling.overviewScreen.devicesNotFound}, ${error}`)
-    );
-    getDeviceRequests().catch((error) =>
-      setError(`${strings.errorHandling.overviewScreen.deviceRequestsNotFound}, ${error}`)
-    );
+    loadData().catch((error) => setError(error));
     setIsLoading(false);
   }, []);
 

@@ -1,6 +1,6 @@
-import { DeviceSurveyQuestionStatistics } from "../../generated/client";
 import strings from "../../localization/strings";
 import theme from "../../styles/theme";
+import { SurveyQuestionStatistics } from "../../types";
 import AnswersDistributionChart from "./answer-distribution-chart";
 import { Divider, Paper, Stack, Typography } from "@mui/material";
 
@@ -8,7 +8,7 @@ import { Divider, Paper, Stack, Typography } from "@mui/material";
  * Components properties
  */
 interface Props {
-  question: DeviceSurveyQuestionStatistics;
+  question: SurveyQuestionStatistics;
   pageTitle: string;
 }
 

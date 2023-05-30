@@ -2,16 +2,10 @@ import { errorAtom } from "../../atoms/error";
 import { layoutsAtom } from "../../atoms/layouts";
 import { pagesAtom } from "../../atoms/pages";
 import { END_HOUR, HOUR_GROUPING, START_HOUR } from "../../constants";
-import {
-  Device,
-  DeviceSurvey,
-  DeviceSurveyQuestionStatistics,
-  DeviceSurveyStatistics,
-  Survey
-} from "../../generated/client";
+import { Device, DeviceSurveyStatistics, Survey } from "../../generated/client";
 import { useApi } from "../../hooks/use-api";
 import strings from "../../localization/strings";
-import { EditablePageElement, PageElementType } from "../../types";
+import { EditablePageElement, PageElementType, SurveyQuestionStatistics } from "../../types";
 import PageUtils from "../../utils/page-utils";
 import PropertiesPanel from "../editor/properties-panel";
 import OverallStatisticsCharts from "./overall-statistics-charts";
@@ -29,7 +23,6 @@ import { useEffect, useState } from "react";
 interface Props {
   survey: Survey;
   devices: Device[];
-  deviceSurveys: DeviceSurvey[];
 }
 
 /**
@@ -37,31 +30,13 @@ interface Props {
  *
  * @param props component properties
  */
-const SurveyStatistics = ({ devices, deviceSurveys, survey }: Props) => {
+const SurveyStatistics = ({ devices, survey }: Props) => {
   const { deviceSurveysApi } = useApi();
   const [selectedDevices, setSelectedDevices] = useState<Device[]>(devices);
   const [surveyStatistics, setSurveyStatistics] = useState<DeviceSurveyStatistics[]>([]);
-  const [devicesWithSurvey, setDevicesWithSurvey] = useState<Device[]>([]);
   const [surveyPages] = useAtom(pagesAtom);
   const [pageLayouts] = useAtom(layoutsAtom);
   const setError = useSetAtom(errorAtom);
-
-  // TODO: This gets the survey specific data but only for active surveys
-  /**
-   * Gets Devices with particular survey
-   */
-  const getSurveyDevices = () => {
-    const devicesWithSurvey = devices.filter((device) =>
-      deviceSurveys.some(
-        (deviceSurvey) => deviceSurvey.surveyId === survey.id && device.id === deviceSurvey.deviceId
-      )
-    );
-    setDevicesWithSurvey(devicesWithSurvey);
-  };
-
-  useEffect(() => {
-    getSurveyDevices();
-  }, []);
 
   /**
    * Return question title
@@ -94,18 +69,12 @@ const SurveyStatistics = ({ devices, deviceSurveys, survey }: Props) => {
    */
   const getDeviceSurveysStatistics = async () => {
     const selectedDeviceSurveyStatistics = await Promise.all(
-      deviceSurveys
-        .filter(
-          (deviceSurvey) =>
-            selectedDevices.some((selectedDevice) => selectedDevice.id === deviceSurvey.deviceId) &&
-            deviceSurvey.surveyId === survey.id
-        )
-        .map((deviceSurvey) =>
-          deviceSurveysApi.getDeviceSurveyStatistics({
-            deviceId: deviceSurvey.deviceId,
-            deviceSurveyId: deviceSurvey.id!
-          })
-        )
+      selectedDevices.map((selectedDevice) => {
+        return deviceSurveysApi.getDeviceSurveyStatistics({
+          deviceId: selectedDevice.id!,
+          surveyId: survey.id!
+        });
+      })
     );
 
     setSurveyStatistics(selectedDeviceSurveyStatistics);
@@ -131,29 +100,44 @@ const SurveyStatistics = ({ devices, deviceSurveys, survey }: Props) => {
    * get daily average answer count chart
    */
   const getDailyAverageAnswerCount = () => {
+    const weekDayAverages = [0, 0, 0, 0, 0, 0, 0];
+
+    for (const surveyStatistic of surveyStatistics) {
+      const weekDaysLength = surveyStatistic.averages.weekDays.length;
+
+      for (let weekDayIndex = 0; weekDayIndex < weekDaysLength; weekDayIndex++) {
+        weekDayAverages[weekDayIndex] += surveyStatistic.averages.weekDays[weekDayIndex];
+      }
+
+      weekDayAverages;
+    }
+
     const dailyChartdata = [
-      { label: "Ma", value: surveyStatistics[0].averages.weekDays[0] },
-      { label: "Ti", value: surveyStatistics[0].averages.weekDays[1] },
-      { label: "Ke", value: surveyStatistics[0].averages.weekDays[2] },
-      { label: "To", value: surveyStatistics[0].averages.weekDays[3] },
-      { label: "Pe", value: surveyStatistics[0].averages.weekDays[4] },
-      { label: "La", value: surveyStatistics[0].averages.weekDays[5] },
-      { label: "Su", value: surveyStatistics[0].averages.weekDays[6] }
+      { label: "Ma", value: weekDayAverages[0] },
+      { label: "Ti", value: weekDayAverages[1] },
+      { label: "Ke", value: weekDayAverages[2] },
+      { label: "To", value: weekDayAverages[3] },
+      { label: "Pe", value: weekDayAverages[4] },
+      { label: "La", value: weekDayAverages[5] },
+      { label: "Su", value: weekDayAverages[6] }
     ];
+
     return dailyChartdata;
   };
 
   /**
    * Get hourly average answer count chart data
    */
-  const getHourlyAverageAnswerCount = () => {
+  const getHourlyAverageAnswerCount = (): { label: string; value: number }[] => {
     let now = DateTime.now().set({ hour: START_HOUR });
     const hourlyChartData = [];
     while (now.hour < END_HOUR) {
       let average = 0;
 
       for (let hourIndex = 0; hourIndex < HOUR_GROUPING; hourIndex++) {
-        average += surveyStatistics[0].averages.hourly[now.toUTC().hour + hourIndex];
+        for (const surveyStatistic of surveyStatistics) {
+          average += surveyStatistic.averages.hourly[now.toUTC().hour + hourIndex];
+        }
       }
 
       hourlyChartData.push({ label: `${now.hour} - ${now.hour + HOUR_GROUPING}`, value: average });
@@ -184,20 +168,64 @@ const SurveyStatistics = ({ devices, deviceSurveys, survey }: Props) => {
    * @param question question
    * @returns statistic page
    */
-  const renderStatisticPage = (question: DeviceSurveyQuestionStatistics) => (
+  const renderStatisticPage = (question: SurveyQuestionStatistics) => (
     <StatisticPage
       key={question.pageId}
       question={question}
-      pageTitle={getQuestionTitle(question.pageId)}
+      pageTitle={`${getQuestionTitle(question.pageId)} - ${question.pageId}`}
     />
   );
+
+  /**
+   * Renders statistics pages
+   */
+  const renderStatisticPages = () => {
+    if (!surveyStatistics.length) {
+      return renderNoContent();
+    }
+
+    const pages: { [key: string]: SurveyQuestionStatistics } = {};
+
+    surveyStatistics.forEach((surveyStatistic) => {
+      surveyStatistic.questions.forEach((question) => {
+        if (!pages[question.pageId]) {
+          pages[question.pageId] = {
+            pageId: question.pageId,
+            options: []
+          };
+        }
+
+        question.options.forEach((option) => {
+          const optionIndex = pages[question.pageId].options.findIndex(
+            (item) => item.questionOptionValue === option.questionOptionValue
+          );
+
+          if (optionIndex > -1) {
+            pages[question.pageId].options[optionIndex].answerCount += option.answerCount;
+          } else {
+            pages[question.pageId].options.push({ ...option });
+          }
+        });
+      });
+    });
+
+    const pageIds = Object.keys(pages);
+
+    return (
+      <>
+        {pageIds.map((pageId) => {
+          return renderStatisticPage(pages[pageId]);
+        })}
+      </>
+    );
+  };
 
   return (
     <>
       <Stack direction="row" flex={1}>
         <PropertiesPanel width={250}>
           <StatisticDevices
-            devices={devicesWithSurvey}
+            devices={devices}
             selectedDevices={selectedDevices}
             setSelectedDevices={setSelectedDevices}
           />
@@ -205,16 +233,14 @@ const SurveyStatistics = ({ devices, deviceSurveys, survey }: Props) => {
         <Stack width="100%" direction={"column"} marginBottom={2}>
           {surveyStatistics.length > 0 && (
             <OverallStatisticsCharts
-              devices={devicesWithSurvey}
+              devices={devices}
               surveyStatistics={surveyStatistics}
               overallAnswerCount={overallAnswerCount()}
               hourlyChartData={getHourlyAverageAnswerCount()}
               dailyChartData={getDailyAverageAnswerCount()}
             />
           )}
-          {surveyStatistics.length > 0
-            ? surveyStatistics[0].questions.map(renderStatisticPage)
-            : renderNoContent()}
+          {renderStatisticPages()}
         </Stack>
         <PropertiesPanel width={250}>
           <StatisticsInfo survey={survey} overallAnswerCount={overallAnswerCount()} />

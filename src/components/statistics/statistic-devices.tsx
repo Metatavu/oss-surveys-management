@@ -1,7 +1,6 @@
 import { Device } from "../../generated/client";
 import strings from "../../localization/strings";
 import { Checkbox, FormControlLabel, Stack, Typography } from "@mui/material";
-import { ChangeEvent } from "react";
 
 /**
  * Components properties
@@ -21,17 +20,14 @@ const StatisticDevices = ({ devices, selectedDevices, setSelectedDevices }: Prop
   /**
    * Handles device selection change
    *
-   * @param event event
+   * @param checked whether checked
+   * @param device Device object
    */
-  const handleCheckboxChange = ({ target: { checked, name } }: ChangeEvent<HTMLInputElement>) => {
-    const foundDevice = devices.find((device) => device.id === name);
-
-    if (!foundDevice?.id) return;
-
+  const handleCheckboxChange = (checked: boolean, device: Device) => {
     if (checked) {
-      setSelectedDevices([...selectedDevices, foundDevice]);
+      setSelectedDevices([...selectedDevices, device]);
     } else {
-      setSelectedDevices(selectedDevices.filter((device) => device.id !== foundDevice.id));
+      setSelectedDevices(selectedDevices.filter((item) => item.id !== device.id));
     }
   };
 
@@ -49,7 +45,9 @@ const StatisticDevices = ({ devices, selectedDevices, setSelectedDevices }: Prop
         label={device.name ?? strings.generic.unnamed}
         name={device.id}
         checked={isSelected}
-        control={<Checkbox onChange={handleCheckboxChange} />}
+        control={
+          <Checkbox onChange={(event) => handleCheckboxChange(event.target.checked, device)} />
+        }
       />
     );
   };

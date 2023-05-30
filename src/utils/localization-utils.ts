@@ -1,6 +1,6 @@
 import { DeviceApprovalStatus, DeviceStatus } from "../generated/client";
 import strings from "../localization/strings";
-import { SurveyManagementStatus } from "../types";
+import { Background, SurveyManagementStatus } from "../types";
 
 /**
  * Namespace for Localization utilities
@@ -40,6 +40,42 @@ namespace LocalizationUtils {
       [DeviceApprovalStatus.Pending]: strings.overviewScreen.deviceRequests.pendingStatus,
       [DeviceApprovalStatus.Approved]: strings.overviewScreen.deviceRequests.approvedStatus
     })[status];
+
+  /**
+   * Gets translated background
+   *
+   * @param background background
+   */
+  export const getTranslatedBackground = (background: Background): string =>
+    ({
+      [Background.DEFAULT]: strings.editSurveysScreen.editPagesPanel.backgroundImages.default,
+      [Background.IMAGE_1]: strings.editSurveysScreen.editPagesPanel.backgroundImages.image1
+    })[background];
+
+  /**
+   * Gets translated image
+   *
+   * @param background background
+   */
+  export const getTranslatedImage = (image: Background): string =>
+    ({
+      [Background.DEFAULT]: strings.editSurveysScreen.editPagesPanel.images.noImage,
+      [Background.IMAGE_1]: strings.editSurveysScreen.editPagesPanel.backgroundImages.image1
+    })[image];
+
+  /**
+   * Gets translated layout name
+   *
+   * @param layoutName layout name
+   */
+  export const getTranslatedLayoutName = (layoutName: string) =>
+    ({
+      question: strings.layouts.question,
+      info: strings.layouts.info,
+      image: strings.layouts.image,
+      "question + info": strings.layouts.questionInfo,
+      "image + info": strings.layouts.imageParagraph
+    })[layoutName];
 }
 
 export default LocalizationUtils;

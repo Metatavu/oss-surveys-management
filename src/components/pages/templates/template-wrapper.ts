@@ -10,10 +10,11 @@ const sanitizeOptions: IOptions = {
     "p",
     "div",
     "label",
-    "input"
+    "input",
+    "img"
   ]),
   allowedAttributes: {
-    "*": ["style", "id", "class"]
+    "*": ["style", "id", "class", "src"]
   }
 };
 
@@ -80,11 +81,20 @@ const wrapTemplate = (bodyContent: string, pageId?: string) => `<!DOCTYPE html>
         margin-top: 10%;
         justify-content: center;
       }
+      .img-wrapper {
+        display: flex;
+        flex: 1;
+        justify-content: center;
+        margin-top: 10%;
+        width: 100%;
+      }
       .option {
         width: 100%;
-        padding: "30px 20px";
+        padding: 30px 20px;
+        margin-bottom: 2rem;
         font-size: 2.5rem;
         font-family: 'SBonusText-Bold';
+        text-align: center;
         color: #fff;
         background: transparent;
         border: 4px solid #fff;
@@ -101,17 +111,6 @@ const wrapTemplate = (bodyContent: string, pageId?: string) => `<!DOCTYPE html>
       }
       .next-button:active, option:active {
         background-color: rgba(0, 0, 0, 0.1);
-      }
-      .multi-option {
-        width: 100%;
-        height: 80px;
-        font-size: 3rem;
-        font-family: 'SBonusText-Bold';
-        text-align: center;
-        margin-bottom: 2rem;
-        color: #fff;
-        background: transparent;
-        border: 4px solid #fff;
       }
     </style>
   </head>

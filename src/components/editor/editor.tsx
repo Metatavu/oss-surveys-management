@@ -29,6 +29,7 @@ import { Box, Stack, Typography, styled } from "@mui/material";
 import { useAtom, useSetAtom } from "jotai";
 import { useEffect, useState } from "react";
 import EditorPreview from "./editor-preview";
+import LocalizationUtils from "../../utils/localization-utils";
 
 /**
  * Component properties
@@ -49,7 +50,8 @@ const EditorContainer = styled(Stack, {
   display: "flex",
   flexWrap: "wrap",
   flex: 1,
-  flexDirection: "row"
+  flexDirection: "row",
+  overflowY: "auto"
 }));
 
 /**
@@ -254,7 +256,7 @@ const Editor = ({ setPanelProperties, surveyId }: Props) => {
     pageLayouts.map((layout) => (
       <ImageButton
         key={layout.id}
-        title={layout.name}
+        title={LocalizationUtils.getTranslatedLayoutName(layout.name) ?? strings.generic.unnamed}
         image={getLayoutThumbnail(layout)}
         onClick={() => createPage(layout.name)}
         selected={false}
@@ -322,7 +324,7 @@ const Editor = ({ setPanelProperties, surveyId }: Props) => {
 
     for (const variable of layoutVariables ?? []) {
       const foundProperty = properties?.find((property) => property.key === variable.key);
-      if (!foundProperty) continue;
+      if (!foundProperty?.value) continue;
       htmlData = PageUtils.handlePagePropertiesRendering(templateDom, variable, foundProperty);
     }
 

@@ -222,13 +222,14 @@ export interface Localized extends LocalizedStringsMethods {
       infoText: string;
       buttonVisibility: string;
       background: string;
+      image: string;
+      images: {
+        noImage: string;
+        image1: string;
+      };
       backgroundImages: {
         default: string;
         image1: string;
-        image2: string;
-        image3: string;
-        image4: string;
-        image5: string;
       };
       pageSaved: string;
       previewTitle: string;
@@ -273,11 +274,9 @@ export interface Localized extends LocalizedStringsMethods {
     title: string;
     question: string;
     info: string;
-    infoImage: string;
-    paragraphImage: string;
+    image: string;
     imageParagraph: string;
     questionInfo: string;
-    statistics: string;
   };
 
   /**

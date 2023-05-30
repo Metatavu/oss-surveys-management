@@ -1,15 +1,14 @@
-import { AbstractQuestionRenderer } from "../utils/question-utils";
+import { AbstractRenderer } from "./abstract-renderer";
 
 /**
- * Class for SingleSelectTextQuestionRenderer
+ * Single Select Question Renderer
  */
-export class SingleSelectTextQuestionRenderer extends AbstractQuestionRenderer {
+export class SingleSelectQuestionRenderer extends AbstractRenderer {
   /**
-   * Convert single question type option into html buttons
+   * Renders an HTML button element with given value as its text.
    *
-   * @param option option
+   * @param value display text
    * @returns html string
    */
-  public render = (option: string): string =>
-    `<button class="option" style="margin-bottom: 3rem;">${option}</button>`;
+  public render = (value: string): string => `<button class="option">${value}</button>`;
 }

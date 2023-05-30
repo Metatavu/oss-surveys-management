@@ -24,25 +24,29 @@ const PublishDeviceInfo = ({ devices, deviceSurveys }: Props) => {
       <Paper>
         <List>
           <ListHeader headings={listHeadings} />
-          {devices.map((device) => (
-            <ListItem key={device.id}>
-              <ListItemText secondary={device.name ?? strings.generic.unnamed} />
-              <ListItemText
-                secondary={
-                  DeviceUtils.getDeviceSurveyCount(device, deviceSurveys)
-                    ? strings.generic.yes
-                    : strings.generic.no
-                }
-              />
-              <ListItemText secondary={device.description} />
-              <ListItemText
-                secondaryTypographyProps={{
-                  color: device.deviceStatus === DeviceStatus.Offline ? "error" : "main"
-                }}
-                secondary={LocalizationUtils.getLocalizedDeviceStatus(device.deviceStatus!)}
-              />
-            </ListItem>
-          ))}
+          {devices.map((device) => {
+            if (!device.deviceStatus) return;
+
+            return (
+              <ListItem key={device.id}>
+                <ListItemText secondary={device.name ?? strings.generic.unnamed} />
+                <ListItemText
+                  secondary={
+                    DeviceUtils.getDeviceSurveyCount(device, deviceSurveys)
+                      ? strings.generic.yes
+                      : strings.generic.no
+                  }
+                />
+                <ListItemText secondary={device.description} />
+                <ListItemText
+                  secondaryTypographyProps={{
+                    color: device.deviceStatus === DeviceStatus.Offline ? "error" : "main"
+                  }}
+                  secondary={LocalizationUtils.getLocalizedDeviceStatus(device.deviceStatus)}
+                />
+              </ListItem>
+            );
+          })}
         </List>
       </Paper>
     </Stack>

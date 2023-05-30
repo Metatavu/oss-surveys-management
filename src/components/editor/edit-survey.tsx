@@ -6,7 +6,7 @@ import Editor from "./editor";
 import PageProperties from "./page-properties";
 import PropertiesPanel from "./properties-panel";
 import SurveyProperties from "./survey-properties";
-import { Stack } from "@mui/material";
+import { Stack, styled } from "@mui/material";
 import { useSetAtom } from "jotai";
 import { FocusEvent, useState } from "react";
 
@@ -17,12 +17,31 @@ interface Props {
   survey: Survey;
   saveSurvey: (surveyId: string, survey: Survey) => Promise<void>;
 }
+
+/**
+ * Editor root component props
+ */
+interface RootProps {
+  height: number;
+}
+
+/**
+ * Styled image button
+ */
+const Root = styled(Stack, {
+  label: "editor-root"
+})<RootProps>(({ height }) => ({
+  maxHeight: height,
+  flexDirection: "row"
+}));
+
 /**
  * Edit surevey component
  */
 const EditSurvey = ({ survey, saveSurvey }: Props) => {
   const setError = useSetAtom(errorAtom);
-
+  const getWindowHeight = window.innerHeight;
+  const availableWindowHeight = getWindowHeight - 118;
   const [panelProperties, setPanelProperties] = useState<PanelProperties>({
     panelType: EditorPanel.SURVEY
   });
@@ -70,10 +89,10 @@ const EditSurvey = ({ survey, saveSurvey }: Props) => {
   };
 
   return (
-    <Stack direction="row" flex={1}>
+    <Root height={availableWindowHeight}>
       {renderEditor()}
       <PropertiesPanel>{renderPropertiesPanel()}</PropertiesPanel>
-    </Stack>
+    </Root>
   );
 };
 

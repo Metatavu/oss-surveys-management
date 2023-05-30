@@ -190,13 +190,14 @@
       "infoText": "Paragraph",
       "buttonVisibility": "Show button",
       "background": "Background",
+      "image": "Image",
+      "images": {
+        "noImage": "No image",
+        "image1": "Lake scenery"
+      },
       "backgroundImages": {
         "default": "Green",
-        "image1": "image 1",
-        "image2": "image 2",
-        "image3": "image 3",
-        "image4": "image 4",
-        "image5": "image 5"
+        "image1": "Lake scenery"
       },
       "pageSaved": "Page saved",
       "previewTitle": "Click page to edit"
@@ -248,11 +249,9 @@
     "title": "Select page layout",
     "question": "Question",
     "info": "Info",
-    "infoImage": "Image",
-    "paragraphImage": "Info + image",
+    "image": "Image",
     "imageParagraph": "Image + info",
-    "questionInfo": "Question + info",
-    "statistics": "Statistics"
+    "questionInfo": "Question + info"
   },
   "previewScreen": {
     "sharePreview": "Share preview"

@@ -69,11 +69,12 @@ const Header = () => {
         title={strings.navigation.surveys}
         to={NavigationLinks.SURVEYS}
       />
-      <NavButton
+      {/* TODO: This screen is not implemented and therefore the navigation button is removed. */}
+      {/* <NavButton
         selected={currentNavigation === NavigationLinks.SCREENS}
         title={strings.navigation.screens}
         to={NavigationLinks.SCREENS}
-      />
+      /> */}
     </Stack>
   );
 

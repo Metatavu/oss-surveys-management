@@ -190,13 +190,14 @@
       "infoText": "Leipäteksti",
       "buttonVisibility": "Näytä painike",
       "background": "Tausta",
+      "image": "Kuva",
+      "images": {
+        "noImage": "Ei kuvaa",
+        "image1": "Järvimaisema"
+      },
       "backgroundImages": {
         "default": "Vihreä",
-        "image1": "kuva 1",
-        "image2": "kuva 2",
-        "image3": "kuva 3",
-        "image4": "kuva 4",
-        "image5": "kuva 5"
+        "image1": "Järvimaisema"
       },
       "pageSaved": "Sivu tallennettu",
       "previewTitle": "Klikkaa muokataksesi sivua"
@@ -248,11 +249,9 @@
     "title": "Valitse sivun rakenne alla olevista vaihtoehdoista",
     "question": "Kysymys",
     "info": "Info",
-    "infoImage": "Kuva",
-    "paragraphImage": "Info + kuva",
+    "image": "Kuva",
     "imageParagraph": "Kuva + info",
-    "questionInfo": "Kysymys + info",
-    "statistics": "Tilastot"
+    "questionInfo": "Kysymys + info"
   },
   "previewScreen": {
     "sharePreview": "Jaa esikatselu"

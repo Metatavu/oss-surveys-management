@@ -1,5 +1,4 @@
 import { DeviceSurveyStatistics } from "../generated/client";
-import strings from "../localization/strings";
 
 /**
  * Error context type
@@ -101,27 +100,8 @@ export enum LayoutType {
  */
 export enum Background {
   DEFAULT = "#00aa46",
-  IMAGE_1 = "image 1",
-  IMAGE_2 = "image 2",
-  IMAGE_3 = "image 3",
-  IMAGE_4 = "image 4",
-  IMAGE_5 = "image 5"
+  IMAGE_1 = "image 1"
 }
-
-/**
- * Gets translated background
- *
- * @param background navigation
- */
-export const getTranslatedBackground = (background: Background): string =>
-  ({
-    [Background.DEFAULT]: strings.editSurveysScreen.editPagesPanel.backgroundImages.default,
-    [Background.IMAGE_1]: strings.editSurveysScreen.editPagesPanel.backgroundImages.image1,
-    [Background.IMAGE_2]: strings.editSurveysScreen.editPagesPanel.backgroundImages.image2,
-    [Background.IMAGE_3]: strings.editSurveysScreen.editPagesPanel.backgroundImages.image3,
-    [Background.IMAGE_4]: strings.editSurveysScreen.editPagesPanel.backgroundImages.image4,
-    [Background.IMAGE_5]: strings.editSurveysScreen.editPagesPanel.backgroundImages.image5
-  })[background];
 
 /**
  * Type describing available languages
@@ -145,7 +125,8 @@ export type EditablePageElement = {
 export enum PageElementType {
   H1 = "h1",
   P = "p",
-  DIV = "div"
+  DIV = "div",
+  IMG = "img"
 }
 
 /**

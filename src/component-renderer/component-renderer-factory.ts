@@ -1,8 +1,8 @@
 import { PageQuestionType } from "../generated/client";
-import { MultiSelectTextQuestionRenderer } from "./multi-select-question-renderer";
-import { SingleSelectTextQuestionRenderer } from "./single-question-renderer";
-import { TextRenderer } from "./text-renderer";
-import { PageTitleRenderer } from "./title-renderer";
+import { MultiSelectQuestionRenderer } from "./multi-select-question-renderer";
+import { SingleSelectQuestionRenderer } from "./single-question-renderer";
+import { ParagraphRenderer } from "./paragraph-renderer";
+import { TitleRenderer } from "./title-renderer";
 
 /**
  * Class for ComponentRendererFactory
@@ -17,32 +17,28 @@ class ComponentRendererFactory {
   public getQuestionRenderer = (questionType: PageQuestionType) => {
     switch (questionType) {
       case PageQuestionType.SingleSelect:
-        return new SingleSelectTextQuestionRenderer();
+        return new SingleSelectQuestionRenderer();
       case PageQuestionType.MultiSelect:
-        return new MultiSelectTextQuestionRenderer();
+        return new MultiSelectQuestionRenderer();
       default:
         throw new Error(`Could not find renderer for ${questionType}`);
     }
   };
 
   /**
-   * Get title renderer
+   * Gets title renderer
    *
    * @returns Title renderer
    */
-  public getTitleRenderer = () => {
-    return new PageTitleRenderer();
-  };
+  public getTitleRenderer = () => new TitleRenderer();
 
   /**
-   * Get text renderer
+   * Gets paragraph renderer
    *
-   * @returns Text renderer
+   * @returns Paragraph renderer
    */
-  public getTextRenderer = () => {
-    return new TextRenderer();
-  };
+  public getParagraphRenderer = () => new ParagraphRenderer();
 }
 
-const questionRendererFactory = new ComponentRendererFactory();
-export default questionRendererFactory;
+const componentRendererFactory = new ComponentRendererFactory();
+export default componentRendererFactory;

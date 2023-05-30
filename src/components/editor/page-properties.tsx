@@ -380,12 +380,11 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
         fullWidth
         select
         onChange={handleImageChange}
-        defaultValue={PageUtils.getPageImage(elementsToEdit, pageToEdit?.properties)}
+        value={PageUtils.getPageImage(elementsToEdit, pageToEdit?.properties)}
       >
-        <MenuItem value="">{strings.editSurveysScreen.editPagesPanel.images.noImage}</MenuItem>
         {PAGE_IMAGES.map((image) => (
           <MenuItem key={image.key} value={image.value}>
-            {LocalizationUtils.getTranslatedBackground(image.key)}
+            {LocalizationUtils.getTranslatedImage(image.key)}
           </MenuItem>
         ))}
       </TextField>

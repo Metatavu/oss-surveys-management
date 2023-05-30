@@ -10,6 +10,7 @@ import strings from "../localization/strings";
 import {
   IMAGE_PLACEHOLDER_DATA_COMPONENT,
   PAGE_BACKGROUNDS,
+  PAGE_IMAGES,
   QUESTION_PLACEHOLDER_DATA_COMPONENT
 } from "../constants";
 import config from "../app/config";
@@ -214,13 +215,15 @@ namespace PageUtils {
    * Returns page image
    */
   export const getPageImage = (elements: EditablePageElement[], properties?: PageProperty[]) => {
-    if (!elements?.length) return;
+    const defaultImage = PAGE_IMAGES.find((image) => image.key === Background.DEFAULT);
+    if (!defaultImage) return;
+    if (!elements?.length) return defaultImage.value;
     const foundImageElement = elements.find((element) => element.type === PageElementType.IMG);
-    if (!foundImageElement) return;
+    if (!foundImageElement) return defaultImage.value;
     const foundImageProperty = properties?.find(
       (property) => property.key === foundImageElement.id
     );
-    if (!foundImageProperty?.value) return;
+    if (!foundImageProperty?.value) return defaultImage.value;
 
     return foundImageProperty.value;
   };

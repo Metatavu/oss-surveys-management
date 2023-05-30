@@ -53,6 +53,17 @@ namespace LocalizationUtils {
     })[background];
 
   /**
+   * Gets translated image
+   *
+   * @param background background
+   */
+  export const getTranslatedImage = (image: Background): string =>
+    ({
+      [Background.DEFAULT]: strings.editSurveysScreen.editPagesPanel.images.noImage,
+      [Background.IMAGE_1]: strings.editSurveysScreen.editPagesPanel.backgroundImages.image1
+    })[image];
+
+  /**
    * Gets translated layout name
    *
    * @param layoutName layout name

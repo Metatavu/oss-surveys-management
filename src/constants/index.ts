@@ -14,8 +14,10 @@ export const QUESTION_PLACEHOLDER_DATA_COMPONENT = "question";
 
 export const IMAGE_PLACEHOLDER_DATA_COMPONENT = "image";
 
-export const PAGE_IMAGES = [
+export const IMAGES = [
   { key: Background.IMAGE_1, value: "/AO_suursavo_matkasivarrella_1080x1920.jpg" }
 ];
 
-export const PAGE_BACKGROUNDS = [{ key: Background.DEFAULT, value: "DEFAULT" }].concat(PAGE_IMAGES);
+export const PAGE_IMAGES = [{ key: Background.DEFAULT, value: "DEFAULT" }].concat(IMAGES);
+
+export const PAGE_BACKGROUNDS = [{ key: Background.DEFAULT, value: "DEFAULT" }].concat(IMAGES);

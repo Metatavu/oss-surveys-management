@@ -1,14 +1,14 @@
 import { errorAtom } from "../../atoms/error";
+import { languageAtom } from "../../atoms/language";
+import { DeviceSurvey, Survey, SurveyStatus } from "../../generated/client";
 import { useApi } from "../../hooks/use-api";
 import strings from "../../localization/strings";
-import { Stack } from "@mui/material";
-import { useAtomValue, useSetAtom } from "jotai";
-import { useNavigate } from "react-router-dom";
-import { DeviceSurvey, Survey, SurveyStatus } from "../../generated/client";
-import { languageAtom } from "../../atoms/language";
-import { useEffect, useState } from "react";
 import SurveysFilters from "../surveys/surveys-filters";
 import SurveysList from "../surveys/surveys-list";
+import { Stack } from "@mui/material";
+import { useAtomValue, useSetAtom } from "jotai";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 /**
  * Renders surveys screen
@@ -41,11 +41,15 @@ const SurveysScreen = () => {
   const getDeviceSurveys = async () => {
     try {
       const devices = await devicesApi.listDevices({});
+      const allFoundDeviceSurveys = [];
       for (const device of devices) {
         if (!device.id) continue;
-        const deviceSurveys = await deviceSurveysApi.listDeviceSurveys({ deviceId: device.id });
-        setDeviceSurveys([...deviceSurveys, ...deviceSurveys]);
+        const foundDeviceSurveys = await deviceSurveysApi.listDeviceSurveys({
+          deviceId: device.id
+        });
+        allFoundDeviceSurveys.push(...foundDeviceSurveys);
       }
+      setDeviceSurveys(allFoundDeviceSurveys);
     } catch (error: any) {
       setError(`${strings.errorHandling.overviewScreen.deviceSurveysNotFound}, ${error}`);
     }

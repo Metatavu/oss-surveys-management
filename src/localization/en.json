@@ -164,6 +164,7 @@
     "surveySaved": "Survey saved",
     "editing": "Editing",
     "publish": "Publish",
+    "editor": "Editor",
     "published": "Published",
     "statistics": "Statistics",
     "preview": "Preview",
@@ -201,6 +202,21 @@
       "pageSaved": "Page saved",
       "previewTitle": "Click page to edit"
     }
+  },
+  "surveyStatistics": {
+    "surveyStatistics": "Survey statistics",
+    "chooseStatisticsSource": "Choose source",
+    "answerCount": "Answer count",
+    "mostAttainableTime": "Most attainable time",
+    "mostPopularAnswer": "Most popular answer",
+    "mostEfficientScreen": "Most efficient screen",
+    "noStatistics": "No statistics available",
+    "answersPerDisplay": "Answers per display",
+    "answersDistribution": "Answers distribution",
+    "answers": "Answers",
+    "mostPopularDays": "Most popular days",
+    "mostPopularHours": "Most popular hours",
+    "statisticsSource": "Source: "
   },
   "publishSurveys": {
     "surveyPublished": "Survey published",

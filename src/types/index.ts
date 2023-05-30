@@ -1,3 +1,5 @@
+import { DeviceSurveyStatistics } from "../generated/client";
+
 /**
  * Error context type
  */
@@ -140,5 +142,29 @@ export enum SurveyManagementStatus {
 /** Enum for survey screen mode */
 export enum SurveyScreenMode {
   EDITOR,
-  PUBLISH
+  PUBLISH,
+  STATISTICS
+}
+
+/**
+ * Type for Survey Statistics grouped by Survey
+ */
+export type StatisticsGroupedBySurvey = {
+  [key: string]: DeviceSurveyStatistics[];
+};
+
+/**
+ * Interface for SurveyQuestionStatistics
+ */
+export interface SurveyQuestionStatistics {
+  pageId: string;
+  options: SurveyQuestionOptionStatistics[];
+}
+
+/**
+ * Interface for SurveyQuestionOptionStatistics
+ */
+export interface SurveyQuestionOptionStatistics {
+  answerCount: number;
+  questionOptionValue: string;
 }

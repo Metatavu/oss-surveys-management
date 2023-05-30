@@ -143,7 +143,7 @@ const EditorScreen = () => {
     }
 
     if (mode === SurveyScreenMode.STATISTICS) {
-      return <SurveyStatistics survey={survey} devices={devices} deviceSurveys={deviceSurveys} />;
+      return <SurveyStatistics survey={survey} devices={devices} />;
     }
   };
 

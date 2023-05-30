@@ -45,10 +45,14 @@ const EditorScreen = () => {
     const devices = await devicesApi.listDevices();
     setDevices(devices);
 
+    const allFoundDeviceSurveys = [];
     for (const device of devices) {
       if (!device.id) continue;
-      await getDeviceSurveysByDevice(device.id);
+      const foundDeviceSurveys = await getDeviceSurveysByDevice(device.id);
+      if (!foundDeviceSurveys?.length) continue;
+      allFoundDeviceSurveys.push(...foundDeviceSurveys);
     }
+    setDeviceSurveys(allFoundDeviceSurveys);
   };
 
   /**
@@ -60,12 +64,10 @@ const EditorScreen = () => {
    */
   const getDeviceSurveysByDevice = async (deviceId: string) => {
     try {
-      const foundDeviceSurveys = await deviceSurveysApi.listDeviceSurveys({ deviceId: deviceId });
-      setDeviceSurveys([...deviceSurveys, ...foundDeviceSurveys]);
+      return await deviceSurveysApi.listDeviceSurveys({ deviceId: deviceId });
     } catch (error: any) {
       setError(`${strings.errorHandling.overviewScreen.deviceSurveysNotFound}, ${error}`);
     }
-    setIsLoading(false);
   };
 
   useEffect(() => {
@@ -76,6 +78,7 @@ const EditorScreen = () => {
     getDevices().catch((error) =>
       setError(`${strings.errorHandling.overviewScreen.devicesNotFound}, ${error}`)
     );
+    setIsLoading(false);
   }, [id]);
 
   /**

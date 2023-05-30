@@ -1,25 +1,27 @@
 import { errorAtom } from "../../atoms/error";
+import { languageAtom } from "../../atoms/language";
 import {
   Device,
   DeviceApprovalStatus,
   DeviceRequest,
   DeviceStatus,
   DeviceSurvey,
+  DeviceSurveyStatistics,
   Survey
 } from "../../generated/client";
 import { useApi } from "../../hooks/use-api";
 import strings from "../../localization/strings";
-import { OverviewScreenTabs } from "../../types";
+import { OverviewScreenTabs, StatisticsGroupedBySurvey } from "../../types";
+import DeviceUtils from "../../utils/device-utils";
+import SurveyUtils from "../../utils/survey-utils";
+import LoaderWrapper from "../generic/loader-wrapper";
+import OverviewDeviceRequestsList from "../overview/overview-device-requests-list";
+import OverviewDevicesList from "../overview/overview-devices-list";
+import OverviewSurveyList from "../overview/overview-surveys-list";
 import TabPanel from "../overview/tab-panel";
 import { Box, Paper, Tab, Tabs } from "@mui/material";
 import { useAtomValue, useSetAtom } from "jotai";
 import { useEffect, useState } from "react";
-import DeviceUtils from "../../utils/device-utils";
-import OverviewSurveyList from "../overview/overview-surveys-list";
-import OverviewDevicesList from "../overview/overview-devices-list";
-import { languageAtom } from "../../atoms/language";
-import LoaderWrapper from "../generic/loader-wrapper";
-import OverviewDeviceRequestsList from "../overview/overview-device-requests-list";
 
 /**
  *  Renders overview screen
@@ -35,6 +37,7 @@ const OverviewScreen = () => {
   const [deviceRequests, setDeviceRequests] = useState<DeviceRequest[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [activeSurveys, setActiveSurveys] = useState<Survey[]>([]);
+  const [groupedStatistics, setGroupedStatistics] = useState<StatisticsGroupedBySurvey>({});
 
   /**
    * Gets Surveys
@@ -46,35 +49,53 @@ const OverviewScreen = () => {
     } catch (error: any) {
       setError(`${strings.errorHandling.overviewScreen.surveysNotFound}, ${error}`);
     }
-  };
-
-  /**
+  }; /**
    * Gets Devices
    */
   const getDevices = async () => {
     const devices = await devicesApi.listDevices({});
+    const foundDeviceSurveys = await Promise.allSettled(
+      devices.map((device) => {
+        if (!device.id) return Promise.reject();
+
+        return deviceSurveysApi.listDeviceSurveys({ deviceId: device.id });
+      })
+    );
+    const resolvedDeviceSurveys = foundDeviceSurveys.reduce<DeviceSurvey[]>(
+      (allDeviceSurveys, deviceSurveys) => {
+        if (deviceSurveys.status === "fulfilled") {
+          allDeviceSurveys.push(...deviceSurveys.value);
+        }
+
+        return allDeviceSurveys;
+      },
+      []
+    );
+    const foundStatistics = await Promise.allSettled(
+      resolvedDeviceSurveys.map((deviceSurvey) => {
+        if (!deviceSurvey.id) return Promise.reject();
+
+        return deviceSurveysApi.getDeviceSurveyStatistics({
+          deviceId: deviceSurvey.deviceId,
+          deviceSurveyId: deviceSurvey.id
+        });
+      })
+    );
+    const resolvedStatistics = foundStatistics.reduce<DeviceSurveyStatistics[]>(
+      (allStatistics, statistics) => {
+        if (statistics.status === "fulfilled") {
+          allStatistics.push(statistics.value);
+        }
+
+        return allStatistics;
+      },
+      []
+    );
+    const grouped = SurveyUtils.groupStatisticsBySurvey(resolvedStatistics);
+
+    setGroupedStatistics(grouped);
     setDevices(devices);
-
-    for (const device of devices) {
-      if (!device.id) continue;
-      await getDeviceSurveysByDevice(device.id);
-    }
-  };
-
-  /**
-   * Gets Device Surveys for a specific device
-   *
-   * Device Surveys define what surveys are assigned to what devices.
-   *
-   * @param deviceId device id
-   */
-  const getDeviceSurveysByDevice = async (deviceId: string) => {
-    try {
-      const deviceSurveys = await deviceSurveysApi.listDeviceSurveys({ deviceId: deviceId });
-      setDeviceSurveys([...deviceSurveys, ...deviceSurveys]);
-    } catch (error: any) {
-      setError(`${strings.errorHandling.overviewScreen.deviceSurveysNotFound}, ${error}`);
-    }
+    setDeviceSurveys(resolvedDeviceSurveys);
   };
 
   /**
@@ -181,7 +202,12 @@ const OverviewScreen = () => {
             />
           </Tabs>
           <TabPanel value={activeTab} index={OverviewScreenTabs.ACTIVE}>
-            <OverviewSurveyList surveys={activeSurveys} deviceSurveys={deviceSurveys} />
+            <OverviewSurveyList
+              surveys={activeSurveys}
+              deviceSurveys={deviceSurveys}
+              groupedStatistics={groupedStatistics}
+              devices={devices}
+            />
           </TabPanel>
           <TabPanel value={activeTab} index={OverviewScreenTabs.IDLE_DEVICES}>
             <OverviewDevicesList

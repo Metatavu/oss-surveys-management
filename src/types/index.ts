@@ -1,3 +1,4 @@
+import { DeviceSurveyStatistics } from "../generated/client";
 import strings from "../localization/strings";
 
 /**
@@ -163,3 +164,10 @@ export enum SurveyScreenMode {
   PUBLISH,
   STATISTICS
 }
+
+/**
+ * Type for Survey Statistics grouped by Survey
+ */
+export type StatisticsGroupedBySurvey = {
+  [key: string]: DeviceSurveyStatistics[];
+};

@@ -41,9 +41,27 @@ const SurveyStatistics = ({ devices, deviceSurveys, survey }: Props) => {
   const { deviceSurveysApi } = useApi();
   const [selectedDevices, setSelectedDevices] = useState<Device[]>(devices);
   const [surveyStatistics, setSurveyStatistics] = useState<DeviceSurveyStatistics[]>([]);
+  const [devicesWithSurvey, setDevicesWithSurvey] = useState<Device[]>([]);
   const [surveyPages] = useAtom(pagesAtom);
   const [pageLayouts] = useAtom(layoutsAtom);
   const setError = useSetAtom(errorAtom);
+
+  // TODO: This gets the survey specific data but only for active surveys
+  /**
+   * Gets Devices with particular survey
+   */
+  const getSurveyDevices = () => {
+    const devicesWithSurvey = devices.filter((device) =>
+      deviceSurveys.some(
+        (deviceSurvey) => deviceSurvey.surveyId === survey.id && device.id === deviceSurvey.deviceId
+      )
+    );
+    setDevicesWithSurvey(devicesWithSurvey);
+  };
+
+  useEffect(() => {
+    getSurveyDevices();
+  }, []);
 
   /**
    * Return question title
@@ -179,7 +197,7 @@ const SurveyStatistics = ({ devices, deviceSurveys, survey }: Props) => {
       <Stack direction="row" flex={1}>
         <PropertiesPanel width={250}>
           <StatisticDevices
-            devices={devices}
+            devices={devicesWithSurvey}
             selectedDevices={selectedDevices}
             setSelectedDevices={setSelectedDevices}
           />
@@ -187,7 +205,7 @@ const SurveyStatistics = ({ devices, deviceSurveys, survey }: Props) => {
         <Stack width="100%" direction={"column"} marginBottom={2}>
           {surveyStatistics.length > 0 && (
             <OverallStatisticsCharts
-              devices={selectedDevices}
+              devices={devicesWithSurvey}
               surveyStatistics={surveyStatistics}
               overallAnswerCount={overallAnswerCount()}
               hourlyChartData={getHourlyAverageAnswerCount()}

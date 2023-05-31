@@ -17,6 +17,8 @@ export interface Localized extends LocalizedStringsMethods {
     confirm: string;
     cancel: string;
     unnamed: string;
+    yes: string;
+    no: string;
   };
 
   /**
@@ -66,12 +68,14 @@ export interface Localized extends LocalizedStringsMethods {
     editSurveysScreen: {
       surveyNotFound: string;
       surveyNotSaved: string;
+      surveyNotPublished: string;
       surveyPagesNotFound: string;
       pageLayoutsNotFound: string;
       pageLayoutNotFound: string;
       pageNotSaved: string;
       pageNotDeleted: string;
       pageNotCreated: string;
+      questionNotAdded: string;
     };
     previewScreen: {
       surveyNotFound: string;
@@ -176,11 +180,24 @@ export interface Localized extends LocalizedStringsMethods {
    * Translations related to surveys screen
    */
   editSurveysScreen: {
+    addQuestion: {
+      dialog: {
+        title: string;
+        description: string;
+        singleSelect: string;
+        multiSelect: string;
+        freeText: string;
+        addQuestion: string;
+      };
+      helperText: string;
+      questionAdded: string;
+    };
     addNewPage: string;
     deletePage: string;
     surveySaved: string;
     editing: string;
     publish: string;
+    editor: string;
     published: string;
     statistics: string;
     preview: string;
@@ -198,6 +215,12 @@ export interface Localized extends LocalizedStringsMethods {
       page: string;
       title: string;
       questionType: string;
+      questionTypes: {
+        singleSelect: string;
+        multiSelect: string;
+        freeText: string;
+      };
+      question: string;
       answerOptions: string;
       answerOptionPlaceholder: string;
       deleteAnswerOptionTitle: string;
@@ -206,15 +229,76 @@ export interface Localized extends LocalizedStringsMethods {
       infoText: string;
       buttonVisibility: string;
       background: string;
+      image: string;
+      images: {
+        noImage: string;
+        image1: string;
+      };
       backgroundImages: {
         default: string;
         image1: string;
-        image2: string;
-        image3: string;
-        image4: string;
-        image5: string;
       };
       pageSaved: string;
+      previewTitle: string;
+    };
+  };
+
+  /**
+   * Translations related to survey statistics
+   */
+  surveyStatistics: {
+    surveyStatistics: string;
+    chooseStatisticsSource: string;
+    answerCount: string;
+    mostAttainableTime: string;
+    mostPopularAnswer: string;
+    mostEfficientScreen: string;
+    noStatistics: string;
+    answersPerDisplay: string;
+    answersDistribution: string;
+    answers: string;
+    mostPopularDays: string;
+    mostPopularHours: string;
+    statisticsSource: string;
+    labels: {
+      answerCount: string;
+      monday: string;
+      tuesday: string;
+      wednesday: string;
+      thursday: string;
+      friday: string;
+      saturday: string;
+      sunday: string;
+    };
+  };
+
+  /**
+   * Translations related to publishing a survey
+   */
+  publishSurveys: {
+    surveyPublished: string;
+    leftPanel: {
+      heading: string;
+    };
+    rightPanel: {
+      heading: string;
+      description: string;
+      devicesCount: string;
+      scheduling: string;
+      publishStartTime: string;
+      publishEndTime: string;
+      publishButton: string;
+    };
+    headings: {
+      device: string;
+      activeSurveys: string;
+      description: string;
+      status: string;
+    };
+    dialog: {
+      title: string;
+      description: string;
+      button: string;
     };
   };
 
@@ -226,11 +310,9 @@ export interface Localized extends LocalizedStringsMethods {
     title: string;
     question: string;
     info: string;
-    infoImage: string;
-    paragraphImage: string;
+    image: string;
     imageParagraph: string;
     questionInfo: string;
-    statistics: string;
   };
 
   /**

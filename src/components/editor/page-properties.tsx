@@ -1,11 +1,16 @@
 import { errorAtom } from "../../atoms/error";
 import { layoutsAtom } from "../../atoms/layouts";
 import { pagesAtom } from "../../atoms/pages";
-import { Layout, Page, PageQuestionOption } from "../../generated/client";
+import {
+  Layout,
+  Page,
+  PageProperty,
+  PageQuestionOption,
+  PageQuestionType
+} from "../../generated/client";
 import { useApi } from "../../hooks/use-api";
 import strings from "../../localization/strings";
 import GenericDialog from "../generic/generic-dialog";
-import WithDebounce from "../generic/with-debounce";
 import { AddCircle, Edit, Close } from "@mui/icons-material";
 import {
   Box,
@@ -15,15 +20,17 @@ import {
   Switch,
   TextField,
   IconButton,
-  Typography
+  Typography,
+  MenuItem,
+  Stack
 } from "@mui/material";
 import { useAtom, useSetAtom } from "jotai";
-import { ChangeEvent, Fragment, useEffect, useState } from "react";
+import { ChangeEvent, FocusEvent, Fragment, useEffect, useState } from "react";
 import PageUtils from "../../utils/page-utils";
 import { EditablePageElement, PageElementType } from "../../types";
-import { EDITABLE_TEXT_PAGE_ELEMENTS } from "../../constants";
+import { EDITABLE_TEXT_PAGE_ELEMENTS, PAGE_BACKGROUNDS, PAGE_IMAGES } from "../../constants";
 import { toast } from "react-toastify";
-import { v4 as uuid } from "uuid";
+import LocalizationUtils from "../../utils/localization-utils";
 
 /**
  * Component properties
@@ -64,6 +71,7 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
       const elementToEdit = PageUtils.getPageTextElementTypeAndId(foundLayout.html, variable.key);
       elements.push(elementToEdit);
     }
+
     setPageToEdit(foundPage);
     setPageToEditLayout(foundLayout);
     setElementsToEdit(elements);
@@ -107,28 +115,16 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
   );
 
   /**
-   * Gets text property label based on page element type
-   */
-  const getTextPropertyLabel = (type: PageElementType) => {
-    if (type === PageElementType.H1) {
-      return strings.editSurveysScreen.editPagesPanel.title;
-    }
-    if (type === PageElementType.P) {
-      return strings.editSurveysScreen.editPagesPanel.infoText;
-    }
-  };
-
-  /**
    * Handler for page property text change
    *
    * @param event event
    */
-  const handleTextChange = async ({ target: { value, name } }: ChangeEvent<HTMLInputElement>) => {
+  const handleTextChange = async ({ target: { value, name } }: FocusEvent<HTMLInputElement>) => {
     if (!pageToEdit) return;
 
     const foundProperty = pageToEdit?.properties?.find((p) => p.key === name);
 
-    if (!foundProperty) return;
+    if (!foundProperty || foundProperty.value === value) return;
     const pageToUpdate = {
       ...pageToEdit,
       properties: pageToEdit.properties?.map((property) =>
@@ -159,23 +155,22 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
   /**
    * Handler for question option text change
    *
-   * @param option option
-   * @param value value
+   * @param event event
    */
-  const handleOptionChange = async (option: PageQuestionOption, value: string) => {
+  const handleOptionChange = async ({ target: { value, name } }: FocusEvent<HTMLInputElement>) => {
     if (!pageToEdit?.question) return;
 
-    const optionToUpdate = pageToEdit.question.options.find((opt) => opt === option);
+    const optionToUpdate = pageToEdit.question.options.find((option) => option.id === name);
 
-    if (!optionToUpdate) return;
+    if (!optionToUpdate || optionToUpdate.questionOptionValue === value) return;
 
     const pageToUpdate: Page = {
       ...pageToEdit,
       question: {
         ...pageToEdit.question,
         options: [
-          ...pageToEdit.question.options.map((opt) =>
-            option === opt ? { ...option, questionOptionValue: value } : opt
+          ...pageToEdit.question.options.map((option) =>
+            option.id === name ? { ...option, questionOptionValue: value } : option
           )
         ]
       }
@@ -198,7 +193,6 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
         options: [
           ...pageToEdit.question.options,
           {
-            id: uuid(),
             questionOptionValue: strings.formatString(
               strings.editSurveysScreen.editPagesPanel.answerOptionPlaceholder,
               orderNumber
@@ -236,32 +230,102 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
   };
 
   /**
+   * Handler for background change event
+   *
+   * @param event event
+   */
+  const handleBackgroundChange = async ({ target: { value } }: ChangeEvent<HTMLInputElement>) => {
+    if (!pageToEdit?.id) return;
+
+    const backgroundProperty = elementsToEdit.find(
+      (element) => element.type === PageElementType.DIV
+    );
+
+    if (!backgroundProperty?.id) return;
+
+    const updatedProperty: PageProperty = {
+      key: backgroundProperty?.id,
+      value: value === "DEFAULT" ? "" : value
+    };
+
+    const pageToUpdate = {
+      ...pageToEdit,
+      properties: pageToEdit.properties?.map((property) =>
+        property.key === backgroundProperty?.id ? updatedProperty : property
+      )
+    };
+
+    await savePage(pageToUpdate);
+  };
+
+  /**
+   * Handler for image change event
+   */
+  const handleImageChange = async ({ target: { value } }: ChangeEvent<HTMLInputElement>) => {
+    if (!pageToEdit?.id) return;
+
+    const imageProperty = elementsToEdit.find((element) => element.type === PageElementType.IMG);
+
+    if (!imageProperty?.id) return;
+
+    const updatedProperty: PageProperty = {
+      key: imageProperty?.id,
+      value: !value ? "" : value
+    };
+
+    const pageToUpdate = {
+      ...pageToEdit,
+      properties: pageToEdit.properties?.map((property) =>
+        property.key === imageProperty?.id ? updatedProperty : property
+      )
+    };
+
+    await savePage(pageToUpdate);
+  };
+
+  /**
+   * Handles question type change
+   *
+   * @param event event
+   */
+  const handleQuestionTypeChange = async ({ target: { value } }: ChangeEvent<HTMLInputElement>) => {
+    if (!pageToEdit?.id || !pageToEdit?.question) return;
+
+    const pageToUpdate: Page = {
+      ...pageToEdit,
+      question: {
+        ...pageToEdit.question,
+        type: value as PageQuestionType
+      }
+    };
+
+    await savePage(pageToUpdate);
+  };
+
+  /**
    * Renders text property editor
    *
    * @param element element
    */
   const renderTextPropertyEditor = (element: EditablePageElement) => (
     <Fragment key={element.id}>
-      <Typography variant="h6">{getTextPropertyLabel(element.type)}</Typography>
-      <WithDebounce
+      <Typography variant="h6">{PageUtils.getTextPropertyLabel(element.type)}</Typography>
+      <TextField
         name={element.id}
-        value={pageToEdit?.properties?.find((property) => property.key === element.id)?.value ?? ""}
-        onChange={handleTextChange}
-        placeholder={getTextPropertyLabel(element.type) ?? ""}
-        component={(props) => (
-          <TextField
-            {...props}
-            fullWidth
-            multiline
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <Edit fontSize="small" color="primary" />
-                </InputAdornment>
-              )
-            }}
-          />
-        )}
+        defaultValue={
+          pageToEdit?.properties?.find((property) => property.key === element.id)?.value ?? ""
+        }
+        placeholder={PageUtils.getTextPropertyLabel(element.type) ?? ""}
+        fullWidth
+        multiline
+        onBlur={handleTextChange}
+        InputProps={{
+          endAdornment: (
+            <InputAdornment position="end">
+              <Edit fontSize="small" color="primary" />
+            </InputAdornment>
+          )
+        }}
       />
     </Fragment>
   );
@@ -273,31 +337,25 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
     if (!pageToEdit?.question) return;
 
     return pageToEdit.question.options.map((option) => (
-      <WithDebounce
+      <TextField
+        key={option.id}
         name={option.id}
-        value={option.questionOptionValue}
-        onChange={({ target: { value } }) => handleOptionChange(option, value)}
-        placeholder=""
-        optionKey={option.questionOptionValue}
-        component={(props) => (
-          <TextField
-            {...props}
-            fullWidth
-            multiline
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end" className="on-hover">
-                  <IconButton
-                    title={strings.editSurveysScreen.editPagesPanel.deleteAnswerOptionTitle}
-                    onClick={() => handleDeleteClick(option)}
-                  >
-                    <Close fontSize="small" />
-                  </IconButton>
-                </InputAdornment>
-              )
-            }}
-          />
-        )}
+        defaultValue={option.questionOptionValue}
+        onBlur={handleOptionChange}
+        fullWidth
+        multiline
+        InputProps={{
+          endAdornment: (
+            <InputAdornment position="end" className="on-hover">
+              <IconButton
+                title={strings.editSurveysScreen.editPagesPanel.deleteAnswerOptionTitle}
+                onClick={() => handleDeleteClick(option)}
+              >
+                <Close fontSize="small" />
+              </IconButton>
+            </InputAdornment>
+          )
+        }}
       />
     ));
   };
@@ -315,6 +373,50 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
     );
   };
 
+  /**
+   * Renders background change
+   */
+  const renderBackgroundChange = () => {
+    if (!pageToEdit?.properties) return;
+
+    return (
+      <TextField
+        fullWidth
+        select
+        onChange={handleBackgroundChange}
+        value={PageUtils.getPageBackground(elementsToEdit, pageToEdit.properties)}
+      >
+        {PAGE_BACKGROUNDS.map((background) => (
+          <MenuItem key={background.key} value={background.value}>
+            {LocalizationUtils.getTranslatedBackground(background.key)}
+          </MenuItem>
+        ))}
+      </TextField>
+    );
+  };
+
+  /**
+   * Renders image change
+   */
+  const renderImageChange = () => {
+    if (!pageToEdit?.properties) return;
+
+    return (
+      <TextField
+        fullWidth
+        select
+        onChange={handleImageChange}
+        value={PageUtils.getPageImage(elementsToEdit, pageToEdit?.properties)}
+      >
+        {PAGE_IMAGES.map((image) => (
+          <MenuItem key={image.key} value={image.value}>
+            {LocalizationUtils.getTranslatedImage(image.key)}
+          </MenuItem>
+        ))}
+      </TextField>
+    );
+  };
+
   return (
     <>
       {renderDeleteOptionDialog()}
@@ -328,6 +430,31 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
           .filter((element) => EDITABLE_TEXT_PAGE_ELEMENTS.includes(element.type))
           .map(renderTextPropertyEditor)}
       </Box>
+      {PageUtils.hasQuestionsPlaceholder(pageToEditLayout?.html) && (
+        <Box p={2} sx={{ borderBottom: "1px solid #DADCDE" }}>
+          <Stack direction="row">
+            <Typography variant="h6" flex={0.5}>
+              {strings.editSurveysScreen.editPagesPanel.question}
+            </Typography>
+            <TextField
+              fullWidth
+              select
+              sx={{ flex: 0.5 }}
+              value={pageToEdit?.question?.type}
+              onChange={handleQuestionTypeChange}
+            >
+              <MenuItem value={PageQuestionType.SingleSelect}>
+                {strings.editSurveysScreen.editPagesPanel.questionTypes.singleSelect}
+              </MenuItem>
+              <MenuItem value={PageQuestionType.MultiSelect}>
+                {strings.editSurveysScreen.editPagesPanel.questionTypes.multiSelect}
+              </MenuItem>
+            </TextField>
+          </Stack>
+          {renderOptions()}
+          {renderAddNewOption()}
+        </Box>
+      )}
       <Box p={2} sx={{ borderBottom: "1px solid #DADCDE" }}>
         <FormControlLabel
           label={strings.editSurveysScreen.editPagesPanel.buttonVisibility}
@@ -339,13 +466,16 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
           }
         />
       </Box>
-      {PageUtils.hasQuestionsPlaceholder(pageToEditLayout?.html) && (
+      {PageUtils.hasImagePlaceholder(pageToEditLayout?.html) && (
         <Box p={2} sx={{ borderBottom: "1px solid #DADCDE" }}>
-          <Typography variant="h6">{strings.editSurveysScreen.editPagesPanel.addOption}</Typography>
-          {renderOptions()}
-          {renderAddNewOption()}
+          <Typography variant="h6">{strings.editSurveysScreen.editPagesPanel.image}</Typography>
+          {renderImageChange()}
         </Box>
       )}
+      <Box p={2} sx={{ borderBottom: "1px solid #DADCDE" }}>
+        <Typography variant="h6">{strings.editSurveysScreen.editPagesPanel.background}</Typography>
+        {renderBackgroundChange()}
+      </Box>
     </>
   );
 };

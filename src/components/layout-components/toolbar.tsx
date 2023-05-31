@@ -1,15 +1,17 @@
-import styled from "@emotion/styled";
-import { Box, Button, IconButton, Paper, Stack, Typography } from "@mui/material";
-import theme from "../../styles/theme";
+import { Survey, SurveyStatus } from "../../generated/client";
 import strings from "../../localization/strings";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import { useNavigate } from "react-router-dom";
+import theme from "../../styles/theme";
+import { SurveyScreenMode } from "../../types";
+import styled from "@emotion/styled";
 import {
   BarChartOutlined,
   MoreHoriz,
   PlayArrowOutlined,
   PublishOutlined
 } from "@mui/icons-material";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import { Box, Button, IconButton, Paper, Stack, Typography } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 /**
  * Styled toolbar container component
@@ -48,22 +50,25 @@ const ControlsContainer = styled(Stack, {
  * Component props
  */
 interface Props {
-  surveyName: string;
-  surveyId: string;
+  survey?: Survey;
+  mode: SurveyScreenMode;
+  setMode: (mode: SurveyScreenMode) => void;
 }
 
 /**
  * Renders toolbar component
  */
-const Toolbar = ({ surveyName, surveyId }: Props) => {
+const Toolbar = ({ survey, mode, setMode }: Props) => {
   const navigate = useNavigate();
+
+  if (!survey) return null;
 
   const renderTitle = () => (
     <Stack spacing={1} direction="row" alignItems="center" flex={1} justifyContent="center">
       <Typography>{strings.editSurveysScreen.editing}</Typography>
       <Typography>/</Typography>
       <Typography variant="h5" color={theme.palette.primary.main}>
-        {surveyName}
+        {survey.title}
       </Typography>
     </Stack>
   );
@@ -71,26 +76,32 @@ const Toolbar = ({ surveyName, surveyId }: Props) => {
   const renderControls = () => (
     <>
       <Button
-        disabled
+        disabled={survey.status === SurveyStatus.Draft}
         color="primary"
         title={strings.generic.notImplemented}
         startIcon={<PublishOutlined />}
+        sx={{
+          backgroundColor: mode === SurveyScreenMode.PUBLISH ? "#c8c8c8" : ""
+        }}
+        onClick={() => setMode(mode === SurveyScreenMode.EDITOR ? SurveyScreenMode.PUBLISH : SurveyScreenMode.EDITOR)}
       >
-        {strings.editSurveysScreen.publish}
+        {mode === SurveyScreenMode.EDITOR ? strings.editSurveysScreen.publish : strings.editSurveysScreen.editor}
       </Button>
       <Button
-        disabled
+        disabled={survey.status === SurveyStatus.Draft}
         color="primary"
-        title={strings.generic.notImplemented}
+        title={strings.surveyStatistics.surveyStatistics}
         startIcon={<BarChartOutlined />}
+        onClick={() => setMode(SurveyScreenMode.STATISTICS)}
       >
         {strings.editSurveysScreen.statistics}
       </Button>
       <Button
+        disabled
         color="primary"
         title={strings.generic.notImplemented}
         startIcon={<PlayArrowOutlined />}
-        onClick={() => navigate(`/preview/${surveyId}`)}
+        onClick={() => navigate(`/preview/${survey.id}`)}
       >
         {strings.editSurveysScreen.preview}
       </Button>

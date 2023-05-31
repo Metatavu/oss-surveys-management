@@ -179,7 +179,6 @@ const PreviewScreen = () => {
             width={DEVICE_WIDTH}
             height={DEVICE_HEIGHT}
             scale={height / 1.5 / DEVICE_HEIGHT}
-            previewPage={true}
           />
         </PreviewContainer>
       </PreviewArea>

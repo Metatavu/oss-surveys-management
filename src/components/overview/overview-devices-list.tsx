@@ -33,20 +33,24 @@ const OverviewDevicesList = ({ devices, actionButtonText, onClick }: Props) => {
   return (
     <List>
       <ListHeader headings={listHeadings} />
-      {devices.map((device) => (
-        <ListItem key={device.id}>
-          <ListItemText secondary={device.name ?? strings.generic.unnamed} />
-          <ListItemText
-            secondaryTypographyProps={{
-              color: device.deviceStatus === DeviceStatus.Offline ? "error" : "main"
-            }}
-            secondary={LocalizationUtils.getLocalizedDeviceStatus(device.deviceStatus!)}
-          />
-          <ListItemText secondary={device.description} />
-          <ListItemText secondary={device.location ?? "-"} />
-          <ListItemText secondary={renderActionButton(device)} />
-        </ListItem>
-      ))}
+      {devices.map((device) => {
+        if (!device.deviceStatus) return;
+
+        return (
+          <ListItem key={device.id}>
+            <ListItemText secondary={device.name ?? strings.generic.unnamed} />
+            <ListItemText
+              secondaryTypographyProps={{
+                color: device.deviceStatus === DeviceStatus.Offline ? "error" : "main"
+              }}
+              secondary={LocalizationUtils.getLocalizedDeviceStatus(device.deviceStatus)}
+            />
+            <ListItemText secondary={device.description} />
+            <ListItemText secondary={device.location ?? "-"} />
+            <ListItemText secondary={renderActionButton(device)} />
+          </ListItem>
+        );
+      })}
     </List>
   );
 };

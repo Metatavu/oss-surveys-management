@@ -6,7 +6,9 @@
     "back": "Takaisin",
     "confirm": "Vahvista",
     "cancel": "Peruuta",
-    "unnamed": "Nimetön"
+    "unnamed": "Nimetön",
+    "yes": "Kyllä",
+    "no": "Ei"
   },
   "navigation": {
     "overview": "Yhteenveto",
@@ -44,12 +46,14 @@
     "editSurveysScreen": {
       "surveyNotFound": "Kyselyä ei löytynyt",
       "surveyNotSaved": "Virhe tallennettaessa kyselyä",
+      "surveyNotPublished": "Virhe kysylyä julkaistaessa",
       "surveyPagesNotFound": "Kyselysivuja ei löytynyt",
       "pageLayoutsNotFound": "Sivuasetteluja ei löytynyt",
       "pageLayoutNotFound": "Sivuasetteluja ei löytynyt",
       "pageNotSaved": "Virhe tallennettaessa sivua",
       "pageNotDeleted": "Virhe poistaessa sivua",
-      "pageNotCreated": "Virhe luotaessa sivua"
+      "pageNotCreated": "Virhe luotaessa sivua",
+      "questionNotAdded": "Virhe lisättäessä kyselyä"
     },
     "previewScreen": {
       "surveyNotFound": "Kyselyä ei löytynyt",
@@ -143,11 +147,24 @@
     }
   },
   "editSurveysScreen": {
+    "addQuestion": {
+      "dialog": {
+        "title": "Lisää kysely",
+        "description": "Valitse minkälaisen kyselyn haluat lisätä sivulle.",
+        "singleSelect": "Valinta",
+        "multiSelect": "Monivalinta",
+        "freeText": "Vapaa teksti",
+        "addQuestion": "Lisää kysely"
+      },
+      "helperText": "Valitse kysely",
+      "questionAdded": "Kysely lisätty"
+    },
     "addNewPage": "Lisää uusi sivu",
     "deletePage": "Poista",
     "surveySaved": "Kysely tallennettu",
     "editing": "Luonnokset",
     "publish": "Julkaise",
+    "editor": "Editori",
     "published": "Julkaistu",
     "statistics": "Tilastot",
     "preview": "Esikatselu",
@@ -165,6 +182,12 @@
       "page": "Sivu {0}",
       "title": "Otsikko",
       "questionType": "Kyselyn tyyppi",
+      "questionTypes": {
+        "singleSelect": "Valinta",
+        "multiSelect": "Monivalinta",
+        "freeText": "Vapaa teksti"
+      },
+      "question": "Kysely",
       "answerOptions": "Vastausvaihtoehdot",
       "answerOptionPlaceholder": "Vaihtoehto {0}",
       "deleteAnswerOptionTitle": "Poista vastausvaihtoehto",
@@ -173,15 +196,68 @@
       "infoText": "Leipäteksti",
       "buttonVisibility": "Näytä painike",
       "background": "Tausta",
+      "image": "Kuva",
+      "images": {
+        "noImage": "Ei kuvaa",
+        "image1": "Järvimaisema"
+      },
       "backgroundImages": {
         "default": "Vihreä",
-        "image1": "kuva 1",
-        "image2": "kuva 2",
-        "image3": "kuva 3",
-        "image4": "kuva 4",
-        "image5": "kuva 5"
+        "image1": "Järvimaisema"
       },
-      "pageSaved": "Sivu tallennettu"
+      "pageSaved": "Sivu tallennettu",
+      "previewTitle": "Klikkaa muokataksesi sivua"
+    }
+  },
+  "surveyStatistics": {
+    "surveyStatistics": "Tilastot",
+    "chooseStatisticsSource": "Valitse koosteen lähde",
+    "answerCount": "Vastauksia yhteensä",
+    "mostAttainableTime": "Saavutettavin ajankohta",
+    "mostPopularAnswer": "Suosituin vastaus",
+    "mostEfficientScreen": "Tehokkain näyttö",
+    "noStatistics": "Tällä kyselyllä ei vielä ole tilastoja",
+    "answersPerDisplay": "Näyttökohtaiset vastausmäärät",
+    "answersDistribution": "Vastauksien jakautuminen",
+    "answers": "Vastauksia",
+    "mostPopularDays": "Vilkkaimmat päivät",
+    "mostPopularHours": "Vilkkaimmat tunnit",
+    "statisticsSource": "Lähde: ",
+    "labels": {
+      "answerCount": "Vastauksia: {0}",
+      "monday": "Ma",
+      "tuesday": "Ti",
+      "wednesday": "Ke",
+      "thursday": "To",
+      "friday": "Pe",
+      "saturday": "La",
+      "sunday": "Su"
+    }
+  },
+  "publishSurveys": {
+    "surveyPublished": "Kysely julkaistu",
+    "leftPanel": {
+      "heading": "Valitse näytöt missä kysely aktivoidaan"
+    },
+    "rightPanel": {
+      "heading": "Julkaisu",
+      "description": "Kuvaus",
+      "devicesCount": "Näyttöjen lukumäärä",
+      "scheduling": "Ajastus",
+      "publishStartTime": "Aloitusaika",
+      "publishEndTime": "Kyselyn päättymisaika",
+      "publishButton": "Aktivoi kysely"
+    },
+    "headings": {
+      "device": "Näyttö",
+      "activeSurveys": "Aktiivisia kyselyjä",
+      "description": "Lisätiedot",
+      "status": "Tila"
+    },
+    "dialog": {
+      "title": "Vahvista kyselyn julkaiseminen",
+      "description": "Olet julkaisemassa kyselyä {0} laitteille: ",
+      "button": "Julkaise"
     }
   },
   "layouts": {
@@ -189,11 +265,9 @@
     "title": "Valitse sivun rakenne alla olevista vaihtoehdoista",
     "question": "Kysymys",
     "info": "Info",
-    "infoImage": "Kuva",
-    "paragraphImage": "Info + kuva",
+    "image": "Kuva",
     "imageParagraph": "Kuva + info",
-    "questionInfo": "Kysymys + info",
-    "statistics": "Tilastot"
+    "questionInfo": "Kysymys + info"
   },
   "previewScreen": {
     "sharePreview": "Jaa esikatselu"

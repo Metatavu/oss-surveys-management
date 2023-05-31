@@ -6,7 +6,9 @@
     "back": "Back",
     "confirm": "Confirm",
     "cancel": "Cancel",
-    "unnamed": "Unnamed"
+    "unnamed": "Unnamed",
+    "yes": "Yes",
+    "no": "No"
   },
   "navigation": {
     "overview": "Overview",
@@ -44,12 +46,14 @@
     "editSurveysScreen": {
       "surveyNotFound": "Survey not found",
       "surveyNotSaved": "Error while saving survey",
+      "surveyNotPublished": "Error while publishing survey",
       "surveyPagesNotFound": "Survey pages not found",
       "pageLayoutsNotFound": "Page layouts not found",
       "pageLayoutNotFound": "Page layout not found",
       "pageNotSaved": "Error when saving page",
       "pageNotDeleted": "Error when deleting page",
-      "pageNotCreated": "Error when creating page"
+      "pageNotCreated": "Error when creating page",
+      "questionNotAdded": "Error when adding page"
     },
     "previewScreen": {
       "surveyNotFound": "Survey not found",
@@ -143,11 +147,24 @@
     }
   },
   "editSurveysScreen": {
+    "addQuestion": {
+      "dialog": {
+        "title": "Add question",
+        "description": "Choose what type of question you want to add to the page.",
+        "singleSelect": "Single select",
+        "multiSelect": "Multi select",
+        "freeText": "Free text",
+        "addQuestion": "Add question"
+      },
+      "helperText": "Choose question",
+      "questionAdded": "Question added"
+    },
     "addNewPage": "Add new page",
     "deletePage": "Delete",
     "surveySaved": "Survey saved",
     "editing": "Editing",
     "publish": "Publish",
+    "editor": "Editor",
     "published": "Published",
     "statistics": "Statistics",
     "preview": "Preview",
@@ -165,6 +182,12 @@
       "page": "Page {0}",
       "title": "Title",
       "questionType": "Question type",
+      "questionTypes": {
+        "singleSelect": "Single select",
+        "multiSelect": "Multi select",
+        "freeText": "Free text"
+      },
+      "question": "Question",
       "answerOptions": "Answer options",
       "answerOptionPlaceholder": "Answer option {0}",
       "deleteAnswerOptionTitle": "Delete answer option",
@@ -173,15 +196,68 @@
       "infoText": "Paragraph",
       "buttonVisibility": "Show button",
       "background": "Background",
+      "image": "Image",
+      "images": {
+        "noImage": "No image",
+        "image1": "Lake scenery"
+      },
       "backgroundImages": {
         "default": "Green",
-        "image1": "image 1",
-        "image2": "image 2",
-        "image3": "image 3",
-        "image4": "image 4",
-        "image5": "image 5"
+        "image1": "Lake scenery"
       },
-      "pageSaved": "Page saved"
+      "pageSaved": "Page saved",
+      "previewTitle": "Click page to edit"
+    }
+  },
+  "surveyStatistics": {
+    "surveyStatistics": "Survey statistics",
+    "chooseStatisticsSource": "Choose source",
+    "answerCount": "Answer count",
+    "mostAttainableTime": "Most attainable time",
+    "mostPopularAnswer": "Most popular answer",
+    "mostEfficientScreen": "Most efficient screen",
+    "noStatistics": "No statistics available",
+    "answersPerDisplay": "Answers per display",
+    "answersDistribution": "Answers distribution",
+    "answers": "Answers",
+    "mostPopularDays": "Most popular days",
+    "mostPopularHours": "Most popular hours",
+    "statisticsSource": "Source: ",
+    "labels": {
+      "answerCount": "Answers: {0}",
+      "monday": "Mo",
+      "tuesday": "Tu",
+      "wednesday": "We",
+      "thursday": "Th",
+      "friday": "Fr",
+      "saturday": "Sa",
+      "sunday": "Su"
+    }
+  },
+  "publishSurveys": {
+    "surveyPublished": "Survey published",
+    "leftPanel": {
+      "heading": "Select devices to publish to"
+    },
+    "rightPanel": {
+      "heading": "Publish",
+      "description": "Description",
+      "devicesCount": "Amount of devices",
+      "scheduling": "Scheduling",
+      "publishStartTime": "Publication start",
+      "publishEndTime": "Publication end",
+      "publishButton": "Activate survey"
+    },
+    "headings": {
+      "device": "Device",
+      "activeSurveys": "Active surveys",
+      "description": "Description",
+      "status": "Status"
+    },
+    "dialog": {
+      "title": "Confirm survey publication",
+      "description": "You're publishing survey <em>{0}</em> for devices: ",
+      "button": "Publish"
     }
   },
   "layouts": {
@@ -189,11 +265,9 @@
     "title": "Select page layout",
     "question": "Question",
     "info": "Info",
-    "infoImage": "Image",
-    "paragraphImage": "Info + image",
+    "image": "Image",
     "imageParagraph": "Image + info",
-    "questionInfo": "Question + info",
-    "statistics": "Statistics"
+    "questionInfo": "Question + info"
   },
   "previewScreen": {
     "sharePreview": "Share preview"

@@ -230,6 +230,13 @@ export default createTheme({
         variant: "standard",
         margin: "dense",
         size: "small"
+      },
+      styleOverrides: {
+        root: {
+          "& .MuiSelect-select": {
+            color: "#00aa46"
+          }
+        }
       }
     },
     MuiInput: {

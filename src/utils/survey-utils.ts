@@ -1,7 +1,14 @@
-import { DateTime } from "luxon";
-import { DeviceSurvey, DeviceSurveyStatus, Survey, SurveyStatus } from "../generated/client";
+import {
+  Device,
+  DeviceSurvey,
+  DeviceSurveyStatistics,
+  DeviceSurveyStatus,
+  Survey,
+  SurveyStatus
+} from "../generated/client";
+import { StatisticsGroupedBySurvey, SurveyManagementStatus } from "../types";
 import { DataValidation } from "./data-validation";
-import { SurveyManagementStatus } from "../types";
+import { DateTime } from "luxon";
 
 /**
  * Namespace for Survey utilities
@@ -26,10 +33,14 @@ namespace SurveyUtils {
     if (!foundDeviceSurveys?.length) return;
 
     const earliestPublishStartTime = Math.min(
-      ...foundDeviceSurveys.map(
-        (deviceSurvey) =>
-          deviceSurvey.publishStartTime?.valueOf() ?? deviceSurvey.metadata!.createdAt!.valueOf()
-      )
+      ...foundDeviceSurveys
+        .filter((deviceSurvey) =>
+          DataValidation.validateValueIsNotUndefinedNorNull(deviceSurvey.metadata?.createdAt)
+        )
+        .map(
+          (deviceSurvey) =>
+            deviceSurvey.publishStartTime?.valueOf() ?? deviceSurvey.metadata!.createdAt!.valueOf()
+        )
     );
 
     return DateTime.fromMillis(earliestPublishStartTime).toFormat("dd.MM.yyyy");
@@ -109,6 +120,91 @@ namespace SurveyUtils {
     if (survey.status === SurveyStatus.Approved) return SurveyManagementStatus.APPROVED;
 
     return SurveyManagementStatus.DRAFT;
+  };
+
+  /**
+   * Gets devices that a survey is published on
+   *
+   * @param survey survey
+   * @param deviceSurveys device surveys
+   * @returns list of devices survey is published on
+   */
+  export const getSurveysPublishedDevices = (survey: Survey, deviceSurveys: DeviceSurvey[], devices: Device[]) => {
+    const foundDeviceSurveys = deviceSurveys.filter(
+      (deviceSurvey) => deviceSurvey.surveyId === survey.id
+    );
+
+    if (foundDeviceSurveys.length) {
+      if (
+        foundDeviceSurveys.some(
+          (deviceSurvey) => deviceSurvey.status === DeviceSurveyStatus.Published
+        )
+      ) {
+        const publishedDeviceSurveys = foundDeviceSurveys.filter(deviceSurvey => deviceSurvey.status === DeviceSurveyStatus.Published);
+
+        return devices.filter(device => publishedDeviceSurveys.some(activeDeviceSurvey => activeDeviceSurvey.deviceId === device.id));
+      }
+    }
+  };
+
+  /**
+   * Gets device with highest amount of answers for survey
+   *
+   * @param devices devices
+   * @param statistics statistics
+   * @returns device with highest amount of answers
+   */
+  export const getDeviceWithHighestAmountOfAnswers = (
+    devices: Device[],
+    statistics: DeviceSurveyStatistics[]
+  ) => {
+    let highestTotalAnswerCount = 0;
+    let deviceWithMostAnswers: string;
+
+    for (const statistic of statistics) {
+      if (statistic.totalAnswerCount > highestTotalAnswerCount) {
+        highestTotalAnswerCount = statistic.totalAnswerCount;
+        deviceWithMostAnswers = statistic.deviceId;
+      }
+    }
+
+    return devices.find((device) => device.id === deviceWithMostAnswers);
+  };
+
+  /**
+   * Gets survey total answer count
+   *
+   * @param surveyId survey id
+   * @param groupedStatistics grouped statistics
+   * @returns total answer count
+   */
+  export const getSurveyTotalAnswerCount = (
+    surveyId: string,
+    groupedStatistics: StatisticsGroupedBySurvey
+  ): number => {
+    return groupedStatistics[surveyId].reduce(
+      (a: number, b: DeviceSurveyStatistics) => a + b.totalAnswerCount,
+      0
+    );
+  };
+
+  /**
+   * Groups statistics by survey
+   *
+   * @param statistics statistics
+   * @returns statistics grouped by survey
+   */
+  export const groupStatisticsBySurvey = (
+    statistics: DeviceSurveyStatistics[]
+  ): StatisticsGroupedBySurvey => {
+    return statistics.reduce((result: any, obj: DeviceSurveyStatistics) => {
+      const surveyId = obj.surveyId;
+      if (!result[surveyId as keyof typeof result]) {
+        result[surveyId as keyof typeof result] = [];
+      }
+      result[surveyId as keyof typeof result].push(obj);
+      return result;
+    }, {});
   };
 }
 

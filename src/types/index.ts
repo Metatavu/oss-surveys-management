@@ -1,4 +1,4 @@
-import strings from "../localization/strings";
+import { DeviceSurveyStatistics } from "../generated/client";
 
 /**
  * Error context type
@@ -48,7 +48,7 @@ export enum QuestionType {
 export interface IframeClickEvent extends Event {
   detail: {
     eventType: "iframeclick";
-    pageNumber: number;
+    pageId: string;
   };
 }
 
@@ -77,7 +77,8 @@ export enum NavigationLinks {
  */
 export enum EditorPanel {
   SURVEY = "SURVEY",
-  PAGE = "PAGE"
+  PAGE = "PAGE",
+  PUBLISH = "PUBLISH"
 }
 
 /**
@@ -99,27 +100,8 @@ export enum LayoutType {
  */
 export enum Background {
   DEFAULT = "#00aa46",
-  IMAGE_1 = "image 1",
-  IMAGE_2 = "image 2",
-  IMAGE_3 = "image 3",
-  IMAGE_4 = "image 4",
-  IMAGE_5 = "image 5"
+  IMAGE_1 = "image 1"
 }
-
-/**
- * Gets translated background
- *
- * @param background navigation
- */
-export const getTranslatedBackground = (background: Background): string =>
-  ({
-    [Background.DEFAULT]: strings.editSurveysScreen.editPagesPanel.backgroundImages.default,
-    [Background.IMAGE_1]: strings.editSurveysScreen.editPagesPanel.backgroundImages.image1,
-    [Background.IMAGE_2]: strings.editSurveysScreen.editPagesPanel.backgroundImages.image2,
-    [Background.IMAGE_3]: strings.editSurveysScreen.editPagesPanel.backgroundImages.image3,
-    [Background.IMAGE_4]: strings.editSurveysScreen.editPagesPanel.backgroundImages.image4,
-    [Background.IMAGE_5]: strings.editSurveysScreen.editPagesPanel.backgroundImages.image5
-  })[background];
 
 /**
  * Type describing available languages
@@ -143,7 +125,8 @@ export type EditablePageElement = {
 export enum PageElementType {
   H1 = "h1",
   P = "p",
-  DIV = "div"
+  DIV = "div",
+  IMG = "img"
 }
 
 /**
@@ -154,4 +137,34 @@ export enum SurveyManagementStatus {
   APPROVED = "approved",
   SCHEDULED = "scheduled",
   DRAFT = "draft"
+}
+
+/** Enum for survey screen mode */
+export enum SurveyScreenMode {
+  EDITOR,
+  PUBLISH,
+  STATISTICS
+}
+
+/**
+ * Type for Survey Statistics grouped by Survey
+ */
+export type StatisticsGroupedBySurvey = {
+  [key: string]: DeviceSurveyStatistics[];
+};
+
+/**
+ * Interface for SurveyQuestionStatistics
+ */
+export interface SurveyQuestionStatistics {
+  pageId: string;
+  options: SurveyQuestionOptionStatistics[];
+}
+
+/**
+ * Interface for SurveyQuestionOptionStatistics
+ */
+export interface SurveyQuestionOptionStatistics {
+  answerCount: number;
+  questionOptionValue: string;
 }

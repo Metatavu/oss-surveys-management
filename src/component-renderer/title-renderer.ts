@@ -1,27 +1,14 @@
-import { v4 as uuid } from "uuid";
-import { AbstractQuestionRenderer } from "../utils/question-utils";
+import { AbstractRenderer } from "./abstract-renderer";
 
 /**
- * Class for PageTitleRenderer
+ * Title Renderer
  */
-export class PageTitleRenderer extends AbstractQuestionRenderer {
+export class TitleRenderer extends AbstractRenderer {
   /**
-   * Convert page title text to html string
+   * Renders an HTML h1 element with given value as its text.
    *
-   * @param title title
+   * @param value display text
    * @returns html string
    */
-  public render = (title: string): string =>
-    `<h1
-      id="${uuid()}"
-      style="
-        margin: 0;
-        padding: 0;
-        text-transform: uppercase;
-        font-size: 12rem;
-        font-family: SBonusDisplay-Black;
-      "
-      >
-      ${title}
-    </h1>`;
+  public render = (value: string): string => `<h1 class="md">${value}</h1>`;
 }

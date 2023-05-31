@@ -1,30 +1,14 @@
-import { AbstractQuestionRenderer } from "../utils/question-utils";
-import { v4 as uuid } from "uuid";
+import { AbstractRenderer } from "./abstract-renderer";
 
 /**
- * Class for SingleSelectTextQuestionRenderer
+ * Single Select Question Renderer
  */
-export class SingleSelectTextQuestionRenderer extends AbstractQuestionRenderer {
+export class SingleSelectQuestionRenderer extends AbstractRenderer {
   /**
-   * Convert single question type option into html buttons
+   * Renders an HTML button element with given value as its text.
    *
-   * @param option option
+   * @param value display text
    * @returns html string
    */
-  public render = (option: string): string =>
-    `<button
-      id="${uuid()}"
-      style="
-        width: 100%;
-        height: 250px;
-        font-size: 6rem;
-        font-family: 'SBonusText-Bold';
-        color: #fff;
-        background: transparent;
-        border: 20px solid #fff;
-        margin-bottom: 6rem;
-      "
-    >
-      ${option}
-    </button>`;
+  public render = (value: string): string => `<button class="option">${value}</button>`;
 }

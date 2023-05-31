@@ -25,6 +25,16 @@ namespace DeviceUtils {
     devices.filter(
       (device) => !deviceSurveys.find((deviceSurvey) => deviceSurvey.deviceId === device.id)
     );
+
+  /**
+   * Gets devices survey count
+   *
+   * @param device device
+   * @param devicesSurveys devices surveys
+   * @returns devices survey count
+   */
+  export const getDeviceSurveyCount = (device: Device, devicesSurveys: DeviceSurvey[]) =>
+    devicesSurveys.filter((deviceSurvey) => deviceSurvey.deviceId === device.id).length;
 }
 
 export default DeviceUtils;

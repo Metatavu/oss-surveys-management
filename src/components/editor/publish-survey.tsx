@@ -1,10 +1,11 @@
 import { Device, DeviceSurvey, DeviceSurveyStatus, Survey } from "../../generated/client";
+import SurveyUtils from "../../utils/survey-utils";
 import DevicesPanel from "./devices-panel";
 import PropertiesPanel from "./properties-panel";
 import PublishDeviceInfo from "./publish-device-info";
 import PublishProperties from "./publish-properties";
 import { Stack } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 /**
  * Components properties
@@ -21,6 +22,20 @@ interface Props {
  */
 const PublishSurvey = ({ survey, devices, deviceSurveys, publishSurveys }: Props) => {
   const [selectedDevices, setSelectedDevices] = useState<Device[]>([]);
+
+  /**
+   * Get list of devices the selected survey is published on
+   */
+  const getActiveDevices = () => {
+    const activeDevices = SurveyUtils.getSurveysPublishedDevices(survey, deviceSurveys, devices);
+    if (!activeDevices) return;
+
+    setSelectedDevices(activeDevices);
+  };
+
+  useEffect(() => {
+    getActiveDevices();
+  },[]);
 
   /**
    * Publishes survey

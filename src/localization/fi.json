@@ -182,6 +182,12 @@
       "page": "Sivu {0}",
       "title": "Otsikko",
       "questionType": "Kyselyn tyyppi",
+      "questionTypes": {
+        "singleSelect": "Valinta",
+        "multiSelect": "Monivalinta",
+        "freeText": "Vapaa teksti"
+      },
+      "question": "Kysely",
       "answerOptions": "Vastausvaihtoehdot",
       "answerOptionPlaceholder": "Vaihtoehto {0}",
       "deleteAnswerOptionTitle": "Poista vastausvaihtoehto",

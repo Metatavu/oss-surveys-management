@@ -1,7 +1,7 @@
 import { PageQuestionType } from "../../generated/client";
 import strings from "../../localization/strings";
 import GenericDialog from "../generic/generic-dialog";
-import { FormControlLabel, Radio, RadioGroup, Stack, Tooltip, Typography } from "@mui/material";
+import { FormControlLabel, Radio, RadioGroup, Stack, Typography } from "@mui/material";
 import { ChangeEvent, useState } from "react";
 
 /**
@@ -22,7 +22,7 @@ const AddQuestionDialog = ({ open, pageId, onClose, onAddQuestion }: Props) => {
     PageQuestionType.SingleSelect
   );
 
-  const { title, singleSelect, multiSelect, freeText, description, addQuestion } =
+  const { title, singleSelect, multiSelect, description, addQuestion } =
     strings.editSurveysScreen.addQuestion.dialog;
 
   /**
@@ -69,14 +69,6 @@ const AddQuestionDialog = ({ open, pageId, onClose, onAddQuestion }: Props) => {
             control={<Radio />}
             label={multiSelect}
           />
-          <Tooltip title={strings.generic.notImplemented} placement="bottom-start">
-            <FormControlLabel
-              value={PageQuestionType.Freetext}
-              disabled
-              control={<Radio />}
-              label={freeText}
-            />
-          </Tooltip>
         </RadioGroup>
       </Stack>
     </GenericDialog>

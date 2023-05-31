@@ -182,6 +182,12 @@
       "page": "Page {0}",
       "title": "Title",
       "questionType": "Question type",
+      "questionTypes": {
+        "singleSelect": "Single select",
+        "multiSelect": "Multi select",
+        "freeText": "Free text"
+      },
+      "question": "Question",
       "answerOptions": "Answer options",
       "answerOptionPlaceholder": "Answer option {0}",
       "deleteAnswerOptionTitle": "Delete answer option",

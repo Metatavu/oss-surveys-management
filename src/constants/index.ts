@@ -26,3 +26,5 @@ export const IMAGES = [
 export const PAGE_IMAGES = [{ key: Background.DEFAULT, value: "DEFAULT" }].concat(IMAGES);
 
 export const PAGE_BACKGROUNDS = [{ key: Background.DEFAULT, value: "DEFAULT" }].concat(IMAGES);
+
+export const READY_TO_USE_LAYOUTS = ["question", "info"];

@@ -37,6 +37,8 @@ const ChartTooltip = ({ active, label, payload }: TooltipProps<ValueType, string
       </Paper>
     );
   }
+
+  return null;
 };
 
 export default ChartTooltip;

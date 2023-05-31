@@ -44,7 +44,7 @@ const DevicesPanel = ({ devices, selectedDevices, setSelectedDevices }: Props) =
         key={device.id}
         label={device.name ?? strings.generic.unnamed}
         name={device.id}
-        defaultChecked={isSelected}
+        checked={isSelected}
         control={<Checkbox onChange={handleCheckboxChange} />}
       />
     );

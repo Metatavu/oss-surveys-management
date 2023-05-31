@@ -1,3 +1,4 @@
+import { useWindowSize } from "usehooks-ts";
 import { errorAtom } from "../../atoms/error";
 import { Survey } from "../../generated/client";
 import strings from "../../localization/strings";
@@ -40,8 +41,8 @@ const Root = styled(Stack, {
  */
 const EditSurvey = ({ survey, saveSurvey }: Props) => {
   const setError = useSetAtom(errorAtom);
-  const getWindowHeight = window.innerHeight;
-  const availableWindowHeight = getWindowHeight - 118;
+  const { height } = useWindowSize();
+  const availableWindowHeight = height - 118;
   const [panelProperties, setPanelProperties] = useState<PanelProperties>({
     panelType: EditorPanel.SURVEY
   });

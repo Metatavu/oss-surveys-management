@@ -246,7 +246,8 @@
       "scheduling": "Scheduling",
       "publishStartTime": "Publication start",
       "publishEndTime": "Publication end",
-      "publishButton": "Activate survey"
+      "publishButton": "Activate survey",
+      "activateButtonTitle": "Activate survey to selected devices"
     },
     "headings": {
       "device": "Device",

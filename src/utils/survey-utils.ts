@@ -123,6 +123,31 @@ namespace SurveyUtils {
   };
 
   /**
+   * Gets devices that a survey is published on
+   *
+   * @param survey survey
+   * @param deviceSurveys device surveys
+   * @returns list of devices survey is published on
+   */
+  export const getSurveysPublishedDevices = (survey: Survey, deviceSurveys: DeviceSurvey[], devices: Device[]) => {
+    const foundDeviceSurveys = deviceSurveys.filter(
+      (deviceSurvey) => deviceSurvey.surveyId === survey.id
+    );
+
+    if (foundDeviceSurveys.length) {
+      if (
+        foundDeviceSurveys.some(
+          (deviceSurvey) => deviceSurvey.status === DeviceSurveyStatus.Published
+        )
+      ) {
+        const publishedDeviceSurveys = foundDeviceSurveys.filter(deviceSurvey => deviceSurvey.status === DeviceSurveyStatus.Published);
+
+        return devices.filter(device => publishedDeviceSurveys.some(activeDeviceSurvey => activeDeviceSurvey.deviceId === device.id));
+      }
+    }
+  };
+
+  /**
    * Gets device with highest amount of answers for survey
    *
    * @param devices devices

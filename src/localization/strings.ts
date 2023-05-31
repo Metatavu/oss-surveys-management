@@ -215,6 +215,12 @@ export interface Localized extends LocalizedStringsMethods {
       page: string;
       title: string;
       questionType: string;
+      questionTypes: {
+        singleSelect: string;
+        multiSelect: string;
+        freeText: string;
+      };
+      question: string;
       answerOptions: string;
       answerOptionPlaceholder: string;
       deleteAnswerOptionTitle: string;

@@ -6,7 +6,8 @@ import {
   DEVICE_HEIGHT,
   DEVICE_WIDTH,
   EDITOR_SCREEN_PREVIEW_CONTAINER_HEIGHT,
-  EDITOR_SCREEN_PREVIEW_CONTAINER_WIDTH
+  EDITOR_SCREEN_PREVIEW_CONTAINER_WIDTH,
+  READY_TO_USE_LAYOUTS
 } from "../../constants";
 import { Layout, Page, PageQuestionType } from "../../generated/client";
 import { useApi } from "../../hooks/use-api";
@@ -259,6 +260,7 @@ const Editor = ({ setPanelProperties, surveyId }: Props) => {
         title={LocalizationUtils.getTranslatedLayoutName(layout.name) ?? strings.generic.unnamed}
         image={getLayoutThumbnail(layout)}
         onClick={() => createPage(layout.name)}
+        disabled={!READY_TO_USE_LAYOUTS.includes(layout.name)}
         selected={false}
       />
     ));

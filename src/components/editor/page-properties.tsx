@@ -1,7 +1,13 @@
 import { errorAtom } from "../../atoms/error";
 import { layoutsAtom } from "../../atoms/layouts";
 import { pagesAtom } from "../../atoms/pages";
-import { Layout, Page, PageProperty, PageQuestionOption } from "../../generated/client";
+import {
+  Layout,
+  Page,
+  PageProperty,
+  PageQuestionOption,
+  PageQuestionType
+} from "../../generated/client";
 import { useApi } from "../../hooks/use-api";
 import strings from "../../localization/strings";
 import GenericDialog from "../generic/generic-dialog";
@@ -15,7 +21,8 @@ import {
   TextField,
   IconButton,
   Typography,
-  MenuItem
+  MenuItem,
+  Stack
 } from "@mui/material";
 import { useAtom, useSetAtom } from "jotai";
 import { ChangeEvent, FocusEvent, Fragment, useEffect, useState } from "react";
@@ -277,6 +284,25 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
   };
 
   /**
+   * Handles question type change
+   *
+   * @param event event
+   */
+  const handleQuestionTypeChange = async ({ target: { value } }: ChangeEvent<HTMLInputElement>) => {
+    if (!pageToEdit?.id || !pageToEdit?.question) return;
+
+    const pageToUpdate: Page = {
+      ...pageToEdit,
+      question: {
+        ...pageToEdit.question,
+        type: value as PageQuestionType
+      }
+    };
+
+    await savePage(pageToUpdate);
+  };
+
+  /**
    * Renders text property editor
    *
    * @param element element
@@ -406,7 +432,25 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
       </Box>
       {PageUtils.hasQuestionsPlaceholder(pageToEditLayout?.html) && (
         <Box p={2} sx={{ borderBottom: "1px solid #DADCDE" }}>
-          <Typography variant="h6">{strings.editSurveysScreen.editPagesPanel.addOption}</Typography>
+          <Stack direction="row">
+            <Typography variant="h6" flex={0.5}>
+              {strings.editSurveysScreen.editPagesPanel.question}
+            </Typography>
+            <TextField
+              fullWidth
+              select
+              sx={{ flex: 0.5 }}
+              value={pageToEdit?.question?.type}
+              onChange={handleQuestionTypeChange}
+            >
+              <MenuItem value={PageQuestionType.SingleSelect}>
+                {strings.editSurveysScreen.editPagesPanel.questionTypes.singleSelect}
+              </MenuItem>
+              <MenuItem value={PageQuestionType.MultiSelect}>
+                {strings.editSurveysScreen.editPagesPanel.questionTypes.multiSelect}
+              </MenuItem>
+            </TextField>
+          </Stack>
           {renderOptions()}
           {renderAddNewOption()}
         </Box>

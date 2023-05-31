@@ -77,9 +77,8 @@ const wrapTemplate = (bodyContent: string, pageId?: string) => `<!DOCTYPE html>
         display: flex;
         flex: 1;
         flex-direction: column;
-        gap: 2rem;
-        margin-top: 10%;
         justify-content: center;
+        gap: 5%;
       }
       .img-wrapper {
         display: flex;
@@ -90,8 +89,8 @@ const wrapTemplate = (bodyContent: string, pageId?: string) => `<!DOCTYPE html>
       }
       .option {
         width: 100%;
+        box-sizing: border-box;
         padding: 30px 20px;
-        margin-bottom: 2rem;
         font-size: 2.5rem;
         font-family: 'SBonusText-Bold';
         text-align: center;
@@ -100,13 +99,48 @@ const wrapTemplate = (bodyContent: string, pageId?: string) => `<!DOCTYPE html>
         border: 4px solid #fff;
         transition: background-color 0.2s ease-in-out;
       }
+      .multi-option {
+        position: relative;
+        width: 100%;
+        padding: 20px 0 20px 130px;
+        box-sizing: border-box;
+        font-size: 2.5rem;
+        line-height: 150%;
+        font-family: 'SBonusText-Bold';
+        color: #fff;
+        background: transparent;
+        transition: background-color 0.2s ease-in-out;
+      }
+      .multi-option:before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        height: 80px;
+        width: 80px;
+        border: 4px solid #fff;
+        transition: background-color 0.2s ease-in-out;
+      }
+      .multi-option.selected:before {
+        background-color: #fff
+      }
+      .multi-option.selected:after {
+        content: "✓";
+        position: absolute;
+        left: 26px;
+        top: 50%;
+        color: #00AA46;
+        transform: translateY(-50%);
+      }
       .next-button {
         background-color: transparent;
         border: none;
         color: #ffffff;
-        height: 80px;
+        padding: 30px 20px;
         font-family: SBonusText-Bold;
         font-size: 2.5rem;
+        border: 4px solid #fff;
         transition: background-color 0.2s ease-in-out;
       }
       .next-button:active, option:active {

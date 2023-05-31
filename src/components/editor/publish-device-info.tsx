@@ -20,7 +20,7 @@ interface Props {
 const PublishDeviceInfo = ({ devices, deviceSurveys }: Props) => {
   const listHeadings = Object.values(strings.publishSurveys.headings);
   return (
-    <Stack flex={1} p={theme.spacing(4)}>
+    <Stack flex={1} p={theme.spacing(4)} overflow="auto">
       <Paper>
         <List>
           <ListHeader headings={listHeadings} />

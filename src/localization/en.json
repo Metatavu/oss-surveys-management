@@ -216,7 +216,17 @@
     "answers": "Answers",
     "mostPopularDays": "Most popular days",
     "mostPopularHours": "Most popular hours",
-    "statisticsSource": "Source: "
+    "statisticsSource": "Source: ",
+    "labels": {
+      "answerCount": "Answers: {0}",
+      "monday": "Mo",
+      "tuesday": "Tu",
+      "wednesday": "We",
+      "thursday": "Th",
+      "friday": "Fr",
+      "saturday": "Sa",
+      "sunday": "Su"
+    }
   },
   "publishSurveys": {
     "surveyPublished": "Survey published",

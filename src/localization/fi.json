@@ -216,7 +216,17 @@
     "answers": "Vastauksia",
     "mostPopularDays": "Vilkkaimmat päivät",
     "mostPopularHours": "Vilkkaimmat tunnit",
-    "statisticsSource": "Lähde: "
+    "statisticsSource": "Lähde: ",
+    "labels": {
+      "answerCount": "Vastauksia: {0}",
+      "monday": "Ma",
+      "tuesday": "Ti",
+      "wednesday": "Ke",
+      "thursday": "To",
+      "friday": "Pe",
+      "saturday": "La",
+      "sunday": "Su"
+    }
   },
   "publishSurveys": {
     "surveyPublished": "Kysely julkaistu",

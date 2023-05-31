@@ -10,5 +10,5 @@ export class MultiSelectQuestionRenderer extends AbstractRenderer {
    * @param value display text
    * @returns html string
    */
-  public render = (value: string): string => `<div class="option">${value}</div>`;
+  public render = (value: string): string => `<div class="multi-option">${value}</div>`;
 }

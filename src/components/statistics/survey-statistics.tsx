@@ -122,15 +122,15 @@ const SurveyStatistics = ({ devices, survey }: Props) => {
         weekDayAverages[weekDayIndex] += surveyStatistic.averages.weekDays[weekDayIndex];
       }
     }
-
+    const { labels } = strings.surveyStatistics;
     const dailyChartdata = [
-      { label: "Ma", value: weekDayAverages[0] },
-      { label: "Ti", value: weekDayAverages[1] },
-      { label: "Ke", value: weekDayAverages[2] },
-      { label: "To", value: weekDayAverages[3] },
-      { label: "Pe", value: weekDayAverages[4] },
-      { label: "La", value: weekDayAverages[5] },
-      { label: "Su", value: weekDayAverages[6] }
+      { label: labels.monday, value: weekDayAverages[0] },
+      { label: labels.tuesday, value: weekDayAverages[1] },
+      { label: labels.wednesday, value: weekDayAverages[2] },
+      { label: labels.thursday, value: weekDayAverages[3] },
+      { label: labels.friday, value: weekDayAverages[4] },
+      { label: labels.saturday, value: weekDayAverages[5] },
+      { label: labels.sunday, value: weekDayAverages[6] }
     ];
 
     return dailyChartdata;
@@ -183,7 +183,7 @@ const SurveyStatistics = ({ devices, survey }: Props) => {
     <StatisticPage
       key={question.pageId}
       question={question}
-      pageTitle={`${getQuestionTitle(question.pageId)} - ${question.pageId}`}
+      pageTitle={getQuestionTitle(question.pageId)}
     />
   );
 
@@ -244,7 +244,7 @@ const SurveyStatistics = ({ devices, survey }: Props) => {
         <Content gap={2}>
           {surveyStatistics.length > 0 && (
             <OverallStatisticsCharts
-              devices={devices}
+              devices={selectedDevices}
               surveyStatistics={surveyStatistics}
               overallAnswerCount={overallAnswerCount()}
               hourlyChartData={getHourlyAverageAnswerCount()}

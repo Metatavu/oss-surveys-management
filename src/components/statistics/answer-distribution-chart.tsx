@@ -1,5 +1,6 @@
 import { Bar, BarChart, ResponsiveContainer, Tooltip, XAxis, YAxis, LabelList } from "recharts";
 import { DeviceSurveyQuestionOptionStatistics } from "../../generated/client";
+import ChartTooltip from "./chart-tooltip";
 
 /**
  * Component properties
@@ -18,8 +19,13 @@ const AnswersDistributionChart = ({ data }: Props) => {
     <ResponsiveContainer height={height}>
       <BarChart data={data} layout="vertical" margin={{ right: 50 }}>
         <XAxis type="number" fontFamily="SBonusText-Medium" />
-        <YAxis type="category" dataKey="questionOptionValue" width={250} fontFamily="SBonusText-Medium" />
-        <Tooltip />
+        <YAxis
+          type="category"
+          dataKey="questionOptionValue"
+          width={250}
+          fontFamily="SBonusText-Medium"
+        />
+        <Tooltip content={ChartTooltip} />
         <Bar dataKey="answerCount" fill="#00aa46">
           <LabelList dataKey="answerCount" position="right" fontFamily="SBonusText-Medium" />
         </Bar>

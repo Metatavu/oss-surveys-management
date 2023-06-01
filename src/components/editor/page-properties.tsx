@@ -1,6 +1,7 @@
 import { errorAtom } from "../../atoms/error";
 import { layoutsAtom } from "../../atoms/layouts";
 import { pagesAtom } from "../../atoms/pages";
+import { EDITABLE_TEXT_PAGE_ELEMENTS, PAGE_BACKGROUNDS, PAGE_IMAGES } from "../../constants";
 import {
   Layout,
   Page,
@@ -10,27 +11,26 @@ import {
 } from "../../generated/client";
 import { useApi } from "../../hooks/use-api";
 import strings from "../../localization/strings";
+import { EditablePageElement, PageElementType } from "../../types";
+import LocalizationUtils from "../../utils/localization-utils";
+import PageUtils from "../../utils/page-utils";
 import GenericDialog from "../generic/generic-dialog";
-import { AddCircle, Edit, Close } from "@mui/icons-material";
+import { AddCircle, Close, Edit } from "@mui/icons-material";
 import {
   Box,
   Button,
   FormControlLabel,
+  IconButton,
   InputAdornment,
+  MenuItem,
+  Stack,
   Switch,
   TextField,
-  IconButton,
-  Typography,
-  MenuItem,
-  Stack
+  Typography
 } from "@mui/material";
 import { useAtom, useSetAtom } from "jotai";
 import { ChangeEvent, FocusEvent, Fragment, useEffect, useState } from "react";
-import PageUtils from "../../utils/page-utils";
-import { EditablePageElement, PageElementType } from "../../types";
-import { EDITABLE_TEXT_PAGE_ELEMENTS, PAGE_BACKGROUNDS, PAGE_IMAGES } from "../../constants";
 import { toast } from "react-toastify";
-import LocalizationUtils from "../../utils/localization-utils";
 
 /**
  * Component properties
@@ -428,6 +428,16 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
       <Box p={2} sx={{ borderBottom: "1px solid #DADCDE" }}>
         {elementsToEdit
           .filter((element) => EDITABLE_TEXT_PAGE_ELEMENTS.includes(element.type))
+          // TODO: this sorting is a temporary fix until the page layout order is persisted from the backend
+          .sort((a, b) => {
+            if (a.type === PageElementType.H1 && b.type === PageElementType.P) {
+              return -1;
+            } else if (a.type === PageElementType.P && b.type === PageElementType.H1) {
+              return 1;
+            } else {
+              return 0;
+            }
+          })
           .map(renderTextPropertyEditor)}
       </Box>
       {PageUtils.hasQuestionsPlaceholder(pageToEditLayout?.html) && (

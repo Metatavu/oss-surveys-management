@@ -141,7 +141,7 @@ const EditorPreview = ({
         width={width}
         height={height}
         seamless
-        style={{ border: selectedPage === page ? "4px solid #46dc78" : "none" }}
+        style={{ border: selectedPage?.id === page.id ? "4px solid #46dc78" : "none" }}
       />
       {PageUtils.hasQuestionsPlaceholder(htmlString) && !page.question && (
         <>

@@ -29,7 +29,7 @@ import {
   Typography
 } from "@mui/material";
 import { useAtom, useSetAtom } from "jotai";
-import { ChangeEvent, FocusEvent, Fragment, useEffect, useState } from "react";
+import { ChangeEvent, FocusEvent, Fragment, useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
 
 /**
@@ -44,6 +44,7 @@ interface Props {
  * Renders page properties component
  */
 const PageProperties = ({ pageNumber, surveyId }: Props) => {
+  const mounted = useRef(true);
   const [surveyPages, setSurveyPages] = useAtom(pagesAtom);
   const [pageLayouts] = useAtom(layoutsAtom);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
@@ -53,6 +54,13 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
   const [pageToEdit, setPageToEdit] = useState<Page>();
   const [elementsToEdit, setElementsToEdit] = useState<EditablePageElement[]>([]);
   const [pageToEditLayout, setPageToEditLayout] = useState<Layout>();
+
+  useEffect(() => {
+    mounted.current = true;
+    return () => {
+      mounted.current = false;
+    };
+  });
 
   /**
    * Initializes editable pages properties
@@ -66,16 +74,18 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
         foundPage?.properties?.push({ key: variable.key, value: "" });
       }
 
-      if (!foundLayout) continue;
-
-      const elementToEdit = PageUtils.getPageTextElementTypeAndId(foundLayout.html, variable.key);
-      elements.push(elementToEdit);
+      if (foundLayout) {
+        const elementToEdit = PageUtils.getPageTextElementTypeAndId(foundLayout.html, variable.key);
+        elements.push(elementToEdit);
+      }
     }
 
-    setPageToEdit(foundPage);
-    setPageToEditLayout(foundLayout);
-    setElementsToEdit(elements);
-  }, [pageNumber]);
+    if (mounted) {
+      setPageToEdit(foundPage);
+      setPageToEditLayout(foundLayout);
+      setElementsToEdit(elements);
+    }
+  }, [pageNumber, surveyPages, pageLayouts]);
 
   /**
    * Saves page
@@ -85,13 +95,13 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
   const savePage = async (page: Page) => {
     try {
       if (!page?.id) return;
-      setPageToEdit(
-        await pagesApi.updateSurveyPage({
-          surveyId: surveyId,
-          pageId: page.id,
-          page: page
-        })
-      );
+
+      await pagesApi.updateSurveyPage({
+        surveyId: surveyId,
+        pageId: page.id,
+        page: page
+      });
+
       setSurveyPages(surveyPages.map((p) => (p.id !== page.id ? p : page)));
       toast.success(strings.editSurveysScreen.editPagesPanel.pageSaved);
     } catch (error: any) {
@@ -106,8 +116,8 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
     <GenericDialog
       title={strings.editSurveysScreen.editPagesPanel.confirmDeleteOption}
       open={deleteDialogOpen}
-      onCancel={() => setDeleteDialogOpen(false)}
-      onClose={() => setDeleteDialogOpen(false)}
+      onCancel={() => mounted && setDeleteDialogOpen(false)}
+      onClose={() => mounted && setDeleteDialogOpen(false)}
       onConfirm={() => null}
       children={<div>{optionToDelete}</div>}
       confirmButtonText={strings.generic.confirm}
@@ -307,28 +317,31 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
    *
    * @param element element
    */
-  const renderTextPropertyEditor = (element: EditablePageElement) => (
-    <Fragment key={element.id}>
-      <Typography variant="h6">{PageUtils.getTextPropertyLabel(element.type)}</Typography>
-      <TextField
-        name={element.id}
-        defaultValue={
-          pageToEdit?.properties?.find((property) => property.key === element.id)?.value ?? ""
-        }
-        placeholder={PageUtils.getTextPropertyLabel(element.type) ?? ""}
-        fullWidth
-        multiline
-        onBlur={handleTextChange}
-        InputProps={{
-          endAdornment: (
-            <InputAdornment position="end">
-              <Edit fontSize="small" color="primary" />
-            </InputAdornment>
-          )
-        }}
-      />
-    </Fragment>
-  );
+  const renderTextPropertyEditor = (element: EditablePageElement) => {
+    const defaultValue =
+      pageToEdit?.properties?.find((property) => property.key === element.id)?.value ?? "";
+
+    return (
+      <Fragment key={element.id}>
+        <Typography variant="h6">{PageUtils.getTextPropertyLabel(element.type)}</Typography>
+        <TextField
+          name={element.id}
+          defaultValue={defaultValue}
+          placeholder={PageUtils.getTextPropertyLabel(element.type) ?? ""}
+          fullWidth
+          multiline
+          onBlur={handleTextChange}
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <Edit fontSize="small" color="primary" />
+              </InputAdornment>
+            )
+          }}
+        />
+      </Fragment>
+    );
+  };
 
   /**
    * Renders pages question options
@@ -338,7 +351,7 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
 
     return pageToEdit.question.options.map((option) => (
       <TextField
-        key={option.id}
+        key={option.id ?? "key"}
         name={option.id}
         defaultValue={option.questionOptionValue}
         onBlur={handleOptionChange}
@@ -384,7 +397,7 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
         fullWidth
         select
         onChange={handleBackgroundChange}
-        value={PageUtils.getPageBackground(elementsToEdit, pageToEdit.properties)}
+        value={PageUtils.getPageBackground(elementsToEdit, pageToEdit.properties) ?? ""}
       >
         {PAGE_BACKGROUNDS.map((background) => (
           <MenuItem key={background.key} value={background.value}>
@@ -406,7 +419,7 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
         fullWidth
         select
         onChange={handleImageChange}
-        value={PageUtils.getPageImage(elementsToEdit, pageToEdit?.properties)}
+        value={PageUtils.getPageImage(elementsToEdit, pageToEdit?.properties) ?? ""}
       >
         {PAGE_IMAGES.map((image) => (
           <MenuItem key={image.key} value={image.value}>
@@ -450,9 +463,9 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
               fullWidth
               select
               sx={{ flex: 0.5 }}
-              value={pageToEdit?.question?.type}
+              value={pageToEdit?.question?.type ?? ""}
               onChange={handleQuestionTypeChange}
-            >
+            >s
               <MenuItem value={PageQuestionType.SingleSelect}>
                 {strings.editSurveysScreen.editPagesPanel.questionTypes.singleSelect}
               </MenuItem>

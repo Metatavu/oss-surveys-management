@@ -1,4 +1,4 @@
-import { Button, Stack, Typography, TypographyProps } from "@mui/material";
+import { Box, Button, Stack, Typography, TypographyProps } from "@mui/material";
 import { Device, Survey } from "../../generated/client";
 import strings from "../../localization/strings";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
@@ -58,7 +58,7 @@ const PublishProperties = ({ survey, selectedDevices, publishSurvey }: Props) =>
     value?: any
   ) => (
     <>
-      <Typography variant="h6" color="#c8c8c8">
+      <Typography variant="subtitle1">
         {label}
       </Typography>
       <DatePicker
@@ -104,24 +104,21 @@ const PublishProperties = ({ survey, selectedDevices, publishSurvey }: Props) =>
         )}
         {renderPanelLabelAndDatePicker(publishEndTime, setNewPublishEndTime, newPublishEndTime)}
       </Stack>
-      <Button
-        variant="outlined"
-        size="small"
-        sx={{
-          margin: "1rem",
-          padding: "0.5rem",
-          textTransform: "uppercase",
-          display: "flex",
-          justifyContent: "flex-start",
-          gap: "2rem"
-        }}
-        startIcon={<ArrowUpward />}
-        onClick={() =>
-          publishSurvey(newPublishStartTime || undefined, newPublishEndTime || undefined)
-        }
-      >
-        {publishButton}
-      </Button>
+      <Box p={3}>
+        <Button
+          variant="contained"
+          fullWidth
+          sx={{ justifyContent: "space-between" }}
+          startIcon={<ArrowUpward />}
+          endIcon={<ArrowUpward sx={{ opacity: 0 }} />}
+          title={strings.publishSurveys.rightPanel.activateButtonTitle}
+          onClick={() =>
+            publishSurvey(newPublishStartTime || undefined, newPublishEndTime || undefined)
+          }
+        >
+          {publishButton}
+        </Button>
+      </Box>
     </>
   );
 };

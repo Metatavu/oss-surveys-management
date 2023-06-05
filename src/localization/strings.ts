@@ -288,6 +288,7 @@ export interface Localized extends LocalizedStringsMethods {
       publishStartTime: string;
       publishEndTime: string;
       publishButton: string;
+      activateButtonTitle: string;
     };
     headings: {
       device: string;

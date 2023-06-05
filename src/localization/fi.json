@@ -246,7 +246,8 @@
       "scheduling": "Ajastus",
       "publishStartTime": "Aloitusaika",
       "publishEndTime": "Kyselyn päättymisaika",
-      "publishButton": "Aktivoi kysely"
+      "publishButton": "Aktivoi kysely",
+      "activateButtonTitle": "Aktivoi kysely valituille laitteille"
     },
     "headings": {
       "device": "Näyttö",

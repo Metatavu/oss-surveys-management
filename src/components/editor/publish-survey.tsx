@@ -35,7 +35,7 @@ const PublishSurvey = ({ survey, devices, deviceSurveys, publishSurveys }: Props
 
   useEffect(() => {
     getActiveDevices();
-  },[]);
+  }, []);
 
   /**
    * Publishes survey
@@ -61,7 +61,7 @@ const PublishSurvey = ({ survey, devices, deviceSurveys, publishSurveys }: Props
 
   return (
     <>
-      <Stack direction="row" flex={1}>
+      <Stack direction="row" flex={1} overflow="hidden">
         <PropertiesPanel width={250}>
           <DevicesPanel
             devices={devices}
@@ -70,7 +70,7 @@ const PublishSurvey = ({ survey, devices, deviceSurveys, publishSurveys }: Props
           />
         </PropertiesPanel>
         <PublishDeviceInfo devices={selectedDevices} deviceSurveys={deviceSurveys} />
-        <PropertiesPanel width={250}>
+        <PropertiesPanel width={300}>
           <PublishProperties
             survey={survey}
             selectedDevices={selectedDevices}

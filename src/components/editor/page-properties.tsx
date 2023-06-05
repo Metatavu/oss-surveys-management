@@ -275,7 +275,7 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
   /**
    * Handler for background change event
    *
-   * @param event event
+   * @param value new value
    */
   const handleBackgroundChange = ({ target: { value } }: ChangeEvent<HTMLInputElement>) => {
     setPendingPages(pages => {
@@ -307,6 +307,8 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
 
   /**
    * Handler for image change event
+   * 
+   * @param value new value
    */
   const handleImageChange = ({ target: { value } }: ChangeEvent<HTMLInputElement>) => {
     setPendingPages(pages => {

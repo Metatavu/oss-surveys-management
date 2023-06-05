@@ -57,7 +57,7 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
   const setError = useSetAtom(errorAtom);
 
   /**
-   * Updates mounted flag when component mount and unmounts
+   * Updates mounted flag when component mounts and unmounts
    */
   useEffect(() => {
     mounted.current = true;
@@ -194,7 +194,6 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
       const optionToUpdate = pageToUpdate.question.options.find((option) => option.id === name);
 
       if (!optionToUpdate || optionToUpdate.questionOptionValue === value) return pages;
-
 
       const updatedPage = {
         ...pageToUpdate,

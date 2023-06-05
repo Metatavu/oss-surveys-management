@@ -19,9 +19,7 @@ export const END_HOUR = 21;
 export const HOUR_GROUPING = 3;
 export const IMAGE_PLACEHOLDER_DATA_COMPONENT = "image";
 
-export const IMAGES = [
-  { key: Background.IMAGE_1, value: "/AO_suursavo_matkasivarrella_1080x1920.jpg" }
-];
+export const IMAGES = [{ key: Background.IMAGE_1, value: "/159795711_l.jpg" }];
 
 export const PAGE_IMAGES = [{ key: Background.DEFAULT, value: "DEFAULT" }].concat(IMAGES);
 

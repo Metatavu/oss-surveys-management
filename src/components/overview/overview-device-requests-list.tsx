@@ -1,11 +1,11 @@
-import { Button, List, ListItem, ListItemText } from "@mui/material";
 import { DeviceApprovalStatus, DeviceRequest } from "../../generated/client";
 import strings from "../../localization/strings";
-import ListHeader from "../generic/list-header";
-import { DateTime } from "luxon";
 import LocalizationUtils from "../../utils/localization-utils";
-import { Fragment, useState } from "react";
+import ListHeader from "../generic/list-header";
 import DeviceApprovalDialog from "./device-approval-dialog";
+import { Button, List, ListItem, ListItemText } from "@mui/material";
+import { DateTime } from "luxon";
+import { Fragment, useState } from "react";
 
 /**
  * Components properties
@@ -43,6 +43,8 @@ const OverviewDeviceRequestsList = ({ deviceRequests, actionButtonText, onClick 
       {actionButtonText}
     </Button>
   );
+
+  console.log("devices waiting for approval are: ", deviceRequests);
 
   return (
     <List>

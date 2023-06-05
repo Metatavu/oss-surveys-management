@@ -110,6 +110,7 @@ const OverviewScreen = () => {
    */
   const handleActionButtonClick = async (_: Device) => alert(strings.generic.notImplemented);
 
+  // TODO: Probelm with wrong device id to API should be from here
   /**
    * Handles device request approve button click
    *
@@ -118,20 +119,22 @@ const OverviewScreen = () => {
   const handleApproveDevice = async (deviceRequest: DeviceRequest) => {
     if (!deviceRequest?.id) return;
 
-    try {
-      setIsLoading(true);
-      const updatedDeviceRequest = await deviceRequestsApi.updateDeviceRequest({
-        requestId: deviceRequest.id,
-        deviceRequest: { ...deviceRequest, approvalStatus: DeviceApprovalStatus.Approved }
-      });
+    console.log("Approve device request", deviceRequest);
 
-      setDeviceRequests([
-        ...deviceRequests.filter((request) => request.id !== deviceRequest.id),
-        updatedDeviceRequest
-      ]);
-    } catch (error: any) {
-      setError(`${strings.errorHandling.overviewScreen.deviceRequestUpdateError}, ${error}`);
-    }
+    // try {
+    //   setIsLoading(true);
+    //   const updatedDeviceRequest = await deviceRequestsApi.updateDeviceRequest({
+    //     requestId: deviceRequest.id,
+    //     deviceRequest: { ...deviceRequest, approvalStatus: DeviceApprovalStatus.Approved }
+    //   });
+
+    //   setDeviceRequests([
+    //     ...deviceRequests.filter((request) => request.id !== deviceRequest.id),
+    //     updatedDeviceRequest
+    //   ]);
+    // } catch (error: any) {
+    //   setError(`${strings.errorHandling.overviewScreen.deviceRequestUpdateError}, ${error}`);
+    // }
     setIsLoading(false);
   };
 

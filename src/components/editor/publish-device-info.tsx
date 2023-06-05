@@ -1,10 +1,10 @@
-import { List, ListItem, ListItemText, Paper, Stack } from "@mui/material";
 import { Device, DeviceStatus, DeviceSurvey } from "../../generated/client";
 import strings from "../../localization/strings";
 import theme from "../../styles/theme";
-import ListHeader from "../generic/list-header";
 import DeviceUtils from "../../utils/device-utils";
 import LocalizationUtils from "../../utils/localization-utils";
+import ListHeader from "../generic/list-header";
+import { List, ListItem, ListItemText, Paper, Stack } from "@mui/material";
 
 /**
  * Components properties

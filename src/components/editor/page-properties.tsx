@@ -75,31 +75,28 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
    */
   const savePages = async () => {
     if (isEqual(surveyPages, pendingPages)) return;
-    try {
-      setSurveyPages(
-        await Promise.all(
-          debouncedPages.map(page =>
-            pagesApi.updateSurveyPage({
-              surveyId: surveyId,
-              pageId: page.id!,
-              page: page
-            })
-          )
+    setSurveyPages(
+      await Promise.all(
+        debouncedPages.map(page =>
+          pagesApi.updateSurveyPage({
+            surveyId: surveyId,
+            pageId: page.id!,
+            page: page
+          })
         )
-      );
+      )
+    );
 
-      toast.success(strings.editSurveysScreen.editPagesPanel.pageSaved);
-    } catch (error) {
-      setError(`${strings.errorHandling.editSurveysScreen.pageNotSaved}, ${error}`);
-    }
+    toast.success(strings.editSurveysScreen.editPagesPanel.pageSaved);
   };
 
   /**
    * Saves pages when page changes
-   * TODO: Find a way to 2
    */
   useEffect(() => {
-    savePages();
+    savePages().catch((error) =>
+      setError(`${strings.errorHandling.editSurveysScreen.pageNotSaved}, ${error}`)
+    );
   }, [debouncedPages]);
 
   /**

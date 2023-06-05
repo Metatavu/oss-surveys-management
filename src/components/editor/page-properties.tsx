@@ -29,8 +29,10 @@ import {
   Typography
 } from "@mui/material";
 import { useAtom, useSetAtom } from "jotai";
-import { ChangeEvent, FocusEvent, Fragment, useEffect, useRef, useState } from "react";
+import isEqual from "lodash.isequal";
+import { ChangeEvent, FocusEvent, Fragment, useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "react-toastify";
+import { useDebounce } from "usehooks-ts";
 
 /**
  * Component properties
@@ -46,15 +48,17 @@ interface Props {
 const PageProperties = ({ pageNumber, surveyId }: Props) => {
   const mounted = useRef(true);
   const [surveyPages, setSurveyPages] = useAtom(pagesAtom);
+  const [pendingPages, setPendingPages] = useState(surveyPages);
+  const debouncedPages = useDebounce(pendingPages, 1000);
   const [pageLayouts] = useAtom(layoutsAtom);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [optionToDelete, _] = useState<string>();
   const { pagesApi } = useApi();
   const setError = useSetAtom(errorAtom);
-  const [pageToEdit, setPageToEdit] = useState<Page>();
-  const [elementsToEdit, setElementsToEdit] = useState<EditablePageElement[]>([]);
-  const [pageToEditLayout, setPageToEditLayout] = useState<Layout>();
 
+  /**
+   * Updates mounted flag when component mount and unmounts
+   */
   useEffect(() => {
     mounted.current = true;
     return () => {
@@ -62,15 +66,51 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
     };
   });
 
+  useEffect(() => {
+    setPendingPages(surveyPages);
+  }, [surveyPages]);
+
+  /**
+   * Save pages
+   */
+  const savePages = async () => {
+    if (isEqual(surveyPages, pendingPages)) return;
+    try {
+      setSurveyPages(
+        await Promise.all(
+          debouncedPages.map(page =>
+            pagesApi.updateSurveyPage({
+              surveyId: surveyId,
+              pageId: page.id!,
+              page: page
+            })
+          )
+        )
+      );
+
+      toast.success(strings.editSurveysScreen.editPagesPanel.pageSaved);
+    } catch (error) {
+      setError(`${strings.errorHandling.editSurveysScreen.pageNotSaved}, ${error}`);
+    }
+  };
+
+  /**
+   * Saves pages when page changes
+   * TODO: Find a way to 2
+   */
+  useEffect(() => {
+    savePages();
+  }, [debouncedPages]);
+
   /**
    * Initializes editable pages properties
    */
-  useEffect(() => {
-    const foundPage = surveyPages.find((page) => page.orderNumber === pageNumber);
+  const [pageToEdit, pageToEditLayout, elementsToEdit] = useMemo<[Page | undefined, Layout | undefined, EditablePageElement[]]>(() => {
+    const foundPage = pendingPages.find((page) => page.orderNumber === pageNumber);
     const foundLayout = pageLayouts.find((layout) => layout.id === foundPage?.layoutId);
-    const elements = [];
-    for (const variable of foundLayout?.layoutVariables || []) {
-      if (!foundPage?.properties?.some((property) => property.key === variable.key)) {
+    const elements: EditablePageElement[] = [];
+    for (const variable of foundLayout?.layoutVariables ?? []) {
+      if (foundPage?.properties?.every((property) => property.key !== variable.key)) {
         foundPage?.properties?.push({ key: variable.key, value: "" });
       }
 
@@ -80,34 +120,8 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
       }
     }
 
-    if (mounted) {
-      setPageToEdit(foundPage);
-      setPageToEditLayout(foundLayout);
-      setElementsToEdit(elements);
-    }
-  }, [pageNumber, surveyPages, pageLayouts]);
-
-  /**
-   * Saves page
-   *
-   * @param page page
-   */
-  const savePage = async (page: Page) => {
-    try {
-      if (!page?.id) return;
-
-      await pagesApi.updateSurveyPage({
-        surveyId: surveyId,
-        pageId: page.id,
-        page: page
-      });
-
-      setSurveyPages(surveyPages.map((p) => (p.id !== page.id ? p : page)));
-      toast.success(strings.editSurveysScreen.editPagesPanel.pageSaved);
-    } catch (error: any) {
-      setError(`${strings.errorHandling.editSurveysScreen.pageNotSaved}, ${error}`);
-    }
-  };
+    return [foundPage, foundLayout, elements];
+  }, [pageNumber, pendingPages, pageLayouts]);
 
   /**
    * Render delete option dialog
@@ -129,21 +143,25 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
    *
    * @param event event
    */
-  const handleTextChange = async ({ target: { value, name } }: FocusEvent<HTMLInputElement>) => {
-    if (!pageToEdit) return;
+  const handleTextChange = ({ target: { value, name } }: FocusEvent<HTMLInputElement>) => {
+    setPendingPages(pages => {
+      const pageToUpdate = pages.find((page) => page.id === pageToEdit?.id);
 
-    const foundProperty = pageToEdit?.properties?.find((p) => p.key === name);
+      if (!pageToUpdate) return pages;
 
-    if (!foundProperty || foundProperty.value === value) return;
-    const pageToUpdate = {
-      ...pageToEdit,
-      properties: pageToEdit.properties?.map((property) =>
-        property.key === name ? { ...property, value: value } : property
-      )
-    };
+      const foundProperty = pageToUpdate?.properties?.find((property) => property.key === name);
 
-    if (!pageToUpdate.id) return;
-    await savePage(pageToUpdate);
+      if (!foundProperty || foundProperty.value === value) return pages;
+
+      const updatedPage = {
+        ...pageToUpdate,
+        properties: pageToUpdate.properties?.map((property) =>
+          property.key === name ? { ...property, value: value } : property
+        )
+      };
+
+      return surveyPages.map((page) => (page.id === updatedPage.id ? updatedPage : page));
+    });
   };
 
   /**
@@ -154,12 +172,15 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
   const handleButtonVisiblitySwitch = async ({
     target: { checked }
   }: ChangeEvent<HTMLInputElement>) => {
-    if (!pageToEdit) return;
-    const pageToUpdate = {
-      ...pageToEdit,
-      nextButtonVisible: checked
-    };
-    await savePage(pageToUpdate);
+    setPendingPages(pages => {
+      const pageToUpdate = pages.find((page) => page.id === pageToEdit?.id);
+
+      if (!pageToUpdate) return pages;
+
+      const updatedPage = { ...pageToUpdate, showNextButton: checked };
+
+      return surveyPages.map((page) => (page.id === updatedPage.id ? updatedPage : page));
+    });
   };
 
   /**
@@ -167,53 +188,64 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
    *
    * @param event event
    */
-  const handleOptionChange = async ({ target: { value, name } }: FocusEvent<HTMLInputElement>) => {
-    if (!pageToEdit?.question) return;
+  const handleOptionChange = ({ target: { value, name } }: FocusEvent<HTMLInputElement>) => {
+    setPendingPages(pages => {
+      const pageToUpdate = pages.find((page) => page.id === pageToEdit?.id);
 
-    const optionToUpdate = pageToEdit.question.options.find((option) => option.id === name);
+      if (!pageToUpdate?.question) return pages;
 
-    if (!optionToUpdate || optionToUpdate.questionOptionValue === value) return;
+      const optionToUpdate = pageToUpdate.question.options.find((option) => option.id === name);
 
-    const pageToUpdate: Page = {
-      ...pageToEdit,
-      question: {
-        ...pageToEdit.question,
-        options: [
-          ...pageToEdit.question.options.map((option) =>
-            option.id === name ? { ...option, questionOptionValue: value } : option
-          )
-        ]
-      }
-    };
+      if (!optionToUpdate || optionToUpdate.questionOptionValue === value) return pages;
 
-    await savePage(pageToUpdate);
+
+      const updatedPage = {
+        ...pageToUpdate,
+        question: {
+          ...pageToUpdate.question,
+          options: [
+            ...pageToUpdate.question.options.map((option) =>
+              option.id === name ? { ...option, questionOptionValue: value } : option
+            )
+          ]
+        }
+      };
+
+      return surveyPages.map((page) => (page.id === updatedPage.id ? updatedPage : page));
+    });
+
   };
 
   /**
    * Handler for add new option button click
    */
-  const handleNewOptionClick = async () => {
-    if (!pageToEdit?.question) return;
+  const handleNewOptionClick = () => {
+    setPendingPages(pages => {
+      const pageToUpdate = pages.find((page) => page.id === pageToEdit?.id);
 
-    const orderNumber = pageToEdit.question.options.length + 1;
-    const pageToUpdate: Page = {
-      ...pageToEdit,
-      question: {
-        ...pageToEdit.question,
-        options: [
-          ...pageToEdit.question.options,
-          {
-            questionOptionValue: strings.formatString(
-              strings.editSurveysScreen.editPagesPanel.answerOptionPlaceholder,
-              orderNumber
-            ) as string,
-            orderNumber: orderNumber
-          }
-        ]
-      }
-    };
+      if (!pageToUpdate?.question) return pages;
 
-    await savePage(pageToUpdate);
+      const orderNumber = pageToUpdate.question.options.length + 1;
+
+      const updatedPage = {
+        ...pageToUpdate,
+        question: {
+          ...pageToUpdate.question,
+          options: [
+            ...pageToUpdate.question.options,
+            {
+              questionOptionValue: strings.formatString(
+                strings.editSurveysScreen.editPagesPanel.answerOptionPlaceholder,
+                orderNumber
+              ) as string,
+              orderNumber: orderNumber
+            }
+          ]
+        }
+      };
+
+      return surveyPages.map((page) => (page.id === updatedPage.id ? updatedPage : page));
+    });
   };
 
   /**
@@ -221,22 +253,26 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
    *
    * @param option option
    */
-  const handleDeleteClick = async (option: PageQuestionOption) => {
-    if (!pageToEdit?.question) return;
+  const handleDeleteClick = (option: PageQuestionOption) => {
+    setPendingPages(pages => {
+      const pageToUpdate = pages.find((page) => page.id === pageToEdit?.id);
 
-    const filteredOptions = pageToEdit.question.options.filter((opt) => opt !== option);
+      if (!pageToUpdate?.question) return pages;
 
-    const pageToUpdate = {
-      ...pageToEdit,
-      question: {
-        ...pageToEdit.question,
-        options: filteredOptions.map((opt) =>
-          opt.orderNumber > option.orderNumber ? { ...opt, orderNumber: opt.orderNumber - 1 } : opt
-        )
-      }
-    };
+      const filteredOptions = pageToUpdate.question.options.filter((opt) => opt.id !== option.id);
 
-    await savePage(pageToUpdate);
+      const updatedPage = {
+        ...pageToUpdate,
+        question: {
+          ...pageToUpdate.question,
+          options: filteredOptions.map((opt) =>
+            opt.orderNumber > option.orderNumber ? { ...opt, orderNumber: opt.orderNumber - 1 } : opt
+          )
+        }
+      };
+
+      return surveyPages.map((page) => (page.id === updatedPage.id ? updatedPage : page));
+    });
   };
 
   /**
@@ -244,53 +280,60 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
    *
    * @param event event
    */
-  const handleBackgroundChange = async ({ target: { value } }: ChangeEvent<HTMLInputElement>) => {
-    if (!pageToEdit?.id) return;
+  const handleBackgroundChange = ({ target: { value } }: ChangeEvent<HTMLInputElement>) => {
+    setPendingPages(pages => {
+      const pageToUpdate = pages.find((page) => page.id === pageToEdit?.id);
 
-    const backgroundProperty = elementsToEdit.find(
-      (element) => element.type === PageElementType.DIV
-    );
+      if (!pageToUpdate) return pages;
 
-    if (!backgroundProperty?.id) return;
+      const backgroundProperty = elementsToEdit.find(
+        (element) => element.type === PageElementType.DIV
+      );
 
-    const updatedProperty: PageProperty = {
-      key: backgroundProperty?.id,
-      value: value === "DEFAULT" ? "" : value
-    };
+      if (!backgroundProperty?.id) return pages;
 
-    const pageToUpdate = {
-      ...pageToEdit,
-      properties: pageToEdit.properties?.map((property) =>
-        property.key === backgroundProperty?.id ? updatedProperty : property
-      )
-    };
+      const updatedProperty: PageProperty = {
+        key: backgroundProperty?.id,
+        value: value === "DEFAULT" ? "" : value
+      };
 
-    await savePage(pageToUpdate);
+      const updatedPage = {
+        ...pageToUpdate,
+        properties: pageToUpdate.properties?.map((property) =>
+          property.key === backgroundProperty?.id ? updatedProperty : property
+        )
+      };
+
+      return surveyPages.map((page) => (page.id === updatedPage.id ? updatedPage : page));
+    });
   };
 
   /**
    * Handler for image change event
    */
-  const handleImageChange = async ({ target: { value } }: ChangeEvent<HTMLInputElement>) => {
-    if (!pageToEdit?.id) return;
+  const handleImageChange = ({ target: { value } }: ChangeEvent<HTMLInputElement>) => {
+    setPendingPages(pages => {
+      const pageToUpdate = pages.find((page) => page.id === pageToEdit?.id);
+      if (!pageToUpdate) return pages;
 
-    const imageProperty = elementsToEdit.find((element) => element.type === PageElementType.IMG);
+      const imageProperty = elementsToEdit.find((element) => element.type === PageElementType.IMG);
 
-    if (!imageProperty?.id) return;
+      if (!imageProperty?.id) return pages;
 
-    const updatedProperty: PageProperty = {
-      key: imageProperty?.id,
-      value: !value ? "" : value
-    };
+      const updatedProperty: PageProperty = {
+        key: imageProperty?.id,
+        value: !value ? "" : value
+      };
 
-    const pageToUpdate = {
-      ...pageToEdit,
-      properties: pageToEdit.properties?.map((property) =>
-        property.key === imageProperty?.id ? updatedProperty : property
-      )
-    };
+      const updatedPage = {
+        ...pageToUpdate,
+        properties: pageToUpdate.properties?.map((property) =>
+          property.key === imageProperty?.id ? updatedProperty : property
+        )
+      };
 
-    await savePage(pageToUpdate);
+      return surveyPages.map((page) => (page.id === updatedPage.id ? updatedPage : page));
+    });
   };
 
   /**
@@ -298,18 +341,21 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
    *
    * @param event event
    */
-  const handleQuestionTypeChange = async ({ target: { value } }: ChangeEvent<HTMLInputElement>) => {
-    if (!pageToEdit?.id || !pageToEdit?.question) return;
+  const handleQuestionTypeChange = ({ target: { value } }: ChangeEvent<HTMLInputElement>) => {
+    setPendingPages(pages => {
+      const pageToUpdate = pages.find((page) => page.id === pageToEdit?.id);
+      if (!pageToUpdate?.question) return pages;
 
-    const pageToUpdate: Page = {
-      ...pageToEdit,
-      question: {
-        ...pageToEdit.question,
-        type: value as PageQuestionType
-      }
-    };
+      const updatedPage = {
+        ...pageToUpdate,
+        question: {
+          ...pageToUpdate.question,
+          type: value as PageQuestionType
+        }
+      };
 
-    await savePage(pageToUpdate);
+      return surveyPages.map((page) => (page.id === updatedPage.id ? updatedPage : page));
+    });
   };
 
   /**
@@ -318,15 +364,14 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
    * @param element element
    */
   const renderTextPropertyEditor = (element: EditablePageElement) => {
-    const defaultValue =
-      pageToEdit?.properties?.find((property) => property.key === element.id)?.value ?? "";
+    const property = pageToEdit?.properties?.find((property) => property.key === element.id);
 
     return (
-      <Fragment key={element.id}>
+      <Fragment key={`${pageToEdit?.id ?? ""}-${property?.key ?? ""}`}>
         <Typography variant="h6">{PageUtils.getTextPropertyLabel(element.type)}</Typography>
         <TextField
           name={element.id}
-          defaultValue={defaultValue}
+          defaultValue={property?.value ?? ""}
           placeholder={PageUtils.getTextPropertyLabel(element.type) ?? ""}
           fullWidth
           multiline
@@ -351,7 +396,7 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
 
     return pageToEdit.question.options.map((option) => (
       <TextField
-        key={option.id ?? "key"}
+        key={option.id ?? `option-${option.orderNumber}`}
         name={option.id}
         defaultValue={option.questionOptionValue}
         onBlur={handleOptionChange}
@@ -465,7 +510,7 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
               sx={{ flex: 0.5 }}
               value={pageToEdit?.question?.type ?? ""}
               onChange={handleQuestionTypeChange}
-            >s
+            >
               <MenuItem value={PageQuestionType.SingleSelect}>
                 {strings.editSurveysScreen.editPagesPanel.questionTypes.singleSelect}
               </MenuItem>

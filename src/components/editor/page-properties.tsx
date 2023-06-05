@@ -195,7 +195,6 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
 
       if (!optionToUpdate || optionToUpdate.questionOptionValue === value) return pages;
 
-
       const updatedPage = {
         ...pageToUpdate,
         question: {

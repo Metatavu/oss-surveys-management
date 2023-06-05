@@ -119,6 +119,11 @@ const wrapTemplate = (bodyContent: string, pageId?: string) => `<!DOCTYPE html>
         border: 4px solid #fff;
         transition: background-color 0.2s ease-in-out;
       }
+      .page.text-shadow .option {
+        text-shadow: 0px 0px 30px rgba(0, 0, 0, 0.25);
+        box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.25);
+        background: rgba(0,0,0,0.1);
+      }
       .multi-option {
         position: relative;
         width: 100%;
@@ -130,6 +135,11 @@ const wrapTemplate = (bodyContent: string, pageId?: string) => `<!DOCTYPE html>
         color: #fff;
         background: transparent;
         transition: background-color 0.2s ease-in-out;
+      }
+      .page.text-shadow .multi-option {
+        text-shadow: 0px 0px 30px rgba(0, 0, 0, 0.25);
+        box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.25);
+        background: rgba(0,0,0,0.1);
       }
       .multi-option:before {
         content: "";

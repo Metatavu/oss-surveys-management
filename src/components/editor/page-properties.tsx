@@ -57,7 +57,7 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
   const setError = useSetAtom(errorAtom);
 
   /**
-   * Updates mounted flag when component mount and unmounts
+   * Updates mounted flag when component mounts and unmounts
    */
   useEffect(() => {
     mounted.current = true;

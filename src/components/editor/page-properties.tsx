@@ -174,7 +174,7 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
 
       if (!pageToUpdate) return pages;
 
-      const updatedPage = { ...pageToUpdate, showNextButton: checked };
+      const updatedPage = { ...pageToUpdate, nextButtonVisible: checked };
 
       return surveyPages.map((page) => (page.id === updatedPage.id ? updatedPage : page));
     });

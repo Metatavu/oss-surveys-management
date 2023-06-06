@@ -131,7 +131,7 @@ const SurveyStatistics = ({ devices, survey }: Props) => {
    */
   const getDeviceSurveysByDevice = async (deviceId: string) => {
     try {
-      return await deviceSurveysApi.listDeviceSurveys({ deviceId: deviceId });
+      return await deviceSurveysApi.listDeviceSurveys({ deviceId: deviceId, maxResults: 1000 });
     } catch (error: any) {
       setError(`${strings.errorHandling.overviewScreen.deviceSurveysNotFound}, ${error}`);
     }

@@ -88,14 +88,14 @@ const SurveysScreen = () => {
   };
 
   return (
-    <Stack gap={1}>
+    <>
       <SurveysFilters
         surveys={surveys}
         setFilteredSurveys={setFilteredSurveys}
         createSurvey={createSurvey}
       />
       <SurveysList surveys={filteredSurveys} deviceSurveys={deviceSurveys} />
-    </Stack>
+    </>
   );
 };
 

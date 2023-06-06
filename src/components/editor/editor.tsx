@@ -1,4 +1,3 @@
-import { toast } from "react-toastify";
 import { errorAtom } from "../../atoms/error";
 import { layoutsAtom } from "../../atoms/layouts";
 import { pagesAtom } from "../../atoms/pages";
@@ -14,6 +13,7 @@ import { useApi } from "../../hooks/use-api";
 import strings from "../../localization/strings";
 import theme from "../../styles/theme";
 import { EditorPanel, PanelProperties } from "../../types";
+import LocalizationUtils from "../../utils/localization-utils";
 import PageUtils from "../../utils/page-utils";
 import GenericDialog from "../generic/generic-dialog";
 import LoaderWrapper from "../generic/loader-wrapper";
@@ -24,13 +24,13 @@ import ParagraphImageLayoutImage from "../images/svg/layout-thumbnails/paragraph
 import QuestionLayoutImage from "../images/svg/layout-thumbnails/question";
 import QuestionParagraphLayoutImage from "../images/svg/layout-thumbnails/question-paragraph";
 import StatisticsLayoutImage from "../images/svg/layout-thumbnails/statistics";
+import EditorPreview from "./editor-preview";
 import ImageButton from "./image-button";
 import NewPageButton from "./new-page-button";
 import { Box, Stack, Typography, styled } from "@mui/material";
 import { useAtom, useSetAtom } from "jotai";
 import { useEffect, useState } from "react";
-import EditorPreview from "./editor-preview";
-import LocalizationUtils from "../../utils/localization-utils";
+import { toast } from "react-toastify";
 
 /**
  * Component properties
@@ -118,7 +118,7 @@ const Editor = ({ setPanelProperties, surveyId }: Props) => {
    * Get layouts
    */
   const getPageLayouts = async () => {
-    const layouts = await layoutsApi.listLayouts();
+    const layouts = await layoutsApi.listLayouts({ maxResults: 1000 });
     setPageLayouts(layouts);
   };
 

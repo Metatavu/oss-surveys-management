@@ -33,7 +33,7 @@ const SurveysList = ({ surveys, deviceSurveys }: Props) => {
     DateTime.fromJSDate(survey.metadata!.modifiedAt!).toFormat("dd.MM.yyyy");
 
   return (
-    <Box p={4}>
+    <Box p={3} sx={{ overflowY: "auto" }}>
       <Paper>
         <List>
           <ListHeader headings={listHeadings} />

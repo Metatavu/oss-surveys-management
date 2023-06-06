@@ -44,9 +44,10 @@ const Content = styled(Stack, {
  * @param props component properties
  */
 const SurveyStatistics = ({ devices, survey }: Props) => {
-  const { deviceSurveysApi } = useApi();
-  const [selectedDevices, setSelectedDevices] = useState<Device[]>(devices);
+  const { deviceSurveysApi, devicesApi } = useApi();
+  const [selectedDevices, setSelectedDevices] = useState<Device[]>([]);
   const [surveyStatistics, setSurveyStatistics] = useState<DeviceSurveyStatistics[]>([]);
+  const [devicesWithSurvey, setDevicesWithSurvey] = useState<Device[]>([]);
   const [surveyPages] = useAtom(pagesAtom);
   const [pageLayouts] = useAtom(layoutsAtom);
   const setError = useSetAtom(errorAtom);
@@ -96,6 +97,49 @@ const SurveyStatistics = ({ devices, survey }: Props) => {
   useEffect(() => {
     getDeviceSurveysStatistics().catch((error) => setError(error));
   }, [survey, selectedDevices]);
+
+  /**
+   * Gets devices with the selected survey
+   */
+  const getDevicesWithSelectedSurvey = async () => {
+    const allFoundDeviceSurveys = [];
+    for (const device of devices) {
+      if (!device.id) continue;
+      const foundDeviceSurveys = await getDeviceSurveysByDevice(device.id);
+      if (!foundDeviceSurveys?.length) continue;
+      allFoundDeviceSurveys.push(...foundDeviceSurveys);
+    }
+
+    const selectedSurveyDeviceSurveys = allFoundDeviceSurveys.filter(
+      (deviceSurvey) => deviceSurvey.surveyId === survey.id
+    );
+
+    const devicesWithSurvey = await Promise.all(
+      selectedSurveyDeviceSurveys.map((selectedSurveyDeviceSurvey) =>
+        devicesApi.findDevice({ deviceId: selectedSurveyDeviceSurvey.deviceId })
+      )
+    );
+
+    setDevicesWithSurvey(devicesWithSurvey);
+    setSelectedDevices(devicesWithSurvey);
+  };
+
+  /**
+   * Gets Device Surveys for a specific device
+   *
+   * @param deviceId device id
+   */
+  const getDeviceSurveysByDevice = async (deviceId: string) => {
+    try {
+      return await deviceSurveysApi.listDeviceSurveys({ deviceId: deviceId, maxResults: 1000 });
+    } catch (error: any) {
+      setError(`${strings.errorHandling.overviewScreen.deviceSurveysNotFound}, ${error}`);
+    }
+  };
+
+  useEffect(() => {
+    getDevicesWithSelectedSurvey().catch((error) => setError(error));
+  }, [survey, devices]);
 
   /**
    * Get overall answer count
@@ -236,7 +280,7 @@ const SurveyStatistics = ({ devices, survey }: Props) => {
       <Stack direction="row" flex={1} overflow="hidden">
         <PropertiesPanel width={400}>
           <StatisticDevices
-            devices={devices}
+            devices={devicesWithSurvey}
             selectedDevices={selectedDevices}
             setSelectedDevices={setSelectedDevices}
           />

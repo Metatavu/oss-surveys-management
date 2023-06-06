@@ -97,7 +97,7 @@ const PreviewScreen = () => {
    * Get layouts
    */
   const getPageLayouts = async () => {
-    const layouts = await layoutsApi.listLayouts();
+    const layouts = await layoutsApi.listLayouts({ maxResults: 1000 });
     setPageLayouts(layouts);
   };
 

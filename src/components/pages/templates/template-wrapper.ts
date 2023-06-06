@@ -11,10 +11,13 @@ const sanitizeOptions: IOptions = {
     "div",
     "label",
     "input",
-    "img"
+    "img",
+    "svg",
+    "path",
+    "g"
   ]),
   allowedAttributes: {
-    "*": ["style", "id", "class", "src"]
+    "*": ["style", "id", "class", "src", "viewbox", "fill", "d"]
   }
 };
 
@@ -45,8 +48,25 @@ const wrapTemplate = (bodyContent: string, pageId?: string) => `<!DOCTYPE html>
         display: flex;
         flex: 1;
         flex-direction: column;
-        padding: 10%;
+        padding: 10% 215px 215px 10%;
         box-sizing: border-box;
+        background-size: cover;
+      }
+      .page.text-shadow {
+        text-shadow: 0px 0px 15px rgba(0, 0, 0, 0.75);
+      }
+      .logo-container {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        left: 0;
+        height: 215px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      svg.logo {
+        height: 140px;
       }
       .content {
         display: flex;
@@ -99,6 +119,11 @@ const wrapTemplate = (bodyContent: string, pageId?: string) => `<!DOCTYPE html>
         border: 4px solid #fff;
         transition: background-color 0.2s ease-in-out;
       }
+      .page.text-shadow .option {
+        text-shadow: 0px 0px 15px rgba(0, 0, 0, 0.75);
+        box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.25);
+        background: rgba(0,0,0,0.1);
+      }
       .multi-option {
         position: relative;
         width: 100%;
@@ -110,6 +135,9 @@ const wrapTemplate = (bodyContent: string, pageId?: string) => `<!DOCTYPE html>
         color: #fff;
         background: transparent;
         transition: background-color 0.2s ease-in-out;
+      }
+      .page.text-shadow .multi-option {
+        text-shadow: 0px 0px 15px rgba(0, 0, 0, 0.75);
       }
       .multi-option:before {
         content: "";
@@ -123,28 +151,40 @@ const wrapTemplate = (bodyContent: string, pageId?: string) => `<!DOCTYPE html>
         transition: background-color 0.2s ease-in-out;
       }
       .multi-option.selected:before {
-        background-color: #fff
+        background-color: rgba(0, 0, 0, 0.2);
+      }
+      .page.text-shadow .multi-option:before {
+        background-color: rgba(0, 0, 0, 0.1);
+      }
+      .multi-option.selected:before, .page.text-shadow .multi-option.selected:before {
+        background-color: rgba(0, 0, 0, 0.2);
       }
       .multi-option.selected:after {
         content: "✓";
         position: absolute;
         left: 26px;
         top: 50%;
-        color: #00AA46;
+        color: #fff;
         transform: translateY(-50%);
       }
       .next-button {
         background-color: transparent;
         border: none;
         color: #ffffff;
-        padding: 30px 20px;
-        font-family: SBonusText-Bold;
-        font-size: 2.5rem;
-        border: 4px solid #fff;
+        height: 100%;
+        width: 215px;
+        position: absolute;
+        top: 0;
+        right: 0;
         transition: background-color 0.2s ease-in-out;
       }
       .next-button:active, option:active {
         background-color: rgba(0, 0, 0, 0.1);
+      }
+      svg.next-icon {
+        margin-top: 600px;
+        height: 100px;
+        width: 100px;
       }
     </style>
   </head>

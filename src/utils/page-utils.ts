@@ -1,19 +1,19 @@
+import config from "../app/config";
 import componentRendererFactory from "../component-renderer/component-renderer-factory";
-import {
-  LayoutVariable,
-  LayoutVariableType,
-  PageProperty,
-  PageQuestion
-} from "../generated/client";
-import { Background, EditablePageElement, PageElementType } from "../types";
-import strings from "../localization/strings";
 import {
   IMAGE_PLACEHOLDER_DATA_COMPONENT,
   PAGE_BACKGROUNDS,
   PAGE_IMAGES,
   QUESTION_PLACEHOLDER_DATA_COMPONENT
 } from "../constants";
-import config from "../app/config";
+import {
+  LayoutVariable,
+  LayoutVariableType,
+  PageProperty,
+  PageQuestion
+} from "../generated/client";
+import strings from "../localization/strings";
+import { Background, EditablePageElement, PageElementType } from "../types";
 
 /**
  * Namespace for Page utilities
@@ -48,16 +48,13 @@ namespace PageUtils {
   export const hasQuestionsPlaceholder = (layoutHtml?: string): boolean => {
     if (!layoutHtml) return false;
     const body = new DOMParser().parseFromString(layoutHtml, "text/html").body;
-    const divElements = body.getElementsByTagName("div");
-    let hasQuestionsPlaceholder = false;
+    const divElements = [...body.getElementsByTagName("div")];
 
-    for (const element of divElements) {
-      const dataComponentAttribute = element.attributes.getNamedItem("data-component")?.nodeValue;
-
-      hasQuestionsPlaceholder = dataComponentAttribute === QUESTION_PLACEHOLDER_DATA_COMPONENT;
-    }
-
-    return hasQuestionsPlaceholder;
+    return divElements.some(
+      (element) =>
+        element.attributes.getNamedItem("data-component")?.nodeValue ===
+        QUESTION_PLACEHOLDER_DATA_COMPONENT
+    );
   };
 
   /**
@@ -69,16 +66,13 @@ namespace PageUtils {
   export const hasImagePlaceholder = (layoutHtml?: string): boolean => {
     if (!layoutHtml) return false;
     const body = new DOMParser().parseFromString(layoutHtml, "text/html").body;
-    const imgElements = body.getElementsByTagName("img");
-    let hasQuestionsPlaceholder = false;
+    const imgElements = [...body.getElementsByTagName("img")];
 
-    for (const element of imgElements) {
-      const dataComponentAttribute = element.attributes.getNamedItem("data-component")?.nodeValue;
-
-      hasQuestionsPlaceholder = dataComponentAttribute === IMAGE_PLACEHOLDER_DATA_COMPONENT;
-    }
-
-    return hasQuestionsPlaceholder;
+    return imgElements.some(
+      (element) =>
+        element.attributes.getNamedItem("data-component")?.nodeValue ===
+        IMAGE_PLACEHOLDER_DATA_COMPONENT
+    );
   };
 
   /**

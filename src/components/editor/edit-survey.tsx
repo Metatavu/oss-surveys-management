@@ -1,4 +1,3 @@
-import { useWindowSize } from "usehooks-ts";
 import { errorAtom } from "../../atoms/error";
 import { Survey } from "../../generated/client";
 import strings from "../../localization/strings";
@@ -10,6 +9,7 @@ import SurveyProperties from "./survey-properties";
 import { Stack, styled } from "@mui/material";
 import { useSetAtom } from "jotai";
 import { FocusEvent, useState } from "react";
+import { useWindowSize } from "usehooks-ts";
 
 /**
  * Components properties

@@ -43,12 +43,12 @@ const OverviewScreen = () => {
    * Gets Devices
    */
   const loadDevices = async () => {
-    const devices = await devicesApi.listDevices({});
+    const devices = await devicesApi.listDevices({ maxResults: 1000 });
     const foundDeviceSurveys = await Promise.allSettled(
       devices.map((device) => {
         if (!device.id) return Promise.reject();
 
-        return deviceSurveysApi.listDeviceSurveys({ deviceId: device.id });
+        return deviceSurveysApi.listDeviceSurveys({ deviceId: device.id, maxResults: 1000 });
       })
     );
 
@@ -139,9 +139,9 @@ const OverviewScreen = () => {
    * Load all data for screen
    */
   const loadData = async () => {
-    setSurveys(await surveysApi.listSurveys());
+    setSurveys(await surveysApi.listSurveys({ maxResults: 1000 }));
     await loadDevices();
-    setDeviceRequests(await deviceRequestsApi.listDeviceRequests());
+    setDeviceRequests(await deviceRequestsApi.listDeviceRequests({ maxResults: 1000 }));
   };
 
   useEffect(() => {

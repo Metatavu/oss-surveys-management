@@ -5,7 +5,6 @@ import { useApi } from "../../hooks/use-api";
 import strings from "../../localization/strings";
 import SurveysFilters from "../surveys/surveys-filters";
 import SurveysList from "../surveys/surveys-list";
-import { Stack } from "@mui/material";
 import { useAtomValue, useSetAtom } from "jotai";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -40,12 +39,13 @@ const SurveysScreen = () => {
    */
   const getDeviceSurveys = async () => {
     try {
-      const devices = await devicesApi.listDevices({});
+      const devices = await devicesApi.listDevices({ maxResults: 1000 });
       const allFoundDeviceSurveys = [];
       for (const device of devices) {
         if (!device.id) continue;
         const foundDeviceSurveys = await deviceSurveysApi.listDeviceSurveys({
-          deviceId: device.id
+          deviceId: device.id,
+          maxResults: 1000
         });
         allFoundDeviceSurveys.push(...foundDeviceSurveys);
       }

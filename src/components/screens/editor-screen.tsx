@@ -42,7 +42,7 @@ const EditorScreen = () => {
    * Gets devices
    */
   const getDevices = async () => {
-    const devices = await devicesApi.listDevices();
+    const devices = await devicesApi.listDevices({ maxResults: 1000 });
     setDevices(devices);
 
     const allFoundDeviceSurveys = [];
@@ -64,7 +64,7 @@ const EditorScreen = () => {
    */
   const getDeviceSurveysByDevice = async (deviceId: string) => {
     try {
-      return await deviceSurveysApi.listDeviceSurveys({ deviceId: deviceId });
+      return await deviceSurveysApi.listDeviceSurveys({ deviceId: deviceId, maxResults: 1000 });
     } catch (error: any) {
       setError(`${strings.errorHandling.overviewScreen.deviceSurveysNotFound}, ${error}`);
     }

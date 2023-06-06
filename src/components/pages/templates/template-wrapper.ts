@@ -53,7 +53,7 @@ const wrapTemplate = (bodyContent: string, pageId?: string) => `<!DOCTYPE html>
         background-size: cover;
       }
       .page.text-shadow {
-        text-shadow: 0px 0px 10px rgba(0, 0, 0, 0.25);
+        text-shadow: 0px 0px 15px rgba(0, 0, 0, 0.75);
       }
       .logo-container {
         position: absolute;
@@ -120,7 +120,7 @@ const wrapTemplate = (bodyContent: string, pageId?: string) => `<!DOCTYPE html>
         transition: background-color 0.2s ease-in-out;
       }
       .page.text-shadow .option {
-        text-shadow: 0px 0px 30px rgba(0, 0, 0, 0.25);
+        text-shadow: 0px 0px 15px rgba(0, 0, 0, 0.75);
         box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.25);
         background: rgba(0,0,0,0.1);
       }
@@ -137,9 +137,7 @@ const wrapTemplate = (bodyContent: string, pageId?: string) => `<!DOCTYPE html>
         transition: background-color 0.2s ease-in-out;
       }
       .page.text-shadow .multi-option {
-        text-shadow: 0px 0px 30px rgba(0, 0, 0, 0.25);
-        box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.25);
-        background: rgba(0,0,0,0.1);
+        text-shadow: 0px 0px 15px rgba(0, 0, 0, 0.75);
       }
       .multi-option:before {
         content: "";
@@ -153,14 +151,20 @@ const wrapTemplate = (bodyContent: string, pageId?: string) => `<!DOCTYPE html>
         transition: background-color 0.2s ease-in-out;
       }
       .multi-option.selected:before {
-        background-color: #fff
+        background-color: rgba(0, 0, 0, 0.2);
+      }
+      .page.text-shadow .multi-option:before {
+        background-color: rgba(0, 0, 0, 0.1);
+      }
+      .multi-option.selected:before, .page.text-shadow .multi-option.selected:before {
+        background-color: rgba(0, 0, 0, 0.2);
       }
       .multi-option.selected:after {
         content: "✓";
         position: absolute;
         left: 26px;
         top: 50%;
-        color: #00AA46;
+        color: #fff;
         transform: translateY(-50%);
       }
       .next-button {

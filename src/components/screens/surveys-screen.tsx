@@ -28,7 +28,7 @@ const SurveysScreen = () => {
    */
   const getSurveys = async () => {
     try {
-      const surveys = await surveysApi.listSurveys({});
+      const surveys = await surveysApi.listSurveys({ maxResults: 1000 });
       setSurveys(surveys);
     } catch (error: any) {
       setError(`${strings.errorHandling.overviewScreen.surveysNotFound}, ${error}`);

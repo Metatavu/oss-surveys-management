@@ -114,13 +114,10 @@ const SurveyStatistics = ({ devices, survey }: Props) => {
       (deviceSurvey) => deviceSurvey.surveyId === survey.id
     );
 
-    const devicesWithSurvey = await Promise.all(
-      selectedSurveyDeviceSurveys.map((selectedSurveyDeviceSurvey) =>
-        devicesApi.findDevice({ deviceId: selectedSurveyDeviceSurvey.deviceId })
-      )
-    );
+    const devicesWithSurvey: Device[] = selectedSurveyDeviceSurveys
+      .flatMap(deviceSurvey => devices.find(device => device.id === deviceSurvey.deviceId) || []);
 
-    setDevicesWithSurvey(devicesWithSurvey);
+    setDevicesWithSurvey([...devices]);
     setSelectedDevices(devicesWithSurvey);
   };
 

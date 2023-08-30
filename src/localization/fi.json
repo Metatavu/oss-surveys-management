@@ -225,6 +225,7 @@
     "statisticsSource": "Lähde: ",
     "labels": {
       "answerCount": "Vastauksia: {0}",
+      "PercentageCount": "{0}%",
       "monday": "Ma",
       "tuesday": "Ti",
       "wednesday": "Ke",

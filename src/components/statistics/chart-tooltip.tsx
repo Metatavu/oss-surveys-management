@@ -1,13 +1,22 @@
-import { Paper, Stack, Typography } from "@mui/material";
 import strings from "../../localization/strings";
 import theme from "../../styles/theme";
-import { TooltipProps } from "recharts/types/component/Tooltip";
+import { Paper, Stack, Typography } from "@mui/material";
 import { ValueType } from "recharts/types/component/DefaultTooltipContent";
+import { TooltipProps } from "recharts/types/component/Tooltip";
+
+interface CustomToolTipProps {
+  usesPercentage?: boolean;
+}
 
 /**
  * Chart tooltip component
  */
-const ChartTooltip = ({ active, label, payload }: TooltipProps<ValueType, string | number>) => {
+const ChartTooltip = ({
+  active,
+  label,
+  payload,
+  usesPercentage
+}: TooltipProps<ValueType, string | number> & CustomToolTipProps) => {
   /**
    * Gets label value
    *
@@ -28,10 +37,15 @@ const ChartTooltip = ({ active, label, payload }: TooltipProps<ValueType, string
         <Stack>
           <Typography variant="h6">{label}</Typography>
           <Typography>
-            {strings.formatString(
-              strings.surveyStatistics.labels.answerCount,
-              getLabelValue(payload[0].value ?? "")
-            )}
+            {usesPercentage
+              ? strings.formatString(
+                  strings.surveyStatistics.labels.percentageCount,
+                  getLabelValue(payload[0].value ?? "")
+                )
+              : strings.formatString(
+                  strings.surveyStatistics.labels.answerCount,
+                  getLabelValue(payload[0].value ?? "")
+                )}
           </Typography>
         </Stack>
       </Paper>

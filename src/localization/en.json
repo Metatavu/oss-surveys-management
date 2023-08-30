@@ -225,6 +225,7 @@
     "statisticsSource": "Source: ",
     "labels": {
       "answerCount": "Answers: {0}",
+      "percentageCount": "{0}%",
       "monday": "Mo",
       "tuesday": "Tu",
       "wednesday": "We",

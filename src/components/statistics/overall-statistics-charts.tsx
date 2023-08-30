@@ -1,6 +1,5 @@
 import { Device, DeviceSurveyStatistics } from "../../generated/client";
 import strings from "../../localization/strings";
-import theme from "../../styles/theme";
 import DeviceDistributionChart from "./device-distribution-chart";
 import HorizontalChart from "./horizontal-chart";
 import { Divider, Paper, Stack, Typography } from "@mui/material";
@@ -40,12 +39,12 @@ const OverallStatisticsCharts = ({
         <Divider orientation="vertical" flexItem />
         <Stack p={2} flex={1}>
           <Typography variant="h6">{strings.surveyStatistics.mostPopularDays}</Typography>
-          <HorizontalChart data={dailyChartData} />
+          <HorizontalChart usesPercentage data={dailyChartData} />
         </Stack>
         <Divider orientation="vertical" flexItem />
         <Stack p={2} flex={1}>
           <Typography variant="h6">{strings.surveyStatistics.mostPopularHours}</Typography>
-          <HorizontalChart data={hourlyChartData} />
+          <HorizontalChart usesPercentage data={hourlyChartData} />
         </Stack>
       </Stack>
       <Divider />

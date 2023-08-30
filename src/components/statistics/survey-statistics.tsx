@@ -44,7 +44,7 @@ const Content = styled(Stack, {
  * @param props component properties
  */
 const SurveyStatistics = ({ devices, survey }: Props) => {
-  const { deviceSurveysApi, devicesApi } = useApi();
+  const { deviceSurveysApi } = useApi();
   const [selectedDevices, setSelectedDevices] = useState<Device[]>([]);
   const [surveyStatistics, setSurveyStatistics] = useState<DeviceSurveyStatistics[]>([]);
   const [devicesWithSurvey, setDevicesWithSurvey] = useState<Device[]>([]);
@@ -114,8 +114,9 @@ const SurveyStatistics = ({ devices, survey }: Props) => {
       (deviceSurvey) => deviceSurvey.surveyId === survey.id
     );
 
-    const devicesWithSurvey: Device[] = selectedSurveyDeviceSurveys
-      .flatMap(deviceSurvey => devices.find(device => device.id === deviceSurvey.deviceId) || []);
+    const devicesWithSurvey: Device[] = selectedSurveyDeviceSurveys.flatMap(
+      (deviceSurvey) => devices.find((device) => device.id === deviceSurvey.deviceId) || []
+    );
 
     setDevicesWithSurvey([...devices]);
     setSelectedDevices(devicesWithSurvey);
@@ -156,11 +157,16 @@ const SurveyStatistics = ({ devices, survey }: Props) => {
   const getDailyAverageAnswerCount = () => {
     const weekDayAverages = [0, 0, 0, 0, 0, 0, 0];
 
+    const numberOfSurveysWithAnswers = surveyStatistics.filter(
+      (survey) => survey.totalAnswerCount > 0
+    ).length;
+
     for (const surveyStatistic of surveyStatistics) {
       const weekDaysLength = surveyStatistic.averages.weekDays.length;
 
       for (let weekDayIndex = 0; weekDayIndex < weekDaysLength; weekDayIndex++) {
-        weekDayAverages[weekDayIndex] += surveyStatistic.averages.weekDays[weekDayIndex];
+        weekDayAverages[weekDayIndex] +=
+          surveyStatistic.averages.weekDays[weekDayIndex] / numberOfSurveysWithAnswers;
       }
     }
     const { labels } = strings.surveyStatistics;
@@ -182,13 +188,19 @@ const SurveyStatistics = ({ devices, survey }: Props) => {
    */
   const getHourlyAverageAnswerCount = (): { label: string; value: number }[] => {
     let now = DateTime.now().set({ hour: START_HOUR });
+    const numberOfSurveysWithAnswers = surveyStatistics.filter(
+      (survey) => survey.totalAnswerCount > 0
+    ).length;
     const hourlyChartData = [];
+
     while (now.hour < END_HOUR) {
       let average = 0;
 
       for (let hourIndex = 0; hourIndex < HOUR_GROUPING; hourIndex++) {
         for (const surveyStatistic of surveyStatistics) {
-          average += surveyStatistic.averages.hourly[now.toUTC().hour + hourIndex];
+          average +=
+            surveyStatistic.averages.hourly[now.toUTC().hour + hourIndex] /
+            numberOfSurveysWithAnswers;
         }
       }
 

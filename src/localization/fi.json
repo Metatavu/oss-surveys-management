@@ -167,6 +167,7 @@
     "editor": "Editori",
     "published": "Julkaistu",
     "statistics": "Tilastot",
+    "pdfDownload": "Lataa PDF",
     "preview": "Esikatselu",
     "editSurveyPanel": {
       "name": "Nimi",
@@ -234,6 +235,10 @@
       "saturday": "La",
       "sunday": "Su"
     }
+  },
+  "pdfStatisticsDownload": {
+    "surveyTitle": "Kyselyn otsikko: {0}",
+    "totalAnswerCount": "Vastausten kokonaismäärä: {0}"
   },
   "publishSurveys": {
     "surveyPublished": "Kysely julkaistu",

@@ -7,12 +7,14 @@ import { useApi } from "../../hooks/use-api";
 import strings from "../../localization/strings";
 import { EditablePageElement, PageElementType, SurveyQuestionStatistics } from "../../types";
 import PageUtils from "../../utils/page-utils";
+import { generatePdf } from "../../utils/pdf-download-utils";
 import PropertiesPanel from "../editor/properties-panel";
 import OverallStatisticsCharts from "./overall-statistics-charts";
 import StatisticDevices from "./statistic-devices";
 import StatisticPage from "./statistic-page";
 import StatisticsInfo from "./statistics-info";
-import { Stack, Typography, styled } from "@mui/material";
+import { Download } from "@mui/icons-material";
+import { Button, Stack, Typography, styled } from "@mui/material";
 import { useAtom, useSetAtom } from "jotai";
 import { DateTime } from "luxon";
 import { useEffect, useState } from "react";
@@ -308,6 +310,14 @@ const SurveyStatistics = ({ devices, survey }: Props) => {
         </Content>
         <PropertiesPanel width={450}>
           <StatisticsInfo survey={survey} overallAnswerCount={overallAnswerCount()} />
+          <Button
+            color="primary"
+            title={strings.editSurveysScreen.pdfDownload}
+            startIcon={<Download />}
+            onClick={() => generatePdf(survey, surveyStatistics)}
+          >
+            {strings.editSurveysScreen.pdfDownload}
+          </Button>
         </PropertiesPanel>
       </Stack>
     </>

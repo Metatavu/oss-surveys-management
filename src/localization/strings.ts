@@ -200,6 +200,7 @@ export interface Localized extends LocalizedStringsMethods {
     editor: string;
     published: string;
     statistics: string;
+    pdfDownload: string;
     preview: string;
     editSurveyPanel: {
       name: string;
@@ -271,6 +272,14 @@ export interface Localized extends LocalizedStringsMethods {
       saturday: string;
       sunday: string;
     };
+  };
+
+  /**
+   * Translations related to PDF statistics download
+   */
+  pdfStatisticsDownload: {
+    surveyTitle: string;
+    totalAnswerCount: string;
   };
 
   /**

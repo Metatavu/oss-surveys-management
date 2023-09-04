@@ -167,6 +167,7 @@
     "editor": "Editor",
     "published": "Published",
     "statistics": "Statistics",
+    "pdfDownload": "Download PDF",
     "preview": "Preview",
     "editSurveyPanel": {
       "name": "Name",
@@ -234,6 +235,10 @@
       "saturday": "Sa",
       "sunday": "Su"
     }
+  },
+  "pdfStatisticsDownload": {
+    "surveyTitle": "Survey title: {0}",
+    "totalAnswerCount": "Total answer count: {0}"
   },
   "publishSurveys": {
     "surveyPublished": "Survey published",

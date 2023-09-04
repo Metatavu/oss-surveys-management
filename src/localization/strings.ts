@@ -262,6 +262,7 @@ export interface Localized extends LocalizedStringsMethods {
     statisticsSource: string;
     labels: {
       answerCount: string;
+      percentageCount: string;
       monday: string;
       tuesday: string;
       wednesday: string;

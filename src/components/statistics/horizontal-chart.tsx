@@ -7,6 +7,7 @@ import { Bar, BarChart, ResponsiveContainer, Tooltip, XAxis } from "recharts";
 interface Props {
   data: any[];
   usesPercentage?: boolean;
+  id: string;
 }
 
 /**
@@ -14,9 +15,9 @@ interface Props {
  *
  * @param props component properties
  */
-const HorizontalChart = ({ data, usesPercentage }: Props) => {
+const HorizontalChart = ({ data, usesPercentage, id }: Props) => {
   return (
-    <ResponsiveContainer height={250}>
+    <ResponsiveContainer id={id} height={250}>
       <BarChart data={data} layout="horizontal" margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
         <XAxis type="category" dataKey="label" fontFamily="SBonusText-Medium" />
         <Tooltip content={(props) => <ChartTooltip {...props} usesPercentage={usesPercentage} />} />

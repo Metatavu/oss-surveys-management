@@ -239,7 +239,9 @@
   "pdfStatisticsDownload": {
     "surveyTitle": "Kyselyn otsikko: {0}",
     "totalAnswerCount": "Vastausten kokonaismäärä: {0}",
-    "answersPerDisplay": "Näyttökohtaiset vastausmäärät:"
+    "answersPerDisplayChart": "Näyttökohtaiset vastausmäärät:",
+    "mostPopularDaysChart": "Vilkkaimmat päivät:",
+    "mostPopularHoursChart": "Vilkkaimmat tunnit:"
   },
   "publishSurveys": {
     "surveyPublished": "Kysely julkaistu",

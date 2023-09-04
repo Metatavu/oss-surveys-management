@@ -1,4 +1,4 @@
-import { PDF_IMAGE_FACTOR } from "../constants";
+import { CHART_IDS, CHART_STRINGS } from "../constants";
 import { DeviceSurveyStatistics, Survey } from "../generated/client";
 import strings from "../localization/strings";
 import { toPng } from "html-to-image";
@@ -23,9 +23,9 @@ export const generatePdf = async (
     deviceSurveyStatistics
   );
 
-  const pdfWithAnswersPerDisplay = await addAnswersPerDisplayChart(pdfWithTotalAnswerCount);
+  const pdfWithCharts = await addCharts(pdfWithTotalAnswerCount, CHART_IDS);
 
-  pdfWithAnswersPerDisplay.save(`${survey.title.replaceAll(" ", "-")}.pdf`);
+  pdfWithCharts.save(`${survey.title.replaceAll(" ", "-")}.pdf`);
 };
 
 /**
@@ -79,21 +79,45 @@ const addTotalAnswerCountToPdf = (
 /**
  * Adds the answers per display chart to the PDF
  */
-const addAnswersPerDisplayChart = async (pdfDocument: jsPDF) => {
-  var node = document.getElementById("answers-per-display-chart");
+const addCharts = async (pdfDocument: jsPDF, ids: string[]) => {
+  const pdfWidth = pdfDocument.internal.pageSize.getWidth(); // Get PDF page width
+  const pdfHeight = pdfDocument.internal.pageSize.getHeight(); // Get PDF page height
+  const margin = 30; // Margin between charts and edges of the PDF page
+  let yCoordinate = margin; // Start y-coordinate
 
-  if (!node) return pdfDocument;
+  for (const id of ids) {
+    const node = document.getElementById(id);
 
-  const response = await toPng(node);
+    if (!node) return pdfDocument;
 
-  pdfDocument.text(strings.pdfStatisticsDownload.answersPerDisplay, 10, 30);
+    const response = await toPng(node);
 
-  return pdfDocument.addImage(
-    response,
-    "PNG",
-    10,
-    40,
-    node.offsetWidth / PDF_IMAGE_FACTOR,
-    node.offsetHeight / PDF_IMAGE_FACTOR
-  );
+    pdfDocument.text(CHART_STRINGS[id], margin, yCoordinate);
+
+    // Calculate dimensions based on available space
+    const availableWidth = pdfWidth - 2 * margin;
+    const availableHeight = pdfHeight - yCoordinate - 2 * margin;
+
+    // Calculate the aspect ratio of the chart
+    const chartAspectRatio = node.offsetWidth / node.offsetHeight;
+
+    // Calculate dimensions based on the aspect ratio and available space
+    let chartWidth = availableWidth;
+    let chartHeight = chartWidth / chartAspectRatio;
+
+    // TODO: This reduces chart size, need to have both most popular charts the same size.
+    // If the calculated height exceeds the available height, adjust the dimensions
+    if (chartHeight > availableHeight) {
+      chartHeight = availableHeight;
+      chartWidth = chartHeight * chartAspectRatio;
+    }
+
+    // Add the chart to the PDF
+    pdfDocument.addImage(response, "PNG", margin, yCoordinate + 10, chartWidth, chartHeight);
+
+    // Update the y-coordinate for the next chart
+    yCoordinate += chartHeight + 20;
+  }
+
+  return pdfDocument;
 };

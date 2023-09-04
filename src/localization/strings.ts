@@ -280,7 +280,9 @@ export interface Localized extends LocalizedStringsMethods {
   pdfStatisticsDownload: {
     surveyTitle: string;
     totalAnswerCount: string;
-    answersPerDisplay: string;
+    answersPerDisplayChart: string;
+    mostPopularDaysChart: string;
+    mostPopularHoursChart: string;
   };
 
   /**

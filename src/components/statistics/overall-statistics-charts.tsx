@@ -39,12 +39,12 @@ const OverallStatisticsCharts = ({
         <Divider orientation="vertical" flexItem />
         <Stack p={2} flex={1}>
           <Typography variant="h6">{strings.surveyStatistics.mostPopularDays}</Typography>
-          <HorizontalChart usesPercentage data={dailyChartData} />
+          <HorizontalChart id="most-popular-days-chart" usesPercentage data={dailyChartData} />
         </Stack>
         <Divider orientation="vertical" flexItem />
         <Stack p={2} flex={1}>
           <Typography variant="h6">{strings.surveyStatistics.mostPopularHours}</Typography>
-          <HorizontalChart usesPercentage data={hourlyChartData} />
+          <HorizontalChart id="most-popular-hours-chart" usesPercentage data={hourlyChartData} />
         </Stack>
       </Stack>
       <Divider />

@@ -1,3 +1,4 @@
+import strings from "../localization/strings";
 import { Background, PageElementType } from "../types";
 
 export const EDITOR_SCREEN_PREVIEW_CONTAINER_WIDTH = 280;
@@ -27,4 +28,14 @@ export const PAGE_BACKGROUNDS = [{ key: Background.DEFAULT, value: "DEFAULT" }].
 
 export const READY_TO_USE_LAYOUTS = ["question", "info"];
 
-export const PDF_IMAGE_FACTOR = 4;
+export const CHART_IDS = [
+  "answers-per-display-chart",
+  "most-popular-days-chart",
+  "most-popular-hours-chart"
+];
+
+export const CHART_STRINGS = {
+  [CHART_IDS[0]]: strings.pdfStatisticsDownload.answersPerDisplayChart,
+  [CHART_IDS[1]]: strings.pdfStatisticsDownload.mostPopularDaysChart,
+  [CHART_IDS[2]]: strings.pdfStatisticsDownload.mostPopularHoursChart
+};

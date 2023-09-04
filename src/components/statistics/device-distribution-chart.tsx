@@ -46,11 +46,11 @@ const DeviceDistributionChart = ({ data, devices }: Props) => {
           <XAxis type="number" fontFamily="SBonusText-Medium" />
           <YAxis type="category" dataKey="deviceName" width={0} fontFamily="SBonusText-Medium" />
           <Tooltip content={ChartTooltip} />
-          <Bar dataKey="answerCount" fill="#00aa46">
+          <Bar dataKey="answerCount" fill="#00aa46" isAnimationActive={false}>
             <LabelList
               dataKey="deviceName"
               position="insideLeft"
-              fill="#fff"
+              fill="#000"
               fontFamily="SBonusText-Bold"
             />
             <LabelList dataKey="answerCount" position="right" fontFamily="SBonusText-Medium" />

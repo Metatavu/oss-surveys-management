@@ -1,6 +1,6 @@
-import { Bar, BarChart, ResponsiveContainer, Tooltip, XAxis, YAxis, LabelList } from "recharts";
 import { DeviceSurveyQuestionOptionStatistics } from "../../generated/client";
 import ChartTooltip from "./chart-tooltip";
+import { Bar, BarChart, LabelList, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 
 /**
  * Component properties
@@ -14,10 +14,11 @@ interface Props {
  */
 const AnswersDistributionChart = ({ data }: Props) => {
   const height = data.length * 25 + 50;
+  const sortedData = data.sort((a, b) => b.answerCount - a.answerCount);
 
   return (
     <ResponsiveContainer height={height}>
-      <BarChart data={data} layout="vertical" margin={{ right: 50 }}>
+      <BarChart data={sortedData} layout="vertical" margin={{ right: 50 }}>
         <XAxis type="number" fontFamily="SBonusText-Medium" />
         <YAxis
           type="category"

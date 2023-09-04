@@ -1,8 +1,8 @@
-import { Typography } from "@mui/material";
-import { Bar, BarChart, LabelList, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import { Device, DeviceSurveyStatistics } from "../../generated/client";
 import strings from "../../localization/strings";
 import ChartTooltip from "./chart-tooltip";
+import { Typography } from "@mui/material";
+import { Bar, BarChart, LabelList, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 
 /**
  * Component properties
@@ -23,10 +23,12 @@ interface ConstructedData {
  * @param props component properties
  */
 const DeviceDistributionChart = ({ data, devices }: Props) => {
-  const constructedData: ConstructedData[] = devices.map((device) => ({
-    deviceName: device.name ?? strings.generic.unnamed,
-    answerCount: data.find((stat) => stat.deviceId === device.id)?.totalAnswerCount || 0
-  }));
+  const constructedData: ConstructedData[] = devices
+    .map((device) => ({
+      deviceName: device.name ?? strings.generic.unnamed,
+      answerCount: data.find((stat) => stat.deviceId === device.id)?.totalAnswerCount || 0
+    }))
+    .sort((a, b) => b.answerCount - a.answerCount);
 
   const constructSourcesString = () => {
     const sourcesString =

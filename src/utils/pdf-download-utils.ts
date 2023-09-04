@@ -1,5 +1,7 @@
+import { PDF_IMAGE_FACTOR } from "../constants";
 import { DeviceSurveyStatistics, Survey } from "../generated/client";
 import strings from "../localization/strings";
+import { toPng } from "html-to-image";
 import jsPDF from "jspdf";
 
 /**
@@ -8,7 +10,10 @@ import jsPDF from "jspdf";
  * @param survey Survey
  * @param deviceSurveyStatistics list of DeviceSurveyStatistics
  */
-export const generatePdf = (survey: Survey, deviceSurveyStatistics: DeviceSurveyStatistics[]) => {
+export const generatePdf = async (
+  survey: Survey,
+  deviceSurveyStatistics: DeviceSurveyStatistics[]
+) => {
   const pdfDocument = new jsPDF();
 
   const pdfWithSurveyInfo = addSurveyInfoToPdf(pdfDocument, survey);
@@ -18,7 +23,9 @@ export const generatePdf = (survey: Survey, deviceSurveyStatistics: DeviceSurvey
     deviceSurveyStatistics
   );
 
-  pdfWithTotalAnswerCount.save(`${survey.title.replaceAll(" ", "-")}.pdf`);
+  const pdfWithAnswersPerDisplay = await addAnswersPerDisplayChart(pdfWithTotalAnswerCount);
+
+  pdfWithAnswersPerDisplay.save(`${survey.title.replaceAll(" ", "-")}.pdf`);
 };
 
 /**
@@ -67,3 +74,26 @@ const addTotalAnswerCountToPdf = (
     10,
     20
   );
+
+// TODO: Causes errors related to accessing the fonts and stylesheets.
+/**
+ * Adds the answers per display chart to the PDF
+ */
+const addAnswersPerDisplayChart = async (pdfDocument: jsPDF) => {
+  var node = document.getElementById("answers-per-display-chart");
+
+  if (!node) return pdfDocument;
+
+  const response = await toPng(node);
+
+  pdfDocument.text(strings.pdfStatisticsDownload.answersPerDisplay, 10, 30);
+
+  return pdfDocument.addImage(
+    response,
+    "PNG",
+    10,
+    40,
+    node.offsetWidth / PDF_IMAGE_FACTOR,
+    node.offsetHeight / PDF_IMAGE_FACTOR
+  );
+};

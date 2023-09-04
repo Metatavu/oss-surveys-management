@@ -238,7 +238,8 @@
   },
   "pdfStatisticsDownload": {
     "surveyTitle": "Kyselyn otsikko: {0}",
-    "totalAnswerCount": "Vastausten kokonaismäärä: {0}"
+    "totalAnswerCount": "Vastausten kokonaismäärä: {0}",
+    "answersPerDisplay": "Näyttökohtaiset vastausmäärät:"
   },
   "publishSurveys": {
     "surveyPublished": "Kysely julkaistu",

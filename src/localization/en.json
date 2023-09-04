@@ -238,7 +238,8 @@
   },
   "pdfStatisticsDownload": {
     "surveyTitle": "Survey title: {0}",
-    "totalAnswerCount": "Total answer count: {0}"
+    "totalAnswerCount": "Total answer count: {0}",
+    "answersPerDisplay": "Answers per display:"
   },
   "publishSurveys": {
     "surveyPublished": "Survey published",

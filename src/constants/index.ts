@@ -26,3 +26,5 @@ export const PAGE_IMAGES = [{ key: Background.DEFAULT, value: "DEFAULT" }].conca
 export const PAGE_BACKGROUNDS = [{ key: Background.DEFAULT, value: "DEFAULT" }].concat(IMAGES);
 
 export const READY_TO_USE_LAYOUTS = ["question", "info"];
+
+export const PDF_IMAGE_FACTOR = 4;

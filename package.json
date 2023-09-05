@@ -25,6 +25,7 @@
     "html-to-image": "1.11.11",
     "jotai": "2.0.3",
     "jspdf": "2.5.1",
+    "jspdf-autotable": "3.6.0",
     "keycloak-js": "21.0.1",
     "localized-strings": "0.2.4",
     "lodash.isequal": "4.5.0",

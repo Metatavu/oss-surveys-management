@@ -3,29 +3,37 @@ import { DeviceSurveyStatistics, Survey } from "../generated/client";
 import strings from "../localization/strings";
 import { toPng } from "html-to-image";
 import jsPDF from "jspdf";
+import "jspdf-autotable";
 
 /**
  * Generates pdf download from statistics data
  *
  * @param survey Survey
  * @param deviceSurveyStatistics list of DeviceSurveyStatistics
+ * @param getQuestionTitle Function to get the title for a question
  */
 export const generatePdf = async (
   survey: Survey,
-  deviceSurveyStatistics: DeviceSurveyStatistics[]
+  deviceSurveyStatistics: DeviceSurveyStatistics[],
+  getQuestionTitle: (pageId: string) => string
 ) => {
   const pdfDocument = new jsPDF();
 
   const pdfWithSurveyInfo = addSurveyInfoToPdf(pdfDocument, survey);
-
   const pdfWithTotalAnswerCount = addTotalAnswerCountToPdf(
     pdfWithSurveyInfo,
     deviceSurveyStatistics
   );
-
   const pdfWithCharts = await addCharts(pdfWithTotalAnswerCount, CHART_IDS);
+  // Hardcoding a new page here for now
+  pdfWithCharts.addPage();
+  const pdfWithAnswerDistributionTables = addAnswerDistributionTables(
+    pdfWithCharts,
+    deviceSurveyStatistics,
+    getQuestionTitle
+  );
 
-  pdfWithCharts.save(`${survey.title.replaceAll(" ", "-")}.pdf`);
+  pdfWithAnswerDistributionTables.save(`${survey.title.replaceAll(" ", "-")}.pdf`);
 };
 
 /**
@@ -78,22 +86,26 @@ const addTotalAnswerCountToPdf = (
 // TODO: Causes errors related to accessing the fonts and stylesheets.
 /**
  * Adds the answers per display chart to the PDF
+ *
+ * @param pdfDocument jsPDF
+ * @param ids list of ids
  */
 const addCharts = async (pdfDocument: jsPDF, ids: string[]) => {
-  const pdfWidth = pdfDocument.internal.pageSize.getWidth(); // Get PDF page width
-  const pdfHeight = pdfDocument.internal.pageSize.getHeight(); // Get PDF page height
-  const margin = 30; // Margin between charts and edges of the PDF page
-  let yCoordinate = margin; // Start y-coordinate
+  const pdfWidth = pdfDocument.internal.pageSize.getWidth();
+  const pdfHeight = pdfDocument.internal.pageSize.getHeight();
+  const margin = 30;
+  let yCoordinate = margin;
 
   for (const id of ids) {
     const node = document.getElementById(id);
 
     if (!node) return pdfDocument;
 
-    const response = await toPng(node);
+    const chartImage = await toPng(node);
 
     pdfDocument.text(CHART_STRINGS[id], margin, yCoordinate);
 
+    // TODO: The below needs fixing to handle various screen sizes.
     // Calculate dimensions based on available space
     const availableWidth = pdfWidth - 2 * margin;
     const availableHeight = pdfHeight - yCoordinate - 2 * margin;
@@ -105,18 +117,73 @@ const addCharts = async (pdfDocument: jsPDF, ids: string[]) => {
     let chartWidth = availableWidth;
     let chartHeight = chartWidth / chartAspectRatio;
 
-    // TODO: This reduces chart size, need to have both most popular charts the same size.
     // If the calculated height exceeds the available height, adjust the dimensions
     if (chartHeight > availableHeight) {
       chartHeight = availableHeight;
       chartWidth = chartHeight * chartAspectRatio;
     }
 
-    // Add the chart to the PDF
-    pdfDocument.addImage(response, "PNG", margin, yCoordinate + 10, chartWidth, chartHeight);
-
-    // Update the y-coordinate for the next chart
+    pdfDocument.addImage(chartImage, "PNG", margin, yCoordinate + 10, chartWidth, chartHeight);
     yCoordinate += chartHeight + 20;
+  }
+
+  return pdfDocument;
+};
+
+// TODO: This is grouping question by name, perhaps should be by id? However question ids are currently undefined or null...
+/**
+ * Adds answer distrubution tables, answers are accumulated across selected devices
+ *
+ * @param pdfDocumenet jdPDF
+ * @param deviceSurveyStatistics list of DeviceSurveyStatistics
+ * @param getQuestionTitle function to get the title of a question
+ */
+const addAnswerDistributionTables = (
+  pdfDocument: jsPDF,
+  deviceSurveyStatistics: DeviceSurveyStatistics[],
+  getQuestionTitle: (pageId: string) => string
+) => {
+  let yCoordinate = 10;
+  const questionOptionCounts: Record<string, Record<string, number>> = {};
+
+  for (const stats of deviceSurveyStatistics) {
+    for (const question of stats.questions) {
+      const questionText = getQuestionTitle(question.pageId);
+
+      for (const option of question.options) {
+        const optionText = option.questionOptionValue;
+        const answerCount = option.answerCount;
+
+        if (!questionOptionCounts[questionText]) {
+          questionOptionCounts[questionText] = {};
+        }
+        if (!questionOptionCounts[questionText][optionText]) {
+          questionOptionCounts[questionText][optionText] = 0;
+        }
+
+        questionOptionCounts[questionText][optionText] += answerCount;
+      }
+    }
+  }
+
+  for (const questionText in questionOptionCounts) {
+    pdfDocument.text(questionText, 10, yCoordinate);
+
+    const headers = ["Option", "Answer Count"];
+    const data = [];
+
+    for (const optionText in questionOptionCounts[questionText]) {
+      const answerCount = questionOptionCounts[questionText][optionText];
+      data.push([optionText, answerCount]);
+    }
+
+    (pdfDocument as any).autoTable({
+      startY: yCoordinate + 10,
+      head: [headers],
+      body: data
+    });
+
+    yCoordinate = (pdfDocument as any).lastAutoTable.finalY + 10;
   }
 
   return pdfDocument;

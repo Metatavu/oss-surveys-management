@@ -314,7 +314,7 @@ const SurveyStatistics = ({ devices, survey }: Props) => {
             color="primary"
             title={strings.editSurveysScreen.pdfDownload}
             startIcon={<Download />}
-            onClick={() => generatePdf(survey, surveyStatistics)}
+            onClick={() => generatePdf(survey, surveyStatistics, getQuestionTitle)}
           >
             {strings.editSurveysScreen.pdfDownload}
           </Button>

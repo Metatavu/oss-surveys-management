@@ -24,13 +24,12 @@ export const generatePdf = async (
     pdfWithSurveyInfo,
     deviceSurveyStatistics
   );
-  const pdfWithCharts = await addCharts(pdfWithTotalAnswerCount, CHART_IDS);
-  // Hardcoding a new page here for now
-  pdfWithCharts.addPage();
+  const { pdfWithCharts, yCoordinate } = await addCharts(pdfWithTotalAnswerCount, CHART_IDS);
   const pdfWithAnswerDistributionTables = addAnswerDistributionTables(
     pdfWithCharts,
     deviceSurveyStatistics,
-    getQuestionTitle
+    getQuestionTitle,
+    yCoordinate
   );
 
   pdfWithAnswerDistributionTables.save(`${survey.title.replaceAll(" ", "-")}.pdf`);
@@ -91,21 +90,23 @@ const addTotalAnswerCountToPdf = (
  * @param ids list of ids
  */
 const addCharts = async (pdfDocument: jsPDF, ids: string[]) => {
-  const pdfWidth = pdfDocument.internal.pageSize.getWidth();
-  const pdfHeight = pdfDocument.internal.pageSize.getHeight();
   const margin = 30;
   let yCoordinate = margin;
 
   for (const id of ids) {
     const node = document.getElementById(id);
+    const pdfWidth = pdfDocument.internal.pageSize.getWidth();
+    const pdfHeight = pdfDocument.internal.pageSize.getHeight();
 
-    if (!node) return pdfDocument;
+    if (!node)
+      return {
+        pdfWithCharts: pdfDocument,
+        yCoordinate: yCoordinate
+      };
 
     const chartImage = await toPng(node);
 
-    pdfDocument.text(CHART_STRINGS[id], margin, yCoordinate);
-
-    // TODO: The below needs fixing to handle various screen sizes.
+    // TODO: The below needs fixing to handle various screen sizes and improve aspect ratio.
     // Calculate dimensions based on available space
     const availableWidth = pdfWidth - 2 * margin;
     const availableHeight = pdfHeight - yCoordinate - 2 * margin;
@@ -114,20 +115,26 @@ const addCharts = async (pdfDocument: jsPDF, ids: string[]) => {
     const chartAspectRatio = node.offsetWidth / node.offsetHeight;
 
     // Calculate dimensions based on the aspect ratio and available space
+    const maxHeight = 50;
     let chartWidth = availableWidth;
-    let chartHeight = chartWidth / chartAspectRatio;
+    let chartHeight =
+      chartWidth / chartAspectRatio < maxHeight ? chartWidth / chartAspectRatio : maxHeight;
 
-    // If the calculated height exceeds the available height, adjust the dimensions
     if (chartHeight > availableHeight) {
-      chartHeight = availableHeight;
-      chartWidth = chartHeight * chartAspectRatio;
+      pdfDocument.addPage();
+      yCoordinate = 10;
     }
+
+    pdfDocument.text(CHART_STRINGS[id], margin, yCoordinate);
 
     pdfDocument.addImage(chartImage, "PNG", margin, yCoordinate + 10, chartWidth, chartHeight);
     yCoordinate += chartHeight + 20;
   }
 
-  return pdfDocument;
+  return {
+    pdfWithCharts: pdfDocument,
+    yCoordinate: yCoordinate
+  };
 };
 
 // TODO: This is grouping question by name, perhaps should be by id? However question ids are currently undefined or null...
@@ -141,9 +148,9 @@ const addCharts = async (pdfDocument: jsPDF, ids: string[]) => {
 const addAnswerDistributionTables = (
   pdfDocument: jsPDF,
   deviceSurveyStatistics: DeviceSurveyStatistics[],
-  getQuestionTitle: (pageId: string) => string
+  getQuestionTitle: (pageId: string) => string,
+  yCoordinate: number
 ) => {
-  let yCoordinate = 10;
   const questionOptionCounts: Record<string, Record<string, number>> = {};
 
   for (const stats of deviceSurveyStatistics) {
@@ -166,9 +173,11 @@ const addAnswerDistributionTables = (
     }
   }
 
-  for (const questionText in questionOptionCounts) {
-    pdfDocument.text(questionText, 10, yCoordinate);
+  let estimatedTableFinalY = yCoordinate;
+  const margin = 30;
+  const availablePageHeight = pdfDocument.internal.pageSize.getHeight() - margin;
 
+  for (const questionText in questionOptionCounts) {
     const headers = ["Option", "Answer Count"];
     const data = [];
 
@@ -176,6 +185,15 @@ const addAnswerDistributionTables = (
       const answerCount = questionOptionCounts[questionText][optionText];
       data.push([optionText, answerCount]);
     }
+
+    estimatedTableFinalY += data.length * 10;
+    if (estimatedTableFinalY > availablePageHeight) {
+      pdfDocument.addPage();
+      yCoordinate = 10;
+      estimatedTableFinalY = 10;
+    }
+
+    pdfDocument.text(questionText, 10, yCoordinate);
 
     (pdfDocument as any).autoTable({
       startY: yCoordinate + 10,

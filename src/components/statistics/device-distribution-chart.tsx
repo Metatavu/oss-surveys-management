@@ -44,16 +44,10 @@ const DeviceDistributionChart = ({ data, devices }: Props) => {
       <ResponsiveContainer id="answers-per-display-chart" height={height}>
         <BarChart data={constructedData} layout="vertical" margin={{ right: 50 }}>
           <XAxis type="number" fontFamily="SBonusText-Medium" />
-          <YAxis type="category" dataKey="deviceName" width={0} fontFamily="SBonusText-Medium" />
+          <YAxis type="category" dataKey="deviceName" width={250} fontFamily="SBonusText-Medium" />
           <Tooltip content={ChartTooltip} />
           {/* TODO: This keeps the labels visible but prevents animation, other option is to handle the data in partent? */}
           <Bar dataKey="answerCount" fill="#00aa46" isAnimationActive={false}>
-            <LabelList
-              dataKey="deviceName"
-              position="insideLeft"
-              fill="#000"
-              fontFamily="SBonusText-Bold"
-            />
             <LabelList dataKey="answerCount" position="right" fontFamily="SBonusText-Medium" />
           </Bar>
         </BarChart>

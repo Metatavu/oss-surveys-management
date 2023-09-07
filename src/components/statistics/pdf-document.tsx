@@ -45,9 +45,7 @@ const PDFDocument = ({ combinedChartsData, surveyStatistics, survey, getQuestion
   /**
    * Render survey info
    */
-  const renderSurveyInfo = () => (
-    <Text>{strings.formatString(strings.pdfStatisticsDownload.surveyTitle, survey.title)}</Text>
-  );
+  const renderSurveyInfo = () => <Text>{survey.title}</Text>;
 
   /**
    * Render total answer count

@@ -1,20 +1,28 @@
 import { errorAtom } from "../../atoms/error";
 import { layoutsAtom } from "../../atoms/layouts";
 import { pagesAtom } from "../../atoms/pages";
-import { END_HOUR, HOUR_GROUPING, START_HOUR } from "../../constants";
+import { CHART_IDS, END_HOUR, HOUR_GROUPING, START_HOUR } from "../../constants";
 import { Device, DeviceSurveyStatistics, Survey } from "../../generated/client";
 import { useApi } from "../../hooks/use-api";
 import strings from "../../localization/strings";
-import { EditablePageElement, PageElementType, SurveyQuestionStatistics } from "../../types";
+import {
+  ChartData,
+  CombinedChartData,
+  EditablePageElement,
+  PageElementType,
+  SurveyQuestionStatistics
+} from "../../types";
 import PageUtils from "../../utils/page-utils";
-import { generatePdf } from "../../utils/pdf-download-utils";
+import { addChart } from "../../utils/pdf-download-utils";
 import PropertiesPanel from "../editor/properties-panel";
 import OverallStatisticsCharts from "./overall-statistics-charts";
+import PDFDocument from "./pdf-document";
 import StatisticDevices from "./statistic-devices";
 import StatisticPage from "./statistic-page";
 import StatisticsInfo from "./statistics-info";
 import { Download } from "@mui/icons-material";
 import { Button, Stack, Typography, styled } from "@mui/material";
+import { PDFDownloadLink } from "@react-pdf/renderer";
 import { useAtom, useSetAtom } from "jotai";
 import { DateTime } from "luxon";
 import { useEffect, useState } from "react";
@@ -53,6 +61,7 @@ const SurveyStatistics = ({ devices, survey }: Props) => {
   const [surveyPages] = useAtom(pagesAtom);
   const [pageLayouts] = useAtom(layoutsAtom);
   const setError = useSetAtom(errorAtom);
+  const [combinedChartsData, setCombinedChartsData] = useState<CombinedChartData>();
 
   /**
    * Return question title
@@ -96,9 +105,54 @@ const SurveyStatistics = ({ devices, survey }: Props) => {
     setSurveyStatistics(selectedDeviceSurveyStatistics);
   };
 
+  /**
+   * Initialize recharts chart data for pdf document
+   */
+  const getChartsData = async () => {
+    const popularTimesAndDeviceCharts = await Promise.all(
+      CHART_IDS.map(async (id) => {
+        return {
+          id: id,
+          ref: await addChart(id)
+        };
+      })
+    );
+    const filteredPopularTimesAndDevicesCharts = popularTimesAndDeviceCharts.filter(
+      (data) => data.ref !== undefined
+    ) as ChartData[];
+
+    const uniquePageIds = [
+      ...new Set(
+        surveyStatistics.flatMap((stats) => stats.questions.map((question) => question.pageId))
+      )
+    ];
+    const answerDistributionCharts = await Promise.all(
+      uniquePageIds.map(async (id) => {
+        return {
+          id: id,
+          ref: await addChart(id)
+        };
+      })
+    );
+    const filteredAnswerDistributionCharts = answerDistributionCharts.filter(
+      (data) => data.ref !== undefined
+    ) as ChartData[];
+
+    const combinedChartData: CombinedChartData = {
+      answerDistributionCharts: filteredAnswerDistributionCharts,
+      popularTimesAndDeviceCharts: filteredPopularTimesAndDevicesCharts
+    };
+
+    setCombinedChartsData(combinedChartData);
+  };
+
   useEffect(() => {
     getDeviceSurveysStatistics().catch((error) => setError(error));
   }, [survey, selectedDevices]);
+
+  useEffect(() => {
+    getChartsData().catch((error) => setError(error));
+  }, [surveyStatistics]);
 
   /**
    * Gets devices with the selected survey
@@ -286,6 +340,40 @@ const SurveyStatistics = ({ devices, survey }: Props) => {
     );
   };
 
+  /**
+   * Render PDF document
+   */
+  const renderPdfDocument = () => {
+    if (
+      !(
+        combinedChartsData?.answerDistributionCharts.length &&
+        combinedChartsData?.popularTimesAndDeviceCharts.length &&
+        surveyStatistics
+      )
+    ) {
+      return <></>;
+    }
+
+    return (
+      <PDFDocument
+        combinedChartsData={combinedChartsData}
+        surveyStatistics={surveyStatistics}
+        survey={survey}
+        getQuestionTitle={getQuestionTitle}
+      />
+    );
+  };
+
+  const renderOverallCharts = () => (
+    <OverallStatisticsCharts
+      devices={selectedDevices}
+      surveyStatistics={surveyStatistics}
+      overallAnswerCount={overallAnswerCount()}
+      hourlyChartData={getHourlyAverageAnswerCount()}
+      dailyChartData={getDailyAverageAnswerCount()}
+    />
+  );
+
   return (
     <>
       <Stack direction="row" flex={1} overflow="hidden">
@@ -297,27 +385,26 @@ const SurveyStatistics = ({ devices, survey }: Props) => {
           />
         </PropertiesPanel>
         <Content gap={2}>
-          {surveyStatistics.length > 0 && (
-            <OverallStatisticsCharts
-              devices={selectedDevices}
-              surveyStatistics={surveyStatistics}
-              overallAnswerCount={overallAnswerCount()}
-              hourlyChartData={getHourlyAverageAnswerCount()}
-              dailyChartData={getDailyAverageAnswerCount()}
-            />
-          )}
+          {surveyStatistics.length > 0 && renderOverallCharts()}
           {renderStatisticPages()}
         </Content>
         <PropertiesPanel width={450}>
           <StatisticsInfo survey={survey} overallAnswerCount={overallAnswerCount()} />
-          <Button
-            color="primary"
-            title={strings.editSurveysScreen.pdfDownload}
-            startIcon={<Download />}
-            onClick={() => generatePdf(survey, surveyStatistics, getQuestionTitle)}
+
+          <PDFDownloadLink
+            document={renderPdfDocument()}
+            fileName={`${survey.title.replaceAll(" ", "-")}.pdf`}
+            style={{ textDecoration: "none", color: "#fff" }}
           >
-            {strings.editSurveysScreen.pdfDownload}
-          </Button>
+            <Button
+              color="primary"
+              title={strings.editSurveysScreen.pdfDownload}
+              startIcon={<Download />}
+              fullWidth
+            >
+              {strings.editSurveysScreen.pdfDownload}
+            </Button>
+          </PDFDownloadLink>
         </PropertiesPanel>
       </Stack>
     </>

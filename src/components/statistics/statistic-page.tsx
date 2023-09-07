@@ -25,7 +25,7 @@ const StatisticPage = ({ question, pageTitle }: Props) => {
       <Divider />
       <Stack padding={2}>
         <Typography variant="h6">{strings.surveyStatistics.answersDistribution}</Typography>
-        <AnswersDistributionChart data={question.options} />
+        <AnswersDistributionChart id={question.pageId} data={question.options} />
       </Stack>
     </Paper>
   );

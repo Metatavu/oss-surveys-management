@@ -7,17 +7,18 @@ import { Bar, BarChart, LabelList, ResponsiveContainer, Tooltip, XAxis, YAxis } 
  */
 interface Props {
   data: DeviceSurveyQuestionOptionStatistics[];
+  id: string;
 }
 
 /**
  * Render vertical bar chart
  */
-const AnswersDistributionChart = ({ data }: Props) => {
+const AnswersDistributionChart = ({ data, id }: Props) => {
   const height = data.length * 25 + 50;
   const sortedData = data.sort((a, b) => b.answerCount - a.answerCount);
 
   return (
-    <ResponsiveContainer height={height}>
+    <ResponsiveContainer id={id} height={height}>
       <BarChart data={sortedData} layout="vertical" margin={{ right: 50 }}>
         <XAxis type="number" fontFamily="SBonusText-Medium" />
         <YAxis
@@ -27,7 +28,7 @@ const AnswersDistributionChart = ({ data }: Props) => {
           fontFamily="SBonusText-Medium"
         />
         <Tooltip content={ChartTooltip} />
-        <Bar dataKey="answerCount" fill="#00aa46">
+        <Bar dataKey="answerCount" fill="#00aa46" isAnimationActive={false}>
           <LabelList dataKey="answerCount" position="right" fontFamily="SBonusText-Medium" />
         </Bar>
       </BarChart>

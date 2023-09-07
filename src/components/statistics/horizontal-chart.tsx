@@ -21,7 +21,7 @@ const HorizontalChart = ({ data, usesPercentage, id }: Props) => {
       <BarChart data={data} layout="horizontal" margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
         <XAxis type="category" dataKey="label" fontFamily="SBonusText-Medium" />
         <Tooltip content={(props) => <ChartTooltip {...props} usesPercentage={usesPercentage} />} />
-        <Bar dataKey="value" fill="#00aa46" />
+        <Bar dataKey="value" fill="#00aa46" isAnimationActive={false} />
       </BarChart>
     </ResponsiveContainer>
   );

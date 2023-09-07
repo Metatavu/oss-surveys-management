@@ -168,3 +168,19 @@ export interface SurveyQuestionOptionStatistics {
   answerCount: number;
   questionOptionValue: string;
 }
+
+/**
+ * Interface for ChartData
+ */
+export interface ChartData {
+  id: string;
+  ref: string;
+}
+
+/**
+ * Interface for CombinedChartData
+ */
+export interface CombinedChartData {
+  popularTimesAndDeviceCharts: ChartData[];
+  answerDistributionCharts: ChartData[];
+}

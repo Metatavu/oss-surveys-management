@@ -14,9 +14,7 @@ export class ParagraphRenderer extends AbstractRenderer {
     const lines = value.split("\n");
     const pTags = lines
       .map((line) => {
-        if (line.trim() === "") return "<p>&nbsp;</p>";
-        // TODO: Using above as br not working in the device?
-        // if (line.trim() === "") return "<br/>";
+        if (line.trim() === "") return "<br/>";
 
         return `<p>${line}</p>`;
       })

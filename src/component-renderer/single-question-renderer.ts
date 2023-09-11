@@ -10,5 +10,15 @@ export class SingleSelectQuestionRenderer extends AbstractRenderer {
    * @param value display text
    * @returns html string
    */
-  public render = (value: string): string => `<button class="option">${value}</button>`;
+  public render = (value: string): string => {
+    const lines = value.split("\n");
+    const buttonContent = lines
+      .map((line) => {
+        if (line.trim() === "") return "<br>";
+
+        return line;
+      })
+      .join("<br>");
+    return `<button class="option">${buttonContent}</button>`;
+  };
 }

@@ -70,7 +70,8 @@ const styles = StyleSheet.create({
   regularText: {
     // fontFamily: "SBonusText-Regular",
     fontSize: 14,
-    fontWeight: "bold"
+    fontWeight: "bold",
+    marginBottom: 5
   },
   totalAnswersNumber: {
     fontSize: 18,

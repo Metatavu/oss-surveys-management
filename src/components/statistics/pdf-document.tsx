@@ -28,18 +28,6 @@ import { Document, Font, Image, Page, StyleSheet, Text, View } from "@react-pdf/
 //   ]
 // });
 
-// // Register SBonusDisplay-Black font
-// Font.register({
-//   family: "SBonusDisplay-Black",
-//   format: "truetype",
-//   fonts: [
-//     {
-//       src: "https://cdn.metatavu.io/fonts/sok/fonts/stylesheet.css",
-//       fontWeight: "normal"
-//     }
-//   ]
-// });
-
 const styles = StyleSheet.create({
   page: {
     flexDirection: "column",
@@ -64,13 +52,19 @@ const styles = StyleSheet.create({
     flexDirection: "row"
   },
   titleText: {
+    // fontFamily: "SBonusText-Bold",
     fontSize: 18,
     fontWeight: "bold"
   },
-  regularText: {
-    // fontFamily: "SBonusText-Regular",
+  headerText: {
+    // fontFamily: "SBonusText-Bold",
     fontSize: 14,
     fontWeight: "bold",
+    marginBottom: 5
+  },
+  regularText: {
+    // fontFamily: "SBonusText-Regular",
+    fontSize: 12,
     marginBottom: 5
   },
   totalAnswersNumber: {
@@ -105,14 +99,14 @@ const PDFDocument = ({ combinedChartsData, surveyStatistics, survey, getQuestion
   /**
    * Render survey info
    */
-  const renderSurveyInfo = () => <Text style={styles.titleText}>{survey.title}</Text>;
+  const renderSurveyInfo = () => <Text style={styles.headerText}>{survey.title}</Text>;
 
   /**
    * Render total answer count
    */
   const renderTotalAnswerCount = () => (
     <>
-      <Text style={styles.regularText}>{strings.pdfStatisticsDownload.totalAnswerCount}</Text>
+      <Text style={styles.headerText}>{strings.pdfStatisticsDownload.totalAnswerCount}</Text>
       <Text style={styles.totalAnswersNumber}>{getTotalAnswerCount(surveyStatistics)}</Text>
     </>
   );
@@ -139,7 +133,7 @@ const PDFDocument = ({ combinedChartsData, surveyStatistics, survey, getQuestion
    */
   const renderDeviceChart = (data: ChartData) => (
     <View key={data.id} style={styles.section} wrap={false}>
-      <Text style={styles.regularText}>{CHART_STRINGS[data.id]}</Text>
+      <Text style={styles.headerText}>{CHART_STRINGS[data.id]}</Text>
       <Image source={data.ref} />
     </View>
   );
@@ -153,7 +147,7 @@ const PDFDocument = ({ combinedChartsData, surveyStatistics, survey, getQuestion
     <View style={styles.multiImageSection} wrap={false}>
       {data.map((chartData) => (
         <View key={chartData.id}>
-          <Text style={styles.regularText}>{CHART_STRINGS[chartData.id]}</Text>
+          <Text style={styles.headerText}>{CHART_STRINGS[chartData.id]}</Text>
           <Image source={chartData.ref} />
         </View>
       ))}

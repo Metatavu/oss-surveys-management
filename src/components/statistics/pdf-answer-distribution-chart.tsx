@@ -7,24 +7,19 @@ import { Bar, BarChart, LabelList, ResponsiveContainer, Tooltip, XAxis, YAxis } 
  */
 interface Props {
   data: DeviceSurveyQuestionOptionStatistics[];
+  id: string;
 }
 
 /**
- * Render vertical bar chart
+ * Render hidden vertical bar chart for pdf download
  */
-const AnswersDistributionChart = ({ data }: Props) => {
+const PdfAnswersDistributionChart = ({ data, id }: Props) => {
   const height = data.length * 25 + 50;
   const sortedData = data.sort((a, b) => b.answerCount - a.answerCount);
 
-  // Removes line breaks from questionOptionValues otherwise will not render in recharts.
-  const sanatizedData = sortedData.map((item) => ({
-    ...item,
-    questionOptionValue: item.questionOptionValue.replace(/\n/g, "")
-  }));
-
   return (
-    <ResponsiveContainer height={height}>
-      <BarChart data={sanatizedData} layout="vertical" margin={{ right: 50 }}>
+    <ResponsiveContainer id={id} className="pdf-chart" height={height} width={800}>
+      <BarChart data={sortedData} layout="vertical" margin={{ right: 50 }}>
         <XAxis type="number" fontFamily="SBonusText-Medium" />
         <YAxis
           type="category"
@@ -33,7 +28,7 @@ const AnswersDistributionChart = ({ data }: Props) => {
           fontFamily="SBonusText-Medium"
         />
         <Tooltip content={ChartTooltip} />
-        <Bar dataKey="answerCount" fill="#00aa46">
+        <Bar dataKey="answerCount" fill="#00aa46" isAnimationActive={false}>
           <LabelList dataKey="answerCount" position="right" fontFamily="SBonusText-Medium" />
         </Bar>
       </BarChart>
@@ -41,4 +36,4 @@ const AnswersDistributionChart = ({ data }: Props) => {
   );
 };
 
-export default AnswersDistributionChart;
+export default PdfAnswersDistributionChart;

@@ -1,6 +1,7 @@
 import strings from "../../localization/strings";
 import { SurveyQuestionStatistics } from "../../types";
 import AnswersDistributionChart from "./answer-distribution-chart";
+import PdfAnswersDistributionChart from "./pdf-answer-distribution-chart";
 import { Divider, Paper, Stack, Typography } from "@mui/material";
 
 /**
@@ -25,7 +26,8 @@ const StatisticPage = ({ question, pageTitle }: Props) => {
       <Divider />
       <Stack padding={2}>
         <Typography variant="h6">{strings.surveyStatistics.answersDistribution}</Typography>
-        <AnswersDistributionChart id={question.pageId} data={question.options} />
+        <AnswersDistributionChart data={question.options} />
+        <PdfAnswersDistributionChart id={question.pageId} data={question.options} />
       </Stack>
     </Paper>
   );

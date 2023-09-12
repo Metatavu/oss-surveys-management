@@ -7,7 +7,7 @@ import { Document, Image, Page, StyleSheet, Text, View } from "@react-pdf/render
 const styles = StyleSheet.create({
   page: {
     flexDirection: "column",
-    backgroundColor: "#E4E4E4",
+    backgroundColor: "#FFFFFF",
     padding: 30
   },
   section: {
@@ -74,7 +74,6 @@ const PDFDocument = ({ combinedChartsData, surveyStatistics, survey, getQuestion
     return total;
   };
 
-  // TODO: Rendering charts seemst to cause errors related to accessing the fonts and stylesheets.
   /**
    * Render device chart
    *

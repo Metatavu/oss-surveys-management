@@ -50,6 +50,13 @@ const styles = StyleSheet.create({
     margin: 10,
     padding: 10
   },
+  answerCountSection: {
+    margin: 10,
+    padding: 10,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between"
+  },
   multiImageSection: {
     margin: 10,
     padding: 10,
@@ -57,13 +64,18 @@ const styles = StyleSheet.create({
     flexDirection: "row"
   },
   titleText: {
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: "bold"
   },
   regularText: {
     // fontFamily: "SBonusText-Regular",
-    fontSize: 12,
+    fontSize: 14,
     fontWeight: "bold"
+  },
+  totalAnswersNumber: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "#00aa46"
   }
 });
 
@@ -98,12 +110,10 @@ const PDFDocument = ({ combinedChartsData, surveyStatistics, survey, getQuestion
    * Render total answer count
    */
   const renderTotalAnswerCount = () => (
-    <Text style={styles.regularText}>
-      {strings.formatString(
-        strings.pdfStatisticsDownload.totalAnswerCount,
-        getTotalAnswerCount(surveyStatistics)
-      )}
-    </Text>
+    <>
+      <Text style={styles.regularText}>{strings.pdfStatisticsDownload.totalAnswerCount}</Text>
+      <Text style={styles.totalAnswersNumber}>{getTotalAnswerCount(surveyStatistics)}</Text>
+    </>
   );
 
   /**
@@ -166,7 +176,7 @@ const PDFDocument = ({ combinedChartsData, surveyStatistics, survey, getQuestion
     <Document>
       <Page size="A4" style={styles.page}>
         <View style={styles.section}>{renderSurveyInfo()}</View>
-        <View style={styles.section}>{renderTotalAnswerCount()}</View>
+        <View style={styles.answerCountSection}>{renderTotalAnswerCount()}</View>
         <View>{renderAnswerDistributionCharts(answerDistributionCharts)}</View>
         <View style={styles.section}>
           {renderPopularTimesCharts(popularTimesCharts)}

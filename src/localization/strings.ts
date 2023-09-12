@@ -279,7 +279,6 @@ export interface Localized extends LocalizedStringsMethods {
    * Translations related to PDF statistics download
    */
   pdfStatisticsDownload: {
-    surveyTitle: string;
     totalAnswerCount: string;
     answersPerDisplayChart: string;
     mostPopularDaysChart: string;

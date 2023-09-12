@@ -238,11 +238,10 @@
     }
   },
   "pdfStatisticsDownload": {
-    "surveyTitle": "Survey title: {0}",
-    "totalAnswerCount": "Total answer count: {0}",
-    "answersPerDisplayChart": "Answers per display:",
-    "mostPopularDaysChart": "Most popular days:",
-    "mostPopularHoursChart": "Most popular hours:"
+    "totalAnswerCount": "Total answer count",
+    "answersPerDisplayChart": "Answers per display",
+    "mostPopularDaysChart": "Most popular days",
+    "mostPopularHoursChart": "Most popular hours"
   },
   "publishSurveys": {
     "surveyPublished": "Survey published",

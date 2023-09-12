@@ -15,6 +15,7 @@ interface Props {
   overallAnswerCount: number;
   hourlyChartData: any;
   dailyChartData: any;
+  renderPdfCharts: boolean;
 }
 
 /**
@@ -27,7 +28,8 @@ const OverallStatisticsCharts = ({
   surveyStatistics,
   overallAnswerCount,
   hourlyChartData,
-  dailyChartData
+  dailyChartData,
+  renderPdfCharts
 }: Props) => {
   return (
     <Paper>
@@ -42,20 +44,24 @@ const OverallStatisticsCharts = ({
         <Stack p={2} flex={1}>
           <Typography variant="h6">{strings.surveyStatistics.mostPopularDays}</Typography>
           <HorizontalChart usesPercentage data={dailyChartData} />
-          <PdfHorizontalChart id="most-popular-days-chart" usesPercentage data={dailyChartData} />
+          <PdfHorizontalChart renderPdfCharts={renderPdfCharts} id="most-popular-days-chart" usesPercentage data={dailyChartData} />
         </Stack>
         <Divider orientation="vertical" flexItem />
         <Stack p={2} flex={1}>
           <Typography variant="h6">{strings.surveyStatistics.mostPopularHours}</Typography>
           <HorizontalChart usesPercentage data={hourlyChartData} />
-          <PdfHorizontalChart id="most-popular-hours-chart" usesPercentage data={hourlyChartData} />
+          <PdfHorizontalChart renderPdfCharts={renderPdfCharts} id="most-popular-hours-chart" usesPercentage data={hourlyChartData} />
         </Stack>
       </Stack>
       <Divider />
       <Stack p={2}>
         <Typography variant="h6">{strings.surveyStatistics.answersPerDisplay}</Typography>
         <DeviceDistributionChart data={surveyStatistics} devices={devices} />
-        <PdfDeviceDistributionChart data={surveyStatistics} devices={devices} />
+        <PdfDeviceDistributionChart
+          renderPdfCharts={renderPdfCharts}
+          data={surveyStatistics}
+          devices={devices}
+        />
       </Stack>
     </Paper>
   );

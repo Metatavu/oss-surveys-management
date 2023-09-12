@@ -168,6 +168,7 @@
     "published": "Julkaistu",
     "statistics": "Tilastot",
     "pdfDownload": "Lataa PDF",
+    "pdfGenerate": "Luoda pdf",
     "preview": "Esikatselu",
     "editSurveyPanel": {
       "name": "Nimi",

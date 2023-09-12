@@ -8,12 +8,17 @@ import { Bar, BarChart, LabelList, ResponsiveContainer, Tooltip, XAxis, YAxis } 
 interface Props {
   data: DeviceSurveyQuestionOptionStatistics[];
   id: string;
+  renderPdfCharts: boolean;
 }
 
 /**
  * Render hidden vertical bar chart for pdf download
  */
-const PdfAnswersDistributionChart = ({ data, id }: Props) => {
+const PdfAnswersDistributionChart = ({ data, id, renderPdfCharts }: Props) => {
+  if (!renderPdfCharts) {
+    return <></>;
+  }
+
   const height = data.length * 25 + 50;
   const sortedData = data.sort((a, b) => b.answerCount - a.answerCount);
 

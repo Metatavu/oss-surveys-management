@@ -201,6 +201,7 @@ export interface Localized extends LocalizedStringsMethods {
     published: string;
     statistics: string;
     pdfDownload: string;
+    pdfGenerate: string;
     preview: string;
     editSurveyPanel: {
       name: string;

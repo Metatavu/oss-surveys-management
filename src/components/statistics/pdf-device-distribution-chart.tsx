@@ -9,7 +9,7 @@ import { Bar, BarChart, LabelList, ResponsiveContainer, Tooltip, XAxis, YAxis } 
 interface Props {
   data: DeviceSurveyStatistics[];
   devices: Device[];
-  toRender?: Boolean;
+  renderPdfCharts: boolean;
 }
 
 interface ConstructedData {
@@ -22,7 +22,11 @@ interface ConstructedData {
  *
  * @param props component properties
  */
-const PdfDeviceDistributionChart = ({ data, devices }: Props) => {
+const PdfDeviceDistributionChart = ({ data, devices, renderPdfCharts }: Props) => {
+  if (!renderPdfCharts) {
+    return <></>;
+  }
+
   const constructedData: ConstructedData[] = devices
     .map((device) => ({
       deviceName: device.name ?? strings.generic.unnamed,

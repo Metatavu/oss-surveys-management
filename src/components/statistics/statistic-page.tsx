@@ -10,6 +10,7 @@ import { Divider, Paper, Stack, Typography } from "@mui/material";
 interface Props {
   question: SurveyQuestionStatistics;
   pageTitle: string;
+  renderPdfCharts: boolean;
 }
 
 /**
@@ -17,7 +18,7 @@ interface Props {
  *
  * @param props component properties
  */
-const StatisticPage = ({ question, pageTitle }: Props) => {
+const StatisticPage = ({ question, pageTitle, renderPdfCharts }: Props) => {
   return (
     <Paper>
       <Typography variant="h6" padding={2}>
@@ -27,7 +28,11 @@ const StatisticPage = ({ question, pageTitle }: Props) => {
       <Stack padding={2}>
         <Typography variant="h6">{strings.surveyStatistics.answersDistribution}</Typography>
         <AnswersDistributionChart data={question.options} />
-        <PdfAnswersDistributionChart id={question.pageId} data={question.options} />
+        <PdfAnswersDistributionChart
+          renderPdfCharts={renderPdfCharts}
+          id={question.pageId}
+          data={question.options}
+        />
       </Stack>
     </Paper>
   );

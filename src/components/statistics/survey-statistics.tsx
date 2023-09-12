@@ -62,6 +62,8 @@ const SurveyStatistics = ({ devices, survey }: Props) => {
   const [pageLayouts] = useAtom(layoutsAtom);
   const setError = useSetAtom(errorAtom);
   const [combinedChartsData, setCombinedChartsData] = useState<CombinedChartData>();
+  const [renderPdfCharts, setRenderPdfCharts] = useState(true);
+  const [pdfContent, setPdfContent] = useState<JSX.Element>();
 
   /**
    * Return question title
@@ -109,6 +111,8 @@ const SurveyStatistics = ({ devices, survey }: Props) => {
    * Initialize recharts chart data for pdf document
    */
   const getChartsData = async () => {
+    if (!renderPdfCharts) return;
+
     const popularTimesAndDeviceCharts = await Promise.all(
       CHART_IDS.map(async (id) => {
         return {
@@ -152,7 +156,11 @@ const SurveyStatistics = ({ devices, survey }: Props) => {
 
   useEffect(() => {
     getChartsData().catch((error) => setError(error));
-  }, [surveyStatistics]);
+  }, [surveyStatistics, renderPdfCharts]);
+
+  useEffect(() => {
+    renderPdfDocument();
+  }, [renderPdfCharts, combinedChartsData]);
 
   /**
    * Gets devices with the selected survey
@@ -293,6 +301,7 @@ const SurveyStatistics = ({ devices, survey }: Props) => {
       key={question.pageId}
       question={question}
       pageTitle={getQuestionTitle(question.pageId)}
+      renderPdfCharts={renderPdfCharts}
     />
   );
 
@@ -348,13 +357,14 @@ const SurveyStatistics = ({ devices, survey }: Props) => {
       !(
         combinedChartsData?.answerDistributionCharts.length &&
         combinedChartsData?.popularTimesAndDeviceCharts.length &&
-        surveyStatistics
+        surveyStatistics &&
+        renderPdfCharts
       )
     ) {
       return <></>;
     }
 
-    return (
+    setPdfContent(
       <PDFDocument
         combinedChartsData={combinedChartsData}
         surveyStatistics={surveyStatistics}
@@ -362,6 +372,17 @@ const SurveyStatistics = ({ devices, survey }: Props) => {
         getQuestionTitle={getQuestionTitle}
       />
     );
+
+    // setRenderPdfCharts(false);
+
+    // return (
+    //   <PDFDocument
+    //     combinedChartsData={combinedChartsData}
+    //     surveyStatistics={surveyStatistics}
+    //     survey={survey}
+    //     getQuestionTitle={getQuestionTitle}
+    //   />
+    // );
   };
 
   const renderOverallCharts = () => (
@@ -371,6 +392,7 @@ const SurveyStatistics = ({ devices, survey }: Props) => {
       overallAnswerCount={overallAnswerCount()}
       hourlyChartData={getHourlyAverageAnswerCount()}
       dailyChartData={getDailyAverageAnswerCount()}
+      renderPdfCharts={renderPdfCharts}
     />
   );
 
@@ -391,7 +413,7 @@ const SurveyStatistics = ({ devices, survey }: Props) => {
         <PropertiesPanel width={450}>
           <StatisticsInfo survey={survey} overallAnswerCount={overallAnswerCount()} />
 
-          <PDFDownloadLink
+          {/* <PDFDownloadLink
             document={renderPdfDocument()}
             fileName={`${survey.title.replaceAll(" ", "-")}.pdf`}
             style={{ textDecoration: "none", color: "#fff" }}
@@ -404,7 +426,34 @@ const SurveyStatistics = ({ devices, survey }: Props) => {
             >
               {strings.editSurveysScreen.pdfDownload}
             </Button>
-          </PDFDownloadLink>
+          </PDFDownloadLink> */}
+
+          {pdfContent ? (
+            <PDFDownloadLink
+              document={pdfContent}
+              fileName={`${survey.title.replaceAll(" ", "-")}.pdf`}
+              style={{ textDecoration: "none", color: "#fff" }}
+            >
+              <Button
+                color="primary"
+                title={strings.editSurveysScreen.pdfDownload}
+                startIcon={<Download />}
+                fullWidth
+              >
+                {strings.editSurveysScreen.pdfDownload}
+              </Button>
+            </PDFDownloadLink>
+          ) : (
+            <Button
+              color="primary"
+              title={strings.editSurveysScreen.pdfGenerate}
+              startIcon={<Download />}
+              fullWidth
+              onClick={() => setRenderPdfCharts(true)}
+            >
+              {strings.editSurveysScreen.pdfGenerate}
+            </Button>
+          )}
         </PropertiesPanel>
       </Stack>
     </>

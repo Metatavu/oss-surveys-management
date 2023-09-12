@@ -8,6 +8,7 @@ interface Props {
   data: any[];
   usesPercentage?: boolean;
   id: string;
+  renderPdfCharts: Boolean;
 }
 
 /**
@@ -15,7 +16,11 @@ interface Props {
  *
  * @param props component properties
  */
-const PdfHorizontalChart = ({ data, usesPercentage, id }: Props) => {
+const PdfHorizontalChart = ({ data, usesPercentage, id, renderPdfCharts }: Props) => {
+  if (!renderPdfCharts) {
+    return <></>;
+  }
+
   return (
     <ResponsiveContainer id={id} height={250} className="pdf-chart" width={350}>
       <BarChart data={data} layout="horizontal" margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>

@@ -168,6 +168,7 @@
     "published": "Published",
     "statistics": "Statistics",
     "pdfDownload": "Download PDF",
+    "pdfGenerate": "Generate PDF",
     "preview": "Preview",
     "editSurveyPanel": {
       "name": "Name",

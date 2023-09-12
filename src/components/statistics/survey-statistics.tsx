@@ -21,8 +21,9 @@ import StatisticDevices from "./statistic-devices";
 import StatisticPage from "./statistic-page";
 import StatisticsInfo from "./statistics-info";
 import { Download } from "@mui/icons-material";
-import { Button, Stack, Typography, styled } from "@mui/material";
-import { PDFDownloadLink } from "@react-pdf/renderer";
+import { LoadingButton } from "@mui/lab";
+import { Stack, Typography, styled } from "@mui/material";
+import { usePDF } from "@react-pdf/renderer";
 import { useAtom, useSetAtom } from "jotai";
 import { DateTime } from "luxon";
 import { useEffect, useState } from "react";
@@ -62,8 +63,8 @@ const SurveyStatistics = ({ devices, survey }: Props) => {
   const [pageLayouts] = useAtom(layoutsAtom);
   const setError = useSetAtom(errorAtom);
   const [combinedChartsData, setCombinedChartsData] = useState<CombinedChartData>();
-  const [renderPdfCharts, setRenderPdfCharts] = useState(true);
-  const [pdfContent, setPdfContent] = useState<JSX.Element>();
+  const [renderPdfCharts, setRenderPdfCharts] = useState(false);
+  const [isPdfLoading, setIsPdfLoading] = useState(false);
 
   /**
    * Return question title
@@ -90,6 +91,17 @@ const SurveyStatistics = ({ devices, survey }: Props) => {
       )?.value ?? ""
     );
   };
+
+  const [pdfInstance, updatePdfInstance] = usePDF({
+    document: (
+      <PDFDocument
+        combinedChartsData={combinedChartsData}
+        surveyStatistics={surveyStatistics}
+        survey={survey}
+        getQuestionTitle={getQuestionTitle}
+      />
+    )
+  });
 
   /**
    * Gets Device survey statistics
@@ -160,7 +172,23 @@ const SurveyStatistics = ({ devices, survey }: Props) => {
 
   useEffect(() => {
     renderPdfDocument();
-  }, [renderPdfCharts, combinedChartsData]);
+  }, [combinedChartsData]);
+
+  useEffect(() => {
+    if (renderPdfCharts && pdfInstance.url && !pdfInstance.loading) {
+      const link = document.createElement("a");
+      link.href = pdfInstance.url;
+      link.setAttribute("download", `${survey.title.replaceAll(" ", "-")}.pdf`);
+
+      document.body.appendChild(link);
+
+      link.click();
+
+      link.parentNode?.removeChild(link);
+      setRenderPdfCharts(false);
+      setIsPdfLoading(false);
+    }
+  }, [pdfInstance.loading]);
 
   /**
    * Gets devices with the selected survey
@@ -364,7 +392,7 @@ const SurveyStatistics = ({ devices, survey }: Props) => {
       return <></>;
     }
 
-    setPdfContent(
+    updatePdfInstance(
       <PDFDocument
         combinedChartsData={combinedChartsData}
         surveyStatistics={surveyStatistics}
@@ -372,17 +400,6 @@ const SurveyStatistics = ({ devices, survey }: Props) => {
         getQuestionTitle={getQuestionTitle}
       />
     );
-
-    // setRenderPdfCharts(false);
-
-    // return (
-    //   <PDFDocument
-    //     combinedChartsData={combinedChartsData}
-    //     surveyStatistics={surveyStatistics}
-    //     survey={survey}
-    //     getQuestionTitle={getQuestionTitle}
-    //   />
-    // );
   };
 
   const renderOverallCharts = () => (
@@ -412,48 +429,19 @@ const SurveyStatistics = ({ devices, survey }: Props) => {
         </Content>
         <PropertiesPanel width={450}>
           <StatisticsInfo survey={survey} overallAnswerCount={overallAnswerCount()} />
-
-          {/* <PDFDownloadLink
-            document={renderPdfDocument()}
-            fileName={`${survey.title.replaceAll(" ", "-")}.pdf`}
-            style={{ textDecoration: "none", color: "#fff" }}
+          <LoadingButton
+            loading={isPdfLoading}
+            color="primary"
+            title={strings.editSurveysScreen.pdfDownload}
+            startIcon={<Download />}
+            fullWidth
+            onClick={() => {
+              setIsPdfLoading(true);
+              setRenderPdfCharts(true);
+            }}
           >
-            <Button
-              color="primary"
-              title={strings.editSurveysScreen.pdfDownload}
-              startIcon={<Download />}
-              fullWidth
-            >
-              {strings.editSurveysScreen.pdfDownload}
-            </Button>
-          </PDFDownloadLink> */}
-
-          {pdfContent ? (
-            <PDFDownloadLink
-              document={pdfContent}
-              fileName={`${survey.title.replaceAll(" ", "-")}.pdf`}
-              style={{ textDecoration: "none", color: "#fff" }}
-            >
-              <Button
-                color="primary"
-                title={strings.editSurveysScreen.pdfDownload}
-                startIcon={<Download />}
-                fullWidth
-              >
-                {strings.editSurveysScreen.pdfDownload}
-              </Button>
-            </PDFDownloadLink>
-          ) : (
-            <Button
-              color="primary"
-              title={strings.editSurveysScreen.pdfGenerate}
-              startIcon={<Download />}
-              fullWidth
-              onClick={() => setRenderPdfCharts(true)}
-            >
-              {strings.editSurveysScreen.pdfGenerate}
-            </Button>
-          )}
+            {strings.editSurveysScreen.pdfDownload}
+          </LoadingButton>
         </PropertiesPanel>
       </Stack>
     </>

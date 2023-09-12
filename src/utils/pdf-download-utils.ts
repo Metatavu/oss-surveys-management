@@ -10,6 +10,10 @@ export const addChart = async (id: string) => {
 
   if (!node) return;
 
+  await new Promise((resolve) => {
+    setTimeout(resolve, 0);
+  });
+
   const canvas = await html2canvas(node);
   const chartImage = canvas.toDataURL("image/png");
 

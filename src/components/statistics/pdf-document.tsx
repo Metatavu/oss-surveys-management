@@ -57,8 +57,13 @@ const styles = StyleSheet.create({
     flexDirection: "row"
   },
   titleText: {
-    // fontFamily: "SBonusText-Bold",
-    fontSize: 16
+    fontSize: 16,
+    fontWeight: "bold"
+  },
+  regularText: {
+    // fontFamily: "SBonusText-Regular",
+    fontSize: 12,
+    fontWeight: "bold"
   }
 });
 
@@ -66,7 +71,7 @@ const styles = StyleSheet.create({
  * Component properties
  */
 interface Props {
-  combinedChartsData: CombinedChartData;
+  combinedChartsData?: CombinedChartData;
   surveyStatistics: DeviceSurveyStatistics[];
   survey: Survey;
   getQuestionTitle: (pageId: string) => string;
@@ -78,6 +83,8 @@ interface Props {
  * @param props component properties
  */
 const PDFDocument = ({ combinedChartsData, surveyStatistics, survey, getQuestionTitle }: Props) => {
+  if (!combinedChartsData) return <div />;
+
   const deviceChart = combinedChartsData.popularTimesAndDeviceCharts[0];
   const popularTimesCharts = combinedChartsData.popularTimesAndDeviceCharts.slice(1);
   const { answerDistributionCharts } = combinedChartsData;
@@ -91,7 +98,7 @@ const PDFDocument = ({ combinedChartsData, surveyStatistics, survey, getQuestion
    * Render total answer count
    */
   const renderTotalAnswerCount = () => (
-    <Text>
+    <Text style={styles.regularText}>
       {strings.formatString(
         strings.pdfStatisticsDownload.totalAnswerCount,
         getTotalAnswerCount(surveyStatistics)
@@ -121,7 +128,7 @@ const PDFDocument = ({ combinedChartsData, surveyStatistics, survey, getQuestion
    */
   const renderDeviceChart = (data: ChartData) => (
     <View key={data.id} style={styles.section} wrap={false}>
-      <Text>{CHART_STRINGS[data.id]}</Text>
+      <Text style={styles.regularText}>{CHART_STRINGS[data.id]}</Text>
       <Image source={data.ref} />
     </View>
   );
@@ -135,7 +142,7 @@ const PDFDocument = ({ combinedChartsData, surveyStatistics, survey, getQuestion
     <View style={styles.multiImageSection} wrap={false}>
       {data.map((chartData) => (
         <View key={chartData.id}>
-          <Text>{CHART_STRINGS[chartData.id]}</Text>
+          <Text style={styles.regularText}>{CHART_STRINGS[chartData.id]}</Text>
           <Image source={chartData.ref} />
         </View>
       ))}
@@ -150,7 +157,7 @@ const PDFDocument = ({ combinedChartsData, surveyStatistics, survey, getQuestion
   const renderAnswerDistributionCharts = (data: ChartData[]) =>
     data.map((chartData) => (
       <View key={chartData.id} style={styles.section} wrap={false}>
-        <Text>{getQuestionTitle(chartData.id)}</Text>
+        <Text style={styles.regularText}>{getQuestionTitle(chartData.id)}</Text>
         <Image source={chartData.ref} />
       </View>
     ));

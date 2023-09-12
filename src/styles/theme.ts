@@ -80,7 +80,7 @@ export default createTheme({
         },
         ".pdf-chart": {
           position: "absolute",
-          left: -100000
+          left: "calc(100vw + 1px)"
         },
         a: {
           textDecoration: "none"

@@ -2,7 +2,43 @@ import { CHART_STRINGS } from "../../constants";
 import { DeviceSurveyStatistics, Survey } from "../../generated/client";
 import strings from "../../localization/strings";
 import { ChartData, CombinedChartData } from "../../types";
-import { Document, Image, Page, StyleSheet, Text, View } from "@react-pdf/renderer";
+import { Document, Font, Image, Page, StyleSheet, Text, View } from "@react-pdf/renderer";
+
+// // Register SBonusText-Bold font
+// Font.register({
+//   family: "SBonusText-Bold",
+//   format: "truetype",
+//   fonts: [
+//     {
+//       src: "https://cdn.metatavu.io/fonts/sok/fonts/stylesheet.css",
+//       fontWeight: "bold"
+//     }
+//   ]
+// });
+
+// // Register SBonusText-Regular font
+// Font.register({
+//   family: "SBonusText-Regular",
+//   format: "truetype",
+//   fonts: [
+//     {
+//       src: "https://cdn.metatavu.io/fonts/sok/fonts/stylesheet.css",
+//       fontWeight: "normal"
+//     }
+//   ]
+// });
+
+// // Register SBonusDisplay-Black font
+// Font.register({
+//   family: "SBonusDisplay-Black",
+//   format: "truetype",
+//   fonts: [
+//     {
+//       src: "https://cdn.metatavu.io/fonts/sok/fonts/stylesheet.css",
+//       fontWeight: "normal"
+//     }
+//   ]
+// });
 
 const styles = StyleSheet.create({
   page: {
@@ -19,6 +55,10 @@ const styles = StyleSheet.create({
     padding: 10,
     flexGrow: 1,
     flexDirection: "row"
+  },
+  titleText: {
+    // fontFamily: "SBonusText-Bold",
+    fontSize: 16
   }
 });
 
@@ -45,7 +85,7 @@ const PDFDocument = ({ combinedChartsData, surveyStatistics, survey, getQuestion
   /**
    * Render survey info
    */
-  const renderSurveyInfo = () => <Text>{survey.title}</Text>;
+  const renderSurveyInfo = () => <Text style={styles.titleText}>{survey.title}</Text>;
 
   /**
    * Render total answer count

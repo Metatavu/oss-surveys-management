@@ -1,10 +1,3 @@
-import { Download } from "@mui/icons-material";
-import { LoadingButton } from "@mui/lab";
-import { Box, Stack, Typography, styled } from "@mui/material";
-import { usePDF } from "@react-pdf/renderer";
-import { useAtom, useSetAtom } from "jotai";
-import { DateTime } from "luxon";
-import { useEffect, useState } from "react";
 import { errorAtom } from "../../atoms/error";
 import { layoutsAtom } from "../../atoms/layouts";
 import { pagesAtom } from "../../atoms/pages";
@@ -27,6 +20,13 @@ import PDFDocument from "./pdf-document";
 import StatisticDevices from "./statistic-devices";
 import StatisticPage from "./statistic-page";
 import StatisticsInfo from "./statistics-info";
+import { Download } from "@mui/icons-material";
+import { LoadingButton } from "@mui/lab";
+import { Box, Stack, Typography, styled } from "@mui/material";
+import { usePDF } from "@react-pdf/renderer";
+import { useAtom, useSetAtom } from "jotai";
+import { DateTime } from "luxon";
+import { useEffect, useState } from "react";
 
 /**
  * Components properties
@@ -65,6 +65,7 @@ const SurveyStatistics = ({ devices, survey }: Props) => {
   const [combinedChartsData, setCombinedChartsData] = useState<CombinedChartData>();
   const [renderPdfCharts, setRenderPdfCharts] = useState(false);
   const [isPdfLoading, setIsPdfLoading] = useState(false);
+  const [pdfReady, setPdfReady] = useState(false);
 
   /**
    * Return question title
@@ -175,7 +176,7 @@ const SurveyStatistics = ({ devices, survey }: Props) => {
   }, [combinedChartsData]);
 
   useEffect(() => {
-    if (renderPdfCharts && pdfInstance.url && !pdfInstance.loading) {
+    if (renderPdfCharts && pdfInstance.url && !pdfInstance.loading && pdfReady) {
       const link = document.createElement("a");
       link.href = pdfInstance.url;
       link.setAttribute("download", `${survey.title.replaceAll(" ", "-")}.pdf`);
@@ -187,8 +188,9 @@ const SurveyStatistics = ({ devices, survey }: Props) => {
       link.parentNode?.removeChild(link);
       setRenderPdfCharts(false);
       setIsPdfLoading(false);
+      setPdfReady(false);
     }
-  }, [pdfInstance.loading]);
+  }, [pdfInstance.loading, pdfReady]);
 
   /**
    * Gets devices with the selected survey
@@ -400,6 +402,8 @@ const SurveyStatistics = ({ devices, survey }: Props) => {
         getQuestionTitle={getQuestionTitle}
       />
     );
+
+    setPdfReady(true);
   };
 
   const renderOverallCharts = () => (

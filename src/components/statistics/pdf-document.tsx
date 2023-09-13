@@ -1,32 +1,45 @@
+import config from "../../app/config";
 import { CHART_STRINGS } from "../../constants";
 import { DeviceSurveyStatistics, Survey } from "../../generated/client";
 import strings from "../../localization/strings";
 import { ChartData, CombinedChartData } from "../../types";
 import { Document, Font, Image, Page, StyleSheet, Text, View } from "@react-pdf/renderer";
 
-// // Register SBonusText-Bold font
-// Font.register({
-//   family: "SBonusText-Bold",
-//   format: "truetype",
-//   fonts: [
-//     {
-//       src: "https://cdn.metatavu.io/fonts/sok/fonts/stylesheet.css",
-//       fontWeight: "bold"
-//     }
-//   ]
-// });
+const { cdnBaseUrl } = config;
 
-// // Register SBonusText-Regular font
-// Font.register({
-//   family: "SBonusText-Regular",
-//   format: "truetype",
-//   fonts: [
-//     {
-//       src: "https://cdn.metatavu.io/fonts/sok/fonts/stylesheet.css",
-//       fontWeight: "normal"
-//     }
-//   ]
-// });
+// Register SBonusText-Regular font
+Font.register({
+  family: "SBonusText-Regular",
+  format: "truetype",
+  fonts: [
+    {
+      src: `${cdnBaseUrl}/fonts/SBonusText-Regular.woff`,
+      fontWeight: "normal"
+    }
+  ]
+});
+
+// Register SBonusDisplay-Black font
+Font.register({
+  family: "SBonusDisplay-Black",
+  fonts: [
+    {
+      src: `${cdnBaseUrl}/fonts/SBonusDisplay-Black.woff`,
+      fontWeight: "normal"
+    }
+  ]
+});
+
+// Register SBonusText-Bold font
+Font.register({
+  family: "SBonusText-Bold",
+  fonts: [
+    {
+      src: `${cdnBaseUrl}/fonts/SBonusText-Bold.woff`,
+      fontWeight: "normal"
+    }
+  ]
+});
 
 const styles = StyleSheet.create({
   page: {
@@ -52,22 +65,21 @@ const styles = StyleSheet.create({
     flexDirection: "row"
   },
   titleText: {
-    // fontFamily: "SBonusText-Bold",
-    fontSize: 18,
-    fontWeight: "bold"
+    fontFamily: "SBonusDisplay-Black",
+    fontSize: 20
   },
   headerText: {
-    // fontFamily: "SBonusText-Bold",
+    fontFamily: "SBonusText-Bold",
     fontSize: 14,
-    fontWeight: "bold",
     marginBottom: 5
   },
   regularText: {
-    // fontFamily: "SBonusText-Regular",
+    fontFamily: "SBonusText-Regular",
     fontSize: 12,
     marginBottom: 5
   },
   totalAnswersNumber: {
+    fontFamily: "SBonusText-Regular",
     fontSize: 18,
     fontWeight: "bold",
     color: "#00aa46"
@@ -99,7 +111,7 @@ const PDFDocument = ({ combinedChartsData, surveyStatistics, survey, getQuestion
   /**
    * Render survey info
    */
-  const renderSurveyInfo = () => <Text style={styles.headerText}>{survey.title}</Text>;
+  const renderSurveyInfo = () => <Text style={styles.titleText}>{survey.title}</Text>;
 
   /**
    * Render total answer count

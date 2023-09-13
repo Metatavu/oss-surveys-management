@@ -1,3 +1,10 @@
+import { Download } from "@mui/icons-material";
+import { LoadingButton } from "@mui/lab";
+import { Box, Stack, Typography, styled } from "@mui/material";
+import { usePDF } from "@react-pdf/renderer";
+import { useAtom, useSetAtom } from "jotai";
+import { DateTime } from "luxon";
+import { useEffect, useState } from "react";
 import { errorAtom } from "../../atoms/error";
 import { layoutsAtom } from "../../atoms/layouts";
 import { pagesAtom } from "../../atoms/pages";
@@ -20,13 +27,6 @@ import PDFDocument from "./pdf-document";
 import StatisticDevices from "./statistic-devices";
 import StatisticPage from "./statistic-page";
 import StatisticsInfo from "./statistics-info";
-import { Download } from "@mui/icons-material";
-import { LoadingButton } from "@mui/lab";
-import { Stack, Typography, styled } from "@mui/material";
-import { usePDF } from "@react-pdf/renderer";
-import { useAtom, useSetAtom } from "jotai";
-import { DateTime } from "luxon";
-import { useEffect, useState } from "react";
 
 /**
  * Components properties
@@ -429,19 +429,23 @@ const SurveyStatistics = ({ devices, survey }: Props) => {
         </Content>
         <PropertiesPanel width={450}>
           <StatisticsInfo survey={survey} overallAnswerCount={overallAnswerCount()} />
-          <LoadingButton
-            loading={isPdfLoading}
-            color="primary"
-            title={strings.editSurveysScreen.pdfDownload}
-            startIcon={<Download />}
-            fullWidth
-            onClick={() => {
-              setIsPdfLoading(true);
-              setRenderPdfCharts(true);
-            }}
-          >
-            {strings.editSurveysScreen.pdfDownload}
-          </LoadingButton>
+          <Box p={4}>
+            <LoadingButton
+              loading={isPdfLoading}
+              loadingPosition="start"
+              variant="contained"
+              color="primary"
+              title={strings.editSurveysScreen.pdfDownload}
+              startIcon={<Download />}
+              fullWidth
+              onClick={() => {
+                setIsPdfLoading(true);
+                setRenderPdfCharts(true);
+              }}
+            >
+              {strings.editSurveysScreen.pdfDownload}
+            </LoadingButton>
+          </Box>
         </PropertiesPanel>
       </Stack>
     </>

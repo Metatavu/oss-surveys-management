@@ -1,6 +1,6 @@
+import LocalizedStrings, { LocalizedStringsMethods } from "localized-strings";
 import en from "./en.json";
 import fi from "./fi.json";
-import LocalizedStrings, { LocalizedStringsMethods } from "localized-strings";
 
 /**
  * Localized strings
@@ -280,6 +280,7 @@ export interface Localized extends LocalizedStringsMethods {
    */
   pdfStatisticsDownload: {
     totalAnswerCount: string;
+    answerDivision: string;
     answersPerDisplayChart: string;
     mostPopularDaysChart: string;
     mostPopularHoursChart: string;

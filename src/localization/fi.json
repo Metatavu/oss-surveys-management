@@ -238,7 +238,8 @@
     }
   },
   "pdfStatisticsDownload": {
-    "totalAnswerCount": "Vastausten kokonaismäärä",
+    "totalAnswerCount": "Vastauksia",
+    "answerDivision": "Vastauksien jakautuminen",
     "answersPerDisplayChart": "Näyttökohtaiset vastausmäärät",
     "mostPopularDaysChart": "Vilkkaimmat päivät",
     "mostPopularHoursChart": "Vilkkaimmat tunnit"

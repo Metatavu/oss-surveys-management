@@ -238,7 +238,8 @@
     }
   },
   "pdfStatisticsDownload": {
-    "totalAnswerCount": "Total answer count",
+    "totalAnswerCount": "Total answers",
+    "answerDivision": "Answer division",
     "answersPerDisplayChart": "Answers per display",
     "mostPopularDaysChart": "Most popular days",
     "mostPopularHoursChart": "Most popular hours"

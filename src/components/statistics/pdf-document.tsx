@@ -1,9 +1,9 @@
+import { Document, Font, Image, Page, StyleSheet, Text, View } from "@react-pdf/renderer";
 import config from "../../app/config";
 import { CHART_STRINGS } from "../../constants";
 import { DeviceSurveyStatistics, Survey } from "../../generated/client";
 import strings from "../../localization/strings";
 import { ChartData, CombinedChartData } from "../../types";
-import { Document, Font, Image, Page, StyleSheet, Text, View } from "@react-pdf/renderer";
 
 const { cdnBaseUrl } = config;
 
@@ -45,42 +45,39 @@ const styles = StyleSheet.create({
   page: {
     flexDirection: "column",
     backgroundColor: "#FFFFFF",
-    padding: 30
+    padding: 32
   },
   section: {
-    margin: 10,
-    padding: 10
+    padding: 8
   },
   answerCountSection: {
-    margin: 10,
-    padding: 10,
+    padding: 8,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between"
   },
   multiImageSection: {
-    margin: 10,
     padding: 10,
     flexGrow: 1,
     flexDirection: "row"
   },
   titleText: {
     fontFamily: "SBonusDisplay-Black",
-    fontSize: 20
+    fontSize: 24
   },
   headerText: {
     fontFamily: "SBonusText-Bold",
     fontSize: 14,
-    marginBottom: 5
+    marginBottom: 16
   },
   regularText: {
     fontFamily: "SBonusText-Regular",
     fontSize: 12,
-    marginBottom: 5
+    marginBottom: 8
   },
   totalAnswersNumber: {
-    fontFamily: "SBonusText-Regular",
-    fontSize: 18,
+    fontFamily: "SBonusDisplay-Black",
+    fontSize: 24,
     fontWeight: "bold",
     color: "#00aa46"
   }
@@ -174,7 +171,7 @@ const PDFDocument = ({ combinedChartsData, surveyStatistics, survey, getQuestion
   const renderAnswerDistributionCharts = (data: ChartData[]) =>
     data.map((chartData) => (
       <View key={chartData.id} style={styles.section} wrap={false}>
-        <Text style={styles.regularText}>{getQuestionTitle(chartData.id)}</Text>
+        <Text style={styles.headerText}>{getQuestionTitle(chartData.id)}</Text>
         <Image source={chartData.ref} />
       </View>
     ));

@@ -22,9 +22,15 @@ const PdfAnswersDistributionChart = ({ data, id, renderPdfCharts }: Props) => {
   const height = data.length * 25 + 50;
   const sortedData = data.sort((a, b) => b.answerCount - a.answerCount);
 
+  // Removes line breaks from questionOptionValues otherwise will not render in recharts.
+  const sanatizedData = sortedData.map((item) => ({
+    ...item,
+    questionOptionValue: item.questionOptionValue.replace(/\n/g, "")
+  }));
+
   return (
     <ResponsiveContainer id={id} className="pdf-chart" height={height} width={800}>
-      <BarChart data={sortedData} layout="vertical" margin={{ right: 50 }}>
+      <BarChart data={sanatizedData} layout="vertical" margin={{ right: 50 }}>
         <XAxis type="number" fontFamily="SBonusText-Medium" />
         <YAxis
           type="category"

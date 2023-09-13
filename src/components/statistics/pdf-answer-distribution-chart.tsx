@@ -19,7 +19,7 @@ const PdfAnswersDistributionChart = ({ data, id, renderPdfCharts }: Props) => {
     return <></>;
   }
 
-  const height = data.length * 25 + 50;
+  const height = data.length * 30 + 50;
   const sortedData = data.sort((a, b) => b.answerCount - a.answerCount);
 
   // Removes line breaks from questionOptionValues otherwise will not render in recharts.

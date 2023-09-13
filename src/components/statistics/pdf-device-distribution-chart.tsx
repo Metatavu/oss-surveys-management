@@ -34,7 +34,7 @@ const PdfDeviceDistributionChart = ({ data, devices, renderPdfCharts }: Props) =
     }))
     .sort((a, b) => b.answerCount - a.answerCount);
 
-  const height = constructedData.length * 25 + 50;
+  const height = constructedData.length * 30 + 50;
 
   return (
     <>

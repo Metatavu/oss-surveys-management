@@ -37,7 +37,7 @@ const DeviceDistributionChart = ({ data, devices }: Props) => {
     return <Typography>{sourcesString}</Typography>;
   };
 
-  const height = constructedData.length * 25 + 50;
+  const height = constructedData.length * 30 + 50;
 
   return (
     <>

@@ -32,6 +32,25 @@ namespace PageUtils {
 
     if (!foundElement) throw new Error(`Element with id ${id} not found`);
 
+    // TODO: To add the option conditions
+    if (foundElement.hasAttribute("data-component")) {
+      const dataComponentValue = foundElement.getAttribute("data-component");
+      if (dataComponentValue === "header-container") {
+        return {
+          type: foundElement?.children[0].tagName.toLowerCase() as PageElementType,
+          element: foundElement,
+          id: id
+        };
+      }
+      if (dataComponentValue === "text-container") {
+        return {
+          type: foundElement?.children[0].tagName.toLowerCase() as PageElementType,
+          element: foundElement,
+          id: id
+        };
+      }
+    }
+
     return {
       type: foundElement?.tagName.toLowerCase() as PageElementType,
       element: foundElement,
@@ -96,7 +115,11 @@ namespace PageUtils {
   };
 
   /**
-   * Handles page properties rendering
+   * Handle page properties rendering
+   *
+   * @param document DOM Document
+   * @param variable LayoutVariable
+   * @param property PageProperty
    */
   export const handlePagePropertiesRendering = (
     document: Document,
@@ -107,27 +130,12 @@ namespace PageUtils {
     const targetElement = document.getElementById(variable.key);
 
     if (!targetElement) return htmlData;
-
     switch (variable.type) {
       case LayoutVariableType.Text: {
-        switch (targetElement?.tagName.toLocaleLowerCase()) {
-          case PageElementType.H1: {
-            const titleRenderer = componentRendererFactory.getTitleRenderer();
-            const textHtml = titleRenderer.render(property.value);
-            const textElement = new DOMParser().parseFromString(textHtml, "text/html");
-            targetElement?.replaceWith(textElement.body);
-            htmlData = document.body.innerHTML;
-            break;
-          }
-          case PageElementType.P: {
-            const textRenderer = componentRendererFactory.getParagraphRenderer();
-            const textHtml = textRenderer.render(property.value);
-            const textElement = new DOMParser().parseFromString(textHtml, "text/html");
-            targetElement?.replaceWith(textElement.body);
-            htmlData = document.body.innerHTML;
-            break;
-          }
-        }
+        const textElement = new DOMParser().parseFromString(property.value, "text/html");
+        targetElement?.replaceWith(textElement.body);
+        htmlData = document.body.innerHTML;
+        break;
       }
       case LayoutVariableType.ImageUrl: {
         switch (targetElement?.tagName.toLocaleLowerCase()) {
@@ -220,6 +228,66 @@ namespace PageUtils {
     if (!foundImageProperty?.value) return defaultImage.value;
 
     return foundImageProperty.value;
+  };
+
+  /**
+   * Serialize the event value as HTML according to element type
+   *
+   * @param value event string
+   * @param elementType PageElementType
+   *
+   * @returns serialized HTML
+   */
+  export const serializeChangeEventValue = (value: string, elementType: PageElementType) => {
+    switch (elementType) {
+      case PageElementType.P: {
+        const textRenderer = componentRendererFactory.getParagraphRenderer();
+        const textHtml = textRenderer.render(value);
+
+        return textHtml;
+      }
+      case PageElementType.H1: {
+        const titleRenderer = componentRendererFactory.getTitleRenderer();
+        const headerHtml = titleRenderer.render(value);
+
+        return headerHtml;
+      }
+    }
+  };
+
+  /**
+   * Converts serialized HTML to string of innerHTML values
+   *
+   * @param serializedHTML
+   * @param elementType
+   *
+   * @returns string of innerHTML values
+   */
+  export const getSerializedHTMLInnerHtmlValues = (
+    serializedHTML: string,
+    elementType: PageElementType
+  ) => {
+    // TODO: Temporary condition while implementing serialization for different element types
+    if (elementType !== PageElementType.P && elementType !== PageElementType.H1)
+      return serializedHTML;
+
+    const tempContainer = document.createElement("div");
+    tempContainer.innerHTML = serializedHTML;
+
+    const tempDiv = tempContainer.querySelector("div");
+
+    if (!tempDiv) return;
+
+    const innerHTMLValues: string[] = [];
+
+    tempDiv.childNodes.forEach((childNode) => {
+      if (childNode instanceof Element) {
+        innerHTMLValues.push(childNode.innerHTML);
+      }
+    });
+    const resultString = innerHTMLValues.join("\n");
+
+    return resultString;
   };
 }
 

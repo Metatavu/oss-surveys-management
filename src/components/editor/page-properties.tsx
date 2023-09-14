@@ -77,7 +77,7 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
     if (isEqual(surveyPages, pendingPages)) return;
     setSurveyPages(
       await Promise.all(
-        debouncedPages.map(page =>
+        debouncedPages.map((page) =>
           pagesApi.updateSurveyPage({
             surveyId: surveyId,
             pageId: page.id!,
@@ -102,7 +102,9 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
   /**
    * Initializes editable pages properties
    */
-  const [pageToEdit, pageToEditLayout, elementsToEdit] = useMemo<[Page | undefined, Layout | undefined, EditablePageElement[]]>(() => {
+  const [pageToEdit, pageToEditLayout, elementsToEdit] = useMemo<
+    [Page | undefined, Layout | undefined, EditablePageElement[]]
+  >(() => {
     const foundPage = pendingPages.find((page) => page.orderNumber === pageNumber);
     const foundLayout = pageLayouts.find((layout) => layout.id === foundPage?.layoutId);
     const elements: EditablePageElement[] = [];
@@ -141,7 +143,7 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
    * @param event event
    */
   const handleTextChange = ({ target: { value, name } }: FocusEvent<HTMLInputElement>) => {
-    setPendingPages(pages => {
+    setPendingPages((pages) => {
       const pageToUpdate = pages.find((page) => page.id === pageToEdit?.id);
 
       if (!pageToUpdate) return pages;
@@ -149,6 +151,25 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
       const foundProperty = pageToUpdate?.properties?.find((property) => property.key === name);
 
       if (!foundProperty || foundProperty.value === value) return pages;
+
+      const foundPage = pendingPages.find((page) => page.orderNumber === pageNumber);
+      const foundLayout = pageLayouts.find((layout) => layout.id === foundPage?.layoutId);
+
+      if (!foundLayout) return pages;
+
+      const elementType = PageUtils.getPageTextElementTypeAndId(foundLayout?.html, name);
+      const serializedValue = PageUtils.serializeChangeEventValue(value, elementType.type);
+
+      if (serializedValue) {
+        const updatedPage = {
+          ...pageToUpdate,
+          properties: pageToUpdate.properties?.map((property) =>
+            property.key === name ? { ...property, value: serializedValue } : property
+          )
+        };
+
+        return surveyPages.map((page) => (page.id === updatedPage.id ? updatedPage : page));
+      }
 
       const updatedPage = {
         ...pageToUpdate,
@@ -169,7 +190,7 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
   const handleButtonVisiblitySwitch = async ({
     target: { checked }
   }: ChangeEvent<HTMLInputElement>) => {
-    setPendingPages(pages => {
+    setPendingPages((pages) => {
       const pageToUpdate = pages.find((page) => page.id === pageToEdit?.id);
 
       if (!pageToUpdate) return pages;
@@ -186,7 +207,7 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
    * @param event event
    */
   const handleOptionChange = ({ target: { value, name } }: FocusEvent<HTMLInputElement>) => {
-    setPendingPages(pages => {
+    setPendingPages((pages) => {
       const pageToUpdate = pages.find((page) => page.id === pageToEdit?.id);
 
       if (!pageToUpdate?.question) return pages;
@@ -209,14 +230,13 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
 
       return surveyPages.map((page) => (page.id === updatedPage.id ? updatedPage : page));
     });
-
   };
 
   /**
    * Handler for add new option button click
    */
   const handleNewOptionClick = () => {
-    setPendingPages(pages => {
+    setPendingPages((pages) => {
       const pageToUpdate = pages.find((page) => page.id === pageToEdit?.id);
 
       if (!pageToUpdate?.question) return pages;
@@ -250,7 +270,7 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
    * @param option option
    */
   const handleDeleteClick = (option: PageQuestionOption) => {
-    setPendingPages(pages => {
+    setPendingPages((pages) => {
       const pageToUpdate = pages.find((page) => page.id === pageToEdit?.id);
 
       if (!pageToUpdate?.question) return pages;
@@ -262,7 +282,9 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
         question: {
           ...pageToUpdate.question,
           options: filteredOptions.map((opt) =>
-            opt.orderNumber > option.orderNumber ? { ...opt, orderNumber: opt.orderNumber - 1 } : opt
+            opt.orderNumber > option.orderNumber
+              ? { ...opt, orderNumber: opt.orderNumber - 1 }
+              : opt
           )
         }
       };
@@ -277,7 +299,7 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
    * @param value new value
    */
   const handleBackgroundChange = ({ target: { value } }: ChangeEvent<HTMLInputElement>) => {
-    setPendingPages(pages => {
+    setPendingPages((pages) => {
       const pageToUpdate = pages.find((page) => page.id === pageToEdit?.id);
 
       if (!pageToUpdate) return pages;
@@ -306,11 +328,11 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
 
   /**
    * Handler for image change event
-   * 
+   *
    * @param value new value
    */
   const handleImageChange = ({ target: { value } }: ChangeEvent<HTMLInputElement>) => {
-    setPendingPages(pages => {
+    setPendingPages((pages) => {
       const pageToUpdate = pages.find((page) => page.id === pageToEdit?.id);
       if (!pageToUpdate) return pages;
 
@@ -340,7 +362,7 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
    * @param event event
    */
   const handleQuestionTypeChange = ({ target: { value } }: ChangeEvent<HTMLInputElement>) => {
-    setPendingPages(pages => {
+    setPendingPages((pages) => {
       const pageToUpdate = pages.find((page) => page.id === pageToEdit?.id);
       if (!pageToUpdate?.question) return pages;
 
@@ -369,7 +391,9 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
         <Typography variant="h6">{PageUtils.getTextPropertyLabel(element.type)}</Typography>
         <TextField
           name={element.id}
-          defaultValue={property?.value ?? ""}
+          defaultValue={
+            PageUtils.getSerializedHTMLInnerHtmlValues(property?.value || "", element.type) ?? ""
+          }
           placeholder={PageUtils.getTextPropertyLabel(element.type) ?? ""}
           fullWidth
           multiline

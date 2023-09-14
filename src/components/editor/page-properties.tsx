@@ -160,21 +160,12 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
       const elementType = PageUtils.getPageTextElementTypeAndId(foundLayout?.html, name);
       const serializedValue = PageUtils.serializeChangeEventValue(value, elementType.type);
 
-      if (serializedValue) {
-        const updatedPage = {
-          ...pageToUpdate,
-          properties: pageToUpdate.properties?.map((property) =>
-            property.key === name ? { ...property, value: serializedValue } : property
-          )
-        };
-
-        return surveyPages.map((page) => (page.id === updatedPage.id ? updatedPage : page));
-      }
+      if (!serializedValue) return pages;
 
       const updatedPage = {
         ...pageToUpdate,
         properties: pageToUpdate.properties?.map((property) =>
-          property.key === name ? { ...property, value: value } : property
+          property.key === name ? { ...property, value: serializedValue } : property
         )
       };
 

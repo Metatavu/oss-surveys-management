@@ -144,12 +144,10 @@ const SurveyStatistics = ({ devices, survey }: Props) => {
       )
     ];
     const answerDistributionCharts = await Promise.all(
-      uniquePageIds.map(async (id) => {
-        return {
-          id: id,
-          ref: await addChart(id)
-        };
-      })
+      uniquePageIds.map(async (id) => ({
+        id: id,
+        ref: await addChart(id)
+      }))
     );
     const filteredAnswerDistributionCharts = answerDistributionCharts.filter(
       (data) => data.ref !== undefined

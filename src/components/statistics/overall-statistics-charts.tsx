@@ -1,5 +1,6 @@
 import { Device, DeviceSurveyStatistics } from "../../generated/client";
 import strings from "../../localization/strings";
+import { PopularTimeChartsData } from "../../types";
 import DeviceDistributionChart from "./device-distribution-chart";
 import HorizontalChart from "./horizontal-chart";
 import PdfDeviceDistributionChart from "./pdf-device-distribution-chart";
@@ -13,8 +14,8 @@ interface Props {
   devices: Device[];
   surveyStatistics: DeviceSurveyStatistics[];
   overallAnswerCount: number;
-  hourlyChartData: any;
-  dailyChartData: any;
+  hourlyChartData: PopularTimeChartsData[];
+  dailyChartData: PopularTimeChartsData[];
   renderPdfCharts: boolean;
 }
 
@@ -44,13 +45,23 @@ const OverallStatisticsCharts = ({
         <Stack p={2} flex={1}>
           <Typography variant="h6">{strings.surveyStatistics.mostPopularDays}</Typography>
           <HorizontalChart usesPercentage data={dailyChartData} />
-          <PdfHorizontalChart renderPdfCharts={renderPdfCharts} id="most-popular-days-chart" usesPercentage data={dailyChartData} />
+          <PdfHorizontalChart
+            renderPdfCharts={renderPdfCharts}
+            id="most-popular-days-chart"
+            usesPercentage
+            data={dailyChartData}
+          />
         </Stack>
         <Divider orientation="vertical" flexItem />
         <Stack p={2} flex={1}>
           <Typography variant="h6">{strings.surveyStatistics.mostPopularHours}</Typography>
           <HorizontalChart usesPercentage data={hourlyChartData} />
-          <PdfHorizontalChart renderPdfCharts={renderPdfCharts} id="most-popular-hours-chart" usesPercentage data={hourlyChartData} />
+          <PdfHorizontalChart
+            renderPdfCharts={renderPdfCharts}
+            id="most-popular-hours-chart"
+            usesPercentage
+            data={hourlyChartData}
+          />
         </Stack>
       </Stack>
       <Divider />

@@ -1,3 +1,4 @@
+import { PopularTimeChartsData } from "../../types";
 import ChartTooltip from "./chart-tooltip";
 import { Bar, BarChart, ResponsiveContainer, Tooltip, XAxis } from "recharts";
 
@@ -5,7 +6,7 @@ import { Bar, BarChart, ResponsiveContainer, Tooltip, XAxis } from "recharts";
  * Component properties
  */
 interface Props {
-  data: any[];
+  data: PopularTimeChartsData[];
   usesPercentage?: boolean;
 }
 

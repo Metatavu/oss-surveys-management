@@ -184,3 +184,11 @@ export interface CombinedChartData {
   popularTimesAndDeviceCharts: ChartData[];
   answerDistributionCharts: ChartData[];
 }
+
+/**
+ * Intrface for PopularTimeChartsData
+ */
+export interface PopularTimeChartsData {
+  label: string;
+  value: number;
+}

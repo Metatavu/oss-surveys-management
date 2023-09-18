@@ -10,6 +10,7 @@ import {
   CombinedChartData,
   EditablePageElement,
   PageElementType,
+  PopularTimeChartsData,
   SurveyQuestionStatistics
 } from "../../types";
 import PageUtils from "../../utils/page-utils";
@@ -170,6 +171,13 @@ const SurveyStatistics = ({ devices, survey }: Props) => {
   }, [combinedChartsData]);
 
   useEffect(() => {
+    triggerPdfDownload();
+  }, [pdfInstance.loading, pdfReady]);
+
+  /**
+   * Triggers pdf download if reference charts are rendered
+   */
+  const triggerPdfDownload = () => {
     if (renderPdfCharts && pdfInstance.url && !pdfInstance.loading && pdfReady) {
       const link = document.createElement("a");
       link.href = pdfInstance.url;
@@ -184,7 +192,7 @@ const SurveyStatistics = ({ devices, survey }: Props) => {
       setIsPdfLoading(false);
       setPdfReady(false);
     }
-  }, [pdfInstance.loading, pdfReady]);
+  };
 
   /**
    * Gets devices with the selected survey
@@ -268,13 +276,13 @@ const SurveyStatistics = ({ devices, survey }: Props) => {
       { label: labels.sunday, value: weekDayAverages[6] }
     ];
 
-    return dailyChartdata;
+    return dailyChartdata as PopularTimeChartsData[];
   };
 
   /**
    * Get hourly average answer count chart data
    */
-  const getHourlyAverageAnswerCount = (): { label: string; value: number }[] => {
+  const getHourlyAverageAnswerCount = () => {
     let now = DateTime.now().set({ hour: START_HOUR });
     const numberOfSurveysWithAnswers = surveyStatistics.filter(
       (survey) => survey.totalAnswerCount > 0
@@ -296,7 +304,7 @@ const SurveyStatistics = ({ devices, survey }: Props) => {
       now = now.plus({ hours: HOUR_GROUPING });
     }
 
-    return hourlyChartData;
+    return hourlyChartData as PopularTimeChartsData[];
   };
 
   /**

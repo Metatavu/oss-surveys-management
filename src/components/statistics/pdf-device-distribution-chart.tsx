@@ -40,23 +40,21 @@ const PdfDeviceDistributionChart = ({ data, devices, renderPdfCharts }: Props) =
   const height = constructedData.length * 30 + 50;
 
   return (
-    <>
-      <ResponsiveContainer
-        id="answers-per-display-chart"
-        className="pdf-chart"
-        height={height}
-        width={800}
-      >
-        <BarChart data={constructedData} layout="vertical" margin={{ right: 50 }}>
-          <XAxis type="number" fontFamily="SBonusText-Medium" />
-          <YAxis type="category" dataKey="deviceName" width={250} fontFamily="SBonusText-Medium" />
-          <Tooltip content={ChartTooltip} />
-          <Bar dataKey="answerCount" fill="#00aa46" isAnimationActive={false}>
-            <LabelList dataKey="answerCount" position="right" fontFamily="SBonusText-Medium" />
-          </Bar>
-        </BarChart>
-      </ResponsiveContainer>
-    </>
+    <ResponsiveContainer
+      id="answers-per-display-chart"
+      className="pdf-chart"
+      height={height}
+      width={800}
+    >
+      <BarChart data={constructedData} layout="vertical" margin={{ right: 50 }}>
+        <XAxis type="number" fontFamily="SBonusText-Medium" />
+        <YAxis type="category" dataKey="deviceName" width={250} fontFamily="SBonusText-Medium" />
+        <Tooltip content={ChartTooltip} />
+        <Bar dataKey="answerCount" fill="#00aa46" isAnimationActive={false}>
+          <LabelList dataKey="answerCount" position="right" fontFamily="SBonusText-Medium" />
+        </Bar>
+      </BarChart>
+    </ResponsiveContainer>
   );
 };
 

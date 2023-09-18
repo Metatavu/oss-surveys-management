@@ -27,7 +27,7 @@ interface ConstructedData {
  */
 const PdfDeviceDistributionChart = ({ data, devices, renderPdfCharts }: Props) => {
   if (!renderPdfCharts) {
-    return <></>;
+    return <div />;
   }
 
   const constructedData: ConstructedData[] = devices

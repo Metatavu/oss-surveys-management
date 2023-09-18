@@ -377,15 +377,12 @@ const SurveyStatistics = ({ devices, survey }: Props) => {
    * Render PDF document
    */
   const renderPdfDocument = () => {
-    if (
-      !(
-        combinedChartsData?.answerDistributionCharts.length &&
-        combinedChartsData?.popularTimesAndDeviceCharts.length &&
-        surveyStatistics &&
-        renderPdfCharts
-      )
-    ) {
-      return <></>;
+    const { answerDistributionCharts, popularTimesAndDeviceCharts } = combinedChartsData || {};
+    const chartsHaveData = answerDistributionCharts?.length && popularTimesAndDeviceCharts?.length;
+    const shouldUpdatePdfInstance = surveyStatistics && renderPdfCharts && chartsHaveData;
+
+    if (!shouldUpdatePdfInstance) {
+      return;
     }
 
     updatePdfInstance(

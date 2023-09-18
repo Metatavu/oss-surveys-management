@@ -155,12 +155,10 @@ const SurveyStatistics = ({ devices, survey }: Props) => {
       (data) => data.ref !== undefined
     ) as ChartData[];
 
-    const combinedChartData: CombinedChartData = {
+    setCombinedChartsData({
       answerDistributionCharts: filteredAnswerDistributionCharts,
       popularTimesAndDeviceCharts: filteredPopularTimesAndDevicesCharts
-    };
-
-    setCombinedChartsData(combinedChartData);
+    });
   };
 
   useEffect(() => {

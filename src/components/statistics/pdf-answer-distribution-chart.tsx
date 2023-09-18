@@ -23,7 +23,7 @@ const PdfAnswersDistributionChart = ({ data, id, renderPdfCharts }: Props) => {
   const sortedData = data.sort((a, b) => b.answerCount - a.answerCount);
 
   // Removes line breaks from questionOptionValues otherwise will not render in recharts.
-  const sanatizedData = sortedData.map((item) => ({
+  const sanitizedData = sortedData.map((item) => ({
     ...item,
     questionOptionValue: item.questionOptionValue.replace(/\n/g, "")
   }));

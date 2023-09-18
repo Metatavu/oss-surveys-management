@@ -16,9 +16,9 @@ export class SingleSelectQuestionRenderer extends AbstractRenderer {
       .map((line) => {
         if (line.trim() === "") return "<br>";
 
-        return line;
+        return `<div>${line}</div>`;
       })
-      .join("<br>");
+      .join("\n");
     return `<div class="option">${buttonContent}</div>`;
   };
 }

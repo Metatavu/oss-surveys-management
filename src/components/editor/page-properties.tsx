@@ -207,13 +207,20 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
 
       if (!optionToUpdate || optionToUpdate.questionOptionValue === value) return pages;
 
+      const serializedValue = PageUtils.serializeChangeEventValue(
+        value,
+        pageToUpdate.question.type
+      );
+
+      if (!serializedValue) return pages;
+
       const updatedPage = {
         ...pageToUpdate,
         question: {
           ...pageToUpdate.question,
           options: [
             ...pageToUpdate.question.options.map((option) =>
-              option.id === name ? { ...option, questionOptionValue: value } : option
+              option.id === name ? { ...option, questionOptionValue: serializedValue } : option
             )
           ]
         }
@@ -407,11 +414,18 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
   const renderOptions = () => {
     if (!pageToEdit?.question) return;
 
+    const questionType = pageToEdit.question.type;
+
     return pageToEdit.question.options.map((option) => (
       <TextField
         key={option.id ?? `option-${option.orderNumber}`}
         name={option.id}
-        defaultValue={option.questionOptionValue}
+        defaultValue={
+          PageUtils.getSerializedHTMLInnerHtmlValues(
+            option?.questionOptionValue ?? "",
+            questionType
+          ) ?? ""
+        }
         onBlur={handleOptionChange}
         fullWidth
         multiline

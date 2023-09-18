@@ -10,7 +10,8 @@ import {
   LayoutVariable,
   LayoutVariableType,
   PageProperty,
-  PageQuestion
+  PageQuestion,
+  PageQuestionType
 } from "../generated/client";
 import strings from "../localization/strings";
 import { Background, EditablePageElement, PageElementType } from "../types";
@@ -32,17 +33,9 @@ namespace PageUtils {
 
     if (!foundElement) throw new Error(`Element with id ${id} not found`);
 
-    // TODO: To add the option conditions
     if (foundElement.hasAttribute("data-component")) {
       const dataComponentValue = foundElement.getAttribute("data-component");
-      if (dataComponentValue === "header-container") {
-        return {
-          type: foundElement?.children[0].tagName.toLowerCase() as PageElementType,
-          element: foundElement,
-          id: id
-        };
-      }
-      if (dataComponentValue === "text-container") {
+      if (dataComponentValue === "header-container" || dataComponentValue === "text-container") {
         return {
           type: foundElement?.children[0].tagName.toLowerCase() as PageElementType,
           element: foundElement,
@@ -98,18 +91,24 @@ namespace PageUtils {
    * Handles page questions rendering
    *
    * @param document document
-   * @param page page
+   * @param pageQuestion pageQuestion
    */
   export const handlePageQuestionsRendering = (document: Document, pageQuestion: PageQuestion) => {
     let htmlData = "";
     const questionRenderer = componentRendererFactory.getQuestionRenderer(pageQuestion.type);
     const questionPlaceholder = document.querySelector("div[data-component='question']");
+
     for (const option of pageQuestion.options) {
-      const questionHtml = questionRenderer.render(option.questionOptionValue);
+      // This check is to ensure back compatability with values not changed since switch to storing values as serialized HTML, should not be needed after value to serialized migration?
+      // TODO: Check to be improved if needed
+      const questionHtml = option.questionOptionValue.includes("<")
+        ? option.questionOptionValue
+        : questionRenderer.render(option.questionOptionValue);
+
       const questionElement = new DOMParser().parseFromString(questionHtml, "text/html");
-      questionPlaceholder?.appendChild(questionElement.body);
-      htmlData = document.body.innerHTML;
+      questionPlaceholder?.appendChild(questionElement.body.children[0]);
     }
+    htmlData = document.body.innerHTML;
 
     return htmlData;
   };
@@ -238,19 +237,34 @@ namespace PageUtils {
    *
    * @returns serialized HTML
    */
-  export const serializeChangeEventValue = (value: string, elementType: PageElementType) => {
+  export const serializeChangeEventValue = (
+    value: string,
+    elementType: PageElementType | PageQuestionType
+  ) => {
     switch (elementType) {
       case PageElementType.P: {
         const textRenderer = componentRendererFactory.getParagraphRenderer();
-        const textHtml = textRenderer.render(value);
+        const textSerializedHtml = textRenderer.render(value);
 
-        return textHtml;
+        return textSerializedHtml;
       }
       case PageElementType.H1: {
         const titleRenderer = componentRendererFactory.getTitleRenderer();
-        const headerHtml = titleRenderer.render(value);
+        const headerSerializedHtml = titleRenderer.render(value);
 
-        return headerHtml;
+        return headerSerializedHtml;
+      }
+      case PageQuestionType.MultiSelect: {
+        const multiOptionRenderer = componentRendererFactory.getQuestionRenderer(elementType);
+        const multiOptionSerializedHtml = multiOptionRenderer.render(value);
+
+        return multiOptionSerializedHtml;
+      }
+      case PageQuestionType.SingleSelect: {
+        const singleOptionRenderer = componentRendererFactory.getQuestionRenderer(elementType);
+        const singleOptionSerializedHtml = singleOptionRenderer.render(value);
+
+        return singleOptionSerializedHtml;
       }
     }
   };
@@ -261,14 +275,19 @@ namespace PageUtils {
    * @param serializedHTML
    * @param elementType
    *
-   * @returns string of innerHTML values
+   * @returns string of innerHTML valuess
    */
   export const getSerializedHTMLInnerHtmlValues = (
     serializedHTML: string,
-    elementType: PageElementType
+    elementType: PageElementType | PageQuestionType
   ) => {
     // TODO: Temporary condition while implementing serialization for different element types
-    if (elementType !== PageElementType.P && elementType !== PageElementType.H1)
+    if (
+      elementType !== PageElementType.P &&
+      elementType !== PageElementType.H1 &&
+      elementType !== PageQuestionType.SingleSelect &&
+      elementType !== PageQuestionType.MultiSelect
+    )
       return serializedHTML;
 
     const tempContainer = document.createElement("div");
@@ -276,7 +295,7 @@ namespace PageUtils {
 
     const tempDiv = tempContainer.querySelector("div");
 
-    if (!tempDiv) return;
+    if (!tempDiv) return serializedHTML;
 
     const innerHTMLValues: string[] = [];
 

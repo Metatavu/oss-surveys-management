@@ -18,7 +18,7 @@ interface Props {
  */
 const PdfHorizontalChart = ({ data, usesPercentage, id, renderPdfCharts }: Props) => {
   if (!renderPdfCharts) {
-    return <></>;
+    return <div />;
   }
 
   return (

@@ -26,7 +26,7 @@ const DeviceDistributionChart = ({ data, devices }: Props) => {
   const constructedData: ConstructedData[] = devices
     .map((device) => ({
       deviceName: device.name ?? strings.generic.unnamed,
-      answerCount: data.find((stat) => stat.deviceId === device.id)?.totalAnswerCount || 0
+      answerCount: data.find((stat) => stat.deviceId === device.id)?.totalAnswerCount ?? 0
     }))
     .sort((a, b) => b.answerCount - a.answerCount);
 

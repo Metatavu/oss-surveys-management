@@ -12,6 +12,9 @@ interface Props {
   renderPdfCharts: boolean;
 }
 
+/**
+ * Answers per device as chart data
+ */
 interface ConstructedData {
   deviceName: string;
   answerCount: number;

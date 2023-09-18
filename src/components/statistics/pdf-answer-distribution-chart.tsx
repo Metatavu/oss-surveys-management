@@ -16,7 +16,7 @@ interface Props {
  */
 const PdfAnswersDistributionChart = ({ data, id, renderPdfCharts }: Props) => {
   if (!renderPdfCharts) {
-    return <></>;
+    return <div />;
   }
 
   const height = data.length * 30 + 50;

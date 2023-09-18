@@ -30,7 +30,7 @@ const PdfAnswersDistributionChart = ({ data, id, renderPdfCharts }: Props) => {
 
   return (
     <ResponsiveContainer id={id} className="pdf-chart" height={height} width={800}>
-      <BarChart data={sanatizedData} layout="vertical" margin={{ right: 50 }}>
+      <BarChart data={sanitizedData} layout="vertical" margin={{ right: 50 }}>
         <XAxis type="number" fontFamily="SBonusText-Medium" />
         <YAxis
           type="category"

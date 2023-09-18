@@ -127,12 +127,10 @@ const SurveyStatistics = ({ devices, survey }: Props) => {
     if (!renderPdfCharts) return;
 
     const popularTimesAndDeviceCharts = await Promise.all(
-      CHART_IDS.map(async (id) => {
-        return {
-          id: id,
-          ref: await addChart(id)
-        };
-      })
+      CHART_IDS.map(async (id) => ({
+        id: id,
+        ref: await addChart(id)
+      }))
     );
     const filteredPopularTimesAndDevicesCharts = popularTimesAndDeviceCharts.filter(
       (data) => data.ref !== undefined

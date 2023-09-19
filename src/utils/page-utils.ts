@@ -301,7 +301,11 @@ namespace PageUtils {
       return serializedHTML;
 
     const tempContainer = document.createElement("div");
-    tempContainer.innerHTML = serializedHTML;
+
+    tempContainer.innerHTML =
+      elementType === PageQuestionType.SingleSelect || elementType === PageQuestionType.MultiSelect
+        ? serializedHTML
+        : `<div>${serializedHTML}</div>`;
 
     const tempDiv = tempContainer.querySelector("div");
 
@@ -311,7 +315,8 @@ namespace PageUtils {
 
     tempDiv.childNodes.forEach((childNode) => {
       if (childNode instanceof Element) {
-        innerHTMLValues.push(childNode.innerHTML);
+        const lineBreakCleanInnerHTML = childNode.innerHTML.replace(/&nbsp;/g, "");
+        innerHTMLValues.push(lineBreakCleanInnerHTML);
       }
     });
     const resultString = innerHTMLValues.join("\n");

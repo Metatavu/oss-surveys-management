@@ -19,6 +19,6 @@ export class ParagraphRenderer extends AbstractRenderer {
         return `<p>${line}</p>`;
       })
       .join("");
-    return `<div>${pTags}</div>`;
+    return pTags;
   };
 }

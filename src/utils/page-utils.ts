@@ -291,12 +291,13 @@ namespace PageUtils {
     serializedHTML: string,
     elementType: PageElementType | PageQuestionType
   ) => {
-    // TODO: Temporary condition while implementing serialization for different element types, remove when migration is ready.
+    // TODO: Temporary condition while implementing serialization for different element types, remove when migration is complete.
     if (
-      elementType !== PageElementType.P &&
-      elementType !== PageElementType.H1 &&
-      elementType !== PageQuestionType.SingleSelect &&
-      elementType !== PageQuestionType.MultiSelect
+      (elementType !== PageElementType.P &&
+        elementType !== PageElementType.H1 &&
+        elementType !== PageQuestionType.SingleSelect &&
+        elementType !== PageQuestionType.MultiSelect) ||
+      !serializedHTML.includes("<")
     )
       return serializedHTML;
 

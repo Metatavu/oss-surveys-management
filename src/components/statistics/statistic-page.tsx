@@ -1,5 +1,6 @@
 import strings from "../../localization/strings";
-import { SurveyQuestionStatistics } from "../../types";
+import { PageElementType, SurveyQuestionStatistics } from "../../types";
+import PageUtils from "../../utils/page-utils";
 import AnswersDistributionChart from "./answer-distribution-chart";
 import { Divider, Paper, Stack, Typography } from "@mui/material";
 
@@ -20,7 +21,7 @@ const StatisticPage = ({ question, pageTitle }: Props) => {
   return (
     <Paper>
       <Typography variant="h6" padding={2}>
-        {`K: "${pageTitle}"`}
+        {`K: "${PageUtils.getSerializedHTMLInnerHtmlValues(pageTitle, PageElementType.H1)}"`}
       </Typography>
       <Divider />
       <Stack padding={2}>

@@ -1,6 +1,7 @@
-import { Bar, BarChart, ResponsiveContainer, Tooltip, XAxis, YAxis, LabelList } from "recharts";
-import { DeviceSurveyQuestionOptionStatistics } from "../../generated/client";
+import { DeviceSurveyQuestionOptionStatistics, PageQuestionType } from "../../generated/client";
+import PageUtils from "../../utils/page-utils";
 import ChartTooltip from "./chart-tooltip";
+import { Bar, BarChart, LabelList, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 
 /**
  * Component properties
@@ -21,7 +22,13 @@ const AnswersDistributionChart = ({ data }: Props) => {
         <XAxis type="number" fontFamily="SBonusText-Medium" />
         <YAxis
           type="category"
-          dataKey="questionOptionValue"
+          // TODO: Will need to update this in the pdfAnswersDistributionChart before merging
+          dataKey={({ questionOptionValue }) =>
+            PageUtils.getSerializedHTMLInnerHtmlValues(
+              questionOptionValue,
+              PageQuestionType.SingleSelect
+            )
+          }
           width={250}
           fontFamily="SBonusText-Medium"
         />

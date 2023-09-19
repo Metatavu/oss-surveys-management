@@ -1,5 +1,4 @@
 import { AbstractRenderer } from "./abstract-renderer";
-// TODO: Should rename as will no longer be rendering, but serializing and used for saving
 /**
  * Single Select Question Renderer
  */
@@ -18,7 +17,7 @@ export class SingleSelectQuestionRenderer extends AbstractRenderer {
 
         return `<div>${line}</div>`;
       })
-      .join("\n");
+      .join("");
     return `<div class="option">${buttonContent}</div>`;
   };
 }

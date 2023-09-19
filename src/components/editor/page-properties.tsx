@@ -158,7 +158,7 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
       if (!foundLayout) return pages;
 
       const elementType = PageUtils.getPageTextElementTypeAndId(foundLayout?.html, name);
-      const serializedValue = PageUtils.serializeChangeEventValue(value, elementType.type);
+      const serializedValue = PageUtils.serializeValue(value, elementType.type);
 
       if (!serializedValue) return pages;
 
@@ -207,10 +207,7 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
 
       if (!optionToUpdate || optionToUpdate.questionOptionValue === value) return pages;
 
-      const serializedValue = PageUtils.serializeChangeEventValue(
-        value,
-        pageToUpdate.question.type
-      );
+      const serializedValue = PageUtils.serializeValue(value, pageToUpdate.question.type);
 
       if (!serializedValue) return pages;
 

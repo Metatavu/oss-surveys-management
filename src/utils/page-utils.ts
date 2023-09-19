@@ -7,6 +7,7 @@ import {
   QUESTION_PLACEHOLDER_DATA_COMPONENT
 } from "../constants";
 import {
+  Layout,
   LayoutVariable,
   LayoutVariableType,
   PageProperty,
@@ -237,7 +238,7 @@ namespace PageUtils {
    *
    * @returns serialized HTML
    */
-  export const serializeChangeEventValue = (
+  export const serializeValue = (
     value: string,
     elementType: PageElementType | PageQuestionType
   ) => {
@@ -266,6 +267,8 @@ namespace PageUtils {
 
         return singleOptionSerializedHtml;
       }
+      default:
+        return value;
     }
   };
 
@@ -281,7 +284,7 @@ namespace PageUtils {
     serializedHTML: string,
     elementType: PageElementType | PageQuestionType
   ) => {
-    // TODO: Temporary condition while implementing serialization for different element types
+    // TODO: Temporary condition while implementing serialization for different element types, remove when migration is ready.
     if (
       elementType !== PageElementType.P &&
       elementType !== PageElementType.H1 &&
@@ -307,6 +310,20 @@ namespace PageUtils {
     const resultString = innerHTMLValues.join("\n");
 
     return resultString;
+  };
+
+  /**
+   * Produces serialized HTML from new page layout variables
+   *
+   * @param foundLayout Layout
+   * @param variable LayoutVariable
+   * @returns serializedHtml
+   */
+  export const getNewPageSerializedValues = (foundLayout: Layout, variable: LayoutVariable) => {
+    const elementType = getPageTextElementTypeAndId(foundLayout.html, variable.key).type;
+    const stringValue = getTextPropertyLabel(elementType);
+
+    return serializeValue(stringValue, elementType);
   };
 }
 

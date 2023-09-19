@@ -18,7 +18,7 @@ export class TitleRenderer extends AbstractRenderer {
 
         return `<h1 class="md">${line}</h1>`;
       })
-      .join("\n");
+      .join("");
     return `<div>${h1Tags}</div>`;
   };
 }

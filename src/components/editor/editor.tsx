@@ -142,12 +142,14 @@ const Editor = ({ setPanelProperties, surveyId }: Props) => {
           orderNumber: surveyPages.length + 1,
           nextButtonVisible: true,
           question: undefined,
-          properties: foundLayout.layoutVariables?.map((variable) => ({
-            key: variable.key,
-            value: PageUtils.getTextPropertyLabel(
-              PageUtils.getPageTextElementTypeAndId(foundLayout.html, variable.key).type
-            )
-          }))
+          properties: foundLayout.layoutVariables?.map((variable) => {
+            const serializedValue = PageUtils.getNewPageSerializedValues(foundLayout, variable);
+
+            return {
+              key: variable.key,
+              value: serializedValue
+            };
+          })
         }
       });
 

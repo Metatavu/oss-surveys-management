@@ -18,7 +18,7 @@ export class MultiSelectQuestionRenderer extends AbstractRenderer {
 
         return `<div>${line}</div>`;
       })
-      .join("\n");
+      .join("");
     return `<div class="multi-option">${checkboxContent}</div>`;
   };
 }

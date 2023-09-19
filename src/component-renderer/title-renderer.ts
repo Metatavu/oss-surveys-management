@@ -14,7 +14,7 @@ export class TitleRenderer extends AbstractRenderer {
     const lines = value.split("\n");
     const h1Tags = lines
       .map((line) => {
-        if (line.trim() === "") return "<br/>";
+        if (line.trim() === "") return "<h1>&nbsp;</h1>";
 
         return `<h1 class="md">${line}</h1>`;
       })

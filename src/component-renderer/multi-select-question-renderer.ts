@@ -14,7 +14,7 @@ export class MultiSelectQuestionRenderer extends AbstractRenderer {
     const lines = value.split("\n");
     const checkboxContent = lines
       .map((line) => {
-        if (line.trim() === "") return "<br/>";
+        if (line.trim() === "") return "<div>&nbsp;</div>";
 
         return `<div>${line}</div>`;
       })

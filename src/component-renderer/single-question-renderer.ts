@@ -13,7 +13,7 @@ export class SingleSelectQuestionRenderer extends AbstractRenderer {
     const lines = value.split("\n");
     const buttonContent = lines
       .map((line) => {
-        if (line.trim() === "") return "<br>";
+        if (line.trim() === "") return "<div>&nbsp;</div>";
 
         return `<div>${line}</div>`;
       })

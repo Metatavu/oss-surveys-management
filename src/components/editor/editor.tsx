@@ -220,7 +220,10 @@ const Editor = ({ setPanelProperties, surveyId }: Props) => {
           ...foundPage,
           question: {
             type: questionType,
-            options: [PageUtils.getDefaultQuestionOption(1), PageUtils.getDefaultQuestionOption(2)]
+            options: [
+              PageUtils.getDefaultQuestionOption(1, questionType),
+              PageUtils.getDefaultQuestionOption(2, questionType)
+            ]
           }
         }
       });

@@ -161,18 +161,25 @@ namespace PageUtils {
     return htmlData;
   };
 
+  // TODO: This can be reverted to no use questionType if wrapper div does not need to contain the question type class
   /**
    * Gets default question option with placeholder and provided order number
    *
    * @param orderNumber order number
    * @returns page question option
    */
-  export const getDefaultQuestionOption = (orderNumber: number) => ({
-    orderNumber: orderNumber,
-    questionOptionValue: strings
+  export const getDefaultQuestionOption = (orderNumber: number, questionType: PageQuestionType) => {
+    const optionString = strings
       .formatString(strings.editSurveysScreen.editPagesPanel.answerOptionPlaceholder, orderNumber)
-      .toString()
-  });
+      .toString();
+
+    const serializedQuestionOptionValue = serializeValue(optionString, questionType);
+
+    return {
+      orderNumber: orderNumber,
+      questionOptionValue: serializedQuestionOptionValue
+    };
+  };
 
   /**
    * Gets text property label based on page element type

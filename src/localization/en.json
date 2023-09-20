@@ -202,7 +202,8 @@
         "image1": "Lake scenery"
       },
       "backgroundImages": {
-        "default": "Green",
+        "green": "Green",
+        "white": "White",
         "image1": "Lake scenery"
       },
       "pageSaved": "Page saved",

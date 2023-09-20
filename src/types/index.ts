@@ -99,7 +99,8 @@ export enum LayoutType {
  * TODO: add actual image paths once they are available
  */
 export enum Background {
-  DEFAULT = "#00aa46",
+  GREEN = "green",
+  WHITE = "white",
   IMAGE_1 = "image 1"
 }
 

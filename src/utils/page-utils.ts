@@ -132,12 +132,18 @@ namespace PageUtils {
       case LayoutVariableType.ImageUrl: {
         switch (targetElement?.tagName.toLocaleLowerCase()) {
           case PageElementType.DIV: {
+            // if (property.value.match(/^#([A-Fa-f0-9]{6})$/)?.length) {
+            //   targetElement.style.setProperty("background-color", property.value);
+            //   htmlData = document.body.innerHTML;
+            //   break;
+            // } else {
             targetElement.style.setProperty(
               "background-image",
               `url('${config.imageBaseUrl + property.value}')`
             );
             htmlData = document.body.innerHTML;
             break;
+            // }
           }
           case PageElementType.IMG: {
             (targetElement as HTMLImageElement).src = config.imageBaseUrl + property.value;
@@ -191,7 +197,7 @@ namespace PageUtils {
     properties?: PageProperty[]
   ) => {
     const defaultBackground = PAGE_BACKGROUNDS.find(
-      (background) => background.key === Background.DEFAULT
+      (background) => background.key === Background.GREEN
     );
     if (!defaultBackground) return;
     if (!elements?.length) return defaultBackground.value;
@@ -209,7 +215,7 @@ namespace PageUtils {
    * Returns page image
    */
   export const getPageImage = (elements: EditablePageElement[], properties?: PageProperty[]) => {
-    const defaultImage = PAGE_IMAGES.find((image) => image.key === Background.DEFAULT);
+    const defaultImage = PAGE_IMAGES.find((image) => image.key === Background.GREEN);
     if (!defaultImage) return;
     if (!elements?.length) return defaultImage.value;
     const foundImageElement = elements.find((element) => element.type === PageElementType.IMG);

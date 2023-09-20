@@ -1,5 +1,4 @@
 import { DeviceSurveyQuestionOptionStatistics } from "../../generated/client";
-import PageUtils from "../../utils/page-utils";
 import ChartTooltip from "./chart-tooltip";
 import { Bar, BarChart, LabelList, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 
@@ -8,12 +7,18 @@ import { Bar, BarChart, LabelList, ResponsiveContainer, Tooltip, XAxis, YAxis } 
  */
 interface Props {
   data: DeviceSurveyQuestionOptionStatistics[];
+  id: string;
+  renderPdfCharts: boolean;
 }
 
 /**
- * Render vertical bar chart
+ * Render hidden vertical bar chart for pdf download
  */
-const AnswersDistributionChart = ({ data }: Props) => {
+const PdfAnswersDistributionChart = ({ data, id, renderPdfCharts }: Props) => {
+  if (!renderPdfCharts) {
+    return <div />;
+  }
+
   const height = data.length * 30 + 50;
   const sortedData = data.sort((a, b) => b.answerCount - a.answerCount);
 
@@ -24,20 +29,17 @@ const AnswersDistributionChart = ({ data }: Props) => {
   }));
 
   return (
-    <ResponsiveContainer height={height}>
+    <ResponsiveContainer id={id} className="pdf-chart" height={height} width={800}>
       <BarChart data={sanitizedData} layout="vertical" margin={{ right: 50 }}>
         <XAxis type="number" fontFamily="SBonusText-Medium" />
         <YAxis
           type="category"
-          // TODO: Will need to update this in the pdfAnswersDistributionChart before merging
-          dataKey={({ questionOptionValue }) =>
-            PageUtils.getSerializedHTMLInnerOptionValues(questionOptionValue)
-          }
+          dataKey="questionOptionValue"
           width={250}
           fontFamily="SBonusText-Medium"
         />
         <Tooltip content={ChartTooltip} />
-        <Bar dataKey="answerCount" fill="#00aa46">
+        <Bar dataKey="answerCount" fill="#00aa46" isAnimationActive={false}>
           <LabelList dataKey="answerCount" position="right" fontFamily="SBonusText-Medium" />
         </Bar>
       </BarChart>
@@ -45,4 +47,4 @@ const AnswersDistributionChart = ({ data }: Props) => {
   );
 };
 
-export default AnswersDistributionChart;
+export default PdfAnswersDistributionChart;

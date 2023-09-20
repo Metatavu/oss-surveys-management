@@ -78,6 +78,10 @@ export default createTheme({
           height: "100vh",
           width: "100vw"
         },
+        ".pdf-chart": {
+          position: "absolute",
+          left: "calc(100vw + 1px)"
+        },
         a: {
           textDecoration: "none"
         }

@@ -1,4 +1,3 @@
-import { PopularTimeChartsData } from "../../types";
 import ChartTooltip from "./chart-tooltip";
 import { Bar, BarChart, ResponsiveContainer, Tooltip, XAxis } from "recharts";
 
@@ -6,25 +5,31 @@ import { Bar, BarChart, ResponsiveContainer, Tooltip, XAxis } from "recharts";
  * Component properties
  */
 interface Props {
-  data: PopularTimeChartsData[];
+  data: any[];
   usesPercentage?: boolean;
+  id: string;
+  renderPdfCharts: Boolean;
 }
 
 /**
- * Render horizontal bar chart
+ * Render hidden horizontal bar chart for pdf
  *
  * @param props component properties
  */
-const HorizontalChart = ({ data, usesPercentage }: Props) => {
+const PdfHorizontalChart = ({ data, usesPercentage, id, renderPdfCharts }: Props) => {
+  if (!renderPdfCharts) {
+    return <div />;
+  }
+
   return (
-    <ResponsiveContainer height={250}>
+    <ResponsiveContainer id={id} height={250} className="pdf-chart" width={350}>
       <BarChart data={data} layout="horizontal" margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
         <XAxis type="category" dataKey="label" fontFamily="SBonusText-Medium" />
         <Tooltip content={(props) => <ChartTooltip {...props} usesPercentage={usesPercentage} />} />
-        <Bar dataKey="value" fill="#00aa46" />
+        <Bar dataKey="value" fill="#00aa46" isAnimationActive={false} />
       </BarChart>
     </ResponsiveContainer>
   );
 };
 
-export default HorizontalChart;
+export default PdfHorizontalChart;

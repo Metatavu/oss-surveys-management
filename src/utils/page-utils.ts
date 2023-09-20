@@ -134,13 +134,13 @@ namespace PageUtils {
           case PageElementType.DIV: {
             targetElement.style.setProperty(
               "background-image",
-              `url('${config.imageBaseUrl + property.value}')`
+              `url('${config.cdnBaseUrl + property.value}')`
             );
             htmlData = document.body.innerHTML;
             break;
           }
           case PageElementType.IMG: {
-            (targetElement as HTMLImageElement).src = config.imageBaseUrl + property.value;
+            (targetElement as HTMLImageElement).src = config.cdnBaseUrl + property.value;
             targetElement.style.setProperty("height", "50%");
             targetElement.style.setProperty("width", "auto");
             htmlData = document.body.innerHTML;

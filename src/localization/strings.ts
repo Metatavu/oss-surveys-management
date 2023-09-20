@@ -1,6 +1,6 @@
+import LocalizedStrings, { LocalizedStringsMethods } from "localized-strings";
 import en from "./en.json";
 import fi from "./fi.json";
-import LocalizedStrings, { LocalizedStringsMethods } from "localized-strings";
 
 /**
  * Localized strings
@@ -200,6 +200,8 @@ export interface Localized extends LocalizedStringsMethods {
     editor: string;
     published: string;
     statistics: string;
+    pdfDownload: string;
+    pdfGenerate: string;
     preview: string;
     editSurveyPanel: {
       name: string;
@@ -271,6 +273,17 @@ export interface Localized extends LocalizedStringsMethods {
       saturday: string;
       sunday: string;
     };
+  };
+
+  /**
+   * Translations related to PDF statistics download
+   */
+  pdfStatisticsDownload: {
+    totalAnswerCount: string;
+    answerDivision: string;
+    answersPerDisplayChart: string;
+    mostPopularDaysChart: string;
+    mostPopularHoursChart: string;
   };
 
   /**

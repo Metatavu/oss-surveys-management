@@ -39,18 +39,6 @@ const PublishSurvey = ({ survey, devices, deviceSurveys, publishSurveys }: Props
   }, []);
 
   /**
-   * Checks if current time is within the given range
-   *
-   * @param publishStartTime DateTime
-   * @param publishEndTime DateTime
-   */
-  const isCurrentTimeWithinRange = (publishStartTime: DateTime, publishEndTime: DateTime) => {
-    const currentTime = DateTime.now();
-
-    return currentTime >= publishStartTime && currentTime <= publishEndTime;
-  };
-
-  /**
    * Publishes survey
    *
    * @param publishStartTime publish start time
@@ -59,11 +47,14 @@ const PublishSurvey = ({ survey, devices, deviceSurveys, publishSurveys }: Props
   const handlePublish = async (publishStartTime: DateTime, publishEndTime: DateTime) => {
     if (!survey.id) return;
 
-    const toSchedule = isCurrentTimeWithinRange(publishStartTime, publishEndTime);
+    const currentTime = DateTime.now();
     const deviceSurveys: DeviceSurvey[] = selectedDevices.map((device) => ({
       deviceId: device.id!,
       surveyId: survey.id!,
-      status: toSchedule ? DeviceSurveyStatus.Scheduled : DeviceSurveyStatus.Published,
+      status:
+        currentTime < publishStartTime
+          ? DeviceSurveyStatus.Scheduled
+          : DeviceSurveyStatus.Published,
       publishStartTime: publishStartTime?.toJSDate(),
       publishEndTime: publishEndTime?.toJSDate()
     }));

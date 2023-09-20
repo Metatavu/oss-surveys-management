@@ -136,15 +136,19 @@ namespace PageUtils {
       case LayoutVariableType.ImageUrl: {
         switch (targetElement?.tagName.toLocaleLowerCase()) {
           case PageElementType.DIV: {
-            targetElement.style.setProperty(
-              "background-image",
-              `url('${config.cdnBaseUrl + property.value}')`
-            );
+            if (property.value?.trim()) {
+              targetElement.style.setProperty(
+                "background-image",
+                `url('${config.cdnBaseUrl + property.value}')`
+              );
+            }
             htmlData = document.body.innerHTML;
             break;
           }
           case PageElementType.IMG: {
-            (targetElement as HTMLImageElement).src = config.cdnBaseUrl + property.value;
+            if (property.value?.trim()) {
+              (targetElement as HTMLImageElement).src = config.cdnBaseUrl + property.value;
+            }
             targetElement.style.setProperty("height", "50%");
             targetElement.style.setProperty("width", "auto");
             htmlData = document.body.innerHTML;

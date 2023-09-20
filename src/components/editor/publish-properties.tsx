@@ -1,10 +1,11 @@
-import { Box, Button, Stack, Typography, TypographyProps } from "@mui/material";
 import { Device, Survey } from "../../generated/client";
 import strings from "../../localization/strings";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import { ArrowUpward, CalendarTodayOutlined } from "@mui/icons-material";
-import { useState } from "react";
 import theme from "../../styles/theme";
+import { ArrowUpward, CalendarTodayOutlined } from "@mui/icons-material";
+import { Box, Button, Stack, Typography, TypographyProps } from "@mui/material";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { DateTime } from "luxon";
+import { useState } from "react";
 
 /**
  * Components properties
@@ -12,15 +13,31 @@ import theme from "../../styles/theme";
 interface Props {
   survey: Survey;
   selectedDevices: Device[];
-  publishSurvey: (publishStartTime?: Date, publishEndTime?: Date) => Promise<void>;
+  publishSurvey: (publishStartTime: DateTime, publishEndTime: DateTime) => Promise<void>;
 }
 
 /**
  * Publish properties component
  */
 const PublishProperties = ({ survey, selectedDevices, publishSurvey }: Props) => {
-  const [newPublishStartTime, setNewPublishStartTime] = useState<Date | null>(null);
-  const [newPublishEndTime, setNewPublishEndTime] = useState<Date | null>(null);
+  const [newPublishStartTime, setNewPublishStartTime] = useState<DateTime | null>(null);
+  const [newPublishEndTime, setNewPublishEndTime] = useState<DateTime | null>(null);
+  const defaultPublicationStartTime = DateTime.now().set({
+    hour: 0,
+    minute: 0,
+    second: 0,
+    millisecond: 0
+  });
+  const defaultPublicationEndTime = DateTime.fromObject({
+    year: 3000,
+    month: 1,
+    day: 1,
+    hour: 0,
+    minute: 0,
+    second: 0,
+    millisecond: 0
+  });
+
   const {
     heading,
     description,
@@ -54,13 +71,11 @@ const PublishProperties = ({ survey, selectedDevices, publishSurvey }: Props) =>
    */
   const renderPanelLabelAndDatePicker = (
     label: string,
-    onChange: (value: Date | null) => void,
+    onChange: (value: DateTime | null) => void,
     value?: any
   ) => (
     <>
-      <Typography variant="subtitle1">
-        {label}
-      </Typography>
+      <Typography variant="subtitle1">{label}</Typography>
       <DatePicker
         value={value}
         onChange={onChange}
@@ -113,7 +128,10 @@ const PublishProperties = ({ survey, selectedDevices, publishSurvey }: Props) =>
           endIcon={<ArrowUpward sx={{ opacity: 0 }} />}
           title={strings.publishSurveys.rightPanel.activateButtonTitle}
           onClick={() =>
-            publishSurvey(newPublishStartTime || undefined, newPublishEndTime || undefined)
+            publishSurvey(
+              newPublishStartTime || defaultPublicationStartTime,
+              newPublishEndTime || defaultPublicationEndTime
+            )
           }
         >
           {publishButton}

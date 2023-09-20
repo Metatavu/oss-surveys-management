@@ -5,6 +5,7 @@ import PropertiesPanel from "./properties-panel";
 import PublishDeviceInfo from "./publish-device-info";
 import PublishProperties from "./publish-properties";
 import { Stack } from "@mui/material";
+import { DateTime } from "luxon";
 import { useEffect, useState } from "react";
 
 /**
@@ -38,22 +39,33 @@ const PublishSurvey = ({ survey, devices, deviceSurveys, publishSurveys }: Props
   }, []);
 
   /**
+   * Checks if current time is within the given range
+   *
+   * @param publishStartTime DateTime
+   * @param publishEndTime DateTime
+   */
+  const isCurrentTimeWithinRange = (publishStartTime: DateTime, publishEndTime: DateTime) => {
+    const currentTime = DateTime.now();
+
+    return currentTime >= publishStartTime && currentTime <= publishEndTime;
+  };
+
+  /**
    * Publishes survey
    *
    * @param publishStartTime publish start time
    * @param publishEndTime publish end time
    */
-  const handlePublish = async (publishStartTime?: Date, publishEndTime?: Date) => {
+  const handlePublish = async (publishStartTime: DateTime, publishEndTime: DateTime) => {
     if (!survey.id) return;
+
+    const toSchedule = isCurrentTimeWithinRange(publishStartTime, publishEndTime);
     const deviceSurveys: DeviceSurvey[] = selectedDevices.map((device) => ({
       deviceId: device.id!,
       surveyId: survey.id!,
-      status:
-        publishStartTime && publishEndTime
-          ? DeviceSurveyStatus.Scheduled
-          : DeviceSurveyStatus.Published,
-      publishStartTime: publishStartTime,
-      publishEndTime: publishEndTime
+      status: toSchedule ? DeviceSurveyStatus.Scheduled : DeviceSurveyStatus.Published,
+      publishStartTime: publishStartTime?.toJSDate(),
+      publishEndTime: publishEndTime?.toJSDate()
     }));
 
     await publishSurveys(deviceSurveys);

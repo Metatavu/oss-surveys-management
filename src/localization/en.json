@@ -167,6 +167,8 @@
     "editor": "Editor",
     "published": "Published",
     "statistics": "Statistics",
+    "pdfDownload": "Download PDF",
+    "pdfGenerate": "Generate PDF",
     "preview": "Preview",
     "editSurveyPanel": {
       "name": "Name",
@@ -234,6 +236,13 @@
       "saturday": "Sa",
       "sunday": "Su"
     }
+  },
+  "pdfStatisticsDownload": {
+    "totalAnswerCount": "Total answers",
+    "answerDivision": "Answer division",
+    "answersPerDisplayChart": "Answers per display",
+    "mostPopularDaysChart": "Most popular days",
+    "mostPopularHoursChart": "Most popular hours"
   },
   "publishSurveys": {
     "surveyPublished": "Survey published",

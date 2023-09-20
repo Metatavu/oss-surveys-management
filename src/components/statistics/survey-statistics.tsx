@@ -1,18 +1,30 @@
 import { errorAtom } from "../../atoms/error";
 import { layoutsAtom } from "../../atoms/layouts";
 import { pagesAtom } from "../../atoms/pages";
-import { END_HOUR, HOUR_GROUPING, START_HOUR } from "../../constants";
+import { CHART_IDS, END_HOUR, HOUR_GROUPING, START_HOUR } from "../../constants";
 import { Device, DeviceSurveyStatistics, Survey } from "../../generated/client";
 import { useApi } from "../../hooks/use-api";
 import strings from "../../localization/strings";
-import { EditablePageElement, PageElementType, SurveyQuestionStatistics } from "../../types";
+import {
+  ChartData,
+  CombinedChartData,
+  EditablePageElement,
+  PageElementType,
+  PopularTimeChartsData,
+  SurveyQuestionStatistics
+} from "../../types";
 import PageUtils from "../../utils/page-utils";
+import { addChart } from "../../utils/pdf-download-utils";
 import PropertiesPanel from "../editor/properties-panel";
 import OverallStatisticsCharts from "./overall-statistics-charts";
+import PDFDocument from "./pdf-document";
 import StatisticDevices from "./statistic-devices";
 import StatisticPage from "./statistic-page";
 import StatisticsInfo from "./statistics-info";
-import { Stack, Typography, styled } from "@mui/material";
+import { Download } from "@mui/icons-material";
+import { LoadingButton } from "@mui/lab";
+import { Box, Stack, Typography, styled } from "@mui/material";
+import { usePDF } from "@react-pdf/renderer";
 import { useAtom, useSetAtom } from "jotai";
 import { DateTime } from "luxon";
 import { useEffect, useState } from "react";
@@ -51,6 +63,10 @@ const SurveyStatistics = ({ devices, survey }: Props) => {
   const [surveyPages] = useAtom(pagesAtom);
   const [pageLayouts] = useAtom(layoutsAtom);
   const setError = useSetAtom(errorAtom);
+  const [combinedChartsData, setCombinedChartsData] = useState<CombinedChartData>();
+  const [renderPdfCharts, setRenderPdfCharts] = useState(false);
+  const [isPdfLoading, setIsPdfLoading] = useState(false);
+  const [pdfReady, setPdfReady] = useState(false);
 
   /**
    * Return question title
@@ -78,6 +94,17 @@ const SurveyStatistics = ({ devices, survey }: Props) => {
     );
   };
 
+  const [pdfInstance, updatePdfInstance] = usePDF({
+    document: (
+      <PDFDocument
+        combinedChartsData={combinedChartsData}
+        surveyStatistics={surveyStatistics}
+        survey={survey}
+        getQuestionTitle={getQuestionTitle}
+      />
+    )
+  });
+
   /**
    * Gets Device survey statistics
    */
@@ -94,9 +121,78 @@ const SurveyStatistics = ({ devices, survey }: Props) => {
     setSurveyStatistics(selectedDeviceSurveyStatistics);
   };
 
+  /**
+   * Initialize recharts chart data for pdf document
+   */
+  const getChartsData = async () => {
+    if (!renderPdfCharts) return;
+
+    const popularTimesAndDeviceCharts = await Promise.all(
+      CHART_IDS.map(async (id) => ({
+        id: id,
+        ref: await addChart(id)
+      }))
+    );
+    const filteredPopularTimesAndDevicesCharts = popularTimesAndDeviceCharts.filter(
+      (data) => data.ref !== undefined
+    ) as ChartData[];
+
+    const uniquePageIds = [
+      ...new Set(
+        surveyStatistics.flatMap((stats) => stats.questions.map((question) => question.pageId))
+      )
+    ];
+    const answerDistributionCharts = await Promise.all(
+      uniquePageIds.map(async (id) => ({
+        id: id,
+        ref: await addChart(id)
+      }))
+    );
+    const filteredAnswerDistributionCharts = answerDistributionCharts.filter(
+      (data) => data.ref !== undefined
+    ) as ChartData[];
+
+    setCombinedChartsData({
+      answerDistributionCharts: filteredAnswerDistributionCharts,
+      popularTimesAndDeviceCharts: filteredPopularTimesAndDevicesCharts
+    });
+  };
+
   useEffect(() => {
     getDeviceSurveysStatistics().catch((error) => setError(error));
   }, [survey, selectedDevices]);
+
+  useEffect(() => {
+    getChartsData().catch((error) => setError(error));
+  }, [surveyStatistics, renderPdfCharts]);
+
+  useEffect(() => {
+    renderPdfDocument();
+  }, [combinedChartsData]);
+
+  useEffect(() => {
+    triggerPdfDownload();
+  }, [pdfInstance.loading, pdfReady]);
+
+  /**
+   * Triggers pdf download if reference charts are rendered
+   */
+  const triggerPdfDownload = () => {
+    if (renderPdfCharts && pdfInstance.url && !pdfInstance.loading && pdfReady) {
+      const link = document.createElement("a");
+      link.href = pdfInstance.url;
+      link.setAttribute("download", `${survey.title.replaceAll(" ", "-")}.pdf`);
+
+      document.body.appendChild(link);
+
+      link.click();
+
+      link.parentNode?.removeChild(link);
+      setRenderPdfCharts(false);
+      setIsPdfLoading(false);
+      setPdfReady(false);
+    }
+  };
 
   /**
    * Gets devices with the selected survey
@@ -180,13 +276,13 @@ const SurveyStatistics = ({ devices, survey }: Props) => {
       { label: labels.sunday, value: weekDayAverages[6] }
     ];
 
-    return dailyChartdata;
+    return dailyChartdata as PopularTimeChartsData[];
   };
 
   /**
    * Get hourly average answer count chart data
    */
-  const getHourlyAverageAnswerCount = (): { label: string; value: number }[] => {
+  const getHourlyAverageAnswerCount = () => {
     let now = DateTime.now().set({ hour: START_HOUR });
     const numberOfSurveysWithAnswers = surveyStatistics.filter(
       (survey) => survey.totalAnswerCount > 0
@@ -208,7 +304,7 @@ const SurveyStatistics = ({ devices, survey }: Props) => {
       now = now.plus({ hours: HOUR_GROUPING });
     }
 
-    return hourlyChartData;
+    return hourlyChartData as PopularTimeChartsData[];
   };
 
   /**
@@ -237,6 +333,7 @@ const SurveyStatistics = ({ devices, survey }: Props) => {
       key={question.pageId}
       question={question}
       pageTitle={getQuestionTitle(question.pageId)}
+      renderPdfCharts={renderPdfCharts}
     />
   );
 
@@ -284,6 +381,41 @@ const SurveyStatistics = ({ devices, survey }: Props) => {
     );
   };
 
+  /**
+   * Render PDF document
+   */
+  const renderPdfDocument = () => {
+    const { answerDistributionCharts, popularTimesAndDeviceCharts } = combinedChartsData || {};
+    const chartsHaveData = answerDistributionCharts?.length && popularTimesAndDeviceCharts?.length;
+    const shouldUpdatePdfInstance = surveyStatistics && renderPdfCharts && chartsHaveData;
+
+    if (!shouldUpdatePdfInstance) {
+      return;
+    }
+
+    updatePdfInstance(
+      <PDFDocument
+        combinedChartsData={combinedChartsData}
+        surveyStatistics={surveyStatistics}
+        survey={survey}
+        getQuestionTitle={getQuestionTitle}
+      />
+    );
+
+    setPdfReady(true);
+  };
+
+  const renderOverallCharts = () => (
+    <OverallStatisticsCharts
+      devices={selectedDevices}
+      surveyStatistics={surveyStatistics}
+      overallAnswerCount={overallAnswerCount()}
+      hourlyChartData={getHourlyAverageAnswerCount()}
+      dailyChartData={getDailyAverageAnswerCount()}
+      renderPdfCharts={renderPdfCharts}
+    />
+  );
+
   return (
     <>
       <Stack direction="row" flex={1} overflow="hidden">
@@ -295,19 +427,28 @@ const SurveyStatistics = ({ devices, survey }: Props) => {
           />
         </PropertiesPanel>
         <Content gap={2}>
-          {surveyStatistics.length > 0 && (
-            <OverallStatisticsCharts
-              devices={selectedDevices}
-              surveyStatistics={surveyStatistics}
-              overallAnswerCount={overallAnswerCount()}
-              hourlyChartData={getHourlyAverageAnswerCount()}
-              dailyChartData={getDailyAverageAnswerCount()}
-            />
-          )}
+          {surveyStatistics.length > 0 && renderOverallCharts()}
           {renderStatisticPages()}
         </Content>
         <PropertiesPanel width={450}>
           <StatisticsInfo survey={survey} overallAnswerCount={overallAnswerCount()} />
+          <Box p={4}>
+            <LoadingButton
+              loading={isPdfLoading}
+              loadingPosition="start"
+              variant="contained"
+              color="primary"
+              title={strings.editSurveysScreen.pdfDownload}
+              startIcon={<Download />}
+              fullWidth
+              onClick={() => {
+                setIsPdfLoading(true);
+                setRenderPdfCharts(true);
+              }}
+            >
+              {strings.editSurveysScreen.pdfDownload}
+            </LoadingButton>
+          </Box>
         </PropertiesPanel>
       </Stack>
     </>

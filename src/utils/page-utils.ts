@@ -132,18 +132,12 @@ namespace PageUtils {
       case LayoutVariableType.ImageUrl: {
         switch (targetElement?.tagName.toLocaleLowerCase()) {
           case PageElementType.DIV: {
-            // if (property.value.match(/^#([A-Fa-f0-9]{6})$/)?.length) {
-            //   targetElement.style.setProperty("background-color", property.value);
-            //   htmlData = document.body.innerHTML;
-            //   break;
-            // } else {
             targetElement.style.setProperty(
               "background-image",
               `url('${config.imageBaseUrl + property.value}')`
             );
             htmlData = document.body.innerHTML;
             break;
-            // }
           }
           case PageElementType.IMG: {
             (targetElement as HTMLImageElement).src = config.imageBaseUrl + property.value;

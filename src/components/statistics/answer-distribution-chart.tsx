@@ -29,7 +29,6 @@ const AnswersDistributionChart = ({ data }: Props) => {
         <XAxis type="number" fontFamily="SBonusText-Medium" />
         <YAxis
           type="category"
-          // TODO: Will need to update this in the pdfAnswersDistributionChart before merging
           dataKey={({ questionOptionValue }) =>
             PageUtils.getSerializedHTMLInnerOptionValues(questionOptionValue)
           }

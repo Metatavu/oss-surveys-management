@@ -1,9 +1,10 @@
-import { Document, Font, Image, Page, StyleSheet, Text, View } from "@react-pdf/renderer";
 import config from "../../app/config";
 import { CHART_STRINGS } from "../../constants";
 import { DeviceSurveyStatistics, Survey } from "../../generated/client";
 import strings from "../../localization/strings";
 import { ChartData, CombinedChartData } from "../../types";
+import PageUtils from "../../utils/page-utils";
+import { Document, Font, Image, Page, StyleSheet, Text, View } from "@react-pdf/renderer";
 
 const { cdnBaseUrl } = config;
 
@@ -171,7 +172,9 @@ const PDFDocument = ({ combinedChartsData, surveyStatistics, survey, getQuestion
   const renderAnswerDistributionCharts = (data: ChartData[]) =>
     data.map((chartData) => (
       <View key={chartData.id} style={styles.section} wrap={false}>
-        <Text style={styles.headerText}>{getQuestionTitle(chartData.id)}</Text>
+        <Text style={styles.headerText}>
+          {`${PageUtils.getSerializedHTMLInnerPropertyValues(getQuestionTitle(chartData.id))}`}
+        </Text>
         <Image source={chartData.ref} />
       </View>
     ));

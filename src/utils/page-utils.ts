@@ -100,11 +100,7 @@ namespace PageUtils {
     const questionPlaceholder = document.querySelector("div[data-component='question']");
 
     for (const option of pageQuestion.options) {
-      // This check is to ensure back compatability with values not changed since switch to storing values as serialized HTML, should not be needed after value to serialized migration?
-      // TODO: Check to be improved if needed
-      const questionHtml = option.questionOptionValue.includes("<")
-        ? option.questionOptionValue
-        : questionRenderer.render(option.questionOptionValue);
+      const questionHtml = questionRenderer.render(option.questionOptionValue);
 
       const questionElement = new DOMParser().parseFromString(questionHtml, "text/html");
       questionPlaceholder?.appendChild(questionElement.body.children[0]);
@@ -161,7 +157,6 @@ namespace PageUtils {
     return htmlData;
   };
 
-  // TODO: This can be reverted to no use questionType if wrapper div does not need to contain the question type class
   /**
    * Gets default question option with placeholder and provided order number
    *
@@ -280,41 +275,47 @@ namespace PageUtils {
   };
 
   /**
-   * Converts serialized HTML to string of innerHTML values
+   * Converts serialized HTML for page properties to string of innerHTML values
    *
    * @param serializedHTML
-   * @param elementType
-   *
    * @returns string of innerHTML valuess
    */
-  export const getSerializedHTMLInnerHtmlValues = (
-    serializedHTML: string,
-    elementType: PageElementType | PageQuestionType
-  ) => {
-    // TODO: Temporary condition while implementing serialization for different element types, remove when migration is complete.
-    if (
-      (elementType !== PageElementType.P &&
-        elementType !== PageElementType.H1 &&
-        elementType !== PageQuestionType.SingleSelect &&
-        elementType !== PageQuestionType.MultiSelect) ||
-      !serializedHTML.includes("<")
-    )
-      return serializedHTML;
-
+  export const getSerializedHTMLInnerPropertyValues = (serializedHTML: string) => {
     const tempContainer = document.createElement("div");
 
-    tempContainer.innerHTML =
-      elementType === PageQuestionType.SingleSelect || elementType === PageQuestionType.MultiSelect
-        ? serializedHTML
-        : `<div>${serializedHTML}</div>`;
-
-    const tempDiv = tempContainer.querySelector("div");
-
-    if (!tempDiv) return serializedHTML;
+    tempContainer.innerHTML = `<div>${serializedHTML}</div>`;
 
     const innerHTMLValues: string[] = [];
 
+    const tempDiv = tempContainer.querySelector("div");
+
+    if (!tempDiv) return serializeValue;
+
     tempDiv.childNodes.forEach((childNode) => {
+      if (childNode instanceof Element) {
+        const lineBreakCleanInnerHTML = childNode.innerHTML.replace(/&nbsp;/g, "");
+        innerHTMLValues.push(lineBreakCleanInnerHTML);
+      }
+    });
+    const resultString = innerHTMLValues.join("\n");
+
+    return resultString;
+  };
+
+  /**
+   * Converts serialized HTML for question options to string of innerHTML values
+   *
+   * @param serializedHTML
+   * @returns string of innerHTML valuess
+   */
+  export const getSerializedHTMLInnerOptionValues = (serializedHTML: string) => {
+    const tempContainer = document.createElement("div");
+
+    tempContainer.innerHTML = serializedHTML;
+
+    const innerHTMLValues: string[] = [];
+
+    tempContainer.childNodes.forEach((childNode) => {
       if (childNode instanceof Element) {
         const lineBreakCleanInnerHTML = childNode.innerHTML.replace(/&nbsp;/g, "");
         innerHTMLValues.push(lineBreakCleanInnerHTML);

@@ -1,4 +1,4 @@
-import { DeviceSurveyQuestionOptionStatistics, PageQuestionType } from "../../generated/client";
+import { DeviceSurveyQuestionOptionStatistics } from "../../generated/client";
 import PageUtils from "../../utils/page-utils";
 import ChartTooltip from "./chart-tooltip";
 import { Bar, BarChart, LabelList, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
@@ -24,10 +24,7 @@ const AnswersDistributionChart = ({ data }: Props) => {
           type="category"
           // TODO: Will need to update this in the pdfAnswersDistributionChart before merging
           dataKey={({ questionOptionValue }) =>
-            PageUtils.getSerializedHTMLInnerHtmlValues(
-              questionOptionValue,
-              PageQuestionType.SingleSelect
-            )
+            PageUtils.getSerializedHTMLInnerOptionValues(questionOptionValue)
           }
           width={250}
           fontFamily="SBonusText-Medium"

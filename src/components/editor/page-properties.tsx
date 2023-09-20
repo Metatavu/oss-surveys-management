@@ -386,9 +386,7 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
         <Typography variant="h6">{PageUtils.getTextPropertyLabel(element.type)}</Typography>
         <TextField
           name={element.id}
-          defaultValue={
-            PageUtils.getSerializedHTMLInnerHtmlValues(property?.value || "", element.type) ?? ""
-          }
+          defaultValue={PageUtils.getSerializedHTMLInnerPropertyValues(property?.value || "") ?? ""}
           placeholder={PageUtils.getTextPropertyLabel(element.type) ?? ""}
           fullWidth
           multiline
@@ -411,17 +409,12 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
   const renderOptions = () => {
     if (!pageToEdit?.question) return;
 
-    const questionType = pageToEdit.question.type;
-
     return pageToEdit.question.options.map((option) => (
       <TextField
         key={option.id ?? `option-${option.orderNumber}`}
         name={option.id}
         defaultValue={
-          PageUtils.getSerializedHTMLInnerHtmlValues(
-            option?.questionOptionValue ?? "",
-            questionType
-          ) ?? ""
+          PageUtils.getSerializedHTMLInnerOptionValues(option?.questionOptionValue ?? "") ?? ""
         }
         onBlur={handleOptionChange}
         fullWidth

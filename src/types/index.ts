@@ -126,7 +126,9 @@ export enum PageElementType {
   H1 = "h1",
   P = "p",
   DIV = "div",
-  IMG = "img"
+  IMG = "img",
+  HEADER_CONTAINER = "header-container",
+  TEXT_CONTAINER = "text-container"
 }
 
 /**

@@ -10,5 +10,15 @@ export class MultiSelectQuestionRenderer extends AbstractRenderer {
    * @param value display text
    * @returns html string
    */
-  public render = (value: string): string => `<div class="multi-option">${value}</div>`;
+  public render = (value: string): string => {
+    const lines = value.split("\n");
+    const checkboxContent = lines
+      .map((line) => {
+        if (line.trim() === "") return "<div>&nbsp;</div>";
+
+        return `<div>${line}</div>`;
+      })
+      .join("");
+    return `<div class="multi-option">${checkboxContent}</div>`;
+  };
 }

@@ -1,4 +1,5 @@
 import { DeviceSurveyQuestionOptionStatistics } from "../../generated/client";
+import PageUtils from "../../utils/page-utils";
 import ChartTooltip from "./chart-tooltip";
 import { Bar, BarChart, LabelList, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 
@@ -28,7 +29,9 @@ const AnswersDistributionChart = ({ data }: Props) => {
         <XAxis type="number" fontFamily="SBonusText-Medium" />
         <YAxis
           type="category"
-          dataKey="questionOptionValue"
+          dataKey={({ questionOptionValue }) =>
+            PageUtils.getSerializedHTMLInnerOptionValues(questionOptionValue)
+          }
           width={250}
           fontFamily="SBonusText-Medium"
         />

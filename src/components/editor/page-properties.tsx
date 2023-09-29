@@ -1,20 +1,3 @@
-import { errorAtom } from "../../atoms/error";
-import { layoutsAtom } from "../../atoms/layouts";
-import { pagesAtom } from "../../atoms/pages";
-import { EDITABLE_TEXT_PAGE_ELEMENTS, PAGE_BACKGROUNDS, PAGE_IMAGES } from "../../constants";
-import {
-  Layout,
-  Page,
-  PageProperty,
-  PageQuestionOption,
-  PageQuestionType
-} from "../../generated/client";
-import { useApi } from "../../hooks/use-api";
-import strings from "../../localization/strings";
-import { EditablePageElement, PageElementType } from "../../types";
-import LocalizationUtils from "../../utils/localization-utils";
-import PageUtils from "../../utils/page-utils";
-import GenericDialog from "../generic/generic-dialog";
 import { AddCircle, Close, Edit } from "@mui/icons-material";
 import {
   Box,
@@ -33,6 +16,23 @@ import isEqual from "lodash.isequal";
 import { ChangeEvent, FocusEvent, Fragment, useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import { useDebounce } from "usehooks-ts";
+import { errorAtom } from "../../atoms/error";
+import { layoutsAtom } from "../../atoms/layouts";
+import { pagesAtom } from "../../atoms/pages";
+import { EDITABLE_TEXT_PAGE_ELEMENTS, IMAGES } from "../../constants";
+import {
+  Layout,
+  Page,
+  PageProperty,
+  PageQuestionOption,
+  PageQuestionType
+} from "../../generated/client";
+import { useApi } from "../../hooks/use-api";
+import strings from "../../localization/strings";
+import { EditablePageElement, PageElementType } from "../../types";
+import LocalizationUtils from "../../utils/localization-utils";
+import PageUtils from "../../utils/page-utils";
+import GenericDialog from "../generic/generic-dialog";
 
 /**
  * Component properties
@@ -445,9 +445,9 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
         onChange={handleBackgroundChange}
         value={PageUtils.getPageBackground(elementsToEdit, pageToEdit.properties) ?? ""}
       >
-        {PAGE_BACKGROUNDS.map((background) => (
-          <MenuItem key={background.key} value={background.value}>
-            {LocalizationUtils.getTranslatedBackground(background.key)}
+        {IMAGES.map((image) => (
+          <MenuItem key={image.key} value={image.value}>
+            {LocalizationUtils.getTranslatedBackground(image.key)}
           </MenuItem>
         ))}
       </TextField>
@@ -467,7 +467,7 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
         onChange={handleImageChange}
         value={PageUtils.getPageImage(elementsToEdit, pageToEdit?.properties) ?? ""}
       >
-        {PAGE_IMAGES.map((image) => (
+        {IMAGES.map((image) => (
           <MenuItem key={image.key} value={image.value}>
             {LocalizationUtils.getTranslatedImage(image.key)}
           </MenuItem>

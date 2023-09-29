@@ -20,15 +20,10 @@ export const HOUR_GROUPING = 3;
 
 export const IMAGE_PLACEHOLDER_DATA_COMPONENT = "image";
 
-export const IMAGES = [{ key: Background.IMAGE_1, value: "/159795711_l.jpg" }];
-
-export const COLORS = [
+export const IMAGES = [
+  { key: Background.IMAGE_1, value: "/159795711_l.jpg" },
   { key: Background.GREEN, value: "/green_background.png" },
   { key: Background.WHITE, value: "/white_background.png" }
 ];
-
-export const PAGE_IMAGES = [...COLORS, ...IMAGES];
-
-export const PAGE_BACKGROUNDS = [...COLORS, ...IMAGES];
 
 export const READY_TO_USE_LAYOUTS = ["question", "info"];

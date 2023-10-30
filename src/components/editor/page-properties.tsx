@@ -152,10 +152,20 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
 
       if (!foundProperty || foundProperty.value === value) return pages;
 
+      const foundPage = pendingPages.find((page) => page.orderNumber === pageNumber);
+      const foundLayout = pageLayouts.find((layout) => layout.id === foundPage?.layoutId);
+
+      if (!foundLayout) return pages;
+
+      const elementType = PageUtils.getPageTextElementTypeAndId(foundLayout?.html, name);
+      const serializedValue = PageUtils.serializeValue(value, elementType.type);
+
+      if (!serializedValue) return pages;
+
       const updatedPage = {
         ...pageToUpdate,
         properties: pageToUpdate.properties?.map((property) =>
-          property.key === name ? { ...property, value: value } : property
+          property.key === name ? { ...property, value: serializedValue } : property
         )
       };
 
@@ -197,13 +207,17 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
 
       if (!optionToUpdate || optionToUpdate.questionOptionValue === value) return pages;
 
+      const serializedValue = PageUtils.serializeValue(value, pageToUpdate.question.type);
+
+      if (!serializedValue) return pages;
+
       const updatedPage = {
         ...pageToUpdate,
         question: {
           ...pageToUpdate.question,
           options: [
             ...pageToUpdate.question.options.map((option) =>
-              option.id === name ? { ...option, questionOptionValue: value } : option
+              option.id === name ? { ...option, questionOptionValue: serializedValue } : option
             )
           ]
         }
@@ -372,7 +386,7 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
         <Typography variant="h6">{PageUtils.getTextPropertyLabel(element.type)}</Typography>
         <TextField
           name={element.id}
-          defaultValue={property?.value ?? ""}
+          defaultValue={PageUtils.getSerializedHTMLInnerPropertyValues(property?.value || "") ?? ""}
           placeholder={PageUtils.getTextPropertyLabel(element.type) ?? ""}
           fullWidth
           multiline
@@ -399,7 +413,9 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
       <TextField
         key={option.id ?? `option-${option.orderNumber}`}
         name={option.id}
-        defaultValue={option.questionOptionValue}
+        defaultValue={
+          PageUtils.getSerializedHTMLInnerOptionValues(option?.questionOptionValue ?? "") ?? ""
+        }
         onBlur={handleOptionChange}
         fullWidth
         multiline

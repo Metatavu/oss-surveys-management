@@ -127,7 +127,9 @@ export enum PageElementType {
   H1 = "h1",
   P = "p",
   DIV = "div",
-  IMG = "img"
+  IMG = "img",
+  HEADER_CONTAINER = "header-container",
+  TEXT_CONTAINER = "text-container"
 }
 
 /**
@@ -168,4 +170,28 @@ export interface SurveyQuestionStatistics {
 export interface SurveyQuestionOptionStatistics {
   answerCount: number;
   questionOptionValue: string;
+}
+
+/**
+ * Interface for ChartData
+ */
+export interface ChartData {
+  id: string;
+  ref: string;
+}
+
+/**
+ * Interface for CombinedChartData
+ */
+export interface CombinedChartData {
+  popularTimesAndDeviceCharts: ChartData[];
+  answerDistributionCharts: ChartData[];
+}
+
+/**
+ * Intrface for PopularTimeChartsData
+ */
+export interface PopularTimeChartsData {
+  label: string;
+  value: number;
 }

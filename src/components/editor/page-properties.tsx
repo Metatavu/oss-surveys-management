@@ -93,9 +93,7 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
         })
       )
     );
-    setSurveyPages(
-      [...filteredPages, ...savedPages].toSorted((a, b) => a.orderNumber - b.orderNumber)
-    );
+    setSurveyPages([...filteredPages, ...savedPages].sort((a, b) => a.orderNumber - b.orderNumber));
 
     toast.success(strings.editSurveysScreen.editPagesPanel.pageSaved);
   };

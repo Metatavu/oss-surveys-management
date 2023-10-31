@@ -234,6 +234,18 @@ namespace PageUtils {
   };
 
   /**
+   * Serializes multi-line question option values
+   *
+   * @param value question option value
+   * @returns serialized HTML
+   */
+  export const serializeMultiLineQuestionOptionValue = (value: string) =>
+    value
+      .split("\n")
+      .map((line) => `<div>${line.trim()}</div>`)
+      .join("");
+
+  /**
    * Serialize the event value as HTML according to element type
    *
    * @param value event string
@@ -247,26 +259,26 @@ namespace PageUtils {
   ) => {
     switch (elementType) {
       case PageElementType.P: {
-        const textRenderer = componentRendererFactory.getParagraphRenderer();
-        const textSerializedHtml = textRenderer.render(value);
+        const textSerializedHtml = componentRendererFactory.getParagraphRenderer().render(value);
 
         return textSerializedHtml;
       }
       case PageElementType.H1: {
-        const titleRenderer = componentRendererFactory.getTitleRenderer();
-        const headerSerializedHtml = titleRenderer.render(value);
+        const headerSerializedHtml = componentRendererFactory.getTitleRenderer().render(value);
 
         return headerSerializedHtml;
       }
       case PageQuestionType.MultiSelect: {
-        const multiOptionRenderer = componentRendererFactory.getQuestionRenderer(elementType);
-        const multiOptionSerializedHtml = multiOptionRenderer.render(value);
+        const multiOptionSerializedHtml = componentRendererFactory
+          .getQuestionRenderer(elementType)
+          .render(value);
 
         return multiOptionSerializedHtml;
       }
       case PageQuestionType.SingleSelect: {
-        const singleOptionRenderer = componentRendererFactory.getQuestionRenderer(elementType);
-        const singleOptionSerializedHtml = singleOptionRenderer.render(value);
+        const singleOptionSerializedHtml = componentRendererFactory
+          .getQuestionRenderer(elementType)
+          .render(value);
 
         return singleOptionSerializedHtml;
       }
@@ -320,6 +332,8 @@ namespace PageUtils {
       if (childNode instanceof Element) {
         const lineBreakCleanInnerHTML = childNode.innerHTML.replace(/&nbsp;/g, "");
         innerHTMLValues.push(lineBreakCleanInnerHTML);
+      } else {
+        innerHTMLValues.push(childNode.textContent || "");
       }
     });
     const resultString = innerHTMLValues.join("\n");

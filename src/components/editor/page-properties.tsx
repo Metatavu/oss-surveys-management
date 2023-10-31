@@ -19,7 +19,7 @@ import { useDebounce } from "usehooks-ts";
 import { errorAtom } from "../../atoms/error";
 import { layoutsAtom } from "../../atoms/layouts";
 import { pagesAtom } from "../../atoms/pages";
-import { EDITABLE_TEXT_PAGE_ELEMENTS, IMAGES } from "../../constants";
+import { EDITABLE_TEXT_PAGE_ELEMENTS, PAGE_BACKGROUNDS, PAGE_IMAGES } from "../../constants";
 import {
   Layout,
   Page,
@@ -71,21 +71,29 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
   }, [surveyPages]);
 
   /**
-   * Save pages
+   * Saves pages that have been updated
    */
   const savePages = async () => {
     if (isEqual(surveyPages, pendingPages)) return;
-    setSurveyPages(
-      await Promise.all(
-        debouncedPages.map((page) =>
-          pagesApi.updateSurveyPage({
-            surveyId: surveyId,
-            pageId: page.id!,
-            page: page
-          })
+    const pagesToSave = debouncedPages.filter(
+      (page) =>
+        !isEqual(
+          page,
+          surveyPages.find((p) => p.id === page.id)
         )
+    );
+    const pagesToSaveIds = [...new Set(pagesToSave.map((page) => page.id))];
+    const filteredPages = debouncedPages.filter((page) => !pagesToSaveIds.includes(page.id!));
+    const savedPages = await Promise.all(
+      pagesToSave.map((page) =>
+        pagesApi.updateSurveyPage({
+          surveyId: surveyId,
+          pageId: page.id!,
+          page: page
+        })
       )
     );
+    setSurveyPages([...filteredPages, ...savedPages].sort((a, b) => a.orderNumber - b.orderNumber));
 
     toast.success(strings.editSurveysScreen.editPagesPanel.pageSaved);
   };
@@ -207,7 +215,7 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
 
       if (!optionToUpdate || optionToUpdate.questionOptionValue === value) return pages;
 
-      const serializedValue = PageUtils.serializeValue(value, pageToUpdate.question.type);
+      const serializedValue = PageUtils.serializeMultiLineQuestionOptionValue(value);
 
       if (!serializedValue) return pages;
 
@@ -421,7 +429,7 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
         multiline
         InputProps={{
           endAdornment: (
-            <InputAdornment position="end" className="on-hover">
+            <InputAdornment position="end">
               <IconButton
                 title={strings.editSurveysScreen.editPagesPanel.deleteAnswerOptionTitle}
                 onClick={() => handleDeleteClick(option)}

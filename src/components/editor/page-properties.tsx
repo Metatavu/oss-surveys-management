@@ -1,20 +1,3 @@
-import { errorAtom } from "../../atoms/error";
-import { layoutsAtom } from "../../atoms/layouts";
-import { pagesAtom } from "../../atoms/pages";
-import { EDITABLE_TEXT_PAGE_ELEMENTS, PAGE_BACKGROUNDS, PAGE_IMAGES } from "../../constants";
-import {
-  Layout,
-  Page,
-  PageProperty,
-  PageQuestionOption,
-  PageQuestionType
-} from "../../generated/client";
-import { useApi } from "../../hooks/use-api";
-import strings from "../../localization/strings";
-import { EditablePageElement, PageElementType } from "../../types";
-import LocalizationUtils from "../../utils/localization-utils";
-import PageUtils from "../../utils/page-utils";
-import GenericDialog from "../generic/generic-dialog";
 import { AddCircle, Close, Edit } from "@mui/icons-material";
 import {
   Box,
@@ -33,6 +16,23 @@ import isEqual from "lodash.isequal";
 import { ChangeEvent, FocusEvent, Fragment, useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import { useDebounce } from "usehooks-ts";
+import { errorAtom } from "../../atoms/error";
+import { layoutsAtom } from "../../atoms/layouts";
+import { pagesAtom } from "../../atoms/pages";
+import { EDITABLE_TEXT_PAGE_ELEMENTS, PAGE_BACKGROUNDS, PAGE_IMAGES } from "../../constants";
+import {
+  Layout,
+  Page,
+  PageProperty,
+  PageQuestionOption,
+  PageQuestionType
+} from "../../generated/client";
+import { useApi } from "../../hooks/use-api";
+import strings from "../../localization/strings";
+import { EditablePageElement, PageElementType } from "../../types";
+import LocalizationUtils from "../../utils/localization-utils";
+import PageUtils from "../../utils/page-utils";
+import GenericDialog from "../generic/generic-dialog";
 
 /**
  * Component properties
@@ -71,20 +71,30 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
   }, [surveyPages]);
 
   /**
-   * Save pages
+   * Saves pages that have been updated
    */
   const savePages = async () => {
     if (isEqual(surveyPages, pendingPages)) return;
-    setSurveyPages(
-      await Promise.all(
-        debouncedPages.map((page) =>
-          pagesApi.updateSurveyPage({
-            surveyId: surveyId,
-            pageId: page.id!,
-            page: page
-          })
+    const pagesToSave = debouncedPages.filter(
+      (page) =>
+        !isEqual(
+          page,
+          surveyPages.find((p) => p.id === page.id)
         )
+    );
+    const pagesToSaveIds = [...new Set(pagesToSave.map((page) => page.id))];
+    const filteredPages = debouncedPages.filter((page) => !pagesToSaveIds.includes(page.id!));
+    const savedPages = await Promise.all(
+      pagesToSave.map((page) =>
+        pagesApi.updateSurveyPage({
+          surveyId: surveyId,
+          pageId: page.id!,
+          page: page
+        })
       )
+    );
+    setSurveyPages(
+      [...filteredPages, ...savedPages].toSorted((a, b) => a.orderNumber - b.orderNumber)
     );
 
     toast.success(strings.editSurveysScreen.editPagesPanel.pageSaved);
@@ -207,7 +217,7 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
 
       if (!optionToUpdate || optionToUpdate.questionOptionValue === value) return pages;
 
-      const serializedValue = PageUtils.serializeValue(value, pageToUpdate.question.type);
+      const serializedValue = PageUtils.serializeMultiLineQuestionOptionValue(value);
 
       if (!serializedValue) return pages;
 
@@ -419,10 +429,12 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
         onBlur={handleOptionChange}
         fullWidth
         multiline
+        tabIndex={option.orderNumber - 1}
         InputProps={{
           endAdornment: (
             <InputAdornment position="end" className="on-hover">
               <IconButton
+                tabIndex={-1}
                 title={strings.editSurveysScreen.editPagesPanel.deleteAnswerOptionTitle}
                 onClick={() => handleDeleteClick(option)}
               >

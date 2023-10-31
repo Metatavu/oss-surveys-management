@@ -429,12 +429,10 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
         onBlur={handleOptionChange}
         fullWidth
         multiline
-        tabIndex={option.orderNumber - 1}
         InputProps={{
           endAdornment: (
-            <InputAdornment position="end" className="on-hover">
+            <InputAdornment position="end">
               <IconButton
-                tabIndex={-1}
                 title={strings.editSurveysScreen.editPagesPanel.deleteAnswerOptionTitle}
                 onClick={() => handleDeleteClick(option)}
               >

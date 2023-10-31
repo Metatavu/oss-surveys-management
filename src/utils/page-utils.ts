@@ -332,7 +332,6 @@ namespace PageUtils {
     const innerHTMLValues: string[] = [];
 
     tempContainer.childNodes.forEach((childNode) => {
-      console.log(childNode);
       if (childNode instanceof Element) {
         const lineBreakCleanInnerHTML = childNode.innerHTML.replace(/&nbsp;/g, "");
         innerHTMLValues.push(lineBreakCleanInnerHTML);

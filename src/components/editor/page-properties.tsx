@@ -19,7 +19,7 @@ import { useDebounce } from "usehooks-ts";
 import { errorAtom } from "../../atoms/error";
 import { layoutsAtom } from "../../atoms/layouts";
 import { pagesAtom } from "../../atoms/pages";
-import { EDITABLE_TEXT_PAGE_ELEMENTS, PAGE_BACKGROUNDS, PAGE_IMAGES } from "../../constants";
+import { EDITABLE_TEXT_PAGE_ELEMENTS, IMAGES } from "../../constants";
 import {
   Layout,
   Page,

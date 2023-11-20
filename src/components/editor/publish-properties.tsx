@@ -1,11 +1,11 @@
-import { Device, Survey } from "../../generated/client";
-import strings from "../../localization/strings";
-import theme from "../../styles/theme";
 import { ArrowUpward, CalendarTodayOutlined } from "@mui/icons-material";
 import { Box, Button, Stack, Typography, TypographyProps } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { DateTime } from "luxon";
 import { useState } from "react";
+import { Device, Survey } from "../../generated/client";
+import strings from "../../localization/strings";
+import theme from "../../styles/theme";
 
 /**
  * Components properties
@@ -22,21 +22,8 @@ interface Props {
 const PublishProperties = ({ survey, selectedDevices, publishSurvey }: Props) => {
   const [newPublishStartTime, setNewPublishStartTime] = useState<DateTime | null>(null);
   const [newPublishEndTime, setNewPublishEndTime] = useState<DateTime | null>(null);
-  const defaultPublicationStartTime = DateTime.now().set({
-    hour: 0,
-    minute: 0,
-    second: 0,
-    millisecond: 0
-  });
-  const defaultPublicationEndTime = DateTime.fromObject({
-    year: 3000,
-    month: 1,
-    day: 1,
-    hour: 0,
-    minute: 0,
-    second: 0,
-    millisecond: 0
-  });
+  const defaultPublicationStartTime = DateTime.now();
+  const defaultPublicationEndTime = DateTime.now().set({ year: 3000 });
 
   const {
     heading,
@@ -122,6 +109,7 @@ const PublishProperties = ({ survey, selectedDevices, publishSurvey }: Props) =>
       <Box p={3}>
         <Button
           variant="contained"
+          disabled={selectedDevices.length === 0}
           fullWidth
           sx={{ justifyContent: "space-between" }}
           startIcon={<ArrowUpward />}

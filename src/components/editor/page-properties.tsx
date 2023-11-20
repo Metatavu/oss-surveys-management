@@ -19,7 +19,7 @@ import { useDebounce } from "usehooks-ts";
 import { errorAtom } from "../../atoms/error";
 import { layoutsAtom } from "../../atoms/layouts";
 import { pagesAtom } from "../../atoms/pages";
-import { EDITABLE_TEXT_PAGE_ELEMENTS, PAGE_BACKGROUNDS, PAGE_IMAGES } from "../../constants";
+import { EDITABLE_TEXT_PAGE_ELEMENTS, IMAGES } from "../../constants";
 import {
   Layout,
   Page,
@@ -315,7 +315,7 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
 
       const updatedProperty: PageProperty = {
         key: backgroundProperty?.id,
-        value: value === "DEFAULT" ? "" : value
+        value: value
       };
 
       const updatedPage = {
@@ -469,9 +469,9 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
         onChange={handleBackgroundChange}
         value={PageUtils.getPageBackground(elementsToEdit, pageToEdit.properties) ?? ""}
       >
-        {PAGE_BACKGROUNDS.map((background) => (
-          <MenuItem key={background.key} value={background.value}>
-            {LocalizationUtils.getTranslatedBackground(background.key)}
+        {IMAGES.map((image) => (
+          <MenuItem key={image.key} value={image.value}>
+            {LocalizationUtils.getTranslatedBackground(image.key)}
           </MenuItem>
         ))}
       </TextField>
@@ -491,7 +491,7 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
         onChange={handleImageChange}
         value={PageUtils.getPageImage(elementsToEdit, pageToEdit?.properties) ?? ""}
       >
-        {PAGE_IMAGES.map((image) => (
+        {IMAGES.map((image) => (
           <MenuItem key={image.key} value={image.value}>
             {LocalizationUtils.getTranslatedImage(image.key)}
           </MenuItem>

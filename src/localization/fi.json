@@ -204,7 +204,8 @@
         "image1": "Järvimaisema"
       },
       "backgroundImages": {
-        "default": "Vihreä",
+        "green": "Vihreä",
+        "white": "Valkoinen",
         "image1": "Järvimaisema"
       },
       "pageSaved": "Sivu tallennettu",

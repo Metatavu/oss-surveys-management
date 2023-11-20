@@ -1,9 +1,8 @@
 import config from "../app/config";
 import componentRendererFactory from "../component-renderer/component-renderer-factory";
 import {
+  IMAGES,
   IMAGE_PLACEHOLDER_DATA_COMPONENT,
-  PAGE_BACKGROUNDS,
-  PAGE_IMAGES,
   QUESTION_PLACEHOLDER_DATA_COMPONENT
 } from "../constants";
 import {
@@ -204,9 +203,7 @@ namespace PageUtils {
     elements: EditablePageElement[],
     properties?: PageProperty[]
   ) => {
-    const defaultBackground = PAGE_BACKGROUNDS.find(
-      (background) => background.key === Background.DEFAULT
-    );
+    const defaultBackground = IMAGES.find((image) => image.key === Background.GREEN);
     if (!defaultBackground) return;
     if (!elements?.length) return defaultBackground.value;
     const foundBackgroundElement = elements.find((element) => element.type === PageElementType.DIV);
@@ -223,7 +220,7 @@ namespace PageUtils {
    * Returns page image
    */
   export const getPageImage = (elements: EditablePageElement[], properties?: PageProperty[]) => {
-    const defaultImage = PAGE_IMAGES.find((image) => image.key === Background.DEFAULT);
+    const defaultImage = IMAGES.find((image) => image.key === Background.GREEN);
     if (!defaultImage) return;
     if (!elements?.length) return defaultImage.value;
     const foundImageElement = elements.find((element) => element.type === PageElementType.IMG);

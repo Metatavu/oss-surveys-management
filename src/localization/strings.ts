@@ -237,7 +237,8 @@ export interface Localized extends LocalizedStringsMethods {
         image1: string;
       };
       backgroundImages: {
-        default: string;
+        green: string;
+        white: string;
         image1: string;
       };
       pageSaved: string;

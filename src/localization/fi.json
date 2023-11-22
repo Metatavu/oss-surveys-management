@@ -167,6 +167,8 @@
     "editor": "Editori",
     "published": "Julkaistu",
     "statistics": "Tilastot",
+    "pdfDownload": "Lataa PDF",
+    "pdfGenerate": "Luo PDF",
     "preview": "Esikatselu",
     "editSurveyPanel": {
       "name": "Nimi",
@@ -202,7 +204,8 @@
         "image1": "Järvimaisema"
       },
       "backgroundImages": {
-        "default": "Vihreä",
+        "green": "Vihreä",
+        "white": "Valkoinen",
         "image1": "Järvimaisema"
       },
       "pageSaved": "Sivu tallennettu",
@@ -225,6 +228,7 @@
     "statisticsSource": "Lähde: ",
     "labels": {
       "answerCount": "Vastauksia: {0}",
+      "percentageCount": "{0}%",
       "monday": "Ma",
       "tuesday": "Ti",
       "wednesday": "Ke",
@@ -233,6 +237,13 @@
       "saturday": "La",
       "sunday": "Su"
     }
+  },
+  "pdfStatisticsDownload": {
+    "totalAnswerCount": "Vastauksia",
+    "answerDivision": "Vastauksien jakautuminen",
+    "answersPerDisplayChart": "Näyttökohtaiset vastausmäärät",
+    "mostPopularDaysChart": "Vilkkaimmat päivät",
+    "mostPopularHoursChart": "Vilkkaimmat tunnit"
   },
   "publishSurveys": {
     "surveyPublished": "Kysely julkaistu",

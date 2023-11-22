@@ -5,10 +5,20 @@ import { AbstractRenderer } from "./abstract-renderer";
  */
 export class TitleRenderer extends AbstractRenderer {
   /**
-   * Renders an HTML h1 element with given value as its text.
+   * Renders a div element with given value split by line breaks as its h1 elements.
    *
    * @param value display text
    * @returns html string
    */
-  public render = (value: string): string => `<h1 class="md">${value}</h1>`;
+  public render = (value: string): string => {
+    const lines = value.split("\n");
+    const h1Tags = lines
+      .map((line) => {
+        if (line.trim() === "") return "<h1>&nbsp;</h1>";
+
+        return `<h1 class="md">${line}</h1>`;
+      })
+      .join("");
+    return h1Tags;
+  };
 }

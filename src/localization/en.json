@@ -167,6 +167,8 @@
     "editor": "Editor",
     "published": "Published",
     "statistics": "Statistics",
+    "pdfDownload": "Download PDF",
+    "pdfGenerate": "Generate PDF",
     "preview": "Preview",
     "editSurveyPanel": {
       "name": "Name",
@@ -202,7 +204,8 @@
         "image1": "Lake scenery"
       },
       "backgroundImages": {
-        "default": "Green",
+        "green": "Green",
+        "white": "White",
         "image1": "Lake scenery"
       },
       "pageSaved": "Page saved",
@@ -225,6 +228,7 @@
     "statisticsSource": "Source: ",
     "labels": {
       "answerCount": "Answers: {0}",
+      "percentageCount": "{0}%",
       "monday": "Mo",
       "tuesday": "Tu",
       "wednesday": "We",
@@ -233,6 +237,13 @@
       "saturday": "Sa",
       "sunday": "Su"
     }
+  },
+  "pdfStatisticsDownload": {
+    "totalAnswerCount": "Total answers",
+    "answerDivision": "Answer division",
+    "answersPerDisplayChart": "Answers per display",
+    "mostPopularDaysChart": "Most popular days",
+    "mostPopularHoursChart": "Most popular hours"
   },
   "publishSurveys": {
     "surveyPublished": "Survey published",

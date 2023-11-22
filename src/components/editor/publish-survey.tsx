@@ -5,6 +5,7 @@ import PropertiesPanel from "./properties-panel";
 import PublishDeviceInfo from "./publish-device-info";
 import PublishProperties from "./publish-properties";
 import { Stack } from "@mui/material";
+import { DateTime } from "luxon";
 import { useEffect, useState } from "react";
 
 /**
@@ -43,17 +44,19 @@ const PublishSurvey = ({ survey, devices, deviceSurveys, publishSurveys }: Props
    * @param publishStartTime publish start time
    * @param publishEndTime publish end time
    */
-  const handlePublish = async (publishStartTime?: Date, publishEndTime?: Date) => {
+  const handlePublish = async (publishStartTime: DateTime, publishEndTime: DateTime) => {
     if (!survey.id) return;
+
+    const currentTime = DateTime.now();
     const deviceSurveys: DeviceSurvey[] = selectedDevices.map((device) => ({
       deviceId: device.id!,
       surveyId: survey.id!,
       status:
-        publishStartTime && publishEndTime
+        currentTime < publishStartTime
           ? DeviceSurveyStatus.Scheduled
           : DeviceSurveyStatus.Published,
-      publishStartTime: publishStartTime,
-      publishEndTime: publishEndTime
+      publishStartTime: publishStartTime?.toJSDate(),
+      publishEndTime: publishEndTime?.toJSDate()
     }));
 
     await publishSurveys(deviceSurveys);

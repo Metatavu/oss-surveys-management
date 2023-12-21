@@ -101,7 +101,8 @@ export enum LayoutType {
 export enum Background {
   GREEN = "green",
   WHITE = "white",
-  IMAGE_1 = "image 1"
+  IMAGE_1 = "image 1",
+  IMAGE_2 = "image 2"
 }
 
 /**

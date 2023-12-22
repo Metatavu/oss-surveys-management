@@ -201,12 +201,14 @@
       "image": "Image",
       "images": {
         "noImage": "No image",
-        "image1": "Lake scenery"
+        "image1": "Lake scenery",
+        "image2": "Christmas background"
       },
       "backgroundImages": {
         "green": "Green",
         "white": "White",
-        "image1": "Lake scenery"
+        "image1": "Lake scenery",
+        "image2": "Christmas background"
       },
       "pageSaved": "Page saved",
       "previewTitle": "Click page to edit"

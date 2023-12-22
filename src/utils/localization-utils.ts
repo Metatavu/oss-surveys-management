@@ -50,7 +50,8 @@ namespace LocalizationUtils {
     ({
       [Background.GREEN]: strings.editSurveysScreen.editPagesPanel.backgroundImages.green,
       [Background.WHITE]: strings.editSurveysScreen.editPagesPanel.backgroundImages.white,
-      [Background.IMAGE_1]: strings.editSurveysScreen.editPagesPanel.backgroundImages.image1
+      [Background.IMAGE_1]: strings.editSurveysScreen.editPagesPanel.backgroundImages.image1,
+      [Background.IMAGE_2]: strings.editSurveysScreen.editPagesPanel.backgroundImages.image2
     })[background];
 
   /**
@@ -62,7 +63,8 @@ namespace LocalizationUtils {
     ({
       [Background.GREEN]: strings.editSurveysScreen.editPagesPanel.images.noImage,
       [Background.WHITE]: strings.editSurveysScreen.editPagesPanel.images.noImage,
-      [Background.IMAGE_1]: strings.editSurveysScreen.editPagesPanel.backgroundImages.image1
+      [Background.IMAGE_1]: strings.editSurveysScreen.editPagesPanel.backgroundImages.image1,
+      [Background.IMAGE_2]: strings.editSurveysScreen.editPagesPanel.backgroundImages.image2
     })[image];
 
   /**

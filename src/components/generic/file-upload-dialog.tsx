@@ -11,12 +11,10 @@ import { FC, useState } from "react";
  */
 interface Props {
   open: boolean;
-  buttonText?: string;
   /**
    * File size in megabytes
    */
   maxFileSize?: number;
-  controlled?: boolean;
   filesLimit?: number;
   allowedFileTypes: string[];
   onClose: () => void;

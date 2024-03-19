@@ -176,7 +176,6 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
     <FileUploadDialog
       open={fileUploadDialogOpen}
       onClose={() => setFileUploadDialogOpen(false)}
-      buttonText={strings.editSurveysScreen.editPagesPanel.addNewImage}
       allowedFileTypes={["image/*"]}
       onSave={onUploadSave}
       uploadLoading={uploadLoading}

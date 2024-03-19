@@ -217,7 +217,8 @@
         "image2": "Joulutausta"
       },
       "pageSaved": "Sivu tallennettu",
-      "previewTitle": "Klikkaa muokataksesi sivua"
+      "previewTitle": "Klikkaa muokataksesi sivua",
+      "uploadWarning": "Virheellinen tiedosto: Tiedostonimien on oltava yksilöllisiä."
     }
   },
   "surveyStatistics": {

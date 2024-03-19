@@ -216,7 +216,8 @@
         "image2": "Christmas background"
       },
       "pageSaved": "Page saved",
-      "previewTitle": "Click page to edit"
+      "previewTitle": "Click page to edit",
+      "uploadWarning": "Invalid file: File names must be unique."
     }
   },
   "surveyStatistics": {

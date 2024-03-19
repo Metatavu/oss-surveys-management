@@ -1,7 +1,8 @@
+import { MediaFile } from "../../generated/client";
 import strings from "../../localization/strings";
 import GenericDialog from "./generic-dialog";
 import LoaderWrapper from "./loader-wrapper";
-import { Box, LinearProgress } from "@mui/material";
+import { Alert, Box, LinearProgress } from "@mui/material";
 import { DropzoneArea } from "mui-file-dropzone";
 import { FC, useState } from "react";
 
@@ -28,17 +29,28 @@ interface Props {
    */
   onSave(files: File[], key?: string): void;
   uploadLoading: boolean;
+  backgroundImages: MediaFile[];
 }
 
 /**
- * Generic file uploader UI component
+ * File uploader dialog component
  *
  * @params props component properties
  */
 const FileUploadDialog: FC<Props> = (props) => {
-  const { open, onClose, maxFileSize, filesLimit, allowedFileTypes, onSave, uploadLoading } = props;
+  const {
+    open,
+    onClose,
+    maxFileSize,
+    filesLimit,
+    allowedFileTypes,
+    onSave,
+    uploadLoading,
+    backgroundImages
+  } = props;
   const [uploading, setUploading] = useState<boolean>(false);
   const [uploadFile, setUploadFile] = useState<File[] | null>(null);
+  const [duplicateFileName, setDuplicateFileName] = useState(false);
 
   const renderUploadDialog = () => {
     const bytes = maxFileSize ? maxFileSize * 1000000 : 2000000;
@@ -53,9 +65,10 @@ const FileUploadDialog: FC<Props> = (props) => {
         cancelButtonText={strings.generic.cancel}
         confirmButtonText={strings.generic.upload}
         fullWidth
+        disabled={duplicateFileName}
       >
         <DropzoneArea
-          onDrop={(files) => setUploadFile(files)}
+          onDrop={(files) => handleDropFile(files)}
           acceptedFiles={allowedFileTypes}
           maxFileSize={bytes}
           filesLimit={filesLimit || 1}
@@ -66,10 +79,34 @@ const FileUploadDialog: FC<Props> = (props) => {
             <LinearProgress />
           </Box>
         )}
+        {duplicateFileName && (
+          <Alert sx={{ margin: 2 }} severity="error">
+            {strings.editSurveysScreen.editPagesPanel.uploadWarning}
+          </Alert>
+        )}
       </GenericDialog>
     );
   };
 
+  /**
+   *  Handler when files are added to the drop zone
+   *
+   * @param files files
+   */
+  const handleDropFile = (files: File[]) => {
+    if (backgroundImages.some((image) => image.name === files[0].name)) {
+      setDuplicateFileName(true);
+    } else {
+      setUploadFile(files);
+      setDuplicateFileName(false);
+    }
+  };
+
+  /**
+   *  Handler for when the save button is clicked
+   *
+   * @param files files
+   */
   const handleSave = async (files: File[]) => {
     setUploading(true);
     onSave(files);

@@ -250,6 +250,7 @@ export interface Localized extends LocalizedStringsMethods {
       };
       pageSaved: string;
       previewTitle: string;
+      uploadWarning: string;
     };
   };
 

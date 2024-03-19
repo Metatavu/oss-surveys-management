@@ -180,6 +180,7 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
       allowedFileTypes={["image/*"]}
       onSave={onUploadSave}
       uploadLoading={uploadLoading}
+      backgroundImages={backgroundImages}
     />
   );
 

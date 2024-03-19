@@ -4,7 +4,7 @@ import GenericDialog from "./generic-dialog";
 import LoaderWrapper from "./loader-wrapper";
 import { Alert, Box, LinearProgress } from "@mui/material";
 import { DropzoneArea } from "mui-file-dropzone";
-import { FC, useState } from "react";
+import { useState } from "react";
 
 /**
  * Component props
@@ -35,17 +35,16 @@ interface Props {
  *
  * @params props component properties
  */
-const FileUploadDialog: FC<Props> = (props) => {
-  const {
-    open,
-    onClose,
-    maxFileSize,
-    filesLimit,
-    allowedFileTypes,
-    onSave,
-    uploadLoading,
-    backgroundImages
-  } = props;
+const FileUploadDialog = ({
+  open,
+  onClose,
+  maxFileSize,
+  filesLimit,
+  allowedFileTypes,
+  onSave,
+  uploadLoading,
+  backgroundImages
+}: Props) => {
   const [uploading, setUploading] = useState<boolean>(false);
   const [uploadFile, setUploadFile] = useState<File[] | null>(null);
   const [duplicateFileName, setDuplicateFileName] = useState(false);

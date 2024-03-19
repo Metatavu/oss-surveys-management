@@ -336,10 +336,6 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
         })
       ).json();
 
-      const formData = new FormData();
-      formData.append("file", file);
-      formData.append("Content-Type", file.type);
-
       const uploadResponse = await fetch(presignedUrl.data, {
         method: "PUT",
         headers: {
@@ -355,7 +351,7 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
       setUploadLoading(false);
       setFileUploadDialogOpen(false);
     } catch (e) {
-      console.error(strings.errorHandling.editSurveysScreen.imageNotUploaded, e);
+      setError(`${strings.errorHandling.editSurveysScreen.imageNotUploaded}, ${e}`);
     }
   };
 
@@ -578,7 +574,7 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
             {strings.editSurveysScreen.editPagesPanel.addNewImage}
           </Button>
         </MenuItem>
-        {/* New images are included here along side the old ones for now */}
+        {/* New images are included here alongside the "color" image backgrounds */}
         {backgroundImages.map((image) => {
           const nameWithoutExtension = image.name.replace(/\.[^/.]+$/, "");
           return (

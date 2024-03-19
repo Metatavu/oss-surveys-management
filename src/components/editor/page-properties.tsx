@@ -62,6 +62,7 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
   const [backgroundImages, setBackgroundImages] = useState<MediaFile[]>([]);
   const { pagesApi, mediaLibraryApi } = useApi();
   const setError = useSetAtom(errorAtom);
+  const [uploadLoading, setUploadLoading] = useState(false);
 
   /**
    * Gets page background images from s3 bucket
@@ -173,12 +174,12 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
    */
   const renderFileUploadDialog = () => (
     <FileUploadDialog
-      controlled
       open={fileUploadDialogOpen}
       onClose={() => setFileUploadDialogOpen(false)}
       buttonText={strings.editSurveysScreen.editPagesPanel.addNewImage}
       allowedFileTypes={["image/*"]}
       onSave={onUploadSave}
+      uploadLoading={uploadLoading}
     />
   );
 
@@ -321,6 +322,7 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
    */
   const uploadImage = async (file: File) => {
     try {
+      setUploadLoading(true);
       const presignedUrl = await (
         await fetch(config.imageUploadBaseUrl, {
           method: "POST",
@@ -350,6 +352,8 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
         throw new Error();
       }
       getBackgroundImages();
+      setUploadLoading(false);
+      setFileUploadDialogOpen(false);
     } catch (e) {
       console.error(strings.errorHandling.editSurveysScreen.imageNotUploaded, e);
     }
@@ -364,7 +368,6 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
     const file = files[0];
     if (file) {
       uploadImage(file);
-      setFileUploadDialogOpen(false);
     }
   };
 

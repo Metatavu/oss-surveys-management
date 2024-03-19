@@ -6,6 +6,7 @@ import {
   DeviceSurveysApi,
   DevicesApi,
   LayoutsApi,
+  MediaLibraryApi,
   PagesApi,
   SurveysApi
 } from "../generated/client";
@@ -30,6 +31,7 @@ export const getApiClient = (accessToken?: string) => {
     layoutsApi: new LayoutsApi(getConfiguration()),
     deviceSurveysApi: new DeviceSurveysApi(getConfiguration()),
     devicesApi: new DevicesApi(getConfiguration()),
-    deviceRequestsApi: new DeviceRequestsApi(getConfiguration())
+    deviceRequestsApi: new DeviceRequestsApi(getConfiguration()),
+    mediaLibraryApi: new MediaLibraryApi(getConfiguration())
   };
 };

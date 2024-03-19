@@ -10,6 +10,7 @@ type Config = {
     baseUrl: string;
   };
   cdnBaseUrl: string;
+  imageUploadBaseUrl: string;
 };
 
 const env = cleanEnv(import.meta.env, {
@@ -17,7 +18,8 @@ const env = cleanEnv(import.meta.env, {
   VITE_KEYCLOAK_REALM: str(),
   VITE_KEYCLOAK_CLIENT_ID: str(),
   VITE_API_BASE_URL: url(),
-  VITE_CDN_BASE_URL: url()
+  VITE_CDN_BASE_URL: url(),
+  VITE_IMAGE_UPLOAD_BASE_URL: url()
 });
 
 const config: Config = {
@@ -29,7 +31,8 @@ const config: Config = {
   api: {
     baseUrl: env.VITE_API_BASE_URL
   },
-  cdnBaseUrl: env.VITE_CDN_BASE_URL
+  cdnBaseUrl: env.VITE_CDN_BASE_URL,
+  imageUploadBaseUrl: env.VITE_IMAGE_UPLOAD_BASE_URL
 };
 
 export default config;

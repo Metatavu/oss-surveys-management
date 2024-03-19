@@ -1,6 +1,6 @@
-import LocalizedStrings, { LocalizedStringsMethods } from "localized-strings";
 import en from "./en.json";
 import fi from "./fi.json";
+import LocalizedStrings, { LocalizedStringsMethods } from "localized-strings";
 
 /**
  * Localized strings
@@ -19,6 +19,8 @@ export interface Localized extends LocalizedStringsMethods {
     unnamed: string;
     yes: string;
     no: string;
+    loadNew: string;
+    upload: string;
   };
 
   /**
@@ -76,6 +78,8 @@ export interface Localized extends LocalizedStringsMethods {
       pageNotDeleted: string;
       pageNotCreated: string;
       questionNotAdded: string;
+      backgroundImagesNotFound: string;
+      imageNotUploaded: string;
     };
     previewScreen: {
       surveyNotFound: string;
@@ -231,6 +235,7 @@ export interface Localized extends LocalizedStringsMethods {
       infoText: string;
       buttonVisibility: string;
       background: string;
+      addNewImage: string;
       image: string;
       images: {
         noImage: string;
@@ -245,6 +250,7 @@ export interface Localized extends LocalizedStringsMethods {
       };
       pageSaved: string;
       previewTitle: string;
+      uploadWarning: string;
     };
   };
 

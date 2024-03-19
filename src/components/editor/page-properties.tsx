@@ -1,3 +1,24 @@
+import config from "../../app/config";
+import { authAtom } from "../../atoms/auth";
+import { errorAtom } from "../../atoms/error";
+import { layoutsAtom } from "../../atoms/layouts";
+import { pagesAtom } from "../../atoms/pages";
+import { EDITABLE_TEXT_PAGE_ELEMENTS, IMAGES } from "../../constants";
+import {
+  Layout,
+  MediaFile,
+  Page,
+  PageProperty,
+  PageQuestionOption,
+  PageQuestionType
+} from "../../generated/client";
+import { useApi } from "../../hooks/use-api";
+import strings from "../../localization/strings";
+import { EditablePageElement, PageElementType } from "../../types";
+import LocalizationUtils from "../../utils/localization-utils";
+import PageUtils from "../../utils/page-utils";
+import FileUploadDialog from "../generic/file-upload-dialog";
+import GenericDialog from "../generic/generic-dialog";
 import { AddCircle, Close, Edit } from "@mui/icons-material";
 import {
   Box,
@@ -16,23 +37,6 @@ import isEqual from "lodash.isequal";
 import { ChangeEvent, FocusEvent, Fragment, useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import { useDebounce } from "usehooks-ts";
-import { errorAtom } from "../../atoms/error";
-import { layoutsAtom } from "../../atoms/layouts";
-import { pagesAtom } from "../../atoms/pages";
-import { EDITABLE_TEXT_PAGE_ELEMENTS, IMAGES } from "../../constants";
-import {
-  Layout,
-  Page,
-  PageProperty,
-  PageQuestionOption,
-  PageQuestionType
-} from "../../generated/client";
-import { useApi } from "../../hooks/use-api";
-import strings from "../../localization/strings";
-import { EditablePageElement, PageElementType } from "../../types";
-import LocalizationUtils from "../../utils/localization-utils";
-import PageUtils from "../../utils/page-utils";
-import GenericDialog from "../generic/generic-dialog";
 
 /**
  * Component properties
@@ -51,10 +55,30 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
   const [pendingPages, setPendingPages] = useState(surveyPages);
   const debouncedPages = useDebounce(pendingPages, 1000);
   const [pageLayouts] = useAtom(layoutsAtom);
+  const [auth] = useAtom(authAtom);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [fileUploadDialogOpen, setFileUploadDialogOpen] = useState(false);
   const [optionToDelete, _] = useState<string>();
-  const { pagesApi } = useApi();
+  const [backgroundImages, setBackgroundImages] = useState<MediaFile[]>([]);
+  const { pagesApi, mediaLibraryApi } = useApi();
   const setError = useSetAtom(errorAtom);
+  const [uploadLoading, setUploadLoading] = useState(false);
+
+  /**
+   * Gets page background images from s3 bucket
+   */
+  const getBackgroundImages = async () => {
+    try {
+      const images = await mediaLibraryApi.listMediaFiles({ path: "images" });
+      setBackgroundImages(images);
+    } catch (error) {
+      setError(`${strings.errorHandling.editSurveysScreen.backgroundImagesNotFound}, ${error}`);
+    }
+  };
+
+  useEffect(() => {
+    getBackgroundImages();
+  }, []);
 
   /**
    * Updates mounted flag when component mounts and unmounts
@@ -142,6 +166,20 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
       onConfirm={() => null}
       children={<div>{optionToDelete}</div>}
       confirmButtonText={strings.generic.confirm}
+    />
+  );
+
+  /**
+   * Render file upload dialog
+   */
+  const renderFileUploadDialog = () => (
+    <FileUploadDialog
+      open={fileUploadDialogOpen}
+      onClose={() => setFileUploadDialogOpen(false)}
+      allowedFileTypes={["image/*"]}
+      onSave={onUploadSave}
+      uploadLoading={uploadLoading}
+      backgroundImages={backgroundImages}
     />
   );
 
@@ -265,6 +303,68 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
 
       return surveyPages.map((page) => (page.id === updatedPage.id ? updatedPage : page));
     });
+  };
+
+  /**
+   * Handler for add new image button click
+   *
+   * @param e event
+   */
+  const handleAddNewImageClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    e.stopPropagation();
+    setFileUploadDialogOpen(true);
+  };
+
+  /**
+   * Upload image request to s3
+   *
+   * @param file file
+   */
+  const uploadImage = async (file: File) => {
+    try {
+      setUploadLoading(true);
+      const presignedUrl = await (
+        await fetch(config.imageUploadBaseUrl, {
+          method: "POST",
+          headers: {
+            authorization: `Bearer ${auth?.tokenRaw}`
+          },
+          body: JSON.stringify({
+            path: `images/${file.name}`,
+            contentType: file.type
+          })
+        })
+      ).json();
+
+      const uploadResponse = await fetch(presignedUrl.data, {
+        method: "PUT",
+        headers: {
+          "Content-Type": file.type
+        },
+        body: file
+      });
+
+      if (uploadResponse.status !== 200) {
+        throw new Error();
+      }
+      getBackgroundImages();
+      setUploadLoading(false);
+      setFileUploadDialogOpen(false);
+    } catch (e) {
+      setError(`${strings.errorHandling.editSurveysScreen.imageNotUploaded}, ${e}`);
+    }
+  };
+
+  /**
+   * Event handler for upload save click
+   *
+   * @param files files
+   */
+  const onUploadSave = async (files: File[]) => {
+    const file = files[0];
+    if (file) {
+      uploadImage(file);
+    }
   };
 
   /**
@@ -469,6 +569,20 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
         onChange={handleBackgroundChange}
         value={PageUtils.getPageBackground(elementsToEdit, pageToEdit.properties) ?? ""}
       >
+        <MenuItem>
+          <Button startIcon={<AddCircle />} onClick={handleAddNewImageClick}>
+            {strings.editSurveysScreen.editPagesPanel.addNewImage}
+          </Button>
+        </MenuItem>
+        {/* New images are included here alongside the "color" image backgrounds */}
+        {backgroundImages.map((image) => {
+          const nameWithoutExtension = image.name.replace(/\.[^/.]+$/, "");
+          return (
+            <MenuItem key={image.path} value={`/${image.path}`}>
+              {nameWithoutExtension}
+            </MenuItem>
+          );
+        })}
         {IMAGES.map((image) => (
           <MenuItem key={image.key} value={image.value}>
             {LocalizationUtils.getTranslatedBackground(image.key)}
@@ -503,6 +617,7 @@ const PageProperties = ({ pageNumber, surveyId }: Props) => {
   return (
     <>
       {renderDeleteOptionDialog()}
+      {renderFileUploadDialog()}
       <Box p={2} sx={{ borderBottom: "1px solid #DADCDE" }}>
         <Typography variant="h6">
           {strings.formatString(strings.editSurveysScreen.editPagesPanel.page, `${pageNumber}`)}

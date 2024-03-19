@@ -8,7 +8,9 @@
     "cancel": "Peruuta",
     "unnamed": "Nimetön",
     "yes": "Kyllä",
-    "no": "Ei"
+    "no": "Ei",
+    "loadNew": "Lataa uusi",
+    "upload": "Lähetä"
   },
   "navigation": {
     "overview": "Yhteenveto",
@@ -53,7 +55,10 @@
       "pageNotSaved": "Virhe tallennettaessa sivua",
       "pageNotDeleted": "Virhe poistaessa sivua",
       "pageNotCreated": "Virhe luotaessa sivua",
-      "questionNotAdded": "Virhe lisättäessä kyselyä"
+      "questionNotAdded": "Virhe lisättäessä kyselyä",
+      "backgroundImagesNotFound": "Virhe ladattaessa taustakuvia",
+      "imageNotUploaded": "Virhe kuvan latauksessa"
+
     },
     "previewScreen": {
       "surveyNotFound": "Kyselyä ei löytynyt",
@@ -198,6 +203,7 @@
       "infoText": "Leipäteksti",
       "buttonVisibility": "Näytä painike",
       "background": "Tausta",
+      "addNewImage": "Lisää uusi kuva",
       "image": "Kuva",
       "images": {
         "noImage": "Ei kuvaa",

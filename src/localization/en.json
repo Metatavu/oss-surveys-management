@@ -8,7 +8,9 @@
     "cancel": "Cancel",
     "unnamed": "Unnamed",
     "yes": "Yes",
-    "no": "No"
+    "no": "No",
+    "loadNew": "Load new",
+    "upload": "Upload"
   },
   "navigation": {
     "overview": "Overview",
@@ -53,7 +55,9 @@
       "pageNotSaved": "Error when saving page",
       "pageNotDeleted": "Error when deleting page",
       "pageNotCreated": "Error when creating page",
-      "questionNotAdded": "Error when adding page"
+      "questionNotAdded": "Error when adding page",
+      "backgroundImagesNotFound": "Error while loading background images",
+      "imageNotUploaded": "Error while uploading image"
     },
     "previewScreen": {
       "surveyNotFound": "Survey not found",
@@ -198,6 +202,7 @@
       "infoText": "Paragraph",
       "buttonVisibility": "Show button",
       "background": "Background",
+      "addNewImage": "Add a new image",
       "image": "Image",
       "images": {
         "noImage": "No image",

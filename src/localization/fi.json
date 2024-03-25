@@ -58,7 +58,6 @@
       "questionNotAdded": "Virhe lisättäessä kyselyä",
       "backgroundImagesNotFound": "Virhe ladattaessa taustakuvia",
       "imageNotUploaded": "Virhe kuvan latauksessa"
-
     },
     "previewScreen": {
       "surveyNotFound": "Kyselyä ei löytynyt",
@@ -213,8 +212,8 @@
       "backgroundImages": {
         "green": "Vihreä",
         "white": "Valkoinen",
-        "image1": "Järvimaisema",
-        "image2": "Joulutausta"
+        "image1": "Järvimaisema (VANHA)",
+        "image2": "Joulutausta (VANHA)"
       },
       "pageSaved": "Sivu tallennettu",
       "previewTitle": "Klikkaa muokataksesi sivua",

@@ -1,7 +1,3 @@
-import { Survey, SurveyStatus } from "../../generated/client";
-import strings from "../../localization/strings";
-import theme from "../../styles/theme";
-import { SurveyScreenMode } from "../../types";
 import styled from "@emotion/styled";
 import {
   BarChartOutlined,
@@ -12,6 +8,10 @@ import {
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { Box, Button, IconButton, Paper, Stack, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { Survey, SurveyStatus } from "../../generated/client";
+import strings from "../../localization/strings";
+import theme from "../../styles/theme";
+import { SurveyScreenMode } from "../../types";
 
 /**
  * Styled toolbar container component
@@ -78,14 +78,24 @@ const Toolbar = ({ survey, mode, setMode }: Props) => {
       <Button
         disabled={survey.status === SurveyStatus.Draft}
         color="primary"
-        title={strings.generic.notImplemented}
+        title={
+          mode === SurveyScreenMode.EDITOR
+            ? strings.editSurveysScreen.publish
+            : strings.editSurveysScreen.editor
+        }
         startIcon={<PublishOutlined />}
         sx={{
           backgroundColor: mode === SurveyScreenMode.PUBLISH ? "#c8c8c8" : ""
         }}
-        onClick={() => setMode(mode === SurveyScreenMode.EDITOR ? SurveyScreenMode.PUBLISH : SurveyScreenMode.EDITOR)}
+        onClick={() =>
+          setMode(
+            mode === SurveyScreenMode.EDITOR ? SurveyScreenMode.PUBLISH : SurveyScreenMode.EDITOR
+          )
+        }
       >
-        {mode === SurveyScreenMode.EDITOR ? strings.editSurveysScreen.publish : strings.editSurveysScreen.editor}
+        {mode === SurveyScreenMode.EDITOR
+          ? strings.editSurveysScreen.publish
+          : strings.editSurveysScreen.editor}
       </Button>
       <Button
         disabled={survey.status === SurveyStatus.Draft}

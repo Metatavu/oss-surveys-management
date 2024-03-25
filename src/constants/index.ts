@@ -22,6 +22,8 @@ export const HOUR_GROUPING = 3;
 export const IMAGE_PLACEHOLDER_DATA_COMPONENT = "image";
 
 export const IMAGES = [
+  { key: Background.IMAGE_1, value: "/159795711_l.jpg" },
+  { key: Background.IMAGE_2, value: "/joulu_tausta_1080x1920.jpg" },
   { key: Background.GREEN, value: "/green_background.png" },
   { key: Background.WHITE, value: "/white_background.png" }
 ];

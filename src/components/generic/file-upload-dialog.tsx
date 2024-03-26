@@ -49,11 +49,25 @@ const FileUploadDialog = ({
   const [uploadFile, setUploadFile] = useState<File[] | null>(null);
   const [errorMessage, setErrorMessage] = useState<string>();
 
+  /**
+   * Close dialog
+   */
   const handleClose = () => {
     setErrorMessage(undefined);
     onClose();
   };
 
+  /**
+   * Delete file
+   */
+  const handleDeleteFile = () => {
+    setUploadFile(null);
+    setErrorMessage(undefined);
+  };
+
+  /**
+   * Render upload dialog
+   */
   const renderUploadDialog = () => {
     const bytes = maxFileSize ? maxFileSize * 1000000 : 2000000;
 
@@ -71,10 +85,7 @@ const FileUploadDialog = ({
       >
         <DropzoneArea
           onDrop={(files) => handleDropFile(files)}
-          onDelete={() => {
-            setUploadFile(null);
-            setErrorMessage(undefined);
-          }}
+          onDelete={handleDeleteFile}
           acceptedFiles={allowedFileTypes}
           maxFileSize={bytes}
           filesLimit={filesLimit || 1}
@@ -94,6 +105,12 @@ const FileUploadDialog = ({
     );
   };
 
+  /**
+   * Check if file name contains invalid characters
+   *
+   * @param file file which name to test
+   * @returns true if file name contains invalid characters
+   */
   const checkFileName = (file: File) => /[^\x00-\x7F]/gi.test(file.name);
 
   /**

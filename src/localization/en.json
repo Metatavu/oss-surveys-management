@@ -217,7 +217,8 @@
       },
       "pageSaved": "Page saved",
       "previewTitle": "Click page to edit",
-      "uploadWarning": "Invalid file: File names must be unique."
+      "uploadWarningDuplicateFileName": "Invalid file: File names must be unique.",
+      "uploadWarningInvalidCharacters": "Invalid file: File name must not contain ä, ö or å."
     }
   },
   "surveyStatistics": {

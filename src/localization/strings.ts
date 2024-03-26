@@ -1,6 +1,6 @@
+import LocalizedStrings, { LocalizedStringsMethods } from "localized-strings";
 import en from "./en.json";
 import fi from "./fi.json";
-import LocalizedStrings, { LocalizedStringsMethods } from "localized-strings";
 
 /**
  * Localized strings
@@ -250,7 +250,8 @@ export interface Localized extends LocalizedStringsMethods {
       };
       pageSaved: string;
       previewTitle: string;
-      uploadWarning: string;
+      uploadWarningDuplicateFileName: string;
+      uploadWarningInvalidCharacters: string;
     };
   };
 

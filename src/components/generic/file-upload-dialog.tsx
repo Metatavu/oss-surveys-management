@@ -1,10 +1,10 @@
+import { Alert, Box, LinearProgress } from "@mui/material";
+import { DropzoneArea } from "mui-file-dropzone";
+import { useState } from "react";
 import { MediaFile } from "../../generated/client";
 import strings from "../../localization/strings";
 import GenericDialog from "./generic-dialog";
 import LoaderWrapper from "./loader-wrapper";
-import { Alert, Box, LinearProgress } from "@mui/material";
-import { DropzoneArea } from "mui-file-dropzone";
-import { useState } from "react";
 
 /**
  * Component props
@@ -47,8 +47,27 @@ const FileUploadDialog = ({
 }: Props) => {
   const [uploading, setUploading] = useState<boolean>(false);
   const [uploadFile, setUploadFile] = useState<File[] | null>(null);
-  const [duplicateFileName, setDuplicateFileName] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string>();
 
+  /**
+   * Close dialog
+   */
+  const handleClose = () => {
+    setErrorMessage(undefined);
+    onClose();
+  };
+
+  /**
+   * Delete file
+   */
+  const handleDeleteFile = () => {
+    setUploadFile(null);
+    setErrorMessage(undefined);
+  };
+
+  /**
+   * Render upload dialog
+   */
   const renderUploadDialog = () => {
     const bytes = maxFileSize ? maxFileSize * 1000000 : 2000000;
 
@@ -56,16 +75,17 @@ const FileUploadDialog = ({
       <GenericDialog
         title={strings.generic.upload}
         open={open}
-        onClose={onClose}
-        onCancel={onClose}
+        onClose={handleClose}
+        onCancel={handleClose}
         onConfirm={() => uploadFile && handleSave(uploadFile)}
         cancelButtonText={strings.generic.cancel}
         confirmButtonText={strings.generic.upload}
         fullWidth
-        disabled={duplicateFileName}
+        disabled={!!errorMessage}
       >
         <DropzoneArea
           onDrop={(files) => handleDropFile(files)}
+          onDelete={handleDeleteFile}
           acceptedFiles={allowedFileTypes}
           maxFileSize={bytes}
           filesLimit={filesLimit || 1}
@@ -76,9 +96,9 @@ const FileUploadDialog = ({
             <LinearProgress />
           </Box>
         )}
-        {duplicateFileName && (
+        {errorMessage && (
           <Alert sx={{ margin: 2 }} severity="error">
-            {strings.editSurveysScreen.editPagesPanel.uploadWarning}
+            {errorMessage}
           </Alert>
         )}
       </GenericDialog>
@@ -86,17 +106,31 @@ const FileUploadDialog = ({
   };
 
   /**
+   * Check if file name contains invalid characters
+   *
+   * @param file file which name to test
+   * @returns true if file name contains invalid characters
+   */
+  const checkFileName = (file: File) => /[^\x00-\x7F]/gi.test(file.name);
+
+  /**
    *  Handler when files are added to the drop zone
    *
    * @param files files
    */
   const handleDropFile = (files: File[]) => {
-    if (backgroundImages.some((image) => image.name === files[0].name)) {
-      setDuplicateFileName(true);
-    } else {
-      setUploadFile(files);
-      setDuplicateFileName(false);
+    if (checkFileName(files[0])) {
+      setErrorMessage(strings.editSurveysScreen.editPagesPanel.uploadWarningInvalidCharacters);
+      return;
     }
+
+    if (backgroundImages.some((image) => image.name === files[0].name)) {
+      setErrorMessage(strings.editSurveysScreen.editPagesPanel.uploadWarningDuplicateFileName);
+      return;
+    }
+
+    setUploadFile(files);
+    setErrorMessage(undefined);
   };
 
   /**

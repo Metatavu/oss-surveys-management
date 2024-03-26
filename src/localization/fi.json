@@ -217,7 +217,8 @@
       },
       "pageSaved": "Sivu tallennettu",
       "previewTitle": "Klikkaa muokataksesi sivua",
-      "uploadWarning": "Virheellinen tiedosto: Tiedostonimien on oltava yksilöllisiä."
+      "uploadWarningDuplicateFileName": "Virheellinen tiedosto: Tiedostonimien on oltava yksilöllisiä.",
+      "uploadWarningInvalidCharacters": "Virheellinen tiedosto: Tiedostonimi ei saa sisältää ä-, ö- tai å-kirjaimia."
     }
   },
   "surveyStatistics": {

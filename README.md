@@ -39,4 +39,3 @@ Automatically fix auto-fixable linting errors and format all files
 ```
 npm run lint:fix
 ```
-

@@ -1,3 +1,7 @@
+import { Box, Stack, Typography, styled } from "@mui/material";
+import { useAtom, useSetAtom } from "jotai";
+import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 import { errorAtom } from "../../atoms/error";
 import { layoutsAtom } from "../../atoms/layouts";
 import { pagesAtom } from "../../atoms/pages";
@@ -27,10 +31,6 @@ import StatisticsLayoutImage from "../images/svg/layout-thumbnails/statistics";
 import EditorPreview from "./editor-preview";
 import ImageButton from "./image-button";
 import NewPageButton from "./new-page-button";
-import { Box, Stack, Typography, styled } from "@mui/material";
-import { useAtom, useSetAtom } from "jotai";
-import { useEffect, useState } from "react";
-import { toast } from "react-toastify";
 
 /**
  * Component properties
@@ -220,10 +220,7 @@ const Editor = ({ setPanelProperties, surveyId }: Props) => {
           ...foundPage,
           question: {
             type: questionType,
-            options: [
-              PageUtils.getDefaultQuestionOption(1, questionType),
-              PageUtils.getDefaultQuestionOption(2, questionType)
-            ]
+            options: [PageUtils.getDefaultQuestionOption(1), PageUtils.getDefaultQuestionOption(2)]
           }
         }
       });

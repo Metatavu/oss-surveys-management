@@ -166,12 +166,12 @@ namespace PageUtils {
    * @param orderNumber order number
    * @returns page question option
    */
-  export const getDefaultQuestionOption = (orderNumber: number, questionType: PageQuestionType) => {
+  export const getDefaultQuestionOption = (orderNumber: number) => {
     const optionString = strings
       .formatString(strings.editSurveysScreen.editPagesPanel.answerOptionPlaceholder, orderNumber)
       .toString();
 
-    const serializedQuestionOptionValue = serializeValue(optionString, questionType);
+    const serializedQuestionOptionValue = serializeMultiLineQuestionOptionValue(optionString);
 
     return {
       orderNumber: orderNumber,
@@ -246,7 +246,9 @@ namespace PageUtils {
       .join("");
 
   /**
-   * Serialize the event value as HTML according to element type
+   * Serialize the page property or question option value as HTML according to element type
+   *
+   * Used in page preview.
    *
    * @param value event string
    * @param elementType PageElementType
